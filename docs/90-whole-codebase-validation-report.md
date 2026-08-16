@@ -8,6 +8,13 @@ non-directory output-root ancestors before staged filesystem writes. This is
 local filesystem-safety evidence only; it does not elevate benchmark,
 attestation, production, or external-evidence claims.
 
+The runtime hardening pass also makes the authorized local formal-backend
+process lanes drain piped stdout and stderr concurrently while retaining only
+the declared bounded prefix plus one truncation sentinel byte. Timeout paths
+kill and reap the child before readers join. This is local process-capture
+safety evidence only; it does not elevate backend, benchmark, proof,
+production, or external-evidence claims.
+
 This report records the end-to-end local validation run after Phase S
 audit-index ergonomics output plumbing, protected-path overlap hardening, the
 Phase 102 opt-in Phala provider-client implementation, the Phase 105

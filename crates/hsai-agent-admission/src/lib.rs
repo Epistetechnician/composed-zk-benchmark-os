@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
-use std::io::{self, Write};
+use std::io::{self, Read, Write};
 use std::path::{Path, PathBuf};
 use std::process::Stdio;
 use std::str::FromStr;
@@ -48285,9 +48285,11 @@ pub fn materialize_gateway_formal_backend_hermetic_fixture_runner_output_bundle(
         );
     }
 
-    let process_result =
-        run_gateway_formal_backend_hermetic_fixture_process(&interface.executable_policy)
-            .map_err(GatewayFormalBackendHermeticFixtureRunnerError::ProcessSpawn)?;
+    let process_result = run_gateway_formal_backend_hermetic_fixture_process(
+        &interface.executable_policy,
+        &interface.runtime_policy,
+    )
+    .map_err(GatewayFormalBackendHermeticFixtureRunnerError::ProcessSpawn)?;
     let files = build_gateway_formal_backend_hermetic_fixture_runner_bundle_files(
         interface,
         descriptor,
@@ -48446,6 +48448,53 @@ pub fn read_gateway_formal_backend_hermetic_fixture_runner_output_bundle(
     validate_gateway_formal_backend_hermetic_fixture_runner_bundle_semantics(&files)
 }
 
+fn read_bounded_child_stream<R: Read>(mut reader: R, max_bytes: u64) -> io::Result<Vec<u8>> {
+    let max_bytes = usize::try_from(max_bytes)
+        .map_err(|_| io::Error::new(io::ErrorKind::InvalidInput, "stream limit is too large"))?;
+    let retention_limit = max_bytes.saturating_add(1);
+    let mut retained = Vec::with_capacity(retention_limit.min(8_192));
+    let mut buffer = [0_u8; 8_192];
+    loop {
+        let read = reader.read(&mut buffer)?;
+        if read == 0 {
+            break;
+        }
+        if retained.len() < retention_limit {
+            let retain = (retention_limit - retained.len()).min(read);
+            retained.extend_from_slice(&buffer[..retain]);
+        }
+    }
+    Ok(retained)
+}
+
+fn spawn_bounded_child_stream_readers<R1, R2>(
+    stdout: R1,
+    stderr: R2,
+    max_stdout_bytes: u64,
+    max_stderr_bytes: u64,
+) -> (
+    std::thread::JoinHandle<io::Result<Vec<u8>>>,
+    std::thread::JoinHandle<io::Result<Vec<u8>>>,
+)
+where
+    R1: Read + Send + 'static,
+    R2: Read + Send + 'static,
+{
+    (
+        std::thread::spawn(move || read_bounded_child_stream(stdout, max_stdout_bytes)),
+        std::thread::spawn(move || read_bounded_child_stream(stderr, max_stderr_bytes)),
+    )
+}
+
+fn join_bounded_child_stream_reader(
+    reader: std::thread::JoinHandle<io::Result<Vec<u8>>>,
+    stream_label: &str,
+) -> io::Result<Vec<u8>> {
+    reader
+        .join()
+        .map_err(|_| io::Error::other(format!("{stream_label} reader panicked")))?
+}
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 struct GatewayFormalBackendHermeticFixtureProcessResult {
     process_exit_code_label: String,
@@ -48483,6 +48532,7 @@ fn validate_gateway_formal_backend_hermetic_fixture_runner_request(
 
 fn run_gateway_formal_backend_hermetic_fixture_process(
     policy: &GatewayFormalBackendHermeticProcessSpawnExecutablePolicy,
+    runtime_policy: &GatewayFormalBackendHermeticProcessSpawnRuntimePolicy,
 ) -> Result<GatewayFormalBackendHermeticFixtureProcessResult, String> {
     let executable = std::env::current_exe().map_err(|error| error.to_string())?;
     let mut command = std::process::Command::new(executable);
@@ -48493,53 +48543,60 @@ fn run_gateway_formal_backend_hermetic_fixture_process(
         .stdout(Stdio::piped())
         .stderr(Stdio::piped());
     let mut child = command.spawn().map_err(|error| error.to_string())?;
+    let stdout_reader = child
+        .stdout
+        .take()
+        .ok_or_else(|| "stdout pipe unavailable".to_owned())?;
+    let stderr_reader = child
+        .stderr
+        .take()
+        .ok_or_else(|| "stderr pipe unavailable".to_owned())?;
+    let (stdout_reader, stderr_reader) = spawn_bounded_child_stream_readers(
+        stdout_reader,
+        stderr_reader,
+        runtime_policy.max_stdout_bytes,
+        runtime_policy.max_stderr_bytes,
+    );
     let deadline = Instant::now() + Duration::from_millis(5_000);
-    loop {
-        if child
-            .try_wait()
-            .map_err(|error| error.to_string())?
-            .is_some()
-        {
-            let output = child
-                .wait_with_output()
-                .map_err(|error| error.to_string())?;
-            let process_exit_code_label = output
-                .status
-                .code()
-                .map(|code| format!("exit_{code}"))
-                .unwrap_or_else(|| "signal".to_owned());
-            let signal = output.status.code().is_none();
-            let solver_status = if output.status.success() {
-                GatewayFormalBackendHermeticExecutionSolverStatus::FixtureProcessExited
-            } else {
-                GatewayFormalBackendHermeticExecutionSolverStatus::FixtureProcessFailed
-            };
-            return Ok(GatewayFormalBackendHermeticFixtureProcessResult {
-                process_exit_code_label,
-                timeout: false,
-                signal,
-                stdout: output.stdout,
-                stderr: output.stderr,
-                solver_status,
-            });
+    let (status, timeout) = loop {
+        match child.try_wait().map_err(|error| error.to_string())? {
+            Some(status) => break (status, false),
+            None if Instant::now() >= deadline => {
+                let _ = child.kill();
+                let status = child.wait().map_err(|error| error.to_string())?;
+                break (status, true);
+            }
+            None => std::thread::sleep(Duration::from_millis(5)),
         }
-        if Instant::now() >= deadline {
-            let _ = child.kill();
-            let output = child
-                .wait_with_output()
-                .map_err(|error| error.to_string())?;
-            return Ok(GatewayFormalBackendHermeticFixtureProcessResult {
-                process_exit_code_label: "timeout".to_owned(),
-                timeout: true,
-                signal: false,
-                stdout: output.stdout,
-                stderr: output.stderr,
-                solver_status:
-                    GatewayFormalBackendHermeticExecutionSolverStatus::FixtureProcessTimedOut,
-            });
-        }
-        std::thread::sleep(Duration::from_millis(5));
-    }
+    };
+    let stdout = join_bounded_child_stream_reader(stdout_reader, "stdout")
+        .map_err(|error| error.to_string())?;
+    let stderr = join_bounded_child_stream_reader(stderr_reader, "stderr")
+        .map_err(|error| error.to_string())?;
+    let process_exit_code_label = if timeout {
+        "timeout".to_owned()
+    } else {
+        status
+            .code()
+            .map(|code| format!("exit_{code}"))
+            .unwrap_or_else(|| "signal".to_owned())
+    };
+    let signal = !timeout && status.code().is_none();
+    let solver_status = if timeout {
+        GatewayFormalBackendHermeticExecutionSolverStatus::FixtureProcessTimedOut
+    } else if status.success() {
+        GatewayFormalBackendHermeticExecutionSolverStatus::FixtureProcessExited
+    } else {
+        GatewayFormalBackendHermeticExecutionSolverStatus::FixtureProcessFailed
+    };
+    Ok(GatewayFormalBackendHermeticFixtureProcessResult {
+        process_exit_code_label,
+        timeout,
+        signal,
+        stdout,
+        stderr,
+        solver_status,
+    })
 }
 
 pub fn gateway_formal_backend_tiny_hermetic_execution_output_declared_files() -> Vec<String> {
@@ -48731,53 +48788,60 @@ fn run_gateway_formal_backend_tiny_hermetic_execution_process(
         .stdout(Stdio::piped())
         .stderr(Stdio::piped());
     let mut child = command.spawn().map_err(|error| error.to_string())?;
+    let stdout_reader = child
+        .stdout
+        .take()
+        .ok_or_else(|| "stdout pipe unavailable".to_owned())?;
+    let stderr_reader = child
+        .stderr
+        .take()
+        .ok_or_else(|| "stderr pipe unavailable".to_owned())?;
+    let (stdout_reader, stderr_reader) = spawn_bounded_child_stream_readers(
+        stdout_reader,
+        stderr_reader,
+        command_descriptor.max_stdout_bytes,
+        command_descriptor.max_stderr_bytes,
+    );
     let deadline = Instant::now() + Duration::from_millis(command_descriptor.timeout_millis);
-    loop {
-        if child
-            .try_wait()
-            .map_err(|error| error.to_string())?
-            .is_some()
-        {
-            let output = child
-                .wait_with_output()
-                .map_err(|error| error.to_string())?;
-            let process_exit_code_label = output
-                .status
-                .code()
-                .map(|code| format!("exit_{code}"))
-                .unwrap_or_else(|| "signal".to_owned());
-            let signal = output.status.code().is_none();
-            let solver_status = if output.status.success() {
-                GatewayFormalBackendHermeticExecutionSolverStatus::FixtureProcessExited
-            } else {
-                GatewayFormalBackendHermeticExecutionSolverStatus::FixtureProcessFailed
-            };
-            return Ok(GatewayFormalBackendHermeticFixtureProcessResult {
-                process_exit_code_label,
-                timeout: false,
-                signal,
-                stdout: output.stdout,
-                stderr: output.stderr,
-                solver_status,
-            });
+    let (status, timeout) = loop {
+        match child.try_wait().map_err(|error| error.to_string())? {
+            Some(status) => break (status, false),
+            None if Instant::now() >= deadline => {
+                let _ = child.kill();
+                let status = child.wait().map_err(|error| error.to_string())?;
+                break (status, true);
+            }
+            None => std::thread::sleep(Duration::from_millis(5)),
         }
-        if Instant::now() >= deadline {
-            let _ = child.kill();
-            let output = child
-                .wait_with_output()
-                .map_err(|error| error.to_string())?;
-            return Ok(GatewayFormalBackendHermeticFixtureProcessResult {
-                process_exit_code_label: "timeout".to_owned(),
-                timeout: true,
-                signal: false,
-                stdout: output.stdout,
-                stderr: output.stderr,
-                solver_status:
-                    GatewayFormalBackendHermeticExecutionSolverStatus::FixtureProcessTimedOut,
-            });
-        }
-        std::thread::sleep(Duration::from_millis(5));
-    }
+    };
+    let stdout = join_bounded_child_stream_reader(stdout_reader, "stdout")
+        .map_err(|error| error.to_string())?;
+    let stderr = join_bounded_child_stream_reader(stderr_reader, "stderr")
+        .map_err(|error| error.to_string())?;
+    let process_exit_code_label = if timeout {
+        "timeout".to_owned()
+    } else {
+        status
+            .code()
+            .map(|code| format!("exit_{code}"))
+            .unwrap_or_else(|| "signal".to_owned())
+    };
+    let signal = !timeout && status.code().is_none();
+    let solver_status = if timeout {
+        GatewayFormalBackendHermeticExecutionSolverStatus::FixtureProcessTimedOut
+    } else if status.success() {
+        GatewayFormalBackendHermeticExecutionSolverStatus::FixtureProcessExited
+    } else {
+        GatewayFormalBackendHermeticExecutionSolverStatus::FixtureProcessFailed
+    };
+    Ok(GatewayFormalBackendHermeticFixtureProcessResult {
+        process_exit_code_label,
+        timeout,
+        signal,
+        stdout,
+        stderr,
+        solver_status,
+    })
 }
 
 fn validate_gateway_formal_backend_tiny_hermetic_execution_request(
@@ -52960,47 +53024,56 @@ pub fn run_gateway_formal_real_command_lane_fixed_smt_process(
     let mut child = command.spawn().map_err(|error| {
         GatewayFormalRealCommandLaneFixedSmtProcessError::ProcessSpawn(error.to_string())
     })?;
+    let stdout_reader = child.stdout.take().ok_or_else(|| {
+        GatewayFormalRealCommandLaneFixedSmtProcessError::ProcessSpawn(
+            "stdout pipe unavailable".to_owned(),
+        )
+    })?;
+    let stderr_reader = child.stderr.take().ok_or_else(|| {
+        GatewayFormalRealCommandLaneFixedSmtProcessError::ProcessSpawn(
+            "stderr pipe unavailable".to_owned(),
+        )
+    })?;
+    let (stdout_reader, stderr_reader) = spawn_bounded_child_stream_readers(
+        stdout_reader,
+        stderr_reader,
+        descriptor.max_stdout_bytes,
+        descriptor.max_stderr_bytes,
+    );
     let deadline = Instant::now() + Duration::from_millis(descriptor.timeout_millis);
-    loop {
-        if child
-            .try_wait()
-            .map_err(|error| {
-                GatewayFormalRealCommandLaneFixedSmtProcessError::ProcessSpawn(error.to_string())
-            })?
-            .is_some()
-        {
-            let output = child.wait_with_output().map_err(|error| {
-                GatewayFormalRealCommandLaneFixedSmtProcessError::ProcessSpawn(error.to_string())
-            })?;
-            return Ok(gateway_formal_real_command_lane_fixed_smt_process_output(
-                preflight,
-                descriptor,
-                executable_digest,
-                output.status.code(),
-                false,
-                output.status.code().is_none(),
-                &output.stdout,
-                &output.stderr,
-            ));
+    let (status, timeout) = loop {
+        match child.try_wait().map_err(|error| {
+            GatewayFormalRealCommandLaneFixedSmtProcessError::ProcessSpawn(error.to_string())
+        })? {
+            Some(status) => break (status, false),
+            None if Instant::now() >= deadline => {
+                let _ = child.kill();
+                let status = child.wait().map_err(|error| {
+                    GatewayFormalRealCommandLaneFixedSmtProcessError::ProcessSpawn(
+                        error.to_string(),
+                    )
+                })?;
+                break (status, true);
+            }
+            None => std::thread::sleep(Duration::from_millis(5)),
         }
-        if Instant::now() >= deadline {
-            let _ = child.kill();
-            let output = child.wait_with_output().map_err(|error| {
-                GatewayFormalRealCommandLaneFixedSmtProcessError::ProcessSpawn(error.to_string())
-            })?;
-            return Ok(gateway_formal_real_command_lane_fixed_smt_process_output(
-                preflight,
-                descriptor,
-                executable_digest,
-                None,
-                true,
-                false,
-                &output.stdout,
-                &output.stderr,
-            ));
-        }
-        std::thread::sleep(Duration::from_millis(5));
-    }
+    };
+    let stdout = join_bounded_child_stream_reader(stdout_reader, "stdout").map_err(|error| {
+        GatewayFormalRealCommandLaneFixedSmtProcessError::ProcessSpawn(error.to_string())
+    })?;
+    let stderr = join_bounded_child_stream_reader(stderr_reader, "stderr").map_err(|error| {
+        GatewayFormalRealCommandLaneFixedSmtProcessError::ProcessSpawn(error.to_string())
+    })?;
+    Ok(gateway_formal_real_command_lane_fixed_smt_process_output(
+        preflight,
+        descriptor,
+        executable_digest,
+        if timeout { None } else { status.code() },
+        timeout,
+        !timeout && status.code().is_none(),
+        &stdout,
+        &stderr,
+    ))
 }
 
 pub fn gateway_formal_real_command_lane_fixed_smt_process_plan(
@@ -80279,51 +80352,58 @@ pub fn run_gateway_formal_tiny_z3_hermetic_backend_execution_result(
             GatewayFormalTinyZ3HermeticBackendExecutionError::StdinWrite(error.to_string())
         })?;
     }
+    let stdout_reader = child.stdout.take().ok_or_else(|| {
+        GatewayFormalTinyZ3HermeticBackendExecutionError::ProcessSpawn(
+            "stdout pipe unavailable".to_owned(),
+        )
+    })?;
+    let stderr_reader = child.stderr.take().ok_or_else(|| {
+        GatewayFormalTinyZ3HermeticBackendExecutionError::ProcessSpawn(
+            "stderr pipe unavailable".to_owned(),
+        )
+    })?;
+    let (stdout_reader, stderr_reader) = spawn_bounded_child_stream_readers(
+        stdout_reader,
+        stderr_reader,
+        request.max_stdout_bytes,
+        request.max_stderr_bytes,
+    );
     let deadline = Instant::now() + Duration::from_millis(request.timeout_millis);
-    loop {
-        if child
-            .try_wait()
-            .map_err(|error| {
-                GatewayFormalTinyZ3HermeticBackendExecutionError::ProcessSpawn(error.to_string())
-            })?
-            .is_some()
-        {
-            let output = child.wait_with_output().map_err(|error| {
-                GatewayFormalTinyZ3HermeticBackendExecutionError::ProcessSpawn(error.to_string())
-            })?;
-            return Ok(
-                gateway_formal_tiny_z3_hermetic_backend_execution_result_from_output(
-                    candidate,
-                    request,
-                    executable_digest,
-                    hash_bytes(smtlib2_text.as_bytes()),
-                    output.status.code(),
-                    false,
-                    &output.stdout,
-                    &output.stderr,
-                ),
-            );
+    let (status, timeout) = loop {
+        match child.try_wait().map_err(|error| {
+            GatewayFormalTinyZ3HermeticBackendExecutionError::ProcessSpawn(error.to_string())
+        })? {
+            Some(status) => break (status, false),
+            None if Instant::now() >= deadline => {
+                let _ = child.kill();
+                let status = child.wait().map_err(|error| {
+                    GatewayFormalTinyZ3HermeticBackendExecutionError::ProcessSpawn(
+                        error.to_string(),
+                    )
+                })?;
+                break (status, true);
+            }
+            None => std::thread::sleep(Duration::from_millis(5)),
         }
-        if Instant::now() >= deadline {
-            let _ = child.kill();
-            let output = child.wait_with_output().map_err(|error| {
-                GatewayFormalTinyZ3HermeticBackendExecutionError::ProcessSpawn(error.to_string())
-            })?;
-            return Ok(
-                gateway_formal_tiny_z3_hermetic_backend_execution_result_from_output(
-                    candidate,
-                    request,
-                    executable_digest,
-                    hash_bytes(smtlib2_text.as_bytes()),
-                    None,
-                    true,
-                    &output.stdout,
-                    &output.stderr,
-                ),
-            );
-        }
-        std::thread::sleep(Duration::from_millis(5));
-    }
+    };
+    let stdout = join_bounded_child_stream_reader(stdout_reader, "stdout").map_err(|error| {
+        GatewayFormalTinyZ3HermeticBackendExecutionError::ProcessSpawn(error.to_string())
+    })?;
+    let stderr = join_bounded_child_stream_reader(stderr_reader, "stderr").map_err(|error| {
+        GatewayFormalTinyZ3HermeticBackendExecutionError::ProcessSpawn(error.to_string())
+    })?;
+    Ok(
+        gateway_formal_tiny_z3_hermetic_backend_execution_result_from_output(
+            candidate,
+            request,
+            executable_digest,
+            hash_bytes(smtlib2_text.as_bytes()),
+            if timeout { None } else { status.code() },
+            timeout,
+            &stdout,
+            &stderr,
+        ),
+    )
 }
 
 fn gateway_formal_tiny_z3_hermetic_backend_execution_result_from_output(
@@ -120957,29 +121037,47 @@ pub fn run_hsai_tiny_z3_gateway_digest_binding_local_execution(
             HsaiTinyZ3GatewayDigestBindingLocalExecutionError::StdinWrite(error.to_string())
         })?;
     }
+    let stdout_reader = child.stdout.take().ok_or_else(|| {
+        HsaiTinyZ3GatewayDigestBindingLocalExecutionError::ProcessWait(
+            "stdout pipe unavailable".to_owned(),
+        )
+    })?;
+    let stderr_reader = child.stderr.take().ok_or_else(|| {
+        HsaiTinyZ3GatewayDigestBindingLocalExecutionError::ProcessWait(
+            "stderr pipe unavailable".to_owned(),
+        )
+    })?;
+    let (stdout_reader, stderr_reader) = spawn_bounded_child_stream_readers(
+        stdout_reader,
+        stderr_reader,
+        input.max_stdout_bytes,
+        input.max_stderr_bytes,
+    );
     let deadline = Instant::now() + Duration::from_millis(input.timeout_millis);
-    let (exit_code, timeout, stdout, stderr) = loop {
-        if child
-            .try_wait()
-            .map_err(|error| {
-                HsaiTinyZ3GatewayDigestBindingLocalExecutionError::ProcessWait(error.to_string())
-            })?
-            .is_some()
-        {
-            let output = child.wait_with_output().map_err(|error| {
-                HsaiTinyZ3GatewayDigestBindingLocalExecutionError::ProcessWait(error.to_string())
-            })?;
-            break (output.status.code(), false, output.stdout, output.stderr);
+    let (status, timeout) = loop {
+        match child.try_wait().map_err(|error| {
+            HsaiTinyZ3GatewayDigestBindingLocalExecutionError::ProcessWait(error.to_string())
+        })? {
+            Some(status) => break (status, false),
+            None if Instant::now() >= deadline => {
+                let _ = child.kill();
+                let status = child.wait().map_err(|error| {
+                    HsaiTinyZ3GatewayDigestBindingLocalExecutionError::ProcessWait(
+                        error.to_string(),
+                    )
+                })?;
+                break (status, true);
+            }
+            None => std::thread::sleep(Duration::from_millis(5)),
         }
-        if Instant::now() >= deadline {
-            let _ = child.kill();
-            let output = child.wait_with_output().map_err(|error| {
-                HsaiTinyZ3GatewayDigestBindingLocalExecutionError::ProcessWait(error.to_string())
-            })?;
-            break (output.status.code(), true, output.stdout, output.stderr);
-        }
-        std::thread::sleep(Duration::from_millis(5));
     };
+    let stdout = join_bounded_child_stream_reader(stdout_reader, "stdout").map_err(|error| {
+        HsaiTinyZ3GatewayDigestBindingLocalExecutionError::ProcessWait(error.to_string())
+    })?;
+    let stderr = join_bounded_child_stream_reader(stderr_reader, "stderr").map_err(|error| {
+        HsaiTinyZ3GatewayDigestBindingLocalExecutionError::ProcessWait(error.to_string())
+    })?;
+    let exit_code = if timeout { None } else { status.code() };
     if timeout {
         return Err(HsaiTinyZ3GatewayDigestBindingLocalExecutionError::ProcessTimedOut);
     }
@@ -211910,6 +212008,56 @@ mod tests {
     #[test]
     fn phase314_fixture_child_large_stdout() {
         print!("{}", "phase314-stdout-line\n".repeat(512));
+    }
+
+    #[ignore]
+    #[test]
+    fn phase314_fixture_child_large_stdout_and_stderr() {
+        print!("{}", "phase314-stdout-line\n".repeat(512));
+        eprint!("{}", "phase314-stderr-line\n".repeat(512));
+    }
+
+    #[test]
+    fn bounded_child_output_capture_retains_only_limit_plus_one_bytes() {
+        let executable = std::env::current_exe().expect("current test executable resolves");
+        let mut command = std::process::Command::new(executable);
+        command
+            .args([
+                "--ignored",
+                "--nocapture",
+                "--exact",
+                "tests::phase314_fixture_child_large_stdout_and_stderr",
+            ])
+            .env_clear()
+            .stdin(Stdio::null())
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped());
+        let mut child = command.spawn().expect("large-output child spawns");
+        let stdout_reader = child.stdout.take().expect("large-output stdout pipe");
+        let stderr_reader = child.stderr.take().expect("large-output stderr pipe");
+        let (stdout_reader, stderr_reader) =
+            spawn_bounded_child_stream_readers(stdout_reader, stderr_reader, 128, 128);
+        let deadline = Instant::now() + Duration::from_secs(5);
+        let (status, timed_out) = loop {
+            match child.try_wait().expect("large-output child wait") {
+                Some(status) => break (status, false),
+                None if Instant::now() >= deadline => {
+                    let _ = child.kill();
+                    let status = child.wait().expect("large-output child reap");
+                    break (status, true);
+                }
+                None => std::thread::sleep(Duration::from_millis(5)),
+            }
+        };
+        let stdout = join_bounded_child_stream_reader(stdout_reader, "stdout")
+            .expect("large-output stdout capture");
+        let stderr = join_bounded_child_stream_reader(stderr_reader, "stderr")
+            .expect("large-output stderr capture");
+
+        assert!(status.success());
+        assert!(!timed_out);
+        assert_eq!(stdout.len(), 129);
+        assert_eq!(stderr.len(), 129);
     }
 
     #[test]
