@@ -84,6 +84,22 @@ fn relative_file_resolver_reads_declared_files_and_rejects_unsafe_refs() {
     ));
 }
 
+#[test]
+fn relative_file_resolver_rejects_parent_directory_root_components() {
+    let root = tempdir().expect("tempdir should be available");
+    let nested = root.path().join("nested");
+    fs::create_dir(&nested).expect("nested directory should be created");
+    fs::write(root.path().join("artifact.json"), b"synthetic artifact\n")
+        .expect("fixture artifact should be written");
+
+    let error = ResultCandidateArtifactResolver::from_relative_files(
+        &nested.join(".."),
+        &["artifact.json".to_string()],
+    )
+    .expect_err("parent-directory root components should reject before reading");
+    assert!(error.to_string().contains("parent-directory components"));
+}
+
 #[cfg(unix)]
 #[test]
 fn relative_file_resolver_rejects_symlinked_parent() {

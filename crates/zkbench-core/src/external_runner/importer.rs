@@ -5,7 +5,7 @@
 //! and never appends accepted evidence.
 
 use std::fs;
-use std::path::Path;
+use std::path::{Component, Path};
 
 use serde::{Deserialize, Serialize};
 
@@ -181,6 +181,16 @@ impl ResultCandidateArtifactResolver {
 }
 
 fn validate_artifact_resolver_path_components(path: &Path) -> Result<()> {
+    if path
+        .components()
+        .any(|component| matches!(component, Component::ParentDir))
+    {
+        return Err(ZkBenchError::synthetic_import(
+            path.display().to_string(),
+            "artifact resolver path must not contain parent-directory components",
+        ));
+    }
+
     let mut candidate = path;
     let mut is_leaf = true;
     loop {

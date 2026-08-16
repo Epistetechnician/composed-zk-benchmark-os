@@ -36,6 +36,11 @@ parent-directory components for pack roots before writer or reader filesystem
 access. This remains local filesystem-safety regression evidence only; it does
 not elevate benchmark, proof, production, or external-evidence claims.
 
+The `zkbench-core` synthetic artifact-resolver path state slice now rejects
+parent-directory components in caller-supplied roots before local artifact
+reads. This remains local filesystem-safety regression evidence only; it does
+not elevate benchmark, proof, production, or external-evidence claims.
+
 This report records the end-to-end local validation run after Phase S
 audit-index ergonomics output plumbing, protected-path overlap hardening, the
 Phase 102 opt-in Phala provider-client implementation, the Phase 105
