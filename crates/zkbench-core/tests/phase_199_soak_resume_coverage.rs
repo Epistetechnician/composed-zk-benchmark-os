@@ -223,6 +223,29 @@ fn write_checkpoint_rejects_parent_path_that_is_a_file() {
 }
 
 #[test]
+fn write_and_read_checkpoint_reject_parent_directory_components() {
+    let dir = tempdir().expect("tempdir should be available");
+    let (checkpoint, _expected_digest, _expected_token) = baseline_triple();
+    let nested = dir.path().join("nested");
+    std::fs::create_dir(&nested).expect("nested checkpoint parent should create");
+    let path = nested.join("../checkpoint.json");
+    let target = dir.path().join("checkpoint.json");
+
+    let write_error = write_soak_shard_checkpoint(&path, &checkpoint)
+        .expect_err("parent-directory component should reject before writing");
+    assert!(write_error
+        .to_string()
+        .contains("parent-directory components"));
+    assert!(!target.exists());
+
+    let read_error = read_soak_shard_checkpoint(&path)
+        .expect_err("parent-directory component should reject before reading");
+    assert!(read_error
+        .to_string()
+        .contains("parent-directory components"));
+}
+
+#[test]
 fn write_then_read_checkpoint_round_trip_with_parent_creation() {
     let dir = tempdir().expect("tempdir should be available");
     let (checkpoint, _expected_digest, _expected_token) = baseline_triple();

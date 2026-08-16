@@ -2,7 +2,7 @@
 
 use std::collections::BTreeSet;
 use std::fs;
-use std::path::Path;
+use std::path::{Component, Path};
 
 use serde::{Deserialize, Serialize};
 
@@ -701,6 +701,16 @@ pub(crate) fn write_json<T: Serialize>(path: impl AsRef<Path>, value: &T) -> Res
 }
 
 pub(crate) fn validate_soak_path_components(path: &Path) -> Result<()> {
+    if path
+        .components()
+        .any(|component| matches!(component, Component::ParentDir))
+    {
+        return Err(ZkBenchError::soak(
+            path.display().to_string(),
+            "soak output path must not contain parent-directory components",
+        ));
+    }
+
     let mut candidate = path;
     let mut is_leaf = true;
     loop {
