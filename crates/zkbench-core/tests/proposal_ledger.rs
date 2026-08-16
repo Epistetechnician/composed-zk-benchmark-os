@@ -84,6 +84,30 @@ fn proposal_ledger_default_matches_new_and_chains_multiple_entries() {
     );
 }
 
+#[test]
+fn proposal_ledger_save_and_load_reject_parent_directory_components() {
+    let dir = tempdir().expect("tempdir should be available for proposal persistence");
+    let ledger = EvidenceAppendProposalLedger::new();
+    let nested = dir.path().join("nested");
+    std::fs::create_dir(&nested).expect("nested proposal parent should create");
+    let path = nested.join("../proposal-ledger.json");
+    let target = dir.path().join("proposal-ledger.json");
+
+    let save_error = ledger
+        .save_json(&path)
+        .expect_err("parent-directory component should reject before writing");
+    assert!(save_error
+        .to_string()
+        .contains("parent-directory components"));
+    assert!(!target.exists());
+
+    let load_error = EvidenceAppendProposalLedger::load_json(&path)
+        .expect_err("parent-directory component should reject before reading");
+    assert!(load_error
+        .to_string()
+        .contains("parent-directory components"));
+}
+
 #[cfg(unix)]
 #[test]
 fn proposal_ledger_save_rejects_symlinked_parent() {

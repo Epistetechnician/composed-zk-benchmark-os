@@ -15,6 +15,12 @@ kill and reap the child before readers join. This is local process-capture
 safety evidence only; it does not elevate backend, benchmark, proof,
 production, or external-evidence claims.
 
+The `zkbench-core` proposal-ledger persistence state slice now rejects
+parent-directory components in caller-supplied ledger paths before any read or
+write. This closes a deterministic lexical path escape in the local JSON
+proposal-ledger boundary and remains local filesystem-safety evidence only; it
+does not elevate benchmark, proof, production, or external-evidence claims.
+
 This report records the end-to-end local validation run after Phase S
 audit-index ergonomics output plumbing, protected-path overlap hardening, the
 Phase 102 opt-in Phala provider-client implementation, the Phase 105

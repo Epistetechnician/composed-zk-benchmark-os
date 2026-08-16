@@ -5,7 +5,7 @@
 
 use std::collections::BTreeMap;
 use std::fs;
-use std::path::Path;
+use std::path::{Component, Path};
 
 use serde::{Deserialize, Serialize};
 
@@ -315,6 +315,16 @@ impl EvidenceAppendProposalLedger {
 }
 
 fn validate_proposal_ledger_path_components(path: &Path) -> Result<()> {
+    if path
+        .components()
+        .any(|component| matches!(component, Component::ParentDir))
+    {
+        return Err(ZkBenchError::evidence_append_proposal(
+            path.display().to_string(),
+            "proposal ledger path must not contain parent-directory components",
+        ));
+    }
+
     let mut candidate = path;
     let mut is_leaf = true;
     loop {
