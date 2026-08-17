@@ -5,7 +5,11 @@
 //! manual handoff bundles are not benchmark results, and result import
 //! candidates remain quarantined or pending review until future validation.
 
+pub mod actor_custody;
 pub mod artifact_capture;
+pub mod astral_execution_gate;
+pub mod custody_packet;
+pub mod custody_replay_manifest;
 pub mod handoff;
 pub mod import_bundle;
 pub mod importer;
@@ -23,12 +27,43 @@ pub mod serialization;
 pub mod synthetic;
 pub mod validation;
 
+pub use actor_custody::{
+    validate_fresh_actor_custody_handoff, ForbiddenCustodyMaterial, FreshActorCustodyHandoff,
+    FreshActorCustodyValidation, FreshActorCustodyValidationIssue,
+    ASTRAL_FRESH_ACTOR_CUSTODY_HANDOFF_CLAIM_BOUNDARY,
+    ASTRAL_FRESH_ACTOR_CUSTODY_HANDOFF_STATE_SLICE, RESERVED_ASTRAL_ACTOR_IDS,
+};
 pub use artifact_capture::{
     build_default_artifact_capture_contract, validate_artifact_capture_contract,
     ArtifactCaptureContract, ArtifactCaptureContractId, ArtifactCaptureContractVersion,
     ArtifactCaptureRequirement, CapturedArtifactMetadata, CapturedArtifactValidation,
     CapturedArtifactValidationIssue, ExpectedArtifact, ExpectedArtifactFormat,
     ExpectedArtifactRole,
+};
+pub use astral_execution_gate::{
+    evaluate_astral_execution_eligibility, AstralActorReadinessDeclaration,
+    AstralExecutionEligibilityDecision, AstralExecutionEligibilityEvaluation,
+    AstralExecutionEligibilityIssue, AstralExecutionEligibilityRequest,
+    AstralInstrumentReadinessDeclaration, AstralReviewDisposition,
+    ASTRAL_EXECUTION_ELIGIBILITY_GATE_STATE_SLICE,
+};
+pub use custody_packet::{
+    compute_fresh_actor_custody_packet_digest, deserialize_fresh_actor_custody_packet_json,
+    serialize_fresh_actor_custody_packet_json, validate_fresh_actor_custody_packet,
+    FreshActorCustodyPacket, FreshActorCustodyPacketValidation, FreshActorCustodyReplayGuard,
+    ASTRAL_FRESH_ACTOR_CUSTODY_PACKET_SCHEMA_VERSION,
+    ASTRAL_FRESH_ACTOR_CUSTODY_PACKET_STATE_SLICE,
+};
+pub use custody_replay_manifest::{
+    compute_fresh_actor_custody_replay_entry_digest,
+    compute_fresh_actor_custody_replay_manifest_digest,
+    deserialize_fresh_actor_custody_replay_manifest_json,
+    serialize_fresh_actor_custody_replay_manifest_json, FreshActorCustodyIngestDisposition,
+    FreshActorCustodyQuarantineEntry, FreshActorCustodyQuarantineReason,
+    FreshActorCustodyReplayEntry, FreshActorCustodyReplayManifest,
+    FreshActorCustodyReplayManifestValidation, FreshActorCustodyReplayManifestValidationIssue,
+    ASTRAL_FRESH_ACTOR_CUSTODY_REPLAY_MANIFEST_SCHEMA_VERSION,
+    ASTRAL_FRESH_ACTOR_CUSTODY_REPLAY_MANIFEST_STATE_SLICE,
 };
 pub use handoff::{
     valid_manual_handoff_step_validation, validate_manual_handoff_bundle, ManualHandoffBundle,

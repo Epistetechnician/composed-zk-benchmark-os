@@ -75,6 +75,9 @@ review and experiments rule out equivalent prior work.
 - [Risk, ethics, and governance](05-risk-ethics-and-governance.md): misuse,
   privacy, gaming, review, and reporting controls.
 - [Literature index](06-literature-index.md): source-scoped prior work.
+- [Metacognition cross-system synthesis](../2607.11881-metacognition-synthesis-v1.md):
+  survey-grounded separation of monitoring, reporting, control, calibration,
+  and authority, plus the synthetic benchmark contract boundary.
 - [Pilot and conversation inventory](07-pilot-and-conversation-inventory.md):
   user-reported pilot results, data contracts, open questions, and complete
   proposition routing.
@@ -180,6 +183,78 @@ review and experiments rule out equivalent prior work.
 - [V25 execution record](47-v25-execution-record.md): validated external-artifact
   result with probe accuracy `1.0`, model-report accuracy `0.34375`, and
   observed fork margin `0.65625`; no confirmation or Stage 1 authority.
+- [V26 causal-channel separation](48-causal-channel-separation-v26.md):
+  docs-only design for comparing report-only, synthetic opaque-artifact, and
+  privileged-telemetry observers against directly measured held-out
+  intervention effects. Execution is not authorized.
+- [V26 authorization record](49-v26-authorization-record.md): docs-only
+  authorization boundary, review checklist, and future execution gate.
+- [V26 execution preflight stop](50-v26-execution-preflight-stop-2026-08-13.md):
+  actual local inventory returned `NoFreshActor`; no model was loaded and no
+  assessment was opened. The available GGUF runtime also failed the required
+  public per-layer residual-capture surface audit.
+- [V27 public-ABI final-embedding feasibility](51-public-abi-final-embedding-feasibility-v27.md):
+  separate GGUF/llama.cpp feasibility protocol using controlled-vector
+  intervention and final-embedding observation; it does not claim per-layer
+  telemetry.
+- [V27 authorization records](52-v27-authorization-record.md): preflight
+  boundary and [execution authorization](53-v27-execution-authorization-record.md).
+- [V27 execution record](54-v27-execution-record-2026-08-13.md): positive local
+  public-ABI final-embedding/intervention feasibility result with aggregate-only
+  external evidence; no per-layer telemetry or Astral claim escalation.
+- [Opaque causal-channel separation V28](55-opaque-causal-channel-separation-v28.md):
+  fresh prediction-locked comparison of a rich final-embedding feature panel,
+  a quantized opaque projection, and a shuffled control against directly
+  measured held-out intervention effects.
+- [V28 execution record](56-v28-execution-authorization-and-record-2026-08-13.md):
+  validated weak channel-ordering signal but failed held-out utility gate;
+  no causal-effect prediction claim or Astral claim escalation.
+- [Calibrated opaque causal-channel test V29](57-calibrated-opaque-causal-channel-v29.md):
+  fresh larger-split follow-up with tune-only ridge selection and a mandatory
+  mean-baseline utility gate.
+- [V29 authorization record](58-v29-authorization-record.md): offline execution
+  boundary, fresh-data rule, transient-only derived stream, and claim ceiling.
+- [V29 execution record](59-v29-execution-record-2026-08-13.md): validated
+  diagnostic-only result; shuffled control outperformed both channels and the
+  V28/V29 lane is closed.
+- [Independent review record](60-research-synthesis-trace-replay-v1-review-2026-08-13.md):
+  source, experiment, privacy, validator, claim-ceiling, and repository-gate
+  review with no open findings.
+- [OpaqueTraceReplay scientific admission validation](../../61-opaque-trace-replay-scientific-admission-validation-v1.md):
+  ten-case synthetic comparison of typed fail-closed admission against a
+  raw-output passthrough control; local control evidence only.
+- [Narrative–Mechanism–Verification V30](../62-narrative-mechanism-verification-v30.md):
+  fresh planted-circuit validation separating a plausible narrative report
+  from a measured mechanism object against held-out intervention effects.
+- [V30 execution record](../63-v30-execution-record-2026-08-14.md): mechanism-only
+  MSE `0.0` versus narrative-only MSE `0.5` and shuffled mechanism MSE `12.0`;
+  local planted-circuit ceiling only.
+- [Narrative–Mechanism Measurement Stress Test V31](../64-narrative-mechanism-stress-test-v31.md):
+  36-task synthetic matrix with strong baselines, variance, and retained
+  interaction failure modes.
+- [V31 execution record](../65-v31-execution-record-2026-08-14.md): 24/24
+  clean/noisy linear all-baseline wins; 7/12 unmodeled-interaction failures
+  retained as a model-class limitation.
+- [Astral scoring-layer contract V32](../66-astral-scoring-layer-contract-v32.md):
+  formal behavior, mechanism, and introspection prerequisites with explicit
+  anti-promotion rules.
+- [V32 execution record](../67-v32-execution-record-2026-08-14.md): six frozen
+  profiles classified exactly with zero unsupported upward promotions.
+- [Trained-model replication readiness V33](../68-model-family-replication-readiness-v33.md):
+  V26 stopped at `NoFreshActor`; V27 public-ABI readiness remains final-embedding
+  feasibility only and does not authorize a fresh mechanism replication.
+- [Fresh-actor custody handoff V34](../69-fresh-actor-custody-handoff-v34.md):
+  local fail-closed metadata preflight for source, runtime, launcher, split,
+  validator, and artifact-root custody; no execution authorization.
+- [Fresh-actor custody packet V35](../71-fresh-actor-custody-packet-v35.md):
+  deterministic packet serialization, digest binding, nonce uniqueness, and
+  predecessor ordering; no execution authorization.
+- [Fresh-actor custody replay manifest V36](../73-fresh-actor-custody-replay-manifest-v36.md):
+  serializable append-only chain, duplicate/reorder quarantine, and manifest
+  integrity checks; no execution authorization.
+- [Astral execution-eligibility gate V37](../75-astral-execution-eligibility-gate-v37.md):
+  fail-closed composition of custody, instrument, review, nonclaim, ceiling,
+  and disabled-execution controls; no execution authorization.
 - [Stage 0 measurement-validity preregistration](08-stage0-measurement-validity-preregistration.md):
   documentation-only compiled-circuit study boundary, locked comparisons,
   endpoints, stop rules, artifact contract, and advancement gate.
@@ -206,3 +281,16 @@ outputs require an explicit retention and privacy decision before collection.
 | 2026-07-26 | Make directly measured intervention effects the canonical target | Attribution scores are approximations and the winning heuristic need not be a mechanism | A reviewed causal benchmark provides a stronger target |
 | 2026-07-26 | Keep Stage 1 blocked and preserve the V6 confirmation reserve | No observer experiment is interpretable until Stage 0C validates its target; no V6 method was selected | A redesigned estimator is locked after development and independently reviewed |
 | 2026-07-26 | Close the V12 linear head-effect estimator lane without confirmation | Telemetry MSE was worse than activation-only and constant prediction, and calibration failed | A materially different causal target and prediction-locked protocol are independently preregistered |
+| 2026-08-13 | Freeze V26 as a docs-only causal-channel separation design | The paper motivates testing whether an opaque surface carries operationally useful information, but provider artifacts and faithful computation are not available as local ground truth | A separately authorized run passes fresh-actor, renderer, parity, lock, and held-out-effect gates |
+| 2026-08-13 | Stop V26 preflight on `NoFreshActor` | The only MLX actors are reserved V22, V23, and V25 identities; the available Qwen3.5 GGUF lacks a validated residual-injection seam | A fresh instrumentable actor or separately authorized runtime adapter is validated |
+| 2026-08-13 | Execute V27 public-ABI feasibility once after preflight | The exact llama.cpp ABI, Qwen3.5 GGUF, control-vector harness, final-embedding capture, parity, repeatability, and direct-effect gates passed | A separately authorized causal-channel protocol may consume only this as instrument-feasibility context, not as per-layer telemetry or provider evidence |
+| 2026-08-13 | Record V28 as ordering signal only, not a breakthrough | Rich and opaque derived channels beat a shuffled control slightly, but both had relative held-out MSE above 30 and failed the mean-baseline utility gate | A new separately authorized protocol must increase held-out sample size and freeze a better-conditioned estimator before revisiting utility |
+| 2026-08-13 | Close the V28/V29 synthetic channel lane | V29's tune-only ridge selection and larger assessment still produced rich relative MSE `5.999`, opaque `5.091`, and shuffled `1.005`; the proposed channels failed the held-out utility gate | A materially different protocol with an independent causal target and reviewed power analysis is authorized |
+| 2026-08-14 | Execute V30 planted narrative-versus-mechanism validation | A separately represented mechanism object exactly predicted a known actor's held-out intervention effects while a plausible narrative and shuffled mechanism failed | A fresh trained-model mechanism protocol with independent instrumentation, held-out effects, and authorization is reviewed |
+| 2026-08-14 | Execute V31 synthetic measurement stress test | The measured mechanism beat narrative, shuffle, zero, and fit-mean baselines on all 24 clean/noisy linear tasks; 7 of 12 interaction tasks failed and were retained | A fresh protocol with a declared model class, larger independent task families, and trained-model instrumentation is reviewed |
+| 2026-08-14 | Freeze and execute V32 scoring-layer contract | Six frozen evidence profiles classified exactly; V30/V31 stop at mechanism and introspection prerequisites are mandatory | A separately authorized trained-model protocol can populate the mechanism or introspection layer only after its required evidence exists |
+| 2026-08-14 | Stop V33 trained-model replication readiness at custody/instrument boundary | V26 found no fresh per-layer actor; V27's existing public ABI is final-embedding feasibility only and its actor is not a new mechanism identity | A non-reserved actor with a validated per-layer intervention surface and complete custody packet is authorized |
+| 2026-08-14 | Validate V34 fresh-actor custody handoff as a design-only preflight | The typed gate rejects reserved actors, incomplete custody, malformed digests, opened assessments, forbidden material, elevated ceilings, and unknown raw-trace or credential fields | A separately reviewed real custody packet and independent instrument validation may request execution authorization; V34 alone never grants it |
+| 2026-08-14 | Validate V35 custody packet integrity as a design-only preflight | Canonical serialization, digest recomputation, schema denial, nonce uniqueness, and predecessor ordering all reject the tested tamper and replay mutations | Durable replay-state ownership and separately verified real custody are required before any execution authorization |
+| 2026-08-14 | Validate V36 custody replay manifest as a design-only preflight | The local append-only chain rejects tested tampering, duplicate nonce, wrong predecessor, invalid packet, and unknown-field mutations while retaining only typed quarantine metadata | Durable operator-owned replay state and independently verified real custody are required before execution authorization |
+| 2026-08-15 | Validate V37 Astral execution-eligibility gate as a design-only preflight | The gate grants only eligibility for separate human authorization when synthetic custody, instrument, review, nonclaim, ceiling, and disabled-execution controls pass; all denial mutations fail closed | Independently verified real custody, instrument readiness, and explicit authorization are required before any future run |
