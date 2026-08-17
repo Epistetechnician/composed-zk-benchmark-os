@@ -22428,3 +22428,816 @@ Delivered in isolated `crates/statebook-authority`:
 - sixteen focused integration tests.
 
 P1-P6 identities remain unchanged. No controller client was added.
+
+## Benchmark OS Track: Experiment Unit and Adaptive Observability
+
+Status: complete for named state slice
+benchmark-os-experiment-unit-adaptive-observability-v1.
+
+Delivered in crates/zkbench-core/src/experiment_observability.rs:
+
+- fixed nine-slot run bundle for config, task, prompt, response, evaluation,
+  mechanism record, metadata, logs, and report;
+- per-artifact provenance for who, what, when, implementation version, and
+  source revision;
+- replaceable Task, ResponseProducer, Metric, Evaluator, MechanismCollector, and
+  ObservabilityScheduler seams plus the fixed-shape ExperimentRunner seam;
+- metadata-only ComposedExperimentRunner integration test covering the full
+  task -> response -> metric -> evaluation -> scheduler -> mechanism -> bundle
+  path, including a retained negative result;
+- Tier0 always-on metadata, Tier1 sampled collection, Tier2
+  anomaly-triggered deep dives, and Tier3 gold-case budgets;
+- append-only digest-chained mechanism ledger;
+- mechanism-ledger schema v2 with explicit failed-collection reasons and
+  decision/payload-digest validation;
+- explicit metric stability, downstream-predictiveness, and noise
+  meta-evaluation ledger;
+- focused tests for fixed slots, budget allocation, failure escalation,
+  ledger tamper detection, and metric meta-evaluation.
+
+The new module is metadata-only and remains capped at Level0DesignNote. It
+does not execute models, access the network, collect privileged telemetry,
+mutate the accepted Evidence Ledger, or promote benchmark, interpretability,
+causal, production, or authority claims.
+
+## Benchmark OS Track: Local Plugin and Observability Contract Composition
+
+Status: complete for named state slice
+`benchmark-os-experiment-contract-composition-v1`.
+
+`LocalJsonExperimentRunner` now bridges the concrete static local plugin into
+the nine-slot observability contract. It runs the inner local replay once,
+validates the `Level1LocalReplay` bundle, allocates a deterministic
+observability tier, appends a digest-chained mechanism record, emits the outer
+fixed-shape bundle, and validates that outer bundle at `Level0DesignNote`.
+The bridge is one-shot per fixed run id and introduces no external execution,
+network, model download, privileged telemetry, accepted-evidence mutation, or
+claim escalation.
+
+## Benchmark OS Track: Adaptive Observability Integrity Hardening
+
+Status: complete for named state slice
+`benchmark-os-observability-integrity-hardening-v1`.
+
+Weighted scheduler decisions now support recomputation of priority and rule
+reasons after deserialization. Mechanism records validate decision bounds,
+payload-digest shape, Tier0 metadata-only invariants, and required failure
+reasons. These are local contract checks only; they do not promote
+observability metadata to scientific evidence or raise the `Level0DesignNote`
+claim ceiling.
+
+## Benchmark OS Track: Canonical Artifact Projection
+
+Status: complete for named state slice
+`benchmark-os-canonical-artifact-projection-v1`.
+
+The local composition bridge now emits a typed, versioned inner-to-outer
+artifact projection in its canonical config payload. It binds the inner bundle
+id and digest, fixed source artifacts, outer slot URIs, relation types, and
+deterministic projected digests. Tier0 mechanism absence is explicit; task,
+prompt, response, evaluation, and mechanism mappings are validated against
+the inner bundle rather than inferred from tuple payloads or imports. The
+validator checks outer identity, config digest, slot target, source identity,
+and projected digest drift while keeping the two bundle schemas separate.
+This remains metadata-only, introduces no external execution or evidence
+mutation, and stays capped at `Level0DesignNote`.
+
+## Benchmark OS Track: Composition Config Transport
+
+Status: complete for named state slice
+`benchmark-os-composition-config-transport-v1`.
+
+The local composition config now has deterministic JSON serialization,
+deserialization, digest computation, and readback validation against the outer
+config artifact reference. Readback rejects changed bytes, non-canonical JSON,
+stale inner identities, and projection drift before returning the config. This
+is transport/readback plumbing only; it adds no filesystem materialization,
+external execution, accepted evidence, or claim escalation.
+
+## Benchmark OS Track: Composition Packet Readback
+
+Status: complete for named state slice
+`benchmark-os-composition-transport-readback-v1`.
+
+The local transport seam now validates the inner experiment bundle JSON,
+composition config JSON, and outer observability bundle JSON as one packet. It
+rejects non-canonical inner/outer bytes before trusting the typed identities,
+then applies the config digest and projection checks. The implementation
+remains in-memory, metadata-only, and capped at `Level0DesignNote` for the
+outer composition.
+
+## Benchmark OS Track: Experiment Packet Materialization and Readback
+
+Status: complete for named state slice
+`benchmark-os-experiment-packet-materialization-readback-v1`.
+
+`crates/zkbench-core/src/experiment_packet.rs` now provides the typed
+`ExperimentPacket` seam plus caller-owned local materialization and readback.
+The writer owns the existing canonical serializers and emits only the fixed
+packet manifest, inner bundle JSON, composition config JSON, outer bundle JSON,
+and digest sidecars. The reader enforces declared-file completeness, canonical
+bytes, payload and manifest digests, identity/projection consistency, safe
+relative paths, symlink rejection, protected-path rejection, and explicit
+matching overwrite.
+
+The packet is durable local metadata, not an execution surface. It does not
+retain raw prompt/response or privileged mechanism streams, mutate source
+artifacts or the accepted Evidence Ledger, authorize external replay, or
+create official benchmark or Level2+ evidence. The outer package remains
+`Level0DesignNote`; the embedded experiment remains `Level1LocalReplay`.
+
+## Benchmark OS Track: Experiment Bundle and Static Plugin Contracts
+
+Status: complete for named state slice
+`benchmark-os-experiment-bundle-plugin-contract-v1`.
+
+Delivered in `crates/zkbench-core/src/experiment.rs`:
+
+- versioned `ExperimentBundle` with configuration, data version, model/runtime
+  version, mechanism ledger, metrics, report, and digest-bound artifact refs;
+- explicit `Collected`, `NotCollected`, `Unsupported`, and `Failed` measurement
+  states with source/reason validation;
+- `ExperimentTask`, `ExperimentModel`, `MechanismCollector`, `Evaluator`, and
+  `ExperimentPlugin` interfaces;
+- static plugin registry metadata with explicit in-process dispatch and no dynamic loading;
+- one local JSON generated-instance replay plugin emitting the full bundle;
+- deterministic JSON serialization, bundle digesting, fail-closed validation,
+  and five focused integration tests.
+
+The implementation composes existing generator, replay, artifact-digest, and
+claim-boundary primitives. It does not broaden `BenchmarkPackManifest` or
+`ReportBundleManifest`, does not execute external processes or network calls,
+does not create official benchmark evidence, and remains capped at
+`Level1LocalReplay`.
+
+## Benchmark OS Track: Experiment Bundle Integrity
+
+Status: complete for named state slice
+`benchmark-os-experiment-bundle-integrity-v1`.
+
+The bundle validator now checks required component identities and schema
+versions, binds the configuration digest to its canonical JSON bytes, binds
+the model digest to its declared identity tuple, and rejects incompatible
+metric or mechanism value variants. The slice remains local and capped at
+`Level1LocalReplay`.
+
+## Benchmark OS Track: Static Plugin Registry Dispatch
+
+Status: superseded by the descriptor-only separation slice
+`benchmark-os-plugin-registry-descriptor-only-separation-v1`.
+
+The historical implementation introduced descriptor validation and
+descriptor-to-bundle output binding. Executable construction and lifecycle
+dispatch now belong exclusively to `ExperimentPluginFactoryCatalog`; the
+serializable `ExperimentPluginRegistry` is metadata-only. The output-binding
+invariants remain active through `ExperimentPlugin::run_validated` and
+`validate_experiment_plugin_output`. Dynamic loading, process execution,
+network access, evidence mutation, and claim-boundary escalation remain
+outside this slice.
+
+## Benchmark OS Track: Plugin Output Binding
+
+Status: complete for named state slice `benchmark-os-plugin-output-binding-v1`.
+
+The plugin lifecycle now has one explicit post-run validation seam. It first
+validates the complete `ExperimentBundle`, then checks schema-version
+correspondence, plugin/config identity, model identity, collector identity,
+evaluator identity, and all bundle-level claim ceilings against the frozen
+`ExperimentPluginDescriptor`. Focused mismatch tests prove descriptor drift
+and claim-ceiling escalation are rejected before a bundle is returned.
+
+This is local contract integrity only. It does not add dynamic loading,
+filesystem or process execution, network access, accepted Evidence Ledger
+mutation, official benchmark evidence, or a higher claim ceiling.
+
+## Benchmark OS Track: Plugin Factory Catalog
+
+Status: complete for named state slice
+`benchmark-os-experiment-plugin-factory-catalog-v1`.
+
+`ExperimentPluginFactoryCatalog` now owns explicit typed in-process factories,
+while `ExperimentPluginRegistry` remains a descriptor-only metadata inventory.
+Registration validates descriptor identities and duplicate ids without
+constructing or executing plugins. Instantiation validates that the returned
+plugin descriptor exactly matches its registered factory descriptor, and
+catalog execution routes through `run_validated`.
+
+The shipped local JSON factory owns its typed `GeneratorConfig`. The local
+composition runner now uses the catalog and the validated plugin path, so
+caller-injected adapters cannot bypass descriptor-to-bundle binding. The
+catalog exports metadata through a descriptor-only registry; executable factory
+state is not serializable. This slice remains local contract infrastructure
+with no dynamic loading, filesystem discovery, process execution, network
+access, evidence mutation, or claim-ceiling increase.
+
+## Benchmark OS Track: Descriptor-Only Plugin Registry Separation
+
+Status: complete for named state slice
+`benchmark-os-plugin-registry-descriptor-only-separation-v1`.
+
+`ExperimentPluginRegistry` is now a serializable descriptor inventory with
+validation and metadata resolution only. Its duplicate executable
+`instantiate`/`run` path was removed; `ExperimentPluginFactoryCatalog` is the
+single in-process adapter for factory construction, descriptor matching, and
+validated lifecycle dispatch. Affected packet, observability, and bundle
+tests now use the catalog for execution while retaining the registry for
+metadata assertions. This deepens locality by keeping executable state and
+serialization policy in separate modules and prevents future plugins from
+requiring a second dispatch arm. It remains local contract infrastructure;
+there is no dynamic loading, filesystem discovery, process or network access,
+evidence mutation, or claim-ceiling increase.
+
+## Benchmark OS Track: Packet Write Symlink Preflight
+
+Status: complete for named state slice
+`benchmark-os-experiment-packet-write-symlink-preflight-v1`.
+
+The experiment packet writer now checks every existing path component with
+symlink-aware metadata before writing. Dangling leaf symlinks, existing leaf
+symlinks, and symlinked intermediate directories fail closed before `fs::write`
+can follow them. Focused unit tests prove that outside targets are neither
+created nor mutated. Packet readback, matching overwrite, protected-root checks,
+canonical digest validation, and the `Level0DesignNote` ceiling remain
+unchanged. This is local filesystem safety plumbing only; it does not add
+runtime authority, external execution, or accepted evidence.
+
+## Benchmark OS Track: Canonical Packet Digest Sidecars
+
+Status: complete for named state slice
+`benchmark-os-experiment-packet-canonical-digest-sidecar-v1`.
+
+Packet readback now requires each digest sidecar to equal the exact bytes
+emitted by the writer: the lowercase SHA-256 hex digest followed by one
+newline. Leading, trailing, repeated, and alternate whitespace is rejected;
+readback no longer normalizes sidecar input with `trim()`. Focused tests cover
+both leading and trailing noncanonical whitespace. This hardens local packet
+integrity only; it does not add runtime authority, external execution, or
+accepted evidence.
+
+## Benchmark OS Track: Plugin-Agnostic Composition
+
+Status: complete for named state slice
+`benchmark-os-experiment-plugin-agnostic-composition-v1`.
+
+The typed factory catalog now has a genuine second implementation:
+`MetacognitiveMonitorControlExperimentPlugin`. It packages seven valid frozen
+pure-data cases and results through the same eight-artifact experiment bundle,
+including exact config/data/model digests, explicit sparse mechanism fields,
+metrics, report non-claims, and a `Level0DesignNote` ceiling. Combined catalog
+metadata exports both descriptors while executable factory state remains
+in-process. Focused tests prove descriptor binding, deterministic output,
+independent local dispatch, and retention of the existing Local JSON plugin.
+The later generic composition and packet transport slices preserve the Local
+JSON compatibility path while adding typed adapters for other plugins.
+This is plugin-contract infrastructure only; it does not execute a model,
+invoke an external process, mutate evidence, or grant runtime authority.
+
+## Benchmark OS Track: Generic Nine-Slot Plugin Composition
+
+Status: complete for named state slice
+`benchmark-os-experiment-plugin-agnostic-composition-v1`.
+
+`PluginCompositionRunner` now accepts any catalog-instantiated plugin that
+passes descriptor-to-bundle validation and emits the fixed nine observability
+slots through an explicit `PluginCompositionConfig`. Each binding names the
+inner artifact kind, URI, and digest directly. Focused tests cover the
+metacognitive plugin, the existing Local JSON plugin, canonical config
+transport, missing-binding rejection, outer payload-digest drift, identity,
+and claim ceilings. The runner is in-memory metadata plumbing; durable packet
+materialization is supplied by the shared typed packet transport documented in
+the following slice. No evidence, process, network, model, or runtime
+authority is added.
+
+## Benchmark OS Track: Plugin-Agnostic Packet Materialization and Readback
+
+Status: complete for named state slice
+`benchmark-os-plugin-agnostic-packet-materialization-readback-v1`.
+
+`ExperimentPacketComposition` is now the typed durable transport interface.
+The existing Local JSON composition remains the default adapter, while
+`PluginCompositionConfig` is a second adapter consumed through
+`PluginCompositionPacket`. Shared packet implementation owns canonical
+inner/config/outer serialization, manifest identity, payload and sidecar
+digests, symlink-aware path preflight, protected-root rejection, overwrite
+matching, and strict readback. Focused tests prove generic metacognitive
+write/read equality and rejection of a noncanonical generic config after
+manifest/sidecar resealing. This remains local Level0 metadata packaging only;
+it does not execute models, invoke processes or networks, mutate evidence, or
+grant runtime authority.
+
+## Benchmark OS Track: Plugin Composition Packet Job
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-packet-job-v1`.
+
+`ExperimentPacketJob` is the one-shot orchestration module between the typed
+factory catalog and durable generic packet transport. It validates the selected
+plugin before output creation, instantiates it through the catalog, runs
+`PluginCompositionRunner`, writes the generic packet, and performs strict
+typed readback before returning. Local JSON and metacognitive plugins both run
+through the same job seam. Focused tests cover successful materialization,
+unknown-plugin rejection, protected-root delegation, and second-run rejection.
+This is OS-level orchestration and local metadata packaging only; it does not
+execute models, processes, or networks, mutate evidence, claim atomic writes,
+or grant runtime authority.
+
+## Benchmark OS Track: Plugin Composition Packet Job Configuration
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-packet-job-config-v1`.
+
+`ExperimentPacketJobConfig` is the typed request value for
+`ExperimentPacketJob`. It centralizes plugin, experiment, and run identities,
+provenance, caller-owned output policy, and protected-path declarations. Its
+validator rejects empty identities, empty output roots, and empty protected
+paths before catalog resolution or filesystem access. The job now accepts one
+validated configuration value rather than a positional argument list, while
+one-shot orchestration and strict packet readback remain unchanged. This is
+configuration and metadata plumbing only; it does not execute models,
+processes, or networks, mutate evidence, claim atomic writes, or grant runtime
+authority.
+
+## Benchmark OS Track: Plugin Composition Packet Store Seam
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-packet-store-seam-v1`.
+
+`PluginCompositionPacketStore` separates packet-job orchestration from
+persistence policy. `FilesystemPluginCompositionPacketStore` delegates to the
+existing canonical packet writer and strict reader, preserving digest
+sidecars, symlink-aware path checks, protected roots, overwrite matching, and
+typed readback. `ExperimentPacketJob::new_with_store` accepts injected store
+adapters, and focused tests prove materialize-before-readback ordering,
+packet/manifest drift rejection, and failure short-circuiting. This is a
+metadata persistence seam only; it does not add atomic publication, model or
+process execution, network access, evidence mutation, or runtime authority.
+
+## Benchmark OS Track: Plugin Composition Packet Store In-Memory Adapter
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-packet-store-memory-adapter-v1`.
+
+`InMemoryPluginCompositionPacketStore` provides a second production adapter
+for local composition paths that need the same typed packet contract without
+filesystem publication. It delegates output construction to the canonical
+packet serializer and manifest builder, preserves strict materialize/readback
+equality through the job seam, and reports readback-before-materialization as
+a validation error. This is non-durable local metadata plumbing only; it does
+not add atomic publication, model or process execution, network access,
+evidence mutation, or runtime authority.
+
+## Benchmark OS Track: Storage-Independent Packet-Job Request
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-packet-job-storage-independent-request-v1`.
+
+`ExperimentPacketJobRequest` separates plugin identity, experiment/run
+identity, and provenance from filesystem persistence policy. The additive
+`ExperimentPacketJob::new_with_request_and_store` constructor creates a
+`StorageIndependentExperimentPacketJob` for injected stores without requiring
+an output root, overwrite flag, or protected-path list. The existing
+`ExperimentPacketJobConfig` and filesystem constructor remain a compatibility
+adapter, while request validation and one-shot materialize/readback
+orchestration are shared. Focused tests cover request validation ordering,
+request-backed in-memory execution, compatibility construction, and the
+existing packet drift/failure invariants. This remains local configuration and
+metadata plumbing only; it does not add publication, execution, network
+access, evidence mutation, or runtime authority, and the outer composition
+ceiling remains `Level0DesignNote`.
+
+## Benchmark OS Track: Canonical Observability Slot Order
+
+Status: complete for named state slice
+`benchmark-os-observability-slot-order-v1`.
+
+`ExperimentArtifactKind` now owns the fixed nine-slot count, canonical order,
+and stable field-name mapping. Bundle validation and generic composition use
+that shared Interface instead of maintaining independent slot lists. The
+serialized bundle remains the same nine named fields; this slice only
+centralizes the replacement-sensitive order invariant and keeps the
+`Level0DesignNote` ceiling unchanged.
+
+## Benchmark OS Track: Experiment Bundle Artifact Access
+
+Status: complete for named state slice
+`benchmark-os-experiment-bundle-artifact-access-v1`.
+
+`ExperimentBundle::artifact` is the shared inner-bundle lookup Interface. It
+requires exactly one artifact of the requested kind and rejects missing or
+duplicate kinds. Generic plugin composition now uses that accessor for source
+binding, preventing first-match selection from masking malformed bundles.
+Aggregate bundle validation remains unchanged and continues to report the
+complete issue set; this slice only hardens Adapter lookup semantics and
+preserves the `Level1LocalReplay` ceiling.
+
+## Benchmark OS Track: Local Projection Binding Access
+
+Status: complete for named state slice
+`benchmark-os-local-json-projection-binding-access-v1`.
+
+`LocalJsonArtifactProjection::binding` now requires exactly one matching outer
+slot and rejects missing or duplicated bindings before a local composition
+runner reads the projection. The aggregate projection validator remains the
+complete-diagnostics path, while runner lookup uses the strict accessor. Focused
+tests cover canonical access, missing slots, and duplicate slots. This is local
+metadata plumbing only; it does not change the serialized projection shape,
+execution authority, evidence state, or the `Level0DesignNote` ceiling.
+
+## Benchmark OS Track: Local Inner Artifact Access
+
+Status: complete for named state slice
+`benchmark-os-local-inner-artifact-access-v1`.
+
+The local observability Adapter now routes projection source selection and
+mechanism-digest lookup through the strict `ExperimentBundle::artifact`
+Interface. Missing or duplicated inner artifact kinds fail before projection
+construction instead of being silently resolved by first-match vector search.
+Focused tests cover missing and duplicated source artifacts. This preserves the
+existing serialized shape, local-only execution posture, and
+`Level0DesignNote` claim ceiling.
+
+## Benchmark OS Track: Plugin Composition Binding Access
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-binding-access-v1`.
+
+`PluginCompositionConfig::binding` now requires exactly one explicit binding
+for a requested outer slot. Generic outer construction consumes that strict
+Interface directly instead of reconstructing slots through first-match lookup
+over generated references. Focused tests cover missing and duplicated binding
+access, while the serialized config shape and aggregate validation behavior
+remain unchanged. This is local metadata composition only and preserves the
+`Level0DesignNote` claim ceiling.
+
+## Benchmark OS Track: Keyed Packet-Store Receipts
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-packet-store-keyed-receipt-v1`.
+
+`PacketStoreKey` now addresses a packet by plugin, experiment, and run
+identity. `PacketStoreMaterialization` returns a `PacketStoreReceipt` whose
+canonical packet-manifest digest is required for readback. Filesystem and
+in-memory adapters implement `KeyedPluginCompositionPacketStore`; in-memory
+storage keeps keyed materializations rather than an implicit latest value.
+`ExperimentPacketJob` uses the keyed interface by default and exposes additive
+keyed-store constructors for storage-independent callers. The historical
+unkeyed job constructor is routed through an explicit compatibility adapter;
+the concrete adapters retain direct legacy implementations for source
+compatibility. Receipt validation still rejects stale or cross-run output.
+Focused tests cover keyed roundtrip, cross-run receipt rejection, and key/
+packet identity mismatch before materialization. This deepens the persistence
+seam without adding atomic publication, external execution, network access,
+evidence mutation, or runtime authority; the outer packet remains
+`Level0DesignNote`.
+
+## Benchmark OS Track: Receipt-Bearing Packet Job Results
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-packet-job-receipt-result-v1`.
+
+`ExperimentPacketJobResult` now carries the strict packet readback output and
+the exact `PacketStoreReceipt` that binds its plugin, experiment, run, and
+manifest digest. `ExperimentPacketJob::run_once_with_receipt` and the
+storage-independent equivalent expose this value for caller-owned handoff or
+keyed follow-up. Existing `run_once` methods remain output-only compatibility
+adapters. This deepens the job seam without adding a second materialization
+path, publication, external execution, network access, evidence mutation, or
+runtime authority; the packet remains `Level0DesignNote`.
+
+## Benchmark OS Track: Typed Plugin-Composition Identity
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-identity-value-v1`.
+
+`PluginCompositionIdentity` centralizes validation and construction of the
+plugin, experiment, and run identity tuple. Packet-job requests and configs,
+composition configs and runners, and keyed packet-store keys now share the
+typed value through additive accessors and constructors. Existing public
+fields and serialized packet wire fields remain unchanged. The slice is local
+metadata plumbing only; it does not authorize execution, publication,
+external evidence, or runtime access. The outer composition boundary remains
+`Level0DesignNote`.
+
+## Benchmark OS Track: Plugin-Composition Identity Constructor Locality
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-identity-constructor-locality-v1`.
+
+`PluginCompositionIdentity::new_at` now owns path-aware construction and
+validation for the shared identity tuple. Composition config, packet-job
+request, and keyed packet-store key accessors route through that Interface
+instead of rebuilding the tuple in separate Implementations. Existing public
+fields, serialized packet wire fields, validation paths, and claim ceilings
+remain unchanged. This is local metadata plumbing only; it adds no execution,
+publication, evidence mutation, production readiness, benchmark superiority,
+or runtime authority.
+
+## Benchmark OS Track: Plugin-Composition Identity Descriptor Binding
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-identity-descriptor-binding-v1`.
+
+`PluginCompositionRunner::new_with_identity` now requires the supplied typed
+identity's plugin id to match the instantiated plugin descriptor before the
+runner is constructed. This closes descriptor/identity drift at the runner
+Seam, where the invariant is cheapest to enforce, while preserving packet
+schemas, serialized bytes, public runner signatures, and claim ceilings. The
+deletion test is negative: removing this check would make packet/config
+validation rediscover a constructor-time mismatch after composition had
+already begun. This remains local metadata plumbing only; it adds no
+execution, publication, evidence mutation, production readiness, benchmark
+superiority, or runtime authority.
+
+## Benchmark OS Track: Plugin-Composition Artifact-Reference Policy Locality
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-artifact-reference-policy-locality-v1`.
+
+The crate-private `ExperimentArtifactReferencePolicy` now owns the shared
+identity-, provenance-, and digest-bound artifact-reference construction used
+by generic composition as well as the generic and local observability runners.
+The generic outer builder routes config and binding-derived references through
+that existing Seam. The deletion test is positive: removing the policy would
+force three Adapters to reimplement the same scope and provenance invariants.
+URIs, digests, serialized packet bytes, public APIs, and claim ceilings remain
+unchanged. This is local metadata plumbing only; it adds no execution,
+publication, evidence mutation, production readiness, benchmark superiority,
+or runtime authority.
+
+## Benchmark OS Track: Plugin-Composition Output Handoff Validation
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-output-handoff-validation-v1`.
+
+`ValidatedPluginCompositionOutput` now owns the complete inner/config/outer
+handoff with private fields and validated accessors. The additive
+`run_validated_output` Interface feeds the active packet-job Adapter, which
+converts the typed handoff into a packet without reopening the trust decision.
+The public `PluginCompositionOutput`, `run`, and infallible conversion remain
+compatibility Adapters; `try_into_packet` revalidates that public shape before
+conversion. The deletion test is positive: removing the typed handoff would
+push the same cross-artifact trust decision back into each downstream packet
+consumer. Packet bytes, public fields, compatibility conversion, and the
+`Level0DesignNote` claim ceiling remain unchanged. This is local metadata
+plumbing only; it adds no execution, publication, evidence mutation,
+production readiness, benchmark superiority, or runtime authority.
+
+## Benchmark OS Track: Packet-Store Materialization Handoff Validation
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-packet-store-materialization-handoff-validation-v1`.
+
+`ValidatedPacketStoreMaterialization` now owns the receipt/output pair with
+private fields and validated accessors. The additive
+`KeyedPluginCompositionPacketStore::materialize_keyed_validated` Interface
+validates legacy Adapter results before the active packet job performs strict
+readback. Existing store methods, packet bytes, receipt fields, compatibility
+Adapters, and the `Level0DesignNote` claim ceiling remain unchanged. This is
+local persistence plumbing only; it adds no execution, publication, evidence
+mutation, production readiness, benchmark superiority, or runtime authority.
+
+## Benchmark OS Track: Packet-Job Result Handoff Validation
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-packet-job-result-handoff-validation-v1`.
+
+`ExperimentPacketJobResult` now owns the existing
+`ValidatedPacketStoreMaterialization` privately instead of reopening its
+receipt/output pair as independently mutable public fields. Read-only
+`output()` and `receipt()` accessors expose the validated views, while
+`into_materialization()` is the explicit consuming conversion for downstream
+Adapters. The job revalidates strict readback against the retained receipt
+before constructing the result. This concentrates packet identity, manifest
+digest, and readback equality in the existing materialization Seam; it adds no
+new validator, packet bytes, execution, publication, evidence mutation,
+production readiness, benchmark superiority, or runtime authority.
+
+## Benchmark OS Track: Packet-Output Handoff Validation
+
+Status: complete for named state slice
+`benchmark-os-experiment-packet-output-handoff-validation-v1`.
+
+`ValidatedExperimentPacketOutput` now owns the canonical packet output with
+private state and validates the manifest, manifest digest, and typed packet as
+one value. The existing `ExperimentPacketOutput` remains the public
+compatibility shape, while `ValidatedPacketStoreMaterialization` retains the
+validated value internally and exposes only read-only views or explicit
+consuming conversion. This closes the packet-output ownership seam without
+changing packet files, compatibility APIs, execution, publication, evidence
+mutation, production readiness, benchmark superiority, or runtime authority.
+
+## Benchmark OS Track: Typed Packet-Store Receipt Binding
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-packet-store-receipt-typed-binding-v1`.
+
+`PacketStoreReceipt::from_validated_output` now issues generic packet-store
+receipts from `ValidatedPluginCompositionPacketOutput`, binding the validated
+packet key and canonical manifest digest at one Interface. Raw
+`PacketStoreReceipt::from_output` remains a compatibility Adapter that first
+enters the validated output seam, and materialization validation compares
+receipts against the typed issuance path. Receipt fields, packet files,
+execution, publication, evidence mutation, production readiness, benchmark
+superiority, and runtime authority remain unchanged.
+
+## Benchmark OS Track: Local JSON Composition Output Handoff Validation
+
+Status: complete for named state slice
+`benchmark-os-local-json-composition-output-handoff-validation-v1`.
+
+`ValidatedLocalJsonCompositionOutput` now owns the validated inner local
+bundle, composition config, and outer observability bundle with private
+fields. The additive `LocalJsonExperimentRunner::run_validated_output`
+Interface returns this typed handoff; historical `run()` and
+`composition_config()` remain compatibility Adapters. The deletion test is
+positive: removing the handoff would return the complete projection decision
+to each caller that currently has to retain and revalidate three separate
+values. JSON bytes, the nine-slot mapping, one-shot transaction behavior, and
+the `Level0DesignNote` ceiling remain unchanged. This is local metadata
+plumbing only; it adds no execution, publication, evidence mutation,
+production readiness, benchmark superiority, or runtime authority.
+
+## Benchmark OS Track: Observability Run Lifecycle Transaction
+
+Status: complete for named state slice
+`benchmark-os-observability-run-lifecycle-transaction-v1`.
+
+Both the generic and local composition runners now use one private transaction
+for tentative scheduler budget and mechanism-ledger state. Allocation,
+collection, ledger validation, projection validation, and nine-slot artifact
+validation complete before commit. Failed runs preserve the prior budget,
+mechanism ledger, and local composition config; successful runs retain the
+existing one-shot commit behavior. This is local deterministic metadata
+plumbing only. It does not add model execution, external execution, network
+access, accepted evidence, production readiness, benchmark superiority, or
+authority, and the outer composition ceiling remains `Level0DesignNote`.
+
+## Benchmark OS Track: Legacy Packet-Store Compatibility Containment
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-packet-store-legacy-seam-containment-v1`.
+
+The keyed receipt-bound store remains the active packet-job persistence
+interface. The historical unkeyed `PluginCompositionPacketStore` interface and
+`LegacyPluginCompositionPacketStoreAdapter` now live in the explicit
+`experiment_packet_store_compat` module, while the packet-store module keeps
+root/source-compatible re-exports. New adapters are directed to the keyed
+identity and receipt interface; existing unkeyed constructors and adapters
+retain their behavior. This is compatibility locality and local metadata
+plumbing only. It adds no execution, publication, evidence mutation, atomic
+write guarantee, runtime authority, or claim-boundary elevation.
+
+## Benchmark OS Track: Validated Plugin Output Value
+
+Status: complete for named state slice
+`benchmark-os-validated-plugin-output-value-v1`.
+
+`ValidatedExperimentPluginOutput` binds a validated plugin descriptor to its
+validated `ExperimentBundle`. Catalog dispatch, generic composition, and the
+local composition runner now consume this typed handoff, while
+`ExperimentPlugin::run_validated` remains an output-only compatibility adapter.
+Descriptor identity, bundle schema, artifact completeness, component binding,
+and claim ceilings are validated once at construction. Existing serialized
+bundle bytes and local claim ceilings remain unchanged; this is local contract
+validation only and does not add execution, evidence, production readiness,
+benchmark superiority, or authority.
+
+## Benchmark OS Track: Observability Run Artifact Policy
+
+Status: complete for named state slice
+`benchmark-os-observability-run-artifact-policy-v1`.
+
+The private `ExperimentArtifactReferencePolicy` now centralizes identity- and
+provenance-bound artifact reference construction for the generic and local
+observability runners, plus typed report reference validation. Adapter
+payloads, nine-slot order, URIs, serialized bytes, digest semantics, and the
+`Level0DesignNote` claim ceiling remain unchanged. This is local metadata
+plumbing only; it adds no execution, publication, accepted evidence,
+production readiness, benchmark superiority, or runtime authority.
+
+## Benchmark OS Track: Local Projection Single-Source Access
+
+Status: complete for named state slice
+`benchmark-os-local-json-projection-single-source-access-v1`.
+
+`LocalJsonArtifactProjection::single_inner_artifact` now requires exactly one
+inner source for direct task, prompt, and response slots. The local composition
+runner consumes that Interface instead of first-element selection, while the
+evaluation slot retains its explicit multi-source projection. Focused tests
+cover canonical, missing, and duplicated source access. The serialized
+projection shape and `Level0DesignNote` claim ceiling remain unchanged.
+
+## Benchmark OS Track: Plugin Composition Source Binding Integrity
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-source-binding-integrity-v1`.
+
+`PluginCompositionBinding::source` now provides exact-kind lookup, and binding
+validation rejects duplicate inner artifact kinds before generic outer
+projection. Multi-source evaluation and log mappings remain supported when
+their source kinds are distinct. Focused tests cover canonical lookup,
+duplicate lookup, and aggregate validation rejection. The serialized config
+shape and `Level0DesignNote` claim ceiling remain unchanged.
+
+## Benchmark OS Track: Plugin Composition Ordered Binding Access
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-ordered-binding-access-v1`.
+
+`PluginCompositionConfig::bindings_in_order` now exposes the fixed outer
+binding order owned by `OuterKind::ALL`. Generic outer construction and
+cross-validation consume that Interface instead of maintaining independent
+slot sequences or raw binding iteration. Missing and duplicated binding access
+fails closed, while the serialized config shape and `Level0DesignNote` claim
+ceiling remain unchanged.
+
+## Benchmark OS Track: Plugin Composition Canonical Order
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-canonical-order-v1`.
+
+Generic composition validation now requires serialized bindings to match
+`OuterKind::ALL` position-for-position. Missing, duplicated, and permuted
+outer slots fail closed before projection; the ordered Interface remains the
+single construction and cross-validation seam. Serialization, digests, and
+the `Level0DesignNote` claim ceiling are unchanged.
+
+## Benchmark OS Track: Plugin Composition Projection Adapter
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-projection-adapter-v1`.
+
+`PluginCompositionProjector` now owns the runtime-only inner-to-outer source
+projection seam. The standard projector preserves existing behavior, while an
+explicit projector can support a different valid plugin artifact layout
+without editing generic composition. Config serialization, packet transport,
+outer validation, digests, execution authority, and the `Level0DesignNote`
+claim ceiling remain unchanged.
+
+## Benchmark OS Track: Plugin Composition Projector Provenance
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-projector-provenance-v1`.
+
+Projectors now declare a fallible `ModuleDescriptor`, and generic composition
+validates and retains that identity before plugin execution. Missing,
+malformed, and wrong-module descriptors fail closed. Persisted config and
+packet shapes, digests, authority, evidence status, and the `Level0DesignNote`
+claim ceiling remain unchanged.
+
+## Benchmark OS Track: Plugin-Composition Packet-Job Projector Injection
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-packet-job-projector-injection-v1`.
+
+The durable packet job now carries a replaceable `PluginCompositionProjector`
+through construction and routes execution through the descriptor-aware
+composition seam. Existing constructors default to the standard projector;
+additive filesystem, keyed-store, and storage-independent constructors accept
+replacement projectors. Descriptor validation happens before plugin execution,
+and focused coverage proves replacement projection through keyed materialize /
+strict readback plus invalid-projector rejection before output creation.
+Packet schemas, manifests, serialized config, digests, one-shot behavior,
+authority, evidence status, and the `Level0DesignNote` claim ceiling remain
+unchanged.
+
+## Benchmark OS Track: Durable Projector Attribution
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-projector-durable-attribution-v1`.
+
+The serialized generic composition config now carries the validated projector
+`ModuleDescriptor` for every newly emitted composition. Config digests,
+outer config references, packet manifests, and strict readback therefore
+retain the concrete replacement implementation that produced the bindings.
+Equivalent projector implementations intentionally differ in config identity
+and digest even when they produce equal binding values. Receipt-bound jobs
+retain the same experiment/run key but receive a different manifest digest
+when the replacement projector changes the attributed config.
+
+The field is additive and optional only for reading legacy v1 JSON. Legacy
+configs remain semantically validated but are explicitly marked as lacking
+durable projector attribution. Focused tests cover descriptor retention,
+legacy deserialization, changed config identity, packet roundtrip, and
+replacement projector readback. This remains local metadata packaging at the
+`Level0DesignNote` ceiling; it does not mutate evidence or authorize runtime
+execution.
+
+## Benchmark OS Track: Durable Composition-Adapter Attribution
+
+Status: complete for named state slices
+`benchmark-os-plugin-composition-adapter-durable-attribution-v1` and
+`benchmark-os-observability-composition-adapter-durable-attribution-v1`.
+
+Generic and local composition configs now retain a validated
+`ModuleDescriptor` for the concrete composition Adapter that emitted each
+config. The existing `adapter_id` compatibility gate remains unchanged; the
+descriptor adds stable module identity, implementation identity, version, and
+source revision. Because it is part of canonical config serialization, the
+identity propagates through config digests, outer references, packet manifests,
+and strict readback. Legacy v1 configs may omit the field and remain
+semantically readable, but are explicitly not durably composition-adapter
+attributed. Focused tests cover descriptor retention, implementation drift,
+legacy omission, config transport, and downstream digest binding. This is
+local metadata plumbing only; it adds no execution, publication, evidence
+mutation, production readiness, benchmark superiority, or runtime authority.

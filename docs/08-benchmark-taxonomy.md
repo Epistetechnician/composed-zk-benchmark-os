@@ -19,6 +19,7 @@ Benchmark Families are generated from Semantic IR and expected verdicts. Each fa
 | Recursion aggregation cases | Aggregate evidence envelopes. | depth, aggregation width | recursion tolerance, proof size | envelope mismatch | Recursion evidence only | gnark later |
 | Formal-only semantic cases | Prove tiny scoped properties. | property scope | proof status | invariant strengthening/weakening | Level 4/5 when proved | clean, zkLean, Garden |
 | Negative-test-only cases | Focus on rejected traces. | mutation class | failure coverage | all malicious classes | Backend capability evidence | Mock, formal, selected benchmark lanes |
+| MetacognitiveMonitorControl | Synthetic evaluation contract for monitoring, reporting, calibration, control, and domain-shift separation. | confidence method, signal source, split, required control | task correctness, monitoring sensitivity, calibration, control utility, domain-shift degradation | overconfidence, underconfidence, monitor-without-control, control-without-monitor, unlocked assessment | Level 0 design note until a separately authorized local evaluation exists | Pure-data contract only; no model or backend execution |
 
 ## Evidence Rule
 
@@ -51,6 +52,17 @@ Future families:
 - Formal-only semantic cases.
 
 Generated families are local semantic fixtures. They are not official benchmark evidence and do not carry performance metrics.
+
+The `MetacognitiveMonitorControl` family is a synthetic evaluation contract,
+not a generated Semantic IR workload. Its eight pure-data variants and oracle
+are implemented in `zkbench-core` under the paper-driven state slice
+`research-synthesis-metacognition-v1-benchmark-contract`. The contract remains
+`Level0DesignNote`: it defines admissible evaluation semantics and negative
+controls but produces no model result, benchmark score, or authority. Its
+stable scenario identifiers are `calibrated_proceed`, `overconfident_error`,
+`underconfident_correct`, `detects_error_revises`,
+`detects_error_no_control`, `control_without_monitor`,
+`domain_shift_overconfidence`, and `malformed_record`.
 
 ## Phase K Local Soak Profiles
 

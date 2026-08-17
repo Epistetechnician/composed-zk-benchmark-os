@@ -932,6 +932,9 @@ Surface DSL
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for thirteen original Statebook architecture illustrations and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
+| [docs/experiment-bundle-plugin-contract-v1.md](docs/experiment-bundle-plugin-contract-v1.md) | Versioned experiment bundle, sparse mechanism ledger, typed plugin seams, two typed catalog implementations, and descriptor-only metadata registry. |
+| [docs/experiment-unit-adaptive-observability-v1.md](docs/experiment-unit-adaptive-observability-v1.md) | Fixed experiment-unit artifact slots, provenance, adaptive observability tiers, append-only mechanism history, and metric meta-evaluation. |
+| [docs/research/2607.11881-metacognition-synthesis-v1.md](docs/research/2607.11881-metacognition-synthesis-v1.md) | Survey-grounded metacognitive monitoring/reporting/control cross-system synthesis and synthetic benchmark contract boundary. |
 | [docs/research/astral-self-modeling/README.md](docs/research/astral-self-modeling/README.md) | Level 0 research project for mechanistic self-model prediction and causally validated self-correction. |
 | [docs/research/astral-self-modeling/30-pretrained-lm-effect-explainer-v17.md](docs/research/astral-self-modeling/30-pretrained-lm-effect-explainer-v17.md) | V17 prospective pretrained-LM intervention-effect explainer feasibility protocol and claim boundary. |
 | [docs/research/astral-self-modeling/31-v17-execution-record.md](docs/research/astral-self-modeling/31-v17-execution-record.md) | V17 validated execution record: exact intervention plumbing and no nonlinear-telemetry candidate. |
@@ -1232,6 +1235,75 @@ This is local hermetic authority-preflight regression evidence only. No value mo
   `audit-index/digests/audit-index-manifest.sha256`. The output remains a
   `Level0DesignNote` local integrity summary and is not accepted evidence,
   official benchmark evidence, ZK backend performance, or Level2+ evidence.
+- A versioned `ExperimentBundle` contract composes task configuration, data
+  identity, model/runtime identity, a sparse explicit `MechanismLedger`,
+  metrics, report, and digest-bound artifact references. Static plugin seams
+  exist for `ExperimentTask`, `ExperimentModel`, `MechanismCollector`, and
+  `Evaluator`, with one local JSON end-to-end plugin, factory-catalog dispatch, and
+  deterministic bundle validation. The slice remains capped at
+  `Level1LocalReplay` and does not
+  establish official benchmark evidence, interpretability, causal validity,
+  production readiness, or runtime authority.
+- `LocalJsonExperimentRunner` composes that concrete local plugin into the
+  adaptive nine-slot observability manifest, records one scheduler decision,
+  retains a digest-chained mechanism ledger, and stores a canonical typed
+  inner-to-outer artifact projection with fail-closed source and target digest
+  validation plus deterministic config transport/readback validation. Tier0
+  mechanism absence is explicit. A complete three-artifact transport readback
+  path validates inner bundle, config, and outer bundle bytes together. The
+  typed `ExperimentPacket` seam now materializes and strictly reads back that
+  packet under a caller-owned declared-file root with payload/manifest digest
+  sidecars, overwrite matching, symlink rejection, and protected-path checks.
+  The executable factory-catalog path validates descriptor-to-bundle output
+  binding for schema, plugin, model, collector, evaluator, and claim ceilings
+  before returning a bundle. The typed metadata registry is descriptor-only;
+  an explicit typed factory catalog owns plugin
+  construction while metadata serialization remains descriptor-only; the
+  catalog now proves a second pure-data metacognitive plugin through the same
+  output-binding path. `PluginCompositionRunner` now composes both the
+  metacognitive and Local JSON bundles through explicit nine-slot source-kind
+  bindings with digest and identity validation, and the
+  composition runner uses the same validated path. The durable packet seam now
+  accepts both the historical Local JSON config and the generic plugin config
+  through one typed transport interface, preserving canonical manifests,
+  payload digests, sidecars, symlink-aware writes, protected-root checks,
+  overwrite matching, and strict readback. Packet materialization also
+  preflights every existing path component so dangling and intermediate
+  symlinks cannot be followed during writes, and readback requires exact
+  canonical digest-sidecar bytes.
+  `ExperimentPacketJob` now owns the one-shot catalog-to-composition-to-write-
+  and-readback choreography for both registered plugins, rejecting unknown
+  plugins before output creation and returning only after typed packet and
+  manifest equality. `ExperimentPacketJobConfig` provides one validated typed
+  request value for those identities, provenance, output, and protected-path
+  invariants. `ExperimentPacketJobRequest` is the storage-independent identity
+  and provenance request, and `new_with_request_and_store` lets non-filesystem
+  adapters use the same choreography without a fake output root. The existing
+  config constructor remains the filesystem compatibility path.
+  `PluginCompositionPacketStore` keeps persistence behind
+  filesystem and non-durable in-memory adapters while allowing hermetic
+  choreography adapters for tests. Both production adapters share the
+  canonical packet-output builder; this adds no atomic-write guarantee,
+  external execution, evidence mutation, or runtime authority.
+  `KeyedPluginCompositionPacketStore` now binds materialization to a typed
+  plugin/experiment/run key and returns a manifest-digest receipt required for
+  readback. The filesystem and in-memory adapters reject stale or cross-run
+  receipt use; the historical unkeyed job constructor is routed through an
+  explicit `experiment_packet_store_compat` compatibility module while root
+  re-exports remain source-compatible. This is receipt-bound local metadata plumbing, not
+  publication, execution, evidence mutation, or runtime authority.
+  `ExperimentPacketJob::run_once_with_receipt` now exposes the validated packet
+  and its receipt together for caller-owned handoff or keyed follow-up;
+  existing `run_once` callers retain the output-only return type.
+  The additive `PluginCompositionIdentity` value centralizes the plugin,
+  experiment, and run tuple across requests, composition configs, runners, and
+  keyed stores without changing packet wire fields.
+  `ValidatedExperimentPluginOutput` now carries the descriptor-bound validated
+  bundle across catalog dispatch and both composition runners, while the
+  output-only validated method remains source-compatible.
+  outer composition remains
+  `Level0DesignNote`; it does not add external execution, model downloads,
+  privileged telemetry, accepted evidence, or runtime authority.
 - Phase S in-memory audit-index ergonomics now exists for one valid
   `LocalAuditIndexManifest`: exact filters over manifest fields, deterministic
   grouping and sorting, selected input ids, warning summaries, required

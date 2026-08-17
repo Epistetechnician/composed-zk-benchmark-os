@@ -4,6 +4,8 @@
 //! external adapters and does not shell out to benchmark or proof systems.
 
 pub mod local_json;
+pub mod metacognitive_monitor_control;
+pub mod opaque_trace_replay;
 pub mod zk_harness;
 
 use serde::{Deserialize, Serialize};
@@ -17,6 +19,29 @@ use crate::replay::{ReplayManifest, ReplayResult};
 pub use local_json::{
     local_json_capabilities, LocalJsonAdapter, LocalJsonAdapterConfig, LocalJsonReplayInput,
     LocalJsonReplayOutput, LocalJsonReplaySummary, LOCAL_JSON_ADAPTER_ID,
+};
+pub use metacognitive_monitor_control::{
+    build_metacognitive_monitor_control_case, expected_metacognitive_monitor_control_verdict,
+    validate_metacognitive_monitor_control_candidate,
+    validate_metacognitive_monitor_control_result, MetacognitiveConfidenceMethod,
+    MetacognitiveControlAction, MetacognitiveMonitorControlCandidate,
+    MetacognitiveMonitorControlCase, MetacognitiveMonitorControlObservation,
+    MetacognitiveMonitorControlResult, MetacognitiveMonitorControlValidation,
+    MetacognitiveMonitorControlValidationIssue, MetacognitiveMonitorControlValidationIssueKind,
+    MetacognitiveMonitorControlVariant, MetacognitiveSignalSource, MetacognitiveSplit,
+    METACOGNITIVE_MAX_CONFIDENCE_MILLI, METACOGNITIVE_MONITOR_CONTROL_CLAIM_BOUNDARY,
+    METACOGNITIVE_MONITOR_CONTROL_FAMILY_ID, METACOGNITIVE_MONITOR_CONTROL_SCHEMA_VERSION,
+};
+pub use opaque_trace_replay::{
+    build_opaque_trace_replay_case, expected_opaque_trace_replay_quarantine_status,
+    expected_opaque_trace_replay_verdict, validate_opaque_trace_replay_adapter_result,
+    validate_opaque_trace_replay_candidate, OpaqueTraceReplayAdapterObservation,
+    OpaqueTraceReplayAdapterResult, OpaqueTraceReplayBoundary, OpaqueTraceReplayCandidate,
+    OpaqueTraceReplayCase, OpaqueTraceReplayContextBinding, OpaqueTraceReplayMutationProvenance,
+    OpaqueTraceReplayValidation, OpaqueTraceReplayValidationIssue,
+    OpaqueTraceReplayValidationIssueKind, OpaqueTraceReplayVariant,
+    OPAQUE_TRACE_REPLAY_CLAIM_BOUNDARY, OPAQUE_TRACE_REPLAY_FAMILY_ID,
+    OPAQUE_TRACE_REPLAY_SCHEMA_VERSION,
 };
 pub use zk_harness::{
     build_default_zk_harness_adapter_manifest, build_manual_handoff_bundle_from_zk_harness_plan,

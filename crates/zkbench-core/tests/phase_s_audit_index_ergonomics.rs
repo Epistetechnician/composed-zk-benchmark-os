@@ -785,18 +785,22 @@ fn audit_index_ergonomics_outputs_reject_partial_unexpected_and_protected_roots(
 
 #[test]
 fn audit_index_ergonomics_outputs_reject_relative_absolute_protected_overlap() {
+    // Test-isolation extension: phase-s-audit-index-ergonomics-test-isolation-v1.
     let manifest = valid_manifest();
     let request = LocalAuditIndexErgonomicsRequest::default();
     let view = build_local_audit_index_ergonomics_view(&manifest, &request)
         .expect("valid ergonomics view");
-    let relative_protected_root =
-        std::path::PathBuf::from("target/phase-s-ergonomics-overlap-source");
+    let current_dir = std::env::current_dir().expect("current dir");
+    let protected_root_dir = tempfile::tempdir_in(&current_dir).expect("unique protected root");
+    let absolute_protected_root = protected_root_dir
+        .path()
+        .canonicalize()
+        .expect("protected root should canonicalize");
+    let relative_protected_root = absolute_protected_root
+        .strip_prefix(&current_dir)
+        .expect("protected root should be below current dir")
+        .to_path_buf();
     let relative_output_root = relative_protected_root.join("audit-index-ergonomics");
-    let absolute_protected_root = std::env::current_dir()
-        .expect("current dir")
-        .join(&relative_protected_root);
-    let _ = fs::remove_dir_all(&relative_protected_root);
-    fs::create_dir_all(&relative_protected_root).expect("protected root");
 
     let overlap_error = write_local_audit_index_ergonomics_outputs(
         &relative_output_root,
@@ -814,8 +818,6 @@ fn audit_index_ergonomics_outputs_reject_relative_absolute_protected_overlap() {
         !relative_output_root.exists(),
         "overlap rejection must happen before any output directory is written"
     );
-
-    fs::remove_dir_all(&relative_protected_root).expect("cleanup protected root");
 }
 
 #[cfg(unix)]

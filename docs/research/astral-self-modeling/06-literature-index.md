@@ -102,6 +102,24 @@ Reality Check," 2026.
 
 ## V11 Primary-Source Expansion
 
+## S017 — Metacognition in LLMs
+
+Gabrielle Kaili-May Liu, Areeb Gani, Jacqueline Lu, Jordan Thomas, Mark
+Steyvers, and Arman Cohan, "Metacognition in LLMs: Foundations, Progress, and
+Opportunities," 2026.
+
+- URL: https://arxiv.org/abs/2607.11881
+- Evidence class: survey and taxonomy.
+- Supports: separating monitoring, confidence/reporting, and control; treating
+  confidence-method choice, task/domain specificity, and report faithfulness as
+  explicit experimental variables; using metacognitive metrics as complements
+  to ordinary calibration.
+- Protocol consequence: a metacognition claim requires more than reflection or
+  self-report; it needs a locked monitor target, held-out evaluation, and a
+  measured control effect with safety and calibration reporting.
+- Does not establish: any local actor's metacognition, mechanistic access,
+  faithful self-report, causal self-model, consciousness, or Stage 0C/Stage 1.
+
 ## S006 — Causal Abstractions of Neural Networks
 
 Geiger et al., "Causal Abstraction: A Theoretical Foundation for Mechanistic
