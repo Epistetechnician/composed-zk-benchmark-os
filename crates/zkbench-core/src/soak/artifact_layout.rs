@@ -748,7 +748,7 @@ pub(crate) fn validate_soak_path_components(path: &Path) -> Result<()> {
     Ok(())
 }
 
-fn validate_soak_root(root: &Path) -> Result<()> {
+pub(crate) fn validate_soak_root(root: &Path) -> Result<()> {
     if root.as_os_str().is_empty() {
         return Err(ZkBenchError::soak(
             "soak.root",

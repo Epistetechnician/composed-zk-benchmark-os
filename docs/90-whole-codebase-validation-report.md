@@ -46,6 +46,12 @@ roots before report-bundle directory inspection or manifest access. This remains
 local filesystem-safety regression evidence only; it does not elevate benchmark,
 proof, production, or external-evidence claims.
 
+The shared `zkbench-core` local soak-runner output-root state slice now rejects
+empty or parent-unsafe caller-provided output directories before shard lookup or
+artifact materialization. This remains local filesystem-safety regression
+evidence only; it does not elevate benchmark, proof, production, or
+external-evidence claims.
+
 The `zkbench-core` synthetic artifact-resolver path state slice now rejects
 parent-directory components in caller-supplied roots before local artifact
 reads. This remains local filesystem-safety regression evidence only; it does

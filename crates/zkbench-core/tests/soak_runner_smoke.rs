@@ -1,4 +1,5 @@
 use std::fs;
+use std::path::Path;
 
 use tempfile::tempdir;
 use zkbench_core::{
@@ -64,6 +65,25 @@ fn tiny_smoke_run_executes_locally() {
         case.status,
         SoakCaseStatus::Completed | SoakCaseStatus::CompletedWithLocalRejections
     )));
+}
+
+#[test]
+fn runner_rejects_empty_output_root_before_artifact_materialization() {
+    let config = build_smoke_soak_config()
+        .with_families(vec![FamilyKind::BaselineFsm])
+        .with_mutation_passes(vec![MutationClass::MissingConstraints])
+        .with_seed_range(0..1)
+        .with_shard_count(1)
+        .with_output_policy(SoakOutputPolicy::NoPacks);
+    let plan = plan_soak_shards(config).expect("plan should build");
+    let mut runner = LocalSoakRunner::new(plan)
+        .with_temp_or_user_output_dir(Path::new(""))
+        .with_clock(MockTelemetryClock::default());
+
+    let error = runner
+        .run_shard(SoakShardId::from_index(0))
+        .expect_err("empty soak output root should reject before materialization");
+    assert!(error.to_string().contains("soak root must be non-empty"));
 }
 
 #[test]
