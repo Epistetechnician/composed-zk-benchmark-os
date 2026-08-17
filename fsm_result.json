@@ -1,0 +1,13 @@
+{
+  "trajectory": [
+    "A",
+    "B",
+    "C",
+    "B",
+    "C",
+    "B",
+    "A"
+  ],
+  "final_state": "A",
+  "accepted": false
+}

@@ -1,0 +1,426 @@
+<style>
+  :root{
+    --bg:#070a12; --bg2:#0b0f1c; --panel:#0f1524; --panel2:#131b2e;
+    --line:#1d2942; --line2:#2a3a5e;
+    --ink:#e8edf7; --ink2:#aeb9d0; --ink3:#7a879f; --ink4:#54617a;
+    --cyan:#2fd4ff; --cyan-d:#0aa6cc; --violet:#a78bfa; --violet-d:#7c5ce0;
+    --gold:#f5c451; --gold-d:#d9a322; --green:#3ee08f; --green-d:#1fb96e;
+    --rose:#ff7d9c; --rose-d:#e15079; --blue:#5b9bff;
+    --mono:'SFMono-Regular',ui-monospace,'JetBrains Mono',Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:radial-gradient(1200px 700px at 80% -10%,#101a33 0%,var(--bg) 55%) fixed,var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--cyan);text-decoration:none}
+  code{font-family:var(--mono);font-size:.86em;background:#101827;border:1px solid var(--line);padding:.08em .4em;border-radius:5px;color:#cfe3ff}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 26px}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:50;background:rgba(7,10,18,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .navin{max-width:1180px;margin:0 auto;padding:13px 26px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .brand{font-family:var(--mono);font-weight:700;font-size:14px;letter-spacing:.4px;color:var(--ink)}
+  .brand b{color:var(--cyan)}
+  .navlinks{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+  .navlinks a{color:var(--ink3);font-size:12.5px;padding:6px 11px;border-radius:8px;transition:.15s}
+  .navlinks a:hover{color:var(--ink);background:#141d31}
+
+  /* HERO */
+  header{padding:84px 0 64px;position:relative;overflow:hidden}
+  header::before{content:"";position:absolute;inset:-40% -10% auto;height:620px;background:
+    radial-gradient(600px 300px at 15% 20%,rgba(47,212,255,.10),transparent 60%),
+    radial-gradient(500px 280px at 78% 10%,rgba(167,139,250,.10),transparent 60%);pointer-events:none}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan);display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(47,212,255,.25);padding:7px 14px;border-radius:100px;background:rgba(47,212,255,.05)}
+  .kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+  h1{font-size:clamp(34px,5.2vw,58px);line-height:1.06;letter-spacing:-.02em;margin:26px 0 20px;font-weight:800}
+  h1 .grad{background:linear-gradient(100deg,var(--cyan),var(--violet) 55%,var(--rose));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{font-size:18px;color:var(--ink2);max-width:780px}
+  .lede b{color:var(--ink)}
+  .statrow{display:flex;gap:14px;flex-wrap:wrap;margin-top:38px}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 20px;min-width:150px}
+  .stat .n{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--cyan)}
+  .stat .l{font-size:12px;color:var(--ink3);margin-top:2px}
+
+  /* SECTIONS */
+  section{padding:66px 0;border-top:1px solid var(--line)}
+  .sechead{margin-bottom:34px}
+  .secnum{font-family:var(--mono);font-size:12px;color:var(--ink4);letter-spacing:1px}
+  h2{font-size:clamp(25px,3.3vw,36px);letter-spacing:-.015em;margin:8px 0 12px;font-weight:750}
+  .secsub{color:var(--ink2);max-width:820px;font-size:15.5px}
+  .tagline{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:5px 12px;border-radius:100px;margin-bottom:14px}
+
+  .grid{display:grid;gap:16px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:920px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:640px){.g2,.g3,.g4{grid-template-columns:1fr}}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:20px;transition:.18s;position:relative}
+  .card:hover{border-color:var(--line2);transform:translateY(-2px);background:var(--panel2)}
+  .card h3{font-size:16px;font-weight:650;margin-bottom:7px;display:flex;align-items:center;gap:9px}
+  .card p{font-size:13.5px;color:var(--ink2)}
+  .card .ic{width:34px;height:34px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:15px;font-weight:700;flex:none}
+  .pill{display:inline-block;font-family:var(--mono);font-size:10.5px;padding:2px 8px;border-radius:100px;border:1px solid;margin-left:auto}
+
+  /* accent helpers */
+  .c-cyan .ic{background:rgba(47,212,255,.12);color:var(--cyan);border:1px solid rgba(47,212,255,.3)}
+  .c-violet .ic{background:rgba(167,139,250,.12);color:var(--violet);border:1px solid rgba(167,139,250,.3)}
+  .c-gold .ic{background:rgba(245,196,81,.12);color:var(--gold);border:1px solid rgba(245,196,81,.3)}
+  .c-green .ic{background:rgba(62,224,143,.12);color:var(--green);border:1px solid rgba(62,224,143,.3)}
+  .c-rose .ic{background:rgba(255,125,156,.12);color:var(--rose);border:1px solid rgba(255,125,156,.3)}
+
+  .t-cyan{background:rgba(47,212,255,.08);color:var(--cyan);border:1px solid rgba(47,212,255,.3)}
+  .t-violet{background:rgba(167,139,250,.08);color:var(--violet);border:1px solid rgba(167,139,250,.3)}
+  .t-gold{background:rgba(245,196,81,.08);color:var(--gold);border:1px solid rgba(245,196,81,.3)}
+  .t-green{background:rgba(62,224,143,.08);color:var(--green);border:1px solid rgba(62,224,143,.3)}
+  .t-rose{background:rgba(255,125,156,.08);color:var(--rose);border:1px solid rgba(255,125,156,.3)}
+
+  /* CLAIM LADDER */
+  .ladder{display:flex;flex-direction:column;gap:9px;margin-top:8px}
+  .rung{display:flex;align-items:center;gap:16px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px;position:relative;overflow:hidden}
+  .rung::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px}
+  .rung .lvl{font-family:var(--mono);font-weight:700;font-size:15px;width:44px;flex:none;text-align:center}
+  .rung .nm{font-weight:650;font-size:14.5px;min-width:230px}
+  .rung .ds{font-size:13px;color:var(--ink3)}
+  .rung .bar{position:absolute;left:0;top:0;bottom:0;opacity:.06}
+  .r0::before,.r0 .lvl{background:#3a4358;color:#9aa5ba}.r0 .bar{background:#9aa5ba}
+  .r1::before{background:var(--cyan)}.r1 .lvl{color:var(--cyan)}.r1 .bar{background:var(--cyan)}
+  .r2::before{background:var(--blue)}.r2 .lvl{color:var(--blue)}.r2 .bar{background:var(--blue)}
+  .r3::before{background:var(--violet)}.r3 .lvl{color:var(--violet)}.r3 .bar{background:var(--violet)}
+  .r4::before{background:var(--gold)}.r4 .lvl{color:var(--gold)}.r4 .bar{background:var(--gold)}
+  .r5::before{background:var(--rose)}.r5 .lvl{color:var(--rose)}.r5 .bar{background:var(--rose)}
+  .r6::before{background:var(--green)}.r6 .lvl{color:var(--green)}.r6 .bar{background:var(--green)}
+
+  /* HSAI stack */
+  .stack{display:flex;flex-direction:column;gap:10px}
+  .layer{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--violet);border-radius:11px;padding:14px 18px;display:flex;gap:16px;align-items:baseline;flex-wrap:wrap}
+  .layer .ord{font-family:var(--mono);color:var(--violet);font-size:12px;width:52px;flex:none}
+  .layer .crate{font-family:var(--mono);font-size:13.5px;color:var(--ink);font-weight:600}
+  .layer .role{font-size:13px;color:var(--ink3);flex:1;min-width:260px}
+  .arrow{text-align:center;color:var(--ink4);font-family:var(--mono);font-size:14px;line-height:1}
+
+  /* flow */
+  .flow{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap;margin-top:6px}
+  .fstep{flex:1;min-width:130px;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:13px 14px;text-align:center}
+  .fstep .t{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--ink)}
+  .fstep .d{font-size:11.5px;color:var(--ink3);margin-top:3px}
+  .farr{align-self:center;color:var(--ink4);font-family:var(--mono)}
+
+  /* breakthroughs */
+  .bt{background:linear-gradient(160deg,var(--panel),#0d1322);border:1px solid var(--line);border-radius:18px;padding:26px;position:relative;overflow:hidden}
+  .bt::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,var(--glow,rgba(47,212,255,.14)),transparent 70%)}
+  .bt .num{font-family:var(--mono);font-size:13px;color:var(--ink4)}
+  .bt h3{font-size:21px;margin:8px 0 10px;letter-spacing:-.01em}
+  .bt p{font-size:14px;color:var(--ink2)}
+  .bt .via{margin-top:14px;font-family:var(--mono);font-size:11.5px;color:var(--ink3)}
+  .bt .via b{color:var(--ink2)}
+
+  /* status table */
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+  th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line)}
+  th{font-family:var(--mono);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink4);font-weight:600}
+  td{color:var(--ink2)} td b{color:var(--ink)}
+  .badge{display:inline-block;font-family:var(--mono);font-size:10.5px;padding:3px 9px;border-radius:100px;border:1px solid}
+  .b-done{color:var(--green);border-color:rgba(62,224,143,.4);background:rgba(62,224,143,.07)}
+  .b-live{color:var(--cyan);border-color:rgba(47,212,255,.4);background:rgba(47,212,255,.07)}
+  .b-gated{color:var(--gold);border-color:rgba(245,196,81,.4);background:rgba(245,196,81,.07)}
+  .b-block{color:var(--rose);border-color:rgba(255,125,156,.4);background:rgba(255,125,156,.07)}
+
+  .note{border:1px solid var(--line2);border-left:4px solid var(--gold);background:rgba(245,196,81,.04);border-radius:10px;padding:16px 18px;font-size:13.5px;color:var(--ink2);margin-top:20px}
+  .note b{color:var(--gold)}
+  .callout{border:1px solid var(--line2);border-radius:14px;padding:22px;background:var(--panel);margin-top:22px}
+  .callout h4{font-size:15px;margin-bottom:8px}
+  .callout p{font-size:13.5px;color:var(--ink2)}
+  footer{padding:50px 0 70px;border-top:1px solid var(--line);color:var(--ink4);font-size:13px;text-align:center}
+  footer .m{font-family:var(--mono);margin-top:6px;font-size:11.5px}
+  .toc-note{font-family:var(--mono);font-size:11px;color:var(--ink4)}
+  ul.cheat{list-style:none;margin-top:10px}
+  ul.cheat li{padding:7px 0 7px 26px;position:relative;font-size:13.5px;color:var(--ink2);border-bottom:1px dashed var(--line)}
+  ul.cheat li::before{content:"▸";position:absolute;left:6px;color:var(--cyan)}
+  ul.cheat li b{color:var(--ink)}
+</style>
+<nav>
+  <div class="navin">
+    <div class="brand">composed<b>·</b>zk<b>·</b>benchmark<b>·</b>os</div>
+    <div class="navlinks">
+      <a href="#principle">Principle</a>
+      <a href="#ladder">Claim Ladder</a>
+      <a href="#zkbench">zkbench-core</a>
+      <a href="#hsai">HSAI</a>
+      <a href="#astral">Astral</a>
+      <a href="#pcsm">PCSM</a>
+      <a href="#statebook">Statebook</a>
+      <a href="#formal">Formal</a>
+      <a href="#breakthroughs">Breakthroughs</a>
+      <a href="#frontier">Frontier</a>
+    </div>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <span class="kicker"><span class="dot"></span> AUTONOMOUS-RESEARCH SUBSTRATE · EVIDENCE-DISCIPLINED</span>
+    <h1>Every claim an agent makes must be<br><span class="grad">bounded by evidence it can produce.</span></h1>
+    <p class="lede">This repository is a working, end-to-end implementation of that idea. It composes a <b>benchmarking &amp; evidence substrate</b>, a <b>self-auditing identity stack</b>, a <b>governed self-improving research loop</b>, a <b>continual-learning research program</b>, and an <b>economic settlement layer</b> — each built as preregistered, named state-slices with hard claim ceilings, so capability gains never outrun the evidence for them.</p>
+    <div class="statrow">
+      <div class="stat"><div class="n">18</div><div class="l">Rust crates</div></div>
+      <div class="stat"><div class="n">826</div><div class="l">numbered spec/record docs</div></div>
+      <div class="stat"><div class="n">21</div><div class="l">Astral research tooling dirs</div></div>
+      <div class="stat"><div class="n">500+</div><div class="l">preregistered phases</div></div>
+      <div class="stat"><div class="n">7</div><div class="l">evidence claim levels</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- PRINCIPLE -->
+<section id="principle">
+  <div class="wrap">
+    <div class="sechead">
+      <div class="secnum">00 / THE GOVERNING PRINCIPLE</div>
+      <h2>Evidence discipline is the operating system</h2>
+      <p class="secsub">Everything below — every crate, every phase, every campaign — is an expression of one meta-rule. This is not a style choice; it is the thing being built. The repo treats an autonomous system's tendency to overclaim as the core failure mode, and engineers against it at every layer.</p>
+    </div>
+    <div class="grid g3">
+      <div class="card c-cyan"><h3><span class="ic">◈</span>Named state-slice</h3><p>Every mutation is a declared, scoped slice of state — never inferred from imports or convenience. What a phase may and may not touch is explicit and auditable.</p></div>
+      <div class="card c-violet"><h3><span class="ic">⌘</span>Preregistration</h3><p>Experiments are specified — instruments, seeds, gates, stop-rules, interpretation ladder — <b>before</b> execution. Negative results are retained as first-class evidence.</p></div>
+      <div class="card c-gold"><h3><span class="ic">▲</span>Claim ceiling</h3><p>Every artifact carries the strongest claim it may support. A benchmark pass is not a proof; a local replay is not official evidence; a recursion proof is not semantic proof.</p></div>
+      <div class="card c-green"><h3><span class="ic">⛓</span>Append-only ledgers</h3><p>Evidence, admission journals, and campaign state live in digest-chained, log-structured ledgers — durable, tamper-evident, never silently rewritten.</p></div>
+      <div class="card c-rose"><h3><span class="ic">⊘</span>Fail-closed gates</h3><p>Validators reject by default: stale digests, unknown fields, promotion text, claim-boundary escalation. Absence of evidence is a hard stop, not a warning.</p></div>
+      <div class="card c-cyan"><h3><span class="ic">◉</span>Sole mutation authority</h3><p>In governed loops the mechanism (not the model, not the operator) is the only writer of state. Providers propose; the journal decides; humans audit.</p></div>
+    </div>
+    <div class="note"><b>Why this matters:</b> the end-goal is autonomous systems that <i>improve themselves</i>. Unbounded, that is the alignment failure. Bounded by preregistration, evidence chains, and claim ceilings, it becomes a defensible engineering property. The whole repo is a proof that the bounded version is buildable.</div>
+  </div>
+</section>
+
+<!-- CLAIM LADDER -->
+<section id="ladder">
+  <div class="wrap">
+    <div class="sechead">
+      <div class="secnum">01 / THE CLAIM LADDER</div>
+      <h2>Seven rungs of evidence</h2>
+      <p class="secsub">Claims escalate only with artifacts. You cannot assert a higher rung without the evidence class beneath it. This ladder is enforced by validators across <code>zkbench-core</code> and <code>hsai-claim-envelope</code>, and it is the spine the rest of the repo hangs on.</p>
+    </div>
+    <div class="ladder">
+      <div class="rung r0"><div class="bar" style="width:14%"></div><div class="lvl">L0</div><div class="nm">Design note</div><div class="ds">Spec, schema, boundary doc. No execution. The default ceiling for docs-first phases.</div></div>
+      <div class="rung r1"><div class="bar" style="width:28%"></div><div class="lvl">L1</div><div class="nm">Local replay evidence</div><div class="ds">Deterministic local execution reproduced. The ceiling for nearly all local campaigns.</div></div>
+      <div class="rung r2"><div class="bar" style="width:42%"></div><div class="lvl">L2</div><div class="nm">Reproducible benchmark artifact</div><div class="ds">Content-addressed, externally replayable artifact with provenance. Requires artifacts, never assumed.</div></div>
+      <div class="rung r3"><div class="bar" style="width:56%"></div><div class="lvl">L3</div><div class="nm">Cross-backend replay</div><div class="ds">Same result reproduced across independent backends / substrates.</div></div>
+      <div class="rung r4"><div class="bar" style="width:70%"></div><div class="lvl">L4</div><div class="nm">Formal property statement</div><div class="ds">A precise, machine-checkable property is stated (not yet proven).</div></div>
+      <div class="rung r5"><div class="bar" style="width:84%"></div><div class="lvl">L5</div><div class="nm">Machine-checked scoped proof</div><div class="ds">A scoped proof checked by a kernel/solver. A proof about one layer ≠ proof of the whole.</div></div>
+      <div class="rung r6"><div class="bar" style="width:100%"></div><div class="lvl">L6</div><div class="nm">Independently reproduced evidence</div><div class="ds">Reproduced by an independent party / implementation. The strongest claim in the system.</div></div>
+    </div>
+    <div class="note"><b>Hard boundaries that are never relaxed:</b> a benchmark pass is not a proof · a local replay is not official benchmark evidence · a formal proof about one layer is not a proof of the full system · a single aggregate score must never hide weak soundness evidence · evidence ledgers are local integrity records, not tamper-proof proof systems.</div>
+  </div>
+</section>
+
+<!-- ZKBENCH -->
+<section id="zkbench">
+  <div class="wrap">
+    <div class="sechead">
+      <span class="tagline t-cyan">EVIDENCE SUBSTRATE · crate: zkbench-core</span>
+      <h2>zkbench-core — the benchmarking &amp; evidence engine</h2>
+      <p class="secsub">The foundation crate. It turns a human-readable benchmark spec into executable, oracle-verified, adversarially-mutated, evidence-chained artifacts — and then governs how those artifacts may be promoted into accepted evidence. This is where the claim ladder is enforced.</p>
+    </div>
+
+    <div class="callout">
+      <h4>The benchmark pipeline (spec → accepted evidence)</h4>
+      <div class="flow">
+        <div class="fstep"><div class="t">Surface DSL</div><div class="d">human spec</div></div><div class="farr">→</div>
+        <div class="fstep"><div class="t">Semantic IR</div><div class="d">lowered form</div></div><div class="farr">→</div>
+        <div class="fstep"><div class="t">Oracle</div><div class="d">ground truth</div></div><div class="farr">→</div>
+        <div class="fstep"><div class="t">Mutation</div><div class="d">adversarial variants</div></div><div class="farr">→</div>
+        <div class="fstep"><div class="t">Backend Outcome</div><div class="d">observed result</div></div><div class="farr">→</div>
+        <div class="fstep"><div class="t">Evidence Record</div><div class="d">chained</div></div><div class="farr">→</div>
+        <div class="fstep"><div class="t">Score Report</div><div class="d">bounded</div></div>
+      </div>
+    </div>
+
+    <div class="grid g3" style="margin-top:16px">
+      <div class="card c-cyan"><h3><span class="ic">✎</span>Surface DSL → Semantic IR</h3><p>Declarative benchmark families (loops, guards, state machines) lowered to an IR the local oracle can execute deterministically. Protected terminology: Surface DSL, Parsed AST, Semantic IR, Benchmark Family/Instance.</p></div>
+      <div class="card c-cyan"><h3><span class="ic">✓</span>Oracle &amp; Expected Verdict</h3><p>A local ground-truth evaluator decides accepted/rejected traces; the Expected Verdict is preregistered so a backend can't quietly disagree with the spec.</p></div>
+      <div class="card c-cyan"><h3><span class="ic">⚠</span>Mutation Engine</h3><p>14+ adversarial mutation classes — invariant weakening/strengthening, stale-state reads, invalid unroll bounds, observation omission, witness aliasing, recursion-envelope mismatch, public/private boundary mismatch, semantic no-op drift, trace-ordering corruption — each with a declared safety class &amp; expected verdict.</p></div>
+      <div class="card c-cyan"><h3><span class="ic">⛓</span>Evidence Ledger</h3><p>Append-only, digest-chained evidence records. Candidates → append-previews → reviewed proposals → accepted appends → materialization. Nothing becomes "accepted" without review + digest binding.</p></div>
+      <div class="card c-cyan"><h3><span class="ic">◎</span>Distinguishability Scoring</h3><p>Classifies each mutation × backend-outcome cell (true-positive, detected-rejection, unsound-acceptance, false-rejection, inconclusive) so a single aggregate score can't hide weak soundness.</p></div>
+      <div class="card c-cyan"><h3><span class="ic">▤</span>Packs · Bundles · Audit Index</h3><p>Benchmark Packs, Pack-Readiness Reports, Report Bundles, Local Audit Index, Local Benchmark Artifacts &amp; Campaigns — content-addressed, digest-sidecared integrity bundles.</p></div>
+      <div class="card c-cyan"><h3><span class="ic">⇉</span>Soak Runner</h3><p>Deterministic shard-planned campaigns with resumable checkpoints, telemetry, health reports, and failure-corpus extraction. Internal timing telemetry is <b>never</b> treated as prover/verifier time.</p></div>
+      <div class="card c-cyan"><h3><span class="ic">⇪</span>Promotion Pipeline</h3><p>Candidate → review → append → materialize → official-submission package, with external-replay preflight. Every hop is fail-closed and digest-bound; promotion text is rejected by validator.</p></div>
+      <div class="card c-cyan"><h3><span class="ic">∴</span>Formal Lane (inert seam)</h3><p><code>FormalPropertyAssertion</code>, <code>FormalLaneProof</code>, <code>NoopFormalVerifier</code> — a declared attach-point for real provers (SMT/Lean/COBALT), capped at L0 until a machine-checked proof exists.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- HSAI -->
+<section id="hsai">
+  <div class="wrap">
+    <div class="sechead">
+      <span class="tagline t-violet">SELF-AUDITING IDENTITY · 14 crates</span>
+      <h2>HSAI — the proof-of-agent stack</h2>
+      <p class="secsub">Hierarchical Self-Auditing Identity: a layered stack that turns "an agent did a thing" into an attested, distinct, economically-accountable, evidence-bounded fact. Each layer depends only on the one below and never claims more than its ceiling. This is the answer to "how do you trust an autonomous worker you didn't run?"</p>
+    </div>
+
+    <div class="stack">
+      <div class="layer"><span class="ord">L0</span><span class="crate">hsai-claim-envelope</span><span class="role">The atom. A bounded claim with maturity + acceptance-policy algebra (<code>top()</code>, <code>conjoin()</code>). Conjoining claims can never raise maturity above the weakest conjunct.</span></div>
+      <div class="arrow">↓</div>
+      <div class="layer"><span class="ord">L1</span><span class="crate">hsai-agent-case</span><span class="role"><code>AgentCase</code> + evidence lanes (<code>DeclaredLane</code>, <code>LocalMemoryLane</code>) — the case an agent presents, with lanes kept honest.</span></div>
+      <div class="arrow">↓</div>
+      <div class="layer"><span class="ord">L2</span><span class="crate">hsai-distinct-agent</span><span class="role">Anchors + <code>IdentityRegistry</code>: one active identity per registered anchor set. Distinctness, not global uniqueness.</span></div>
+      <div class="arrow">↓</div>
+      <div class="layer"><span class="ord">L3</span><span class="crate">hsai-economy</span><span class="role">Signed credits, admitted-work rewards, demurrage &amp; mutual-credit pools — value that only accrues to verified work.</span></div>
+      <div class="arrow">↓</div>
+      <div class="layer"><span class="ord">L3·sim</span><span class="crate">hsai-economy-sim</span><span class="role">Deterministic integer simulation + funding-rule sweeps over the real economy, capped at "no empirical economic claims."</span></div>
+      <div class="arrow">↓</div>
+      <div class="layer"><span class="ord">L4</span><span class="crate">hsai-membrane</span><span class="role">Bounded, autonomy-scaled conversion between internal credits and external amounts — the controlled boundary to the outside world.</span></div>
+      <div class="arrow">↓</div>
+      <div class="layer"><span class="ord">L5</span><span class="crate">hsai-attestation / -phala</span><span class="role">TEE attestation lane (Phala/dstack): DCAP/QVL/PCCS/JWKS/TLS operator lanes. Ceiling is <code>Attested</code> — attestation is evidence, never proof.</span></div>
+      <div class="arrow">↓</div>
+      <div class="layer"><span class="ord">L6</span><span class="crate">hsai-agent-anchor-registry</span><span class="role">Proof-of-agent anchors: sponsor/bond/reputation anchors, revocation, anchor-set hashing. Existence of an agent anchored in attested hardware.</span></div>
+      <div class="arrow">↓</div>
+      <div class="layer"><span class="ord">L7</span><span class="crate">hsai-agent-admission</span><span class="role">Governed admission of untrusted output → typed candidates → accept/reject/quarantine journals. Hosts the PCSM intake, Mesh backend, Gateway, and the V41R28 AGEM surrogate.</span></div>
+      <div class="arrow">↓</div>
+      <div class="layer"><span class="ord">aux</span><span class="crate">hsai-e2e-harness · gateway-digest-checker · native-transcript-preparation</span><span class="role">Pure-data adversarial harness; an implementation-diverse independent digest checker (diversity as evidence); descriptor-relative transcript collection.</span></div>
+    </div>
+
+    <div class="note"><b>The breakthrough this builds:</b> <i>Proof of Agent</i> — a cryptographically-attested, economically-accountable, evidence-bounded autonomous worker. Not "trust us," but "here is the attested, journaled, digest-chained evidence; the claim ceiling tells you exactly how far it reaches."</div>
+  </div>
+</section>
+
+<!-- ASTRAL -->
+<section id="astral">
+  <div class="wrap">
+    <div class="sechead">
+      <span class="tagline t-gold">SELF-MODELING RESEARCH · V17 → V41+</span>
+      <h2>Astral — does the system model &amp; improve itself?</h2>
+      <p class="secsub">A long-running, preregistered research program probing whether a model/agent represents and can improve its own behavior — escalated carefully from effect-explainers to perturbation-discrimination to genuine <b>continual learning</b> (acquire the new <i>without</i> forgetting the old). Every round is a named campaign with a claim ceiling.</p>
+    </div>
+    <div class="grid g3">
+      <div class="card c-gold"><h3><span class="ic">V17–21</span>LM effect explainers</h3><p>Input-ablation &amp; effect explainers over cached small models; establishing that local effects can be measured reproducibly before any self-model claim.</p></div>
+      <div class="card c-gold"><h3><span class="ic">V22–23</span>Perturbation discrimination</h3><p>Activation-vs-input perturbation discrimination and higher-capability replication — can the system tell its own representations apart under controlled perturbation?</p></div>
+      <div class="card c-gold"><h3><span class="ic">V28+</span>Acquisition novelty</h3><p>Controlled acquisition-novelty gates and PCSM-governed autoresearch provider lanes; seeds/instruments freshly generated per campaign (no reuse).</p></div>
+      <div class="card c-gold"><h3><span class="ic">V41</span>AGEM — continual learning</h3><p><b>A</b>cquisition + retention via averaged-gradient episodic-memory projection. The flagship: acquire new cases <i>while provably retaining</i> protected knowledge.</p></div>
+      <div class="card c-gold"><h3><span class="ic">R27</span>H100 campaign</h3><p>Remote 20B/MXFP4/H100 48-worker qualification (16 panels × 3 seeds), sentinel-gated. Reached 30/48 before one substrate-specific acquisition failure + infra interrupt.</p></div>
+      <div class="card c-gold"><h3><span class="ic">R28/29</span>Local surrogate &amp; boundary</h3><p>Local MLX surrogate <b>reproduced</b> the mechanism per-cell (incl. the H100-failing cell), then precisely measured the <b>substrate-capability boundary</b> that gates full local qualification.</p></div>
+    </div>
+    <div class="callout">
+      <h4>The AGEM result so far</h4>
+      <p>Protected retention is <b>solved</b> by the projection (accuracy 1.0 wherever the substrate can do the protected arithmetic). Acquisition works across most cells. The one H100 failure was substrate-specific. V41R29 established that full local qualification is gated by the substrate's baseline arithmetic — a precise, measured capability boundary, not a hand-wave. This is continual learning being <i>measured</i>, not asserted.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PCSM -->
+<section id="pcsm">
+  <div class="wrap">
+    <div class="sechead">
+      <span class="tagline t-green">GOVERNED SELF-IMPROVEMENT</span>
+      <h2>PCSM — the governed autoresearch loop</h2>
+      <p class="secsub">The self-improvement engine, under governance. A provider proposes research steps; the PCSM mechanism decodes, evaluates, and — as the <b>sole writer of state</b> — journals each accepted transition into a digest-chained evidence chain. The model never touches state directly; it can only propose.</p>
+    </div>
+    <div class="flow">
+      <div class="fstep"><div class="t">Provider</div><div class="d">GLM / Qwen proposes</div></div><div class="farr">→</div>
+      <div class="fstep"><div class="t">Strict decode</div><div class="d">PCSMO1 envelope</div></div><div class="farr">→</div>
+      <div class="fstep"><div class="t">Evaluate</div><div class="d">A-GEM projection</div></div><div class="farr">→</div>
+      <div class="fstep"><div class="t">Journal</div><div class="d">sole state authority</div></div><div class="farr">→</div>
+      <div class="fstep"><div class="t">Evidence chain</div><div class="d">digest-chained</div></div><div class="farr">→</div>
+      <div class="fstep"><div class="t">Claim ceiling</div><div class="d">bounded output</div></div>
+    </div>
+    <div class="grid g3" style="margin-top:16px">
+      <div class="card c-green"><h3><span class="ic">⊙</span>Sole mutation authority</h3><p><code>pcsm_sole_state_mutation_authority</code> is asserted in every artifact. Provider output that bypasses the journal is quarantined, not trusted.</p></div>
+      <div class="card c-green"><h3><span class="ic">⌗</span>Bounded proof handoff</h3><p>Cross-repo handoffs carry a digest-bound source identity, verifier status, and an explicit <code>threshold_admitted=false</code> until proven otherwise.</p></div>
+      <div class="card c-green"><h3><span class="ic">↻</span>No-retry / no-substitution</h3><p>Consumed identities are consumed. A failed cell is a retained negative, never quietly rerun or swapped — which is what makes the positives meaningful.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATEBOOK -->
+<section id="statebook">
+  <div class="wrap">
+    <div class="sechead">
+      <span class="tagline t-rose">ECONOMIC SETTLEMENT · crates: statebook-core · statebook-settlement</span>
+      <h2>Statebook — settling verified work</h2>
+      <p class="secsub">The closing loop: once work is evidence-bounded, it can be <b>settled</b>. Statebook defines terminal cash-settled contracts whose payoff is computed from evidence-bounded completeness — semantic, payoff, execution, capital, settlement, assurance, and recovery verdicts kept strictly separate, so no scalar trust score can paper over a failed critical lane.</p>
+    </div>
+    <div class="grid g3">
+      <div class="card c-rose"><h3><span class="ic">Σ</span>Terminal Contract IR</h3><p>A scalar cash-settled terminal contract with a payoff/residual algebra. Settlement completeness is computed, not assumed.</p></div>
+      <div class="card c-rose"><h3><span class="ic">⊟</span>Seven completeness verdicts</h3><p>Semantic · payoff · execution · capital · settlement · assurance · recovery — each Complete/Incomplete/Unknown independently. No aggregation hides a failure.</p></div>
+      <div class="card c-rose"><h3><span class="ic">⚖</span>Assurance-adjusted settlement</h3><p>Payoff is adjusted by assurance lanes and bounded challenge/circuit-breaker contracts; independent common-numeraire valuation; atomic aggregate loss-budget reservations.</p></div>
+    </div>
+    <div class="note"><b>The breakthrough this builds:</b> an economy that pays autonomous agents <i>only for verified, evidence-bounded work</i> — closing the loop from benchmark → identity → attestation → admission → settlement.</div>
+  </div>
+</section>
+
+<!-- FORMAL -->
+<section id="formal">
+  <div class="wrap">
+    <div class="sechead">
+      <span class="tagline t-cyan">FORMAL LANE · Lean · SMT · COBALT</span>
+      <h2>The formal-verification lane</h2>
+      <p class="secsub">Where claims graduate from "measured" to "machine-checked." Kept rigorously scoped: a proof about one property is never inflated to system-wide soundness. Progress so far includes an inert formal seam in <code>zkbench-core</code>, a Lean project (<code>formal/hsai-gateway-digest</code>) with a kernel-checked set-permutation-invariant theorem, and a TinyZ3/SMT execution lane for bounded arithmetic obligations.</p>
+    </div>
+    <div class="grid g4">
+      <div class="card c-cyan"><h3><span class="ic">∴</span>Inert seam</h3><p><code>FormalVerifier</code> trait + <code>NoopFormalVerifier</code>; every proof starts <code>DeclaredOnly</code>, L0.</p></div>
+      <div class="card c-cyan"><h3><span class="ic">λ</span>Lean kernel check</h3><p>Handwritten checker-model theorem kernel-checked on a pinned Lean toolchain; shared-fixture witnesses.</p></div>
+      <div class="card c-cyan"><h3><span class="ic">⊨</span>TinyZ3 / SMT lane</h3><p>Bounded QF arithmetic obligations discharged by a local solver, quarantined &amp; digest-bound.</p></div>
+      <div class="card c-cyan"><h3><span class="ic">▣</span>COBALT-style containment</h3><p>Future containment lane for boolean claim-boundary &amp; small arithmetic-gate invariants.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- BREAKTHROUGHS -->
+<section id="breakthroughs">
+  <div class="wrap">
+    <div class="sechead">
+      <div class="secnum">02 / WHAT IT ALL BUILDS TOWARD</div>
+      <h2>The breakthroughs</h2>
+      <p class="secsub">Five convergent capabilities. Each is the composition of the primitives above; none is claimed beyond its current evidence. Together they describe the end-state: <b>autonomous systems that are safe to improve themselves because every gain is attested, journaled, bounded, and settleable.</b></p>
+    </div>
+    <div class="grid g2">
+      <div class="bt" style="--glow:rgba(47,212,255,.16)"><div class="num">BREAKTHROUGH 01</div><h3>Evidence-bounded autonomy</h3><p>An agent can only claim what it can produce evidence for, and every claim carries an enforced ceiling. This is the meta-breakthrough the entire repo demonstrates is engineerable.</p><div class="via">via <b>claim ladder · claim envelopes · fail-closed validators</b></div></div>
+      <div class="bt" style="--glow:rgba(167,139,250,.16)"><div class="num">BREAKTHROUGH 02</div><h3>Proof of Agent</h3><p>Autonomous workers that are attested, distinct, and economically accountable — existence you can verify, not take on faith. Attested (TEE), anchored, journaled.</p><div class="via">via <b>HSAI stack · Phala/dstack attestation · anchor registry</b></div></div>
+      <div class="bt" style="--glow:rgba(62,224,143,.16)"><div class="num">BREAKTHROUGH 03</div><h3>Governed self-improvement</h3><p>A research loop that improves itself while every step is journaled, evidence-chained, and ceiling-capped — the mechanism, not the model, owns state.</p><div class="via">via <b>PCSM autoresearch · sole-mutation-authority journals</b></div></div>
+      <div class="bt" style="--glow:rgba(245,196,81,.16)"><div class="num">BREAKTHROUGH 04</div><h3>Measured continual learning</h3><p>Acquire the new without forgetting the old, <i>and measure it</i> — acquisition with provable retention, on real substrates, with retained negatives.</p><div class="via">via <b>Astral AGEM · V41 campaigns · substrate-capability boundary</b></div></div>
+      <div class="bt" style="--glow:rgba(255,125,156,.16)"><div class="num">BREAKTHROUGH 05</div><h3>Verifiable settlement</h3><p>Pay autonomous agents only for verified work — terminal contracts whose payoff is computed from evidence-bounded completeness across seven independent lanes.</p><div class="via">via <b>Statebook · assurance-adjusted settlement</b></div></div>
+      <div class="bt" style="--glow:rgba(91,155,255,.16)"><div class="num">CAPABILITY 06</div><h3>Machine-checked graduation</h3><p>The path by which measured results graduate to scoped, machine-checked proofs — without ever inflating a partial proof into a system-wide soundness claim.</p><div class="via">via <b>formal lane · Lean kernel · TinyZ3 · COBALT containment</b></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FRONTIER -->
+<section id="frontier">
+  <div class="wrap">
+    <div class="sechead">
+      <div class="secnum">03 / WHERE EACH WORKSTREAM STANDS</div>
+      <h2>Current frontier</h2>
+      <p class="secsub">Live status of each workstream. "Gated" means blocked behind a named, resolvable prerequisite — in this repo, a blocked state is a precise, documented state, not a failure.</p>
+    </div>
+    <table>
+      <thead><tr><th>Workstream</th><th>Latest milestone</th><th>Status</th><th>Next gate</th></tr></thead>
+      <tbody>
+        <tr><td><b>zkbench-core</b></td><td>Promotion pipeline through official-submission; external-replay preflight; inert formal seam</td><td><span class="badge b-done">MATURE</span></td><td>External-replay execution behind reviewed promotion</td></tr>
+        <tr><td><b>HSAI stack</b></td><td>Gateway + independent digest-checker + native-transcript prep; Phala operator lanes</td><td><span class="badge b-live">ACTIVE</span></td><td>Dashscope provider chain admission</td></tr>
+        <tr><td><b>Astral / AGEM</b></td><td>V41R28 local surrogate reproduces mechanism; V41R29 substrate-capability boundary</td><td><span class="badge b-live">ACTIVE</span></td><td>Stronger substrate or H100 for full qualification</td></tr>
+        <tr><td><b>PCSM autoresearch</b></td><td>Provider state established (GLM exhausted → Qwen lane)</td><td><span class="badge b-live">ACTIVE</span></td><td>Dashscope provider evidence-chain admission</td></tr>
+        <tr><td><b>Formal lane</b></td><td>Lean kernel-checked theorem; TinyZ3 bounded obligations</td><td><span class="badge b-gated">GATED</span></td><td>Scoped machine-checked proof for a live property</td></tr>
+        <tr><td><b>Statebook</b></td><td>Terminal Contract IR + settlement completeness</td><td><span class="badge b-gated">GATED</span></td><td>Assurance-lane integration with live evidence</td></tr>
+        <tr><td><b>H100 lane</b></td><td>V41R27 campaign interrupted at 30/48; snapshot <code>snap-f6dc5</code> pending</td><td><span class="badge b-block">BLOCKED</span></td><td>givemeanode access restore + snapshot resume</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <h4>Immediate frontier</h4>
+      <p>Restore the <b>givemeanode H100 lane</b> (root cause fixed: OAuth scope discovery was clobbering <code>offline_access</code>, so no refresh token was ever stored). Once access is back: resume the 48-worker AGEM qualification on a substrate that passes the protected-arithmetic preflight, and admit the dashscope provider evidence-chain so the governed autoresearch loop runs on a live provider.</p>
+    </div>
+
+    <div class="note"><b>Standing invariants (never relaxed, in any phase):</b> no accepted-evidence mutation without reviewed append · no Level2+ claim without artifacts · no Level5 claim without a scoped machine-checked proof · no benchmark pass treated as a proof · no local replay treated as official evidence · no single aggregate score hiding weak soundness · no external execution without an explicit new phase.</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>composed-zk-benchmark-os · a map of primitives &amp; the breakthroughs they build toward</div>
+    <div class="m">18 crates · 826 numbered docs · 21 Astral tool dirs · 7 evidence levels · every mutation a named state-slice · every claim a ceiling</div>
+  </div>
+</footer>
+
+</body>
+</html>
