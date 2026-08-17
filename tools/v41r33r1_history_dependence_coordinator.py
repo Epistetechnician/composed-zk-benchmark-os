@@ -24,7 +24,7 @@ HERE = Path(__file__).resolve().parent
 # isolated runtime and silently relaunch arms under the base interpreter.
 PYTHON = str(Path(sys.executable))
 RUN_ID = "v41r27-panel-8-seed-412019"
-LAUNCH_ID = "v41r33r1-source-binding-runtime-custody-v6"
+LAUNCH_ID = "v41r33r1-source-binding-runtime-custody-v7"
 EXPECTED_ARCHIVE = "sha256:1b2d2e6c96b89749cddd2e48a727f08a090a21634bf9c48c12734a2174968580"
 EXPECTED_TREE = "sha256:5b2329186f89f53e5a1e8798e096815a5e52bee8d99d596887dbbd1266b79690"
 EXPECTED_WRAPPER = "sha256:9c6af359e51134c083cd4d4fb64995a4580a8c59af3bd5765d4cc8c15142dd74"
@@ -342,7 +342,8 @@ def _run_and_validate(
     validator_binding: dict[str, object] | None = None,
 ) -> tuple[int, int]:
     started_ns = time.time_ns()
-    output.mkdir(parents=True, exist_ok=False)
+    # The consuming child owns creation of its arm directory.  Creating it
+    # here makes the frozen worker fail before its first model-load branch.
     subprocess.run(argv, cwd=cwd.resolve(), env=environment, check=True)
     validator_digest = sha256(validator.resolve())
     if validator_digest != EXPECTED_VALIDATOR:

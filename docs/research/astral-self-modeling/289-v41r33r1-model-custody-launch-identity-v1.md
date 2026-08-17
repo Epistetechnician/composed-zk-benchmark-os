@@ -1,6 +1,6 @@
-# V41R33R1 Source-Binding Runtime-Custody Launch Identity V6
+# V41R33R1 Source-Binding Runtime-Custody Launch Identity V7
 
-State slice: `V41R33R1SourceBindingRuntimeCustodyLaunchIdentityV6`.
+State slice: `V41R33R1SourceBindingRuntimeCustodyLaunchIdentityV7`.
 
 This is a new authorized runtime-custody phase after launch identity V5 was
 unable to start because its restored host did not support scratch disks and
@@ -64,7 +64,7 @@ model-custody phase. Acquisition completed before launch-contract acceptance.
 
 ## New launch identity
 
-- launch identity: `v41r33r1-source-binding-runtime-custody-v6`;
+- launch identity: `v41r33r1-source-binding-runtime-custody-v7`;
 - scientific worker run id remains the preregistered
   `v41r27-panel-8-seed-412019`;
 - source archive and source commit remain frozen by V41R33R1;
@@ -72,13 +72,13 @@ model-custody phase. Acquisition completed before launch-contract acceptance.
   worker's canonical JSON row digest:
   `sha256:5b2329186f89f53e5a1e8798e096815a5e52bee8d99d596887dbbd1266b79690`;
 - runtime-custody coordinator SHA-256:
-  `sha256:91fb3a8d4ccfed61e5dfe996fc3e93190d0421fe977b2a859914ec8d0509f876`;
+  `sha256:6025cdbc6fc0c4910c7d44c78cab1d3ed2dd5d9ea25c1f6b918c4774aea7a89e`;
 - wrapper SHA-256 for the worker-compatible extracted tree:
   `sha256:9c6af359e51134c083cd4d4fb64995a4580a8c59af3bd5765d4cc8c15142dd74`;
 - launch-contract test SHA-256:
-  `sha256:6b96ae779e555650376266330af165eb7aab425b63b315ff45c21e4c89df954a`;
-- launch-contract test SHA-256:
-  `sha256:28726914c56259de6fa67d742d4be4a94f60b91544cfe296213bc3af33091cec`;
+  `sha256:f10c741bbce8d879d4bacfb1e59f8e79a7596fad37d111eb0c8cc324a92a8dd4`;
+- V7 correction: the coordinator leaves arm-directory creation to the
+  consuming worker, matching the worker's `exist_ok=False` ownership boundary;
 - coordinator must verify the runtime manifest digest before model custody or
   either arm;
 - launch-contract tests include runtime-custody acceptance and mismatch cases;

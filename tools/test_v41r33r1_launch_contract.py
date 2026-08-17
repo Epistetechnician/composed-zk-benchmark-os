@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import hashlib
 import importlib.util
+import inspect
 import json
 from pathlib import Path
 import subprocess
 import sys
+from types import SimpleNamespace
 
 
 ROOT = Path(__file__).parent
@@ -178,6 +180,39 @@ def test_same_node_disk_binding_is_recorded(tmp_path: Path) -> None:
     binding = COORDINATOR.verify_same_node_disk(tmp_path, tmp_path / "output")
     assert binding["working_directory"] == str(tmp_path.resolve())
     assert binding["working_directory_device"] == binding["output_parent_device"]
+
+
+def test_arm_runner_leaves_directory_creation_to_consuming_child(
+    tmp_path: Path, monkeypatch
+) -> None:
+    output = tmp_path / "control"
+    validator = tmp_path / "validate_worker.py"
+    validator.write_text("validator\n")
+    calls: list[list[str]] = []
+
+    def fake_run(argv, **kwargs):
+        calls.append(list(argv))
+        if not kwargs.get("capture_output"):
+            output.mkdir()
+        return SimpleNamespace(returncode=0, stdout="{}\n", stderr="")
+
+    monkeypatch.setattr(COORDINATOR.subprocess, "run", fake_run)
+    monkeypatch.setattr(
+        COORDINATOR, "sha256", lambda _path: COORDINATOR.EXPECTED_VALIDATOR
+    )
+    COORDINATOR._run_and_validate(
+        "control",
+        ["fake-worker"],
+        output,
+        cwd=tmp_path,
+        environment={},
+        validator=validator,
+        rgs_root=tmp_path,
+        validator_binding={"arm": "control", "argv": ["fake-validator"]},
+    )
+    assert output.is_dir()
+    assert calls[0] == ["fake-worker"]
+    assert "output.mkdir" not in inspect.getsource(COORDINATOR._run_and_validate)
 
 
 def test_consumed_output_root_fails_closed(tmp_path: Path) -> None:
