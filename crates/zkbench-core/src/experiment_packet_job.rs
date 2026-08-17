@@ -12,6 +12,7 @@
 //! Output handoff validation slice: `benchmark-os-plugin-composition-output-handoff-validation-v1`.
 //! Materialization handoff validation slice: `benchmark-os-plugin-composition-packet-store-materialization-handoff-validation-v1`.
 //! Result handoff validation slice: `benchmark-os-plugin-composition-packet-job-result-handoff-validation-v1`.
+//! Typed job readback slice: `benchmark-os-plugin-composition-packet-job-typed-readback-v1`.
 //!
 //! This module owns only job choreography: catalog resolution, generic plugin
 //! composition, store materialization, strict readback, and one-shot state.
@@ -23,7 +24,9 @@
 use crate::error::{Result, ZkBenchError};
 use crate::experiment_identity::PluginCompositionIdentity;
 use crate::experiment_observability::ExperimentProvenance;
-use crate::experiment_packet::PluginCompositionPacketOutput;
+use crate::experiment_packet::{
+    PluginCompositionPacketOutput, ValidatedPluginCompositionPacketOutput,
+};
 use crate::experiment_packet_store::{
     FilesystemPluginCompositionPacketStore, KeyedPluginCompositionPacketStore,
     PacketStoreDestination, PacketStoreKey, PacketStoreReceipt,
@@ -148,6 +151,12 @@ impl ExperimentPacketJobResult {
         self.materialization.output()
     }
 
+    /// Borrow the typed packet output retained across materialization and
+    /// strict readback.
+    pub fn validated_output(&self) -> &ValidatedPluginCompositionPacketOutput {
+        self.materialization.validated_output()
+    }
+
     /// Borrow the receipt bound to the returned packet output.
     pub fn receipt(&self) -> &PacketStoreReceipt {
         self.materialization.receipt()
@@ -221,22 +230,20 @@ impl ExperimentPacketJobExecution {
         let materialized = self.store.materialize_keyed_validated(&key, &packet)?;
         let read = self
             .store
-            .readback_keyed(materialized.receipt())
+            .readback_keyed_validated(materialized.receipt())
             .map_err(|error| {
                 ZkBenchError::validation(
                     "experiment_packet_job.readback",
                     format!("receipt-bound packet readback failed: {error}"),
                 )
             })?;
-        if materialized.output() != &read {
+        if materialized.validated_output() != read.validated_output() {
             return Err(ZkBenchError::validation(
                 "experiment_packet_job.readback",
                 "receipt-bound packet readback does not equal the materialized output",
             ));
         }
-        let (_, receipt) = materialized.into_parts();
-        let rebound = ValidatedPacketStoreMaterialization::new(read, receipt)?;
-        Ok(ExperimentPacketJobResult::from_materialization(rebound))
+        Ok(ExperimentPacketJobResult::from_materialization(read))
     }
 }
 

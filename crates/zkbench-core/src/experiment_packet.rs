@@ -6,6 +6,7 @@
 //! Generic transport extension: `benchmark-os-plugin-agnostic-packet-materialization-readback-v1`.
 //! Output handoff validation slice: `benchmark-os-plugin-composition-output-handoff-validation-v1`.
 //! Packet output handoff validation slice: `benchmark-os-experiment-packet-output-handoff-validation-v1`.
+//! Canonical typed transport slice: `benchmark-os-experiment-packet-canonical-typed-transport-v1`.
 //!
 //! This module writes only a caller-owned, declared-file packet containing the
 //! canonical inner experiment bundle, composition config, outer observability
@@ -511,14 +512,39 @@ pub fn validate_experiment_packet_manifest(manifest: &ExperimentPacketManifest) 
     Ok(())
 }
 
+/// Materialize a validated local JSON packet through the invariant-bearing
+/// typed transport path.
+pub fn write_experiment_packet_outputs_validated(
+    output_root: impl AsRef<Path>,
+    packet: &LocalJsonExperimentPacket,
+    overwrite: bool,
+    protected_paths: &[PathBuf],
+) -> Result<ValidatedLocalJsonExperimentPacketOutput> {
+    write_experiment_packet_outputs_typed(output_root, packet, overwrite, protected_paths)
+}
+
+/// Materialize a generic plugin-composition packet through the
+/// invariant-bearing typed transport path.
+pub fn write_plugin_composition_packet_outputs_validated(
+    output_root: impl AsRef<Path>,
+    packet: &PluginCompositionPacket,
+    overwrite: bool,
+    protected_paths: &[PathBuf],
+) -> Result<ValidatedPluginCompositionPacketOutput> {
+    write_experiment_packet_outputs_typed(output_root, packet, overwrite, protected_paths)
+}
+
 /// Materialize a validated three-artifact packet under a caller-owned root.
+///
+/// This historical API remains a compatibility Adapter over the canonical
+/// typed transport path.
 pub fn write_experiment_packet_outputs(
     output_root: impl AsRef<Path>,
     packet: &ExperimentPacket,
     overwrite: bool,
     protected_paths: &[PathBuf],
 ) -> Result<ExperimentPacketOutput> {
-    write_experiment_packet_outputs_typed(output_root, packet, overwrite, protected_paths)
+    write_experiment_packet_outputs_validated(output_root, packet, overwrite, protected_paths)
         .map(ValidatedExperimentPacketOutput::into_legacy)
 }
 
@@ -529,8 +555,13 @@ pub fn write_plugin_composition_packet_outputs(
     overwrite: bool,
     protected_paths: &[PathBuf],
 ) -> Result<ExperimentPacketOutput<PluginCompositionConfig>> {
-    write_experiment_packet_outputs_typed(output_root, packet, overwrite, protected_paths)
-        .map(ValidatedExperimentPacketOutput::into_legacy)
+    write_plugin_composition_packet_outputs_validated(
+        output_root,
+        packet,
+        overwrite,
+        protected_paths,
+    )
+    .map(ValidatedExperimentPacketOutput::into_legacy)
 }
 
 /// Build the canonical typed output for a generic plugin-composition packet
@@ -667,12 +698,34 @@ fn write_experiment_packet_bytes_typed<C: ExperimentPacketComposition>(
     Ok(output)
 }
 
+/// Read, integrity-check, and semantically validate one local JSON packet
+/// through the invariant-bearing typed transport path.
+pub fn read_experiment_packet_outputs_validated(
+    output_root: impl AsRef<Path>,
+    protected_paths: &[PathBuf],
+) -> Result<ValidatedLocalJsonExperimentPacketOutput> {
+    read_experiment_packet_outputs_typed::<LocalJsonCompositionConfig>(output_root, protected_paths)
+}
+
+/// Read, integrity-check, and semantically validate one generic
+/// plugin-composition packet through the invariant-bearing typed transport
+/// path.
+pub fn read_plugin_composition_packet_outputs_validated(
+    output_root: impl AsRef<Path>,
+    protected_paths: &[PathBuf],
+) -> Result<ValidatedPluginCompositionPacketOutput> {
+    read_experiment_packet_outputs_typed::<PluginCompositionConfig>(output_root, protected_paths)
+}
+
 /// Read, integrity-check, and semantically validate one materialized packet.
+///
+/// This historical API remains a compatibility Adapter over the canonical
+/// typed transport path.
 pub fn read_experiment_packet_outputs(
     output_root: impl AsRef<Path>,
     protected_paths: &[PathBuf],
 ) -> Result<ExperimentPacketOutput> {
-    read_experiment_packet_outputs_typed::<LocalJsonCompositionConfig>(output_root, protected_paths)
+    read_experiment_packet_outputs_validated(output_root, protected_paths)
         .map(ValidatedExperimentPacketOutput::into_legacy)
 }
 
@@ -682,7 +735,7 @@ pub fn read_plugin_composition_packet_outputs(
     output_root: impl AsRef<Path>,
     protected_paths: &[PathBuf],
 ) -> Result<ExperimentPacketOutput<PluginCompositionConfig>> {
-    read_experiment_packet_outputs_typed::<PluginCompositionConfig>(output_root, protected_paths)
+    read_plugin_composition_packet_outputs_validated(output_root, protected_paths)
         .map(ValidatedExperimentPacketOutput::into_legacy)
 }
 

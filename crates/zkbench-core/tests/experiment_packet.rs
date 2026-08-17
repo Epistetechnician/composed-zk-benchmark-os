@@ -5,6 +5,7 @@
 // Output handoff validation slice: benchmark-os-plugin-composition-output-handoff-validation-v1.
 // Durable projector attribution slice: benchmark-os-plugin-composition-projector-durable-attribution-v1.
 // Packet-output handoff validation slice: benchmark-os-experiment-packet-output-handoff-validation-v1.
+// Canonical typed transport slice: benchmark-os-experiment-packet-canonical-typed-transport-v1.
 // This test module covers only local packet files, integrity, and claim limits.
 
 use std::fs;
@@ -17,9 +18,10 @@ use zkbench_core::{
     compute_artifact_digest_bytes, compute_experiment_packet_manifest_digest,
     deserialize_experiment_packet_manifest_json, deserialize_plugin_composition_config_json,
     read_experiment_packet_outputs, read_plugin_composition_packet_outputs,
-    serialize_experiment_packet_manifest_json, serialize_plugin_composition_config_json,
-    write_experiment_packet_outputs, write_plugin_composition_packet_outputs, ArtifactKind,
-    ArtifactRole, ClaimBoundary, ExperimentPacket, ExperimentPacketComposition,
+    read_plugin_composition_packet_outputs_validated, serialize_experiment_packet_manifest_json,
+    serialize_plugin_composition_config_json, write_experiment_packet_outputs,
+    write_plugin_composition_packet_outputs, write_plugin_composition_packet_outputs_validated,
+    ArtifactKind, ArtifactRole, ClaimBoundary, ExperimentPacket, ExperimentPacketComposition,
     ExperimentPluginFactoryCatalog, GeneratorConfig, LocalJsonExperimentRunner, PacketStoreKey,
     PacketStoreReceipt, PluginCompositionPacket, PluginCompositionRunner,
     EXPERIMENT_PACKET_COMPOSITION_CONFIG_PATH, EXPERIMENT_PACKET_INNER_BUNDLE_DIGEST_PATH,
@@ -311,6 +313,27 @@ fn generic_plugin_packet_materialization_round_trips_through_same_filesystem_sea
         .composition_config
         .has_durable_projector_attribution());
     assert_eq!(packet.outer.claim_boundary, ClaimBoundary::Level0DesignNote);
+}
+
+#[test]
+fn canonical_typed_transport_preserves_legacy_packet_output() {
+    let dir = tempdir().expect("temporary output parent should exist");
+    let legacy_root = dir.path().join("legacy-packet");
+    let typed_root = dir.path().join("typed-packet");
+    let packet = generic_packet("typed-transport-experiment-1", "typed-transport-run-1");
+
+    let legacy = write_plugin_composition_packet_outputs(&legacy_root, &packet, false, &[])
+        .expect("legacy packet writer should materialize");
+    let typed = write_plugin_composition_packet_outputs_validated(&typed_root, &packet, false, &[])
+        .expect("typed packet writer should materialize");
+    assert_eq!(typed.as_output(), &legacy);
+
+    let typed_read = read_plugin_composition_packet_outputs_validated(&typed_root, &[])
+        .expect("typed packet reader should read back");
+    let legacy_read = read_plugin_composition_packet_outputs(&typed_root, &[])
+        .expect("legacy packet reader should read back typed output");
+    assert_eq!(typed_read.as_output(), &legacy_read);
+    assert_eq!(typed_read.packet(), &packet);
 }
 
 #[test]
