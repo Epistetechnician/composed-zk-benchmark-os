@@ -234,6 +234,20 @@ that overspends or mutates an unrelated tier fails before retained runner
 state changes. The existing mutable `allocate` method remains the compatibility
 Adapter for older scheduler implementations.
 
+The `MechanismRecord::validate_for_run` admission Interface then binds the
+record to the active experiment, run, scheduler decision, and collector
+Adapter. Intrinsic record validation remains the durable-ledger check; run
+admission is stronger and is consumed by both generic and local runner
+Adapters. Failed collection records may omit an unavailable collector, while
+non-failed elevated records must retain the expected collector.
+
+The additive `validate_observability_allocation_witness` readback Interface
+reconstructs the runtime allocation receipt from the existing durable config,
+metadata, signals, decision, and remaining-budget fields. Generic
+run-config/metadata payloads and local composition config payloads use this
+same Seam, so signal drift or budget-transition drift fails before a payload
+is treated as a valid experiment record. No serialized fields are added.
+
 The scheduler is policy, not scientific evidence. Its weights and thresholds
 are versioned configuration and must be frozen before a sealed assessment.
 Changing them defines a new experiment configuration.

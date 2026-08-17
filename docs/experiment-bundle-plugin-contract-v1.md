@@ -291,6 +291,14 @@ one Seam rather than making each runner reconstruct the transition invariant.
 Serialized bundle fields and the `Level0DesignNote` claim ceiling remain
 unchanged.
 
+The allocation receipt lifecycle handoff slice keeps that typed scheduler
+receipt intact through both composition Adapters' lifecycle transaction. The
+tentative after-budget and mechanism decision are checked against the same
+receipt before commit; a caller cannot replace the receipt with a detached
+decision while retaining a valid-looking bundle. This is an internal
+observability Interface improvement only and does not change serialized bundle
+fields or the `Level0DesignNote` claim ceiling.
+
 The append-only ledger precondition slice makes both mechanism and metric
 meta-evaluation append Interfaces validate their existing digest chain before
 accepting new evidence. A caller cannot append onto tampered history and defer
@@ -332,6 +340,18 @@ publication, evidence mutation, or authority.
 - an optional deterministic value;
 - an optional source artifact URI;
 - a required reason whenever the value is absent.
+
+The shared `MechanismRecord::validate_for_run` Interface adds active-run
+admission above intrinsic ledger validation. Generic and local runner Adapters
+bind experiment id, run id, scheduler decision, and collector descriptor in
+one Seam. Failed collection records may omit a collector; non-failed elevated
+records cannot silently substitute a different collector implementation.
+
+Allocation permanence is read back through
+`validate_observability_allocation_witness`, which reconstructs the typed
+receipt from existing config, signals, decision, and metadata budget fields.
+The helper is shared by generic run payloads and local composition payloads;
+it adds no wire fields and retains the `Level0DesignNote` ceiling.
 
 The local JSON collector records trace/state-transition summaries and marks
 activation, attention, and causal-effect measurements `Unsupported` with
