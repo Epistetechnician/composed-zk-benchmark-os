@@ -23117,6 +23117,49 @@ runner state changes. The existing mutable `allocate` method remains the
 compatibility Adapter for older implementations. Serialized bundle fields and
 the `Level0DesignNote` claim ceiling remain unchanged.
 
+## Benchmark OS Track: Allocation Receipt Lifecycle Handoff
+
+Status: complete for named state slice
+`benchmark-os-observability-allocation-receipt-lifecycle-handoff-v1`.
+
+`ObservabilityRunLifecycleTransaction` now retains the typed
+`ObservabilityAllocationReceipt` through mechanism append instead of
+downgrading it immediately to an `ObservabilityDecision`. The lifecycle Seam
+validates the receipt's after-budget against its tentative budget and binds the
+mechanism decision to that same receipt before commit. Both the generic and
+local-JSON runner Adapters use this handoff. Serialized bundle fields,
+compatibility access, execution, publication, evidence mutation, production
+readiness, benchmark superiority, runtime authority, and the
+`Level0DesignNote` ceiling remain unchanged.
+
+## Benchmark OS Track: Mechanism Record Admission Seam
+
+Status: complete for named state slice
+`benchmark-os-observability-mechanism-admission-seam-v1`.
+
+`MechanismRecord::validate_for_run` now owns active experiment/run identity,
+scheduler-decision binding, and collector attribution at one admission
+Interface. Both generic and local runner Adapters consume it; durable ledger
+validation remains intrinsic and independent. Failed collection records may
+omit a collector, while non-failed elevated records must retain the expected
+collector. The deletion test is positive: removing this Seam would make each
+runner reconstruct the same admission checks. Serialized fields and the
+`Level0DesignNote` claim ceiling remain unchanged.
+
+## Benchmark OS Track: Allocation Witness Readback
+
+Status: complete for named state slice
+`benchmark-os-observability-allocation-witness-readback-v1`.
+
+`validate_observability_allocation_witness` reconstructs the existing typed
+allocation receipt from durable before-budget, run signals, decision, and
+after-budget fields. Generic run config/metadata and local composition config
+Adapters expose this readback Seam without adding serialized fields. Signal,
+identity, selected-tier, unrelated-tier, and exhausted-budget drift fail
+closed. The deletion test is positive: without this Module, each payload
+readback caller would reimplement the same allocation witness. The
+`Level0DesignNote` claim ceiling remains unchanged.
+
 ## Benchmark OS Track: Local JSON Composition Output Handoff Validation
 
 Status: complete for named state slice

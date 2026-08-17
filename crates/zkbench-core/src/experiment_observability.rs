@@ -20,6 +20,9 @@
 //! Scheduler budget transition validation slice: benchmark-os-observability-scheduler-budget-transition-v1.
 //! Append-only ledger precondition slice: benchmark-os-observability-append-only-ledger-precondition-v1.
 //! Typed allocation receipt slice: benchmark-os-observability-allocation-receipt-v1.
+//! Mechanism admission seam: benchmark-os-observability-mechanism-admission-seam-v1.
+//! Allocation witness readback slice: benchmark-os-observability-allocation-witness-readback-v1.
+//! Allocation receipt lifecycle handoff slice: benchmark-os-observability-allocation-receipt-lifecycle-handoff-v1.
 //! Durable composition-adapter attribution slice:
 //! benchmark-os-observability-composition-adapter-durable-attribution-v1.
 //!
@@ -859,6 +862,33 @@ impl ObservabilityAllocationReceipt {
     }
 }
 
+/// Reconstruct and validate an allocation receipt from durable payload fields.
+///
+/// The serialized bundle intentionally keeps its established config and
+/// metadata fields. This readback Interface binds those fields without
+/// requiring callers to duplicate budget-transition logic.
+pub fn validate_observability_allocation_witness(
+    path: &str,
+    before_budget: &ObservabilityBudget,
+    signals: &ObservabilitySignals,
+    decision: &ObservabilityDecision,
+    after_budget: &ObservabilityBudget,
+) -> Result<ObservabilityAllocationReceipt> {
+    if decision.signals != *signals {
+        return Err(ZkBenchError::validation(
+            format!("{path}.decision.signals"),
+            "allocation decision signals do not match the durable run signals",
+        ));
+    }
+    let receipt = ObservabilityAllocationReceipt {
+        before_budget: before_budget.clone(),
+        decision: decision.clone(),
+        after_budget: after_budget.clone(),
+    };
+    receipt.validate(path)?;
+    Ok(receipt)
+}
+
 /// Replaceable scheduler seam.
 pub trait ObservabilityScheduler: Send + Sync {
     /// Implementation identity and policy version.
@@ -1168,6 +1198,99 @@ impl MechanismRecord {
         }
         if let Some(collector) = &self.collector {
             collector.validate(&format!("{path}.collector"))?;
+        }
+        Ok(())
+    }
+
+    /// Validate this record against the active run and collector adapter.
+    ///
+    /// Intrinsic record validation remains useful for durable ledger
+    /// readback, while this stronger admission Interface binds a record to
+    /// the run that requested it. Failed collection records may omit a
+    /// collector, but any supplied collector must still match the adapter.
+    pub fn validate_for_run(
+        &self,
+        path: &str,
+        experiment_id: &str,
+        run_id: &str,
+        decision: &ObservabilityDecision,
+        expected_collector: &ModuleDescriptor,
+    ) -> Result<()> {
+        self.validate_for_run_parts(
+            path,
+            experiment_id,
+            run_id,
+            decision,
+            expected_collector,
+            "scheduler decision",
+        )
+    }
+
+    /// Validate this record against the typed allocation receipt that produced
+    /// its scheduler decision. The older decision-based method remains a
+    /// compatibility Adapter for callers that have not adopted the receipt
+    /// handoff.
+    pub fn validate_for_run_with_allocation(
+        &self,
+        path: &str,
+        experiment_id: &str,
+        run_id: &str,
+        allocation: &ObservabilityAllocationReceipt,
+        expected_collector: &ModuleDescriptor,
+    ) -> Result<()> {
+        allocation.validate(&format!("{path}.allocation_receipt"))?;
+        self.validate_for_run_parts(
+            path,
+            experiment_id,
+            run_id,
+            &allocation.decision,
+            expected_collector,
+            "allocation receipt decision",
+        )
+    }
+
+    fn validate_for_run_parts(
+        &self,
+        path: &str,
+        experiment_id: &str,
+        run_id: &str,
+        decision: &ObservabilityDecision,
+        expected_collector: &ModuleDescriptor,
+        decision_source: &str,
+    ) -> Result<()> {
+        self.validate(path)?;
+        if self.experiment_id != experiment_id {
+            return Err(ZkBenchError::validation(
+                format!("{path}.experiment_id"),
+                "mechanism record experiment identity does not match the run",
+            ));
+        }
+        if self.run_id != run_id {
+            return Err(ZkBenchError::validation(
+                format!("{path}.run_id"),
+                "mechanism record run identity does not match the run",
+            ));
+        }
+        if self.decision != *decision {
+            return Err(ZkBenchError::validation(
+                format!("{path}.decision"),
+                format!("mechanism record must retain the {decision_source}"),
+            ));
+        }
+        if let Some(collector) = &self.collector {
+            if collector != expected_collector {
+                return Err(ZkBenchError::validation(
+                    format!("{path}.collector"),
+                    "mechanism record collector identity does not match its adapter",
+                ));
+            }
+        } else if self.status != MechanismRecordStatus::Failed
+            && self.tier != ObservabilityTier::Tier0
+        {
+            return Err(ZkBenchError::validation(
+                format!("{path}.collector"),
+                "non-failed elevated mechanism records require the active collector",
+            ));
         }
         Ok(())
     }
@@ -1638,6 +1761,35 @@ pub struct ExperimentRunConfig {
     pub modules: Vec<ModuleDescriptor>,
 }
 
+impl ExperimentRunConfig {
+    /// Validate the config/metadata allocation witness during payload readback.
+    pub fn validate_allocation_witness(
+        &self,
+        metadata: &ExperimentRunMetadata,
+        path: &str,
+    ) -> Result<ObservabilityAllocationReceipt> {
+        if metadata.experiment_id != self.run_spec.experiment_id {
+            return Err(ZkBenchError::validation(
+                format!("{path}.experiment_id"),
+                "metadata experiment identity does not match the run config",
+            ));
+        }
+        if metadata.run_id != self.run_spec.run_id {
+            return Err(ZkBenchError::validation(
+                format!("{path}.run_id"),
+                "metadata run identity does not match the run config",
+            ));
+        }
+        validate_observability_allocation_witness(
+            path,
+            &self.initial_budget,
+            &self.run_spec.signals,
+            &metadata.observability,
+            &metadata.remaining_budget,
+        )
+    }
+}
+
 /// Payload stored in the fixed metadata slot.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ExperimentRunMetadata {
@@ -1933,13 +2085,30 @@ impl ObservabilityRunLifecycleTransaction {
         &mut self,
         scheduler: &dyn ObservabilityScheduler,
         signals: ObservabilitySignals,
-    ) -> Result<ObservabilityDecision> {
+    ) -> Result<ObservabilityAllocationReceipt> {
         let receipt = scheduler.allocate_with_receipt(signals, &self.next_budget)?;
         self.next_budget = receipt.after_budget.clone();
-        Ok(receipt.decision)
+        Ok(receipt)
     }
 
-    fn append_mechanism(&mut self, mechanism: MechanismRecord) -> Result<()> {
+    fn append_mechanism(
+        &mut self,
+        allocation: &ObservabilityAllocationReceipt,
+        mechanism: MechanismRecord,
+    ) -> Result<()> {
+        allocation.validate("observability.lifecycle.allocation_receipt")?;
+        if allocation.after_budget != self.next_budget {
+            return Err(ZkBenchError::validation(
+                "observability.lifecycle.allocation_receipt.after_budget",
+                "allocation receipt does not match the lifecycle next budget",
+            ));
+        }
+        if mechanism.decision != allocation.decision {
+            return Err(ZkBenchError::validation(
+                "observability.lifecycle.mechanism.decision",
+                "mechanism decision does not match the allocation receipt",
+            ));
+        }
         self.next_ledger.append(mechanism)?;
         self.next_ledger.validate()
     }
@@ -2131,7 +2300,8 @@ impl ExperimentRunner for ComposedExperimentRunner {
         }
         let mut lifecycle =
             ObservabilityRunLifecycleTransaction::new(&self.budget, &self.spec.experiment_id);
-        let decision = lifecycle.allocate(&*self.scheduler, self.spec.signals)?;
+        let allocation = lifecycle.allocate(&*self.scheduler, self.spec.signals)?;
+        let decision = allocation.decision.clone();
         let mechanism = self.collector.collect(MechanismCollectionContext {
             experiment_id: &self.spec.experiment_id,
             run_id: &self.spec.run_id,
@@ -2140,34 +2310,14 @@ impl ExperimentRunner for ComposedExperimentRunner {
             evaluation: &evaluation,
             decision: &decision,
         })?;
-        if mechanism.experiment_id != self.spec.experiment_id {
-            return Err(ZkBenchError::validation(
-                "runner.mechanism.experiment_id",
-                "mechanism record experiment identity does not match the run",
-            ));
-        }
-        if mechanism.run_id != self.spec.run_id {
-            return Err(ZkBenchError::validation(
-                "runner.mechanism.run_id",
-                "mechanism record run identity does not match the run",
-            ));
-        }
-        if mechanism.decision != decision {
-            return Err(ZkBenchError::validation(
-                "runner.mechanism.decision",
-                "mechanism record must retain the scheduler decision",
-            ));
-        }
-        if mechanism.tier != ObservabilityTier::Tier0
-            && mechanism.collector.as_ref() != Some(self.collector.descriptor())
-        {
-            return Err(ZkBenchError::validation(
-                "runner.mechanism.collector",
-                "mechanism record collector identity does not match its adapter",
-            ));
-        }
-        mechanism.validate("runner.mechanism")?;
-        lifecycle.append_mechanism(mechanism.clone())?;
+        mechanism.validate_for_run_with_allocation(
+            "runner.mechanism",
+            &self.spec.experiment_id,
+            &self.spec.run_id,
+            &allocation,
+            self.collector.descriptor(),
+        )?;
+        lifecycle.append_mechanism(&allocation, mechanism.clone())?;
         let next_budget = lifecycle.remaining_budget().clone();
 
         let metadata_payload = ExperimentRunMetadata {
@@ -2671,6 +2821,22 @@ impl LocalJsonCompositionConfig {
         validate_module_manifest(&self.modules, "local_json_composition_config.modules")?;
         self.projection.validate(inner, self.decision.tier)
     }
+
+    /// Validate this config against the post-allocation metadata budget during
+    /// payload readback.
+    pub fn validate_allocation_witness(
+        &self,
+        remaining_budget: &ObservabilityBudget,
+        path: &str,
+    ) -> Result<ObservabilityAllocationReceipt> {
+        validate_observability_allocation_witness(
+            path,
+            &self.initial_budget,
+            &self.signals,
+            &self.decision,
+            remaining_budget,
+        )
+    }
 }
 
 /// Validated in-memory handoff for the local inner/config/outer composition.
@@ -3063,7 +3229,8 @@ impl LocalJsonExperimentRunner {
         )?;
         let mut lifecycle =
             ObservabilityRunLifecycleTransaction::new(&self.budget, &self.experiment_id);
-        let decision = lifecycle.allocate(&*self.scheduler, self.signals)?;
+        let allocation = lifecycle.allocate(&*self.scheduler, self.signals)?;
+        let decision = allocation.decision.clone();
         let projection =
             LocalJsonArtifactProjection::from_inner_bundle(&inner_bundle, decision.tier)?;
         let composition_config = LocalJsonCompositionConfig {
@@ -3152,7 +3319,16 @@ impl LocalJsonExperimentRunner {
             decision,
             &self.provenance,
         )?;
-        lifecycle.append_mechanism(mechanism.clone())?;
+        let expected_collector =
+            local_json_mechanism_collector_descriptor(&inner_bundle, &self.provenance);
+        mechanism.validate_for_run_with_allocation(
+            "local_json_runner.mechanism",
+            &self.experiment_id,
+            &self.run_id,
+            &allocation,
+            &expected_collector,
+        )?;
+        lifecycle.append_mechanism(&allocation, mechanism.clone())?;
         let next_budget = lifecycle.remaining_budget().clone();
 
         let evaluation = artifact_policy.reference(
@@ -3289,15 +3465,24 @@ fn local_json_composition_modules(
         },
         descriptor("task", bundle.config.plugin_id.clone()),
         descriptor("model", bundle.model_version.model_id.clone()),
-        descriptor(
-            "mechanism-collector",
-            bundle.mechanism_ledger.collector_id.clone(),
-        ),
+        local_json_mechanism_collector_descriptor(bundle, provenance),
         descriptor("evaluator", bundle.metrics.evaluator_id.clone()),
         scheduler.descriptor(),
     ];
     validate_module_manifest(&modules, "local_json_runner.modules")?;
     Ok(modules)
+}
+
+fn local_json_mechanism_collector_descriptor(
+    bundle: &LocalExperimentBundle,
+    provenance: &ExperimentProvenance,
+) -> ModuleDescriptor {
+    ModuleDescriptor {
+        module_id: "mechanism-collector".to_string(),
+        implementation_id: bundle.mechanism_ledger.collector_id.clone(),
+        version: provenance.version.clone(),
+        source_revision: provenance.source_revision.clone(),
+    }
 }
 
 fn local_json_mechanism_record(
@@ -3310,12 +3495,9 @@ fn local_json_mechanism_record(
     let collector = if decision.tier == ObservabilityTier::Tier0 {
         None
     } else {
-        Some(ModuleDescriptor {
-            module_id: "mechanism-collector".to_string(),
-            implementation_id: bundle.mechanism_ledger.collector_id.clone(),
-            version: provenance.version.clone(),
-            source_revision: provenance.source_revision.clone(),
-        })
+        Some(local_json_mechanism_collector_descriptor(
+            bundle, provenance,
+        ))
     };
     let payload_digest = if decision.tier == ObservabilityTier::Tier0 {
         None

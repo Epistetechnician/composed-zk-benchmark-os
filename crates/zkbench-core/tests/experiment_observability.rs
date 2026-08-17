@@ -22,6 +22,9 @@
 // - `benchmark-os-observability-scheduler-budget-transition-v1`
 // - `benchmark-os-observability-append-only-ledger-precondition-v1`
 // - `benchmark-os-observability-allocation-receipt-v1`
+// - `benchmark-os-observability-mechanism-admission-seam-v1`
+// - `benchmark-os-observability-allocation-witness-readback-v1`
+// - `benchmark-os-observability-allocation-receipt-lifecycle-handoff-v1`
 
 use zkbench_core::evidence::{
     compute_artifact_digest, compute_artifact_digest_bytes, ArtifactKind, ArtifactRole,
@@ -36,7 +39,7 @@ use zkbench_core::experiment_observability::{
     serialize_meta_evaluation_ledger_json, upgrade_experiment_artifact_bundle_v1_json,
     validate_experiment_artifact_bundle, validate_experiment_report_artifact,
     validate_local_json_artifact_projection, validate_module_manifest,
-    validate_serialized_local_json_composition,
+    validate_observability_allocation_witness, validate_serialized_local_json_composition,
     validate_serialized_local_json_composition_transport, ComposedExperimentRunner,
     DownstreamPredictiveness, EvaluationRecord, Evaluator, ExperimentArtifactBundle,
     ExperimentArtifactKind, ExperimentArtifactRef, ExperimentProvenance, ExperimentRunReport,
@@ -322,6 +325,7 @@ impl Evaluator for FixtureEvaluator {
 struct FixtureMechanismCollector {
     descriptor: ModuleDescriptor,
     fail: bool,
+    decision_drift: bool,
 }
 
 impl MechanismCollector for FixtureMechanismCollector {
@@ -354,6 +358,10 @@ impl MechanismCollector for FixtureMechanismCollector {
                 Some(self.descriptor.clone()),
             ),
         };
+        let mut decision = context.decision.clone();
+        if self.decision_drift {
+            decision.priority_milli += 1;
+        }
         Ok(MechanismRecord {
             record_id: format!("{}-mechanism", context.run_id),
             experiment_id: context.experiment_id.to_string(),
@@ -367,7 +375,7 @@ impl MechanismCollector for FixtureMechanismCollector {
                 Some(ArtifactRole::Manifest),
             )),
             failure_reason: None,
-            decision: context.decision.clone(),
+            decision,
             provenance: provenance("fixture-mechanism-collector"),
         })
     }
@@ -428,6 +436,17 @@ impl ObservabilityScheduler for TamperingScheduler {
 }
 
 fn composed_runner(fail_collector: bool) -> ComposedExperimentRunner {
+    composed_runner_with_modes(fail_collector, false)
+}
+
+fn composed_runner_with_decision_drift() -> ComposedExperimentRunner {
+    composed_runner_with_modes(false, true)
+}
+
+fn composed_runner_with_modes(
+    fail_collector: bool,
+    decision_drift: bool,
+) -> ComposedExperimentRunner {
     let task_descriptor = module("task");
     let response_descriptor = module("response");
     let metric_descriptor = module("metric");
@@ -475,6 +494,7 @@ fn composed_runner(fail_collector: bool) -> ComposedExperimentRunner {
         Box::new(FixtureMechanismCollector {
             descriptor: collector_descriptor,
             fail: fail_collector,
+            decision_drift,
         }),
         Box::new(WeightedObservabilityScheduler::default()),
         ObservabilityBudget {
@@ -1096,6 +1116,91 @@ fn failed_mechanism_records_require_a_reason() {
 }
 
 #[test]
+fn mechanism_record_admission_binds_run_decision_and_collector() {
+    let expected_collector = module("collector");
+    let expected_decision = decision(ObservabilityTier::Tier1);
+    let record = MechanismRecord {
+        record_id: "mechanism-admission".to_string(),
+        experiment_id: "experiment-admission".to_string(),
+        run_id: "run-admission".to_string(),
+        tier: ObservabilityTier::Tier1,
+        status: MechanismRecordStatus::Sampled,
+        collector: Some(expected_collector.clone()),
+        payload_digest: None,
+        failure_reason: None,
+        decision: expected_decision.clone(),
+        provenance: provenance("mechanism-admission"),
+    };
+    record
+        .validate_for_run(
+            "test.mechanism",
+            "experiment-admission",
+            "run-admission",
+            &expected_decision,
+            &expected_collector,
+        )
+        .expect("matching mechanism admission should validate");
+
+    let mut wrong_experiment = record.clone();
+    wrong_experiment.experiment_id = "other-experiment".to_string();
+    assert!(wrong_experiment
+        .validate_for_run(
+            "test.mechanism",
+            "experiment-admission",
+            "run-admission",
+            &expected_decision,
+            &expected_collector,
+        )
+        .expect_err("cross-run mechanism records must fail")
+        .to_string()
+        .contains("test.mechanism.experiment_id"));
+
+    let mut wrong_decision = record.clone();
+    wrong_decision.decision.priority_milli = 1;
+    assert!(wrong_decision
+        .validate_for_run(
+            "test.mechanism",
+            "experiment-admission",
+            "run-admission",
+            &expected_decision,
+            &expected_collector,
+        )
+        .expect_err("decision drift must fail")
+        .to_string()
+        .contains("test.mechanism.decision"));
+
+    let mut wrong_collector = record.clone();
+    wrong_collector.collector = Some(module("other-collector"));
+    assert!(wrong_collector
+        .validate_for_run(
+            "test.mechanism",
+            "experiment-admission",
+            "run-admission",
+            &expected_decision,
+            &expected_collector,
+        )
+        .expect_err("collector attribution drift must fail")
+        .to_string()
+        .contains("test.mechanism.collector"));
+
+    let failed_without_collector = MechanismRecord {
+        status: MechanismRecordStatus::Failed,
+        collector: None,
+        failure_reason: Some("collector unavailable".to_string()),
+        ..record
+    };
+    failed_without_collector
+        .validate_for_run(
+            "test.mechanism",
+            "experiment-admission",
+            "run-admission",
+            &expected_decision,
+            &expected_collector,
+        )
+        .expect("failed collection may omit an unavailable collector");
+}
+
+#[test]
 fn composed_runner_emits_valid_bundle_and_retains_negative_result() {
     let mut runner = composed_runner(false);
 
@@ -1155,6 +1260,19 @@ fn composed_runner_budget_commit_is_failure_atomic() {
         .run()
         .expect_err("collector failure should abort the run");
     assert!(error.to_string().contains("fixture collector failure"));
+    assert_eq!(runner.remaining_budget().tier2_deep_dives_remaining, 1);
+    assert!(runner.mechanism_ledger().is_none());
+}
+
+#[test]
+fn allocation_receipt_binds_mechanism_decision_before_commit() {
+    let mut runner = composed_runner_with_decision_drift();
+    let error = runner
+        .run()
+        .expect_err("mechanism decision drift must fail before commit");
+    assert!(error
+        .to_string()
+        .contains("mechanism record must retain the allocation receipt decision"));
     assert_eq!(runner.remaining_budget().tier2_deep_dives_remaining, 1);
     assert!(runner.mechanism_ledger().is_none());
 }
@@ -1271,6 +1389,62 @@ fn scheduler_allocation_receipt_binds_transition_and_is_failure_atomic() {
     let restored: ObservabilityAllocationReceipt =
         serde_json::from_str(&serialized).expect("receipt should deserialize");
     assert_eq!(restored, receipt);
+}
+
+#[test]
+fn allocation_witness_readback_rejects_signal_and_budget_drift() {
+    let before_budget = ObservabilityBudget {
+        tier1_samples_remaining: 1,
+        tier2_deep_dives_remaining: 1,
+        tier3_gold_cases_remaining: 0,
+    };
+    let signals = ObservabilitySignals {
+        novelty_milli: 0,
+        uncertainty_milli: 0,
+        failure_milli: 0,
+    };
+    let decision = decision(ObservabilityTier::Tier1);
+    let after_budget = ObservabilityBudget {
+        tier1_samples_remaining: 0,
+        tier2_deep_dives_remaining: 1,
+        tier3_gold_cases_remaining: 0,
+    };
+    validate_observability_allocation_witness(
+        "test.allocation_witness",
+        &before_budget,
+        &signals,
+        &decision,
+        &after_budget,
+    )
+    .expect("durable allocation fields should reconstruct a valid receipt");
+
+    let wrong_signals = ObservabilitySignals {
+        novelty_milli: 1,
+        ..signals
+    };
+    let error = validate_observability_allocation_witness(
+        "test.allocation_witness",
+        &before_budget,
+        &wrong_signals,
+        &decision,
+        &after_budget,
+    )
+    .expect_err("signal drift must fail readback");
+    assert!(error.to_string().contains("decision.signals"));
+
+    let wrong_after_budget = ObservabilityBudget {
+        tier1_samples_remaining: 1,
+        ..after_budget
+    };
+    let error = validate_observability_allocation_witness(
+        "test.allocation_witness",
+        &before_budget,
+        &signals,
+        &decision,
+        &wrong_after_budget,
+    )
+    .expect_err("budget drift must fail readback");
+    assert!(error.to_string().contains("exactly the selected tier"));
 }
 
 #[test]
@@ -1391,6 +1565,14 @@ fn local_plugin_composes_into_observability_bundle_and_digest_ledger() {
         .expect("composition config should be retained");
     validate_local_json_artifact_projection(&inner, &bundle, composition_config)
         .expect("canonical inner-to-outer projection should validate");
+    composition_config
+        .validate_allocation_witness(runner.remaining_budget(), "test.local_allocation_witness")
+        .expect("local config and metadata budgets should form a valid witness");
+    let mut drifted_budget = runner.remaining_budget().clone();
+    drifted_budget.tier2_deep_dives_remaining += 1;
+    assert!(composition_config
+        .validate_allocation_witness(&drifted_budget, "test.local_allocation_witness")
+        .is_err());
     let config_json = serialize_local_json_composition_config_json(composition_config)
         .expect("composition config should serialize");
     let restored_config = validate_serialized_local_json_composition(&config_json, &inner, &bundle)
