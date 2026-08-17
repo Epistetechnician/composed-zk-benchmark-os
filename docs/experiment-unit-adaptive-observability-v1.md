@@ -244,9 +244,22 @@ non-failed elevated records must retain the expected collector.
 The additive `validate_observability_allocation_witness` readback Interface
 reconstructs the runtime allocation receipt from the existing durable config,
 metadata, signals, decision, and remaining-budget fields. Generic
-run-config/metadata payloads and local composition config payloads use this
+run-config/metadata payloads and local composition config payloads expose this
 same Seam, so signal drift or budget-transition drift fails before a payload
 is treated as a valid experiment record. No serialized fields are added.
+
+State slice: `benchmark-os-observability-allocation-witness-payload-readback-v1`.
+
+`validate_serialized_experiment_run_payloads` and
+`validate_serialized_local_json_composition_with_metadata` are additive
+payload-readback Adapters. They require canonical config and metadata bytes,
+bind each payload to the existing artifact digest and run identity, compare
+the config/metadata decision and module manifest, and reconstruct the shared
+allocation receipt. The historical three-argument composition transport and
+packet readback Interfaces remain unchanged because their outer bundle carries
+only a metadata reference, not metadata bytes. This is authenticated local
+metadata plumbing, not execution, publication, accepted evidence, production
+readiness, or a claim above `Level0DesignNote`.
 
 The scheduler is policy, not scientific evidence. Its weights and thresholds
 are versioned configuration and must be frozen before a sealed assessment.

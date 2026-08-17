@@ -25,6 +25,7 @@
 // - `benchmark-os-observability-mechanism-admission-seam-v1`
 // - `benchmark-os-observability-allocation-witness-readback-v1`
 // - `benchmark-os-observability-allocation-receipt-lifecycle-handoff-v1`
+// - `benchmark-os-observability-allocation-witness-payload-readback-v1`
 
 use zkbench_core::evidence::{
     compute_artifact_digest, compute_artifact_digest_bytes, ArtifactKind, ArtifactRole,
@@ -35,19 +36,23 @@ use zkbench_core::experiment_observability::{
     deserialize_experiment_artifact_bundle_json, deserialize_experiment_report_json,
     deserialize_local_json_composition_config_json, deserialize_mechanism_ledger_json,
     deserialize_meta_evaluation_ledger_json, serialize_experiment_artifact_bundle_json,
+    serialize_experiment_run_config_json, serialize_experiment_run_metadata_json,
     serialize_local_json_composition_config_json, serialize_mechanism_ledger_json,
     serialize_meta_evaluation_ledger_json, upgrade_experiment_artifact_bundle_v1_json,
     validate_experiment_artifact_bundle, validate_experiment_report_artifact,
     validate_local_json_artifact_projection, validate_module_manifest,
-    validate_observability_allocation_witness, validate_serialized_local_json_composition,
-    validate_serialized_local_json_composition_transport, ComposedExperimentRunner,
+    validate_observability_allocation_witness, validate_serialized_experiment_run_payloads,
+    validate_serialized_local_json_composition,
+    validate_serialized_local_json_composition_transport,
+    validate_serialized_local_json_composition_with_metadata, ComposedExperimentRunner,
     DownstreamPredictiveness, EvaluationRecord, Evaluator, ExperimentArtifactBundle,
-    ExperimentArtifactKind, ExperimentArtifactRef, ExperimentProvenance, ExperimentRunReport,
-    ExperimentRunSpec, LocalJsonExperimentRunner, MechanismCollector, MechanismLedger,
-    MechanismRecord, MechanismRecordStatus, MetaEvaluationLedger, MetricMetaEvaluation,
-    MetricMetaEvaluationBasis, MetricNoise, MetricObservation, MetricObservationStatus,
-    MetricStability, ModuleDescriptor, ObservabilityAllocationReceipt, ObservabilityBudget,
-    ObservabilityDecision, ObservabilitySignals, ObservabilityTier, WeightedObservabilityScheduler,
+    ExperimentArtifactKind, ExperimentArtifactRef, ExperimentProvenance, ExperimentRunConfig,
+    ExperimentRunMetadata, ExperimentRunReport, ExperimentRunSpec, LocalJsonExperimentRunner,
+    MechanismCollector, MechanismLedger, MechanismRecord, MechanismRecordStatus,
+    MetaEvaluationLedger, MetricMetaEvaluation, MetricMetaEvaluationBasis, MetricNoise,
+    MetricObservation, MetricObservationStatus, MetricStability, ModuleDescriptor,
+    ObservabilityAllocationReceipt, ObservabilityBudget, ObservabilityDecision,
+    ObservabilitySignals, ObservabilityTier, WeightedObservabilityScheduler,
     EXPERIMENT_UNIT_BUNDLE_SCHEMA_VERSION, OBSERVABILITY_SCORE_SCALE,
 };
 use zkbench_core::experiment_observability::{
@@ -1448,6 +1453,93 @@ fn allocation_witness_readback_rejects_signal_and_budget_drift() {
 }
 
 #[test]
+fn serialized_generic_run_payloads_bind_allocation_receipt_and_reject_tampering() {
+    let mut runner = composed_runner(false);
+    let initial_budget = runner.budget.clone();
+    let bundle = runner.run().expect("generic runner should emit a bundle");
+    let modules = vec![
+        runner.task.descriptor().clone(),
+        runner.response_producer.descriptor().clone(),
+        runner.metrics[0].descriptor().clone(),
+        runner.evaluator.descriptor().clone(),
+        runner.collector.descriptor().clone(),
+        runner.scheduler.descriptor(),
+    ];
+    let expected_receipt = WeightedObservabilityScheduler::default()
+        .allocate_with_receipt(runner.spec.signals, &initial_budget)
+        .expect("reference scheduler should reconstruct the allocation");
+    let config = ExperimentRunConfig {
+        schema_version: EXPERIMENT_UNIT_BUNDLE_SCHEMA_VERSION.to_string(),
+        run_spec: runner.spec.clone(),
+        initial_budget,
+        modules: modules.clone(),
+    };
+    let metadata = ExperimentRunMetadata {
+        schema_version: EXPERIMENT_UNIT_BUNDLE_SCHEMA_VERSION.to_string(),
+        experiment_id: runner.spec.experiment_id.clone(),
+        run_id: runner.spec.run_id.clone(),
+        hypothesis: runner.spec.hypothesis.clone(),
+        replication: runner.spec.replication,
+        lifecycle: "completed".to_string(),
+        observability: expected_receipt.decision.clone(),
+        remaining_budget: runner.budget.clone(),
+        modules,
+        claim_boundary: ClaimBoundary::Level0DesignNote,
+        provenance: runner.spec.provenance.clone(),
+    };
+    let config_json =
+        serialize_experiment_run_config_json(&config).expect("generic run config should serialize");
+    let metadata_json = serialize_experiment_run_metadata_json(&metadata)
+        .expect("generic run metadata should serialize");
+    let (_, _, receipt) =
+        validate_serialized_experiment_run_payloads(&config_json, &metadata_json, &bundle)
+            .expect("serialized generic payloads should reconstruct the allocation receipt");
+    assert_eq!(receipt, expected_receipt);
+
+    let tampered_config_json =
+        config_json.replace("\"failure_milli\":900", "\"failure_milli\":899");
+    assert_ne!(tampered_config_json, config_json);
+    let mut tampered_bundle = bundle.clone();
+    tampered_bundle.config.digest = compute_artifact_digest_bytes(
+        tampered_config_json.as_bytes(),
+        Some(ArtifactKind::Other),
+        Some(ArtifactRole::Manifest),
+    );
+    let signal_error = validate_serialized_experiment_run_payloads(
+        &tampered_config_json,
+        &metadata_json,
+        &tampered_bundle,
+    )
+    .expect_err("serialized signal drift must fail the allocation witness");
+    assert!(
+        signal_error.to_string().contains("allocation_witness"),
+        "unexpected serialized signal error: {signal_error}"
+    );
+
+    let tampered_metadata_json = metadata_json.replace(
+        "\"tier2_deep_dives_remaining\":0",
+        "\"tier2_deep_dives_remaining\":1",
+    );
+    assert_ne!(tampered_metadata_json, metadata_json);
+    tampered_bundle.config.digest = bundle.config.digest.clone();
+    tampered_bundle.metadata.digest = compute_artifact_digest_bytes(
+        tampered_metadata_json.as_bytes(),
+        Some(ArtifactKind::Other),
+        Some(ArtifactRole::Manifest),
+    );
+    let budget_error = validate_serialized_experiment_run_payloads(
+        &config_json,
+        &tampered_metadata_json,
+        &tampered_bundle,
+    )
+    .expect_err("serialized budget drift must fail the allocation witness");
+    assert!(
+        budget_error.to_string().contains("allocation_witness"),
+        "unexpected serialized budget error: {budget_error}"
+    );
+}
+
+#[test]
 fn bundle_json_round_trip_preserves_digest_and_rejects_invalid_shape() {
     let bundle = bundle();
     let json =
@@ -1575,6 +1667,21 @@ fn local_plugin_composes_into_observability_bundle_and_digest_ledger() {
         .is_err());
     let config_json = serialize_local_json_composition_config_json(composition_config)
         .expect("composition config should serialize");
+    let metadata = ExperimentRunMetadata {
+        schema_version: EXPERIMENT_UNIT_BUNDLE_SCHEMA_VERSION.to_string(),
+        experiment_id: composition_config.experiment_id.clone(),
+        run_id: composition_config.run_id.clone(),
+        hypothesis: "local JSON replay composition".to_string(),
+        replication: false,
+        lifecycle: "completed_local_composition".to_string(),
+        observability: composition_config.decision.clone(),
+        remaining_budget: runner.remaining_budget().clone(),
+        modules: composition_config.modules.clone(),
+        claim_boundary: ClaimBoundary::Level0DesignNote,
+        provenance: provenance("local-composition"),
+    };
+    let metadata_json = serialize_experiment_run_metadata_json(&metadata)
+        .expect("local composition metadata should serialize");
     let restored_config = validate_serialized_local_json_composition(&config_json, &inner, &bundle)
         .expect("serialized composition config should validate");
     assert_eq!(restored_config, *composition_config);
@@ -1587,6 +1694,19 @@ fn local_plugin_composes_into_observability_bundle_and_digest_ledger() {
         .expect("inner bundle should serialize");
     let outer_json =
         serialize_experiment_artifact_bundle_json(&bundle).expect("outer bundle should serialize");
+    let (transport_inner, transport_config, transport_metadata, transport_outer, receipt) =
+        validate_serialized_local_json_composition_with_metadata(
+            &inner_json,
+            &config_json,
+            &metadata_json,
+            &outer_json,
+        )
+        .expect("serialized local payloads should reconstruct the allocation receipt");
+    assert_eq!(transport_inner, inner);
+    assert_eq!(transport_config, *composition_config);
+    assert_eq!(transport_metadata, metadata);
+    assert_eq!(transport_outer, bundle);
+    assert_eq!(receipt.after_budget, *runner.remaining_budget());
     let (transport_inner, transport_config, transport_outer) =
         validate_serialized_local_json_composition_transport(
             &inner_json,
@@ -1597,6 +1717,28 @@ fn local_plugin_composes_into_observability_bundle_and_digest_ledger() {
     assert_eq!(transport_inner, inner);
     assert_eq!(transport_config, *composition_config);
     assert_eq!(transport_outer, bundle);
+
+    let tampered_metadata_json = metadata_json.replace(
+        "\"tier2_deep_dives_remaining\":0",
+        "\"tier2_deep_dives_remaining\":1",
+    );
+    assert_ne!(tampered_metadata_json, metadata_json);
+    let mut tampered_outer = bundle.clone();
+    tampered_outer.metadata.digest = compute_artifact_digest_bytes(
+        tampered_metadata_json.as_bytes(),
+        Some(ArtifactKind::Other),
+        Some(ArtifactRole::Manifest),
+    );
+    let tampered_outer_json = serialize_experiment_artifact_bundle_json(&tampered_outer)
+        .expect("tampered outer bundle should serialize");
+    let budget_error = validate_serialized_local_json_composition_with_metadata(
+        &inner_json,
+        &config_json,
+        &tampered_metadata_json,
+        &tampered_outer_json,
+    )
+    .expect_err("serialized local budget drift must fail the allocation witness");
+    assert!(budget_error.to_string().contains("allocation_witness"));
     assert_eq!(composition_config.projection.bindings.len(), 9);
     let ledger = runner
         .mechanism_ledger()

@@ -23160,6 +23160,23 @@ closed. The deletion test is positive: without this Module, each payload
 readback caller would reimplement the same allocation witness. The
 `Level0DesignNote` claim ceiling remains unchanged.
 
+## Benchmark OS Track: Allocation Witness Payload Readback
+
+Status: complete for named state slice
+`benchmark-os-observability-allocation-witness-payload-readback-v1`.
+
+The serialized payload Adapters
+`validate_serialized_experiment_run_payloads` and
+`validate_serialized_local_json_composition_with_metadata` now authenticate
+canonical config and metadata bytes against their existing fixed-slot
+artifact digests before binding run identity, module manifests, decisions, and
+the allocation receipt. Signal and budget tampering therefore fails through
+the actual serialized payload Interface, not only through typed in-memory
+helpers. The historical three-argument composition transport and packet
+readback remain compatibility Adapters because they do not carry metadata
+payload bytes. No serialized fields, execution, publication, accepted
+Evidence Ledger mutation, or `Level0DesignNote` claim ceiling changed.
+
 ## Benchmark OS Track: Local JSON Composition Output Handoff Validation
 
 Status: complete for named state slice
