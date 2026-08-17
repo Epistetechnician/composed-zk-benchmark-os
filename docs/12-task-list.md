@@ -23089,6 +23089,20 @@ returning an otherwise valid decision. Existing scheduler decisions, bundle
 bytes, append-only mechanism state, and the `Level0DesignNote` claim ceiling
 remain unchanged. This is local budget-accounting plumbing only.
 
+## Benchmark OS Track: Append-Only Ledger Preconditions
+
+Status: complete for named state slice
+`benchmark-os-observability-append-only-ledger-precondition-v1`.
+
+`MechanismLedger::append` and `MetaEvaluationLedger::append` now validate their
+existing digest chains before accepting a new record. Tampered history fails
+closed before mutation, so an append cannot extend an invalid chain and defer
+the error until serialization or later readback. The deletion test is
+positive: removing this precondition would let each append caller rediscover
+history integrity independently. Serialized fields, append ordering,
+compatibility access, and the `Level0DesignNote` claim ceiling remain
+unchanged.
+
 ## Benchmark OS Track: Local JSON Composition Output Handoff Validation
 
 Status: complete for named state slice

@@ -18,6 +18,7 @@
 //! Shared artifact-reference policy locality slice: benchmark-os-plugin-composition-artifact-reference-policy-locality-v1.
 //! Local JSON composition output handoff slice: benchmark-os-local-json-composition-output-handoff-validation-v1.
 //! Scheduler budget transition validation slice: benchmark-os-observability-scheduler-budget-transition-v1.
+//! Append-only ledger precondition slice: benchmark-os-observability-append-only-ledger-precondition-v1.
 //! Durable composition-adapter attribution slice:
 //! benchmark-os-observability-composition-adapter-durable-attribution-v1.
 //!
@@ -1164,6 +1165,7 @@ impl MechanismLedger {
 
     /// Append one record without replacing prior entries.
     pub fn append(&mut self, record: MechanismRecord) -> Result<()> {
+        self.validate()?;
         record.validate("mechanism_ledger.record")?;
         if record.experiment_id != self.experiment_id {
             return Err(ZkBenchError::validation(
@@ -3500,6 +3502,7 @@ impl Default for MetaEvaluationLedger {
 impl MetaEvaluationLedger {
     /// Append a new judgment without replacing prior judgments.
     pub fn append(&mut self, evaluation: MetricMetaEvaluation) -> Result<()> {
+        self.validate()?;
         evaluation.validate("meta_evaluation.evaluation")?;
         let sequence_number = self.entries.len() as u64;
         let previous_digest = self.entries.last().map(|entry| entry.entry_digest.clone());

@@ -20,6 +20,7 @@
 // - `benchmark-os-observability-composition-adapter-durable-attribution-v1`
 // - `benchmark-os-local-json-composition-output-handoff-validation-v1`
 // - `benchmark-os-observability-scheduler-budget-transition-v1`
+// - `benchmark-os-observability-append-only-ledger-precondition-v1`
 
 use zkbench_core::evidence::{
     compute_artifact_digest, compute_artifact_digest_bytes, ArtifactKind, ArtifactRole,
@@ -899,6 +900,13 @@ fn mechanism_ledger_appends_and_detects_history_mutation() {
     assert!(deserialize_mechanism_ledger_json(&pretty_json).is_err());
     ledger.entries[0].record.record_id = "tampered".to_string();
     assert!(ledger.validate().is_err());
+    let mut replacement = ledger.entries[0].record.clone();
+    replacement.record_id = "mechanism-2".to_string();
+    let error = ledger
+        .append(replacement)
+        .expect_err("tampered history must block a new append");
+    assert!(error.to_string().contains("entry_digest"));
+    assert_eq!(ledger.entries.len(), 1);
 }
 
 #[test]
@@ -956,6 +964,14 @@ fn metric_meta_evaluation_tracks_three_distinct_properties() {
     assert!(error
         .to_string()
         .contains("meta_evaluation.entries[0].entry_digest"));
+    let replacement = ledger.entries[0].evaluation.clone();
+    let error = ledger
+        .append(replacement)
+        .expect_err("tampered history must block a new meta-evaluation append");
+    assert!(error
+        .to_string()
+        .contains("meta_evaluation.entries[0].entry_digest"));
+    assert_eq!(ledger.entries.len(), 1);
 }
 
 #[test]
