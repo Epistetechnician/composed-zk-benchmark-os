@@ -115,6 +115,13 @@ fn attach_reproduction_bundle_round_trips_and_keeps_pack_valid() {
     assert!(validation.valid, "pack invalid: {:?}", validation.errors);
 }
 
+#[test]
+fn reproduction_bundle_read_rejects_empty_pack_root_before_sidecar_access() {
+    let error = read_reproduction_bundle_from_pack(Path::new(""))
+        .expect_err("empty pack root should reject before sidecar access");
+    assert!(error.to_string().contains("pack root must be non-empty"));
+}
+
 #[cfg(unix)]
 #[test]
 fn reproduction_bundle_read_rejects_symlinked_sidecar() {

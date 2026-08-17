@@ -15,7 +15,7 @@ use crate::error::{Result, ZkBenchError};
 use crate::evidence::{
     compute_artifact_digest, ArtifactDigest, ArtifactKind, ArtifactRole, ClaimBoundary,
 };
-use crate::pack::writer::validate_pack_path_components;
+use crate::pack::writer::{validate_pack_path_components, validate_pack_root};
 use crate::pack::BenchmarkPackReader;
 
 use super::artifact_layout::write_json;
@@ -164,7 +164,9 @@ pub fn attach_reproduction_bundle_to_pack(
 pub fn read_reproduction_bundle_from_pack(
     pack_root: impl AsRef<Path>,
 ) -> Result<ReproductionBundle> {
-    let path = pack_root.as_ref().join(REPRODUCTION_BUNDLE_RELATIVE_PATH);
+    let pack_root = pack_root.as_ref();
+    validate_pack_root(pack_root)?;
+    let path = pack_root.join(REPRODUCTION_BUNDLE_RELATIVE_PATH);
     validate_pack_path_components(&path)?;
     let bytes = fs::read(&path)
         .map_err(|error| ZkBenchError::soak(path.display().to_string(), error.to_string()))?;
