@@ -127,7 +127,7 @@ impl ModuleDescriptor {
 
 /// Validate the ordered module manifest carried by a run or composition.
 ///
-/// The wire shape remains Vec<ModuleDescriptor>, but all callers share one
+/// The wire shape remains `Vec<ModuleDescriptor>`, but all callers share one
 /// admission Interface for non-empty manifests, descriptor validity, and
 /// unique logical module ids. This keeps implementation replacement explicit
 /// without forcing serialized consumers to adopt a new wrapper type.
