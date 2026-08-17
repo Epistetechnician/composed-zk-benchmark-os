@@ -253,6 +253,27 @@ receipt key identity and manifest digest binding are therefore issued in one
 place. This does not add store provenance, change receipt fields, or elevate
 the local `Level0DesignNote` claim ceiling.
 
+The canonical typed transport slice adds validated packet read/write entry
+points for local JSON and generic plugin-composition packets. Historical
+packet functions remain compatibility Adapters over those entry points, so
+serialized packet files and legacy output values remain byte/value-compatible.
+Filesystem keyed storage now uses the typed writer and reader directly, and
+the in-memory Adapter retains `ValidatedPacketStoreMaterialization` rather
+than downgrading before storage. The additive `readback_keyed_validated`
+Interface gives custom stores the same fail-closed upgrade path. This is
+transport plumbing only; it adds no execution, publication, evidence
+mutation, production readiness, benchmark superiority, or runtime authority.
+
+The typed job readback slice routes `ExperimentPacketJobExecution` through
+`readback_keyed_validated`, compares the retained and read-back typed packet
+outputs, and returns the store's validated handoff directly. The historical
+`readback_keyed` Interface remains the compatibility path through the default
+Adapter implementation. `ExperimentPacketJobResult::validated_output` gives
+observers a read-only typed view without reconstructing the output/receipt
+pair. This concentrates readback equality and receipt binding in the job
+Seam without changing packet files, legacy output fields, execution,
+publication, evidence mutation, or the `Level0DesignNote` ceiling.
+
 The local JSON composition output handoff slice adds
 `ValidatedLocalJsonCompositionOutput` with private inner, config, and outer
 fields. The additive `LocalJsonExperimentRunner::run_validated_output`

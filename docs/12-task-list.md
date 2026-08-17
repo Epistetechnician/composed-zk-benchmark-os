@@ -23040,6 +23040,41 @@ receipts against the typed issuance path. Receipt fields, packet files,
 execution, publication, evidence mutation, production readiness, benchmark
 superiority, and runtime authority remain unchanged.
 
+## Benchmark OS Track: Canonical Typed Packet Transport
+
+Status: complete for named state slice
+`benchmark-os-experiment-packet-canonical-typed-transport-v1`.
+
+Validated local-JSON and generic plugin-composition packet writers/readers are
+now public typed entry points. Historical packet APIs remain compatibility
+Adapters over them, preserving the existing packet bytes and public output
+shape. Filesystem keyed materialization/readback uses the typed entry points
+directly. The in-memory store retains the validated packet output and receipt
+as one handoff, with legacy conversion only at the compatibility boundary;
+`readback_keyed_validated` is additive for custom stores. The deletion test is
+positive: removing the typed transport would force each Adapter to rebuild
+or downgrade the manifest/output/receipt invariant independently. This is
+local transport plumbing only; it adds no execution, publication, evidence
+mutation, production readiness, benchmark superiority, or runtime authority,
+and the packet claim ceiling remains `Level0DesignNote`.
+
+## Benchmark OS Track: Typed Packet-Job Readback
+
+Status: complete for named state slice
+`benchmark-os-plugin-composition-packet-job-typed-readback-v1`.
+
+`ExperimentPacketJobExecution` now consumes the additive
+`KeyedPluginCompositionPacketStore::readback_keyed_validated` Interface,
+compares typed packet outputs, and returns the store's validated handoff
+directly. Legacy stores remain supported through the default compatibility
+Adapter. `ExperimentPacketJobResult::validated_output` exposes a read-only
+typed view for downstream observers. The deletion test is positive: removing
+this Seam would make job orchestration reopen the legacy output/receipt pair
+and repeat validation locally. Packet files, compatibility fields,
+execution, publication, evidence mutation, production readiness, benchmark
+superiority, runtime authority, and the `Level0DesignNote` ceiling remain
+unchanged.
+
 ## Benchmark OS Track: Local JSON Composition Output Handoff Validation
 
 Status: complete for named state slice

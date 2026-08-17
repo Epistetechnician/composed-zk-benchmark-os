@@ -10,6 +10,7 @@
 //! Durable projector attribution slice: `benchmark-os-plugin-composition-projector-durable-attribution-v1`.
 //! Materialization handoff validation slice: `benchmark-os-plugin-composition-packet-store-materialization-handoff-validation-v1`.
 //! Result handoff validation slice: `benchmark-os-plugin-composition-packet-job-result-handoff-validation-v1`.
+//! Typed job readback slice: `benchmark-os-plugin-composition-packet-job-typed-readback-v1`.
 //! This is local orchestration and packet-integrity coverage, not execution or
 //! scientific evidence.
 
@@ -829,6 +830,7 @@ fn keyed_job_exports_receipt_bound_result_without_breaking_legacy_output() {
         result.receipt().manifest_digest,
         result.output().manifest_digest
     );
+    assert_eq!(result.validated_output().packet(), &result.output().packet);
 }
 
 #[test]

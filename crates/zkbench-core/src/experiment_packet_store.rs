@@ -7,6 +7,8 @@
 //! Identity constructor locality slice: `benchmark-os-plugin-composition-identity-constructor-locality-v1`.
 //! Materialization handoff validation slice: `benchmark-os-plugin-composition-packet-store-materialization-handoff-validation-v1`.
 //! Typed receipt binding slice: `benchmark-os-plugin-composition-packet-store-receipt-typed-binding-v1`.
+//! Canonical typed transport slice: `benchmark-os-experiment-packet-canonical-typed-transport-v1`.
+//! Typed job readback slice: `benchmark-os-plugin-composition-packet-job-typed-readback-v1`.
 //!
 //! This module separates packet-job choreography from packet persistence. The
 //! filesystem adapter delegates to the existing canonical writer and reader;
@@ -22,8 +24,10 @@ use crate::evidence::ArtifactDigest;
 use crate::experiment_identity::PluginCompositionIdentity;
 use crate::experiment_packet::{
     build_plugin_composition_packet_output, compute_experiment_packet_manifest_digest,
-    read_plugin_composition_packet_outputs, write_plugin_composition_packet_outputs,
+    read_plugin_composition_packet_outputs, read_plugin_composition_packet_outputs_validated,
+    write_plugin_composition_packet_outputs, write_plugin_composition_packet_outputs_validated,
     PluginCompositionPacket, PluginCompositionPacketOutput, ValidatedExperimentPacketOutput,
+    ValidatedPluginCompositionPacketOutput,
 };
 
 pub use crate::experiment_packet_store_compat::{
@@ -207,6 +211,15 @@ impl ValidatedPacketStoreMaterialization {
     /// Construct a validated receipt/output handoff.
     pub fn new(output: PluginCompositionPacketOutput, receipt: PacketStoreReceipt) -> Result<Self> {
         let output = ValidatedExperimentPacketOutput::from_output(output)?;
+        Self::from_validated_output(output, receipt)
+    }
+
+    /// Construct a receipt-bound handoff from an already validated packet
+    /// output without downgrading it through the legacy public shape.
+    pub fn from_validated_output(
+        output: ValidatedPluginCompositionPacketOutput,
+        receipt: PacketStoreReceipt,
+    ) -> Result<Self> {
         let expected = PacketStoreReceipt::from_validated_output(receipt.key.clone(), &output)?;
         if receipt != expected {
             return Err(ZkBenchError::validation(
@@ -220,6 +233,11 @@ impl ValidatedPacketStoreMaterialization {
     /// Borrow the validated packet output.
     pub fn output(&self) -> &PluginCompositionPacketOutput {
         self.output.as_output()
+    }
+
+    /// Borrow the validated packet output without reopening its legacy shape.
+    pub fn validated_output(&self) -> &ValidatedPluginCompositionPacketOutput {
+        &self.output
     }
 
     /// Borrow the receipt bound to the validated packet output.
@@ -296,6 +314,20 @@ pub trait KeyedPluginCompositionPacketStore {
     /// Read back only the materialization named by a valid receipt.
     fn readback_keyed(&self, receipt: &PacketStoreReceipt)
         -> Result<PluginCompositionPacketOutput>;
+
+    /// Read back and return one invariant-bearing receipt/output handoff.
+    ///
+    /// The legacy method remains the required compatibility Interface. This
+    /// additive method validates its public result at the keyed store Seam so
+    /// custom Adapters receive the same fail-closed contract as built-ins.
+    fn readback_keyed_validated(
+        &self,
+        receipt: &PacketStoreReceipt,
+    ) -> Result<ValidatedPacketStoreMaterialization> {
+        receipt.key.validate()?;
+        let output = self.readback_keyed(receipt)?;
+        ValidatedPacketStoreMaterialization::new(output, receipt.clone())
+    }
 }
 
 /// Filesystem adapter over the existing canonical packet writer and reader.
@@ -343,19 +375,45 @@ impl KeyedPluginCompositionPacketStore for FilesystemPluginCompositionPacketStor
         key: &PacketStoreKey,
         packet: &PluginCompositionPacket,
     ) -> Result<PacketStoreMaterialization> {
+        self.materialize_keyed_validated(key, packet)
+            .map(ValidatedPacketStoreMaterialization::into_legacy)
+    }
+
+    fn materialize_keyed_validated(
+        &mut self,
+        key: &PacketStoreKey,
+        packet: &PluginCompositionPacket,
+    ) -> Result<ValidatedPacketStoreMaterialization> {
         key.validate_against_packet(packet)?;
-        let output = <Self as PluginCompositionPacketStore>::materialize(self, packet)?;
-        PacketStoreMaterialization::from_output(key.clone(), output)
+        let output = write_plugin_composition_packet_outputs_validated(
+            &self.destination.output_root,
+            packet,
+            self.destination.overwrite,
+            &self.destination.protected_paths,
+        )?;
+        let receipt = PacketStoreReceipt::from_validated_output(key.clone(), &output)?;
+        ValidatedPacketStoreMaterialization::from_validated_output(output, receipt)
     }
 
     fn readback_keyed(
         &self,
         receipt: &PacketStoreReceipt,
     ) -> Result<PluginCompositionPacketOutput> {
+        self.readback_keyed_validated(receipt)
+            .map(|handoff| handoff.into_parts().0)
+    }
+
+    fn readback_keyed_validated(
+        &self,
+        receipt: &PacketStoreReceipt,
+    ) -> Result<ValidatedPacketStoreMaterialization> {
         receipt.key.validate()?;
-        let output = <Self as PluginCompositionPacketStore>::readback(self)?;
-        receipt.validate_output(&output)?;
-        Ok(output)
+        let output = read_plugin_composition_packet_outputs_validated(
+            &self.destination.output_root,
+            &self.destination.protected_paths,
+        )?;
+        receipt.validate_output(output.as_output())?;
+        ValidatedPacketStoreMaterialization::from_validated_output(output, receipt.clone())
     }
 }
 
@@ -366,7 +424,7 @@ impl KeyedPluginCompositionPacketStore for FilesystemPluginCompositionPacketStor
 /// publication, execution, evidence acceptance, or runtime authority.
 #[derive(Default)]
 pub struct InMemoryPluginCompositionPacketStore {
-    materialized: BTreeMap<PacketStoreKey, PacketStoreMaterialization>,
+    materialized: BTreeMap<PacketStoreKey, ValidatedPacketStoreMaterialization>,
     legacy_last_key: Option<PacketStoreKey>,
 }
 
@@ -383,10 +441,11 @@ impl PluginCompositionPacketStore for InMemoryPluginCompositionPacketStore {
         packet: &PluginCompositionPacket,
     ) -> Result<PluginCompositionPacketOutput> {
         let key = PacketStoreKey::from_packet(packet)?;
-        let materialization =
-            <Self as KeyedPluginCompositionPacketStore>::materialize_keyed(self, &key, packet)?;
+        let handoff = <Self as KeyedPluginCompositionPacketStore>::materialize_keyed_validated(
+            self, &key, packet,
+        )?;
         self.legacy_last_key = Some(key);
-        Ok(materialization.output)
+        Ok(handoff.output().clone())
     }
 
     fn readback(&self) -> Result<PluginCompositionPacketOutput> {
@@ -398,7 +457,7 @@ impl PluginCompositionPacketStore for InMemoryPluginCompositionPacketStore {
         })?;
         self.materialized
             .get(key)
-            .map(|materialization| materialization.output.clone())
+            .map(|materialization| materialization.output().clone())
             .ok_or_else(|| {
                 ZkBenchError::validation(
                     "packet_store.in_memory",
@@ -414,10 +473,20 @@ impl KeyedPluginCompositionPacketStore for InMemoryPluginCompositionPacketStore 
         key: &PacketStoreKey,
         packet: &PluginCompositionPacket,
     ) -> Result<PacketStoreMaterialization> {
+        self.materialize_keyed_validated(key, packet)
+            .map(ValidatedPacketStoreMaterialization::into_legacy)
+    }
+
+    fn materialize_keyed_validated(
+        &mut self,
+        key: &PacketStoreKey,
+        packet: &PluginCompositionPacket,
+    ) -> Result<ValidatedPacketStoreMaterialization> {
         key.validate_against_packet(packet)?;
         let output = build_plugin_composition_packet_output(packet)?;
+        let receipt = PacketStoreReceipt::from_validated_output(key.clone(), &output)?;
         let materialization =
-            PacketStoreMaterialization::from_output(key.clone(), output.into_legacy())?;
+            ValidatedPacketStoreMaterialization::from_validated_output(output, receipt)?;
         self.materialized
             .insert(key.clone(), materialization.clone());
         Ok(materialization)
@@ -427,13 +496,21 @@ impl KeyedPluginCompositionPacketStore for InMemoryPluginCompositionPacketStore 
         &self,
         receipt: &PacketStoreReceipt,
     ) -> Result<PluginCompositionPacketOutput> {
+        self.readback_keyed_validated(receipt)
+            .map(|handoff| handoff.into_parts().0)
+    }
+
+    fn readback_keyed_validated(
+        &self,
+        receipt: &PacketStoreReceipt,
+    ) -> Result<ValidatedPacketStoreMaterialization> {
+        receipt.key.validate()?;
         let materialization = self.materialized.get(&receipt.key).ok_or_else(|| {
             ZkBenchError::validation(
                 "packet_store.in_memory",
                 "requested packet-store key has no materialization",
             )
         })?;
-        receipt.validate_output(&materialization.output)?;
-        Ok(materialization.output.clone())
+        ValidatedPacketStoreMaterialization::new(materialization.output().clone(), receipt.clone())
     }
 }
