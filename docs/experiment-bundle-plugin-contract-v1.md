@@ -353,6 +353,17 @@ receipt from existing config, signals, decision, and metadata budget fields.
 The helper is shared by generic run payloads and local composition payloads;
 it adds no wire fields and retains the `Level0DesignNote` ceiling.
 
+The serialized payload Adapter slice
+`benchmark-os-observability-allocation-witness-payload-readback-v1` adds
+`validate_serialized_experiment_run_payloads` and
+`validate_serialized_local_json_composition_with_metadata`. These Adapters
+authenticate canonical config and metadata bytes against the existing fixed
+artifact references before comparing identities, module manifests, decisions,
+and budget transitions. The existing packet transport remains a
+composition-only compatibility Adapter because it carries a metadata
+reference without the metadata payload bytes. No execution, publication,
+Evidence Ledger mutation, or claim-boundary promotion is implied.
+
 The local JSON collector records trace/state-transition summaries and marks
 activation, attention, and causal-effect measurements `Unsupported` with
 explicit reasons. This is deliberate absence, not a claim that ordinary replay

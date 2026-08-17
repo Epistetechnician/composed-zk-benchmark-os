@@ -23,6 +23,7 @@
 //! Mechanism admission seam: benchmark-os-observability-mechanism-admission-seam-v1.
 //! Allocation witness readback slice: benchmark-os-observability-allocation-witness-readback-v1.
 //! Allocation receipt lifecycle handoff slice: benchmark-os-observability-allocation-receipt-lifecycle-handoff-v1.
+//! Allocation witness payload readback slice: benchmark-os-observability-allocation-witness-payload-readback-v1.
 //! Durable composition-adapter attribution slice:
 //! benchmark-os-observability-composition-adapter-durable-attribution-v1.
 //!
@@ -2037,6 +2038,158 @@ pub fn deserialize_experiment_report_json(
     Ok(report)
 }
 
+/// Serialize the generic run config using canonical JSON bytes.
+pub fn serialize_experiment_run_config_json(config: &ExperimentRunConfig) -> Result<String> {
+    serde_json::to_string(config).map_err(|error| {
+        ZkBenchError::serialization("experiment_run_config.json", error.to_string())
+    })
+}
+
+/// Validate one canonical generic run config payload against its artifact
+/// reference and enclosing run identity.
+pub fn deserialize_experiment_run_config_json(
+    json: &str,
+    bundle: &ExperimentArtifactBundle,
+) -> Result<ExperimentRunConfig> {
+    let config: ExperimentRunConfig = serde_json::from_str(json).map_err(|error| {
+        ZkBenchError::deserialization("experiment_run_config.json", error.to_string())
+    })?;
+    let canonical_json = serialize_experiment_run_config_json(&config)?;
+    if json != canonical_json {
+        return Err(ZkBenchError::validation(
+            "experiment_run_config.json",
+            "run config bytes are not the canonical serialization",
+        ));
+    }
+    if config.schema_version != EXPERIMENT_UNIT_BUNDLE_SCHEMA_VERSION {
+        return Err(ZkBenchError::validation(
+            "experiment_run_config.schema_version",
+            "run config schema version is not supported",
+        ));
+    }
+    config.run_spec.validate()?;
+    if config.run_spec.bundle_id != bundle.bundle_id
+        || config.run_spec.experiment_id != bundle.experiment_id
+        || config.run_spec.run_id != bundle.run_id
+    {
+        return Err(ZkBenchError::validation(
+            "experiment_run_config.identity",
+            "run config identity does not match the enclosing bundle",
+        ));
+    }
+    validate_module_manifest(&config.modules, "experiment_run_config.modules")?;
+    validate_experiment_artifact_payload(
+        &bundle.config,
+        ExperimentArtifactKind::Config,
+        &config,
+        &bundle.experiment_id,
+        &bundle.run_id,
+        "bundle.config",
+    )?;
+    Ok(config)
+}
+
+/// Serialize the generic run metadata using canonical JSON bytes.
+pub fn serialize_experiment_run_metadata_json(metadata: &ExperimentRunMetadata) -> Result<String> {
+    serde_json::to_string(metadata).map_err(|error| {
+        ZkBenchError::serialization("experiment_run_metadata.json", error.to_string())
+    })
+}
+
+/// Validate one canonical generic run metadata payload against its artifact
+/// reference and enclosing run identity.
+pub fn deserialize_experiment_run_metadata_json(
+    json: &str,
+    bundle: &ExperimentArtifactBundle,
+) -> Result<ExperimentRunMetadata> {
+    let metadata: ExperimentRunMetadata = serde_json::from_str(json).map_err(|error| {
+        ZkBenchError::deserialization("experiment_run_metadata.json", error.to_string())
+    })?;
+    let canonical_json = serialize_experiment_run_metadata_json(&metadata)?;
+    if json != canonical_json {
+        return Err(ZkBenchError::validation(
+            "experiment_run_metadata.json",
+            "run metadata bytes are not the canonical serialization",
+        ));
+    }
+    if metadata.schema_version != EXPERIMENT_UNIT_BUNDLE_SCHEMA_VERSION {
+        return Err(ZkBenchError::validation(
+            "experiment_run_metadata.schema_version",
+            "run metadata schema version is not supported",
+        ));
+    }
+    require_text(
+        &metadata.experiment_id,
+        "experiment_run_metadata.experiment_id",
+    )?;
+    require_text(&metadata.run_id, "experiment_run_metadata.run_id")?;
+    require_text(&metadata.hypothesis, "experiment_run_metadata.hypothesis")?;
+    require_text(&metadata.lifecycle, "experiment_run_metadata.lifecycle")?;
+    metadata
+        .observability
+        .validate("experiment_run_metadata.observability")?;
+    validate_module_manifest(&metadata.modules, "experiment_run_metadata.modules")?;
+    if metadata.claim_boundary != ClaimBoundary::Level0DesignNote {
+        return Err(ZkBenchError::ClaimBoundary {
+            message: "run metadata remains Level0DesignNote".to_string(),
+        });
+    }
+    metadata
+        .provenance
+        .validate("experiment_run_metadata.provenance")?;
+    if metadata.experiment_id != bundle.experiment_id || metadata.run_id != bundle.run_id {
+        return Err(ZkBenchError::validation(
+            "experiment_run_metadata.identity",
+            "run metadata identity does not match the enclosing bundle",
+        ));
+    }
+    validate_experiment_artifact_payload(
+        &bundle.metadata,
+        ExperimentArtifactKind::Metadata,
+        &metadata,
+        &bundle.experiment_id,
+        &bundle.run_id,
+        "bundle.metadata",
+    )?;
+    Ok(metadata)
+}
+
+/// Read back generic config and metadata payloads as one receipt-bound unit.
+pub fn validate_serialized_experiment_run_payloads(
+    config_json: &str,
+    metadata_json: &str,
+    bundle: &ExperimentArtifactBundle,
+) -> Result<(
+    ExperimentRunConfig,
+    ExperimentRunMetadata,
+    ObservabilityAllocationReceipt,
+)> {
+    validate_experiment_artifact_bundle(bundle)?;
+    let config = deserialize_experiment_run_config_json(config_json, bundle)?;
+    let metadata = deserialize_experiment_run_metadata_json(metadata_json, bundle)?;
+    if metadata.hypothesis != config.run_spec.hypothesis {
+        return Err(ZkBenchError::validation(
+            "experiment_run_payloads.hypothesis",
+            "metadata hypothesis does not match the run config",
+        ));
+    }
+    if metadata.replication != config.run_spec.replication {
+        return Err(ZkBenchError::validation(
+            "experiment_run_payloads.replication",
+            "metadata replication marker does not match the run config",
+        ));
+    }
+    if metadata.modules != config.modules {
+        return Err(ZkBenchError::validation(
+            "experiment_run_payloads.modules",
+            "metadata module manifest does not match the run config",
+        ));
+    }
+    let receipt = config
+        .validate_allocation_witness(&metadata, "experiment_run_payloads.allocation_witness")?;
+    Ok((config, metadata, receipt))
+}
+
 /// Concrete composition adapter for the fixed nine-slot experiment bundle.
 ///
 /// The adapter owns only contract composition and scheduler budget state. It
@@ -2818,6 +2971,12 @@ impl LocalJsonCompositionConfig {
         self.signals.validate()?;
         self.decision
             .validate("local_json_composition_config.decision")?;
+        if self.decision.signals != self.signals {
+            return Err(ZkBenchError::validation(
+                "local_json_composition_config.decision.signals",
+                "composition decision signals do not match the durable config signals",
+            ));
+        }
         validate_module_manifest(&self.modules, "local_json_composition_config.modules")?;
         self.projection.validate(inner, self.decision.tier)
     }
@@ -3053,6 +3212,48 @@ pub fn validate_serialized_local_json_composition_transport(
     }
     let config = validate_serialized_local_json_composition(config_json, &inner, &outer)?;
     Ok((inner, config, outer))
+}
+
+/// Validate a local composition packet when the durable metadata payload is
+/// available alongside the existing inner/config/outer transport artifacts.
+///
+/// The historical three-argument transport Interface remains unchanged
+/// because its outer bundle carries only a metadata artifact reference. This
+/// additive Adapter authenticates the supplied metadata bytes, binds their
+/// decision and module manifest to the composition config, and reconstructs
+/// the allocation receipt before returning the packet.
+pub fn validate_serialized_local_json_composition_with_metadata(
+    inner_json: &str,
+    config_json: &str,
+    metadata_json: &str,
+    outer_json: &str,
+) -> Result<(
+    LocalExperimentBundle,
+    LocalJsonCompositionConfig,
+    ExperimentRunMetadata,
+    ExperimentArtifactBundle,
+    ObservabilityAllocationReceipt,
+)> {
+    let (inner, config, outer) =
+        validate_serialized_local_json_composition_transport(inner_json, config_json, outer_json)?;
+    let metadata = deserialize_experiment_run_metadata_json(metadata_json, &outer)?;
+    if metadata.observability != config.decision {
+        return Err(ZkBenchError::validation(
+            "local_json_composition_payloads.observability",
+            "metadata decision does not match the composition config decision",
+        ));
+    }
+    if metadata.modules != config.modules {
+        return Err(ZkBenchError::validation(
+            "local_json_composition_payloads.modules",
+            "metadata module manifest does not match the composition config",
+        ));
+    }
+    let receipt = config.validate_allocation_witness(
+        &metadata.remaining_budget,
+        "local_json_composition_payloads.allocation_witness",
+    )?;
+    Ok((inner, config, metadata, outer, receipt))
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
