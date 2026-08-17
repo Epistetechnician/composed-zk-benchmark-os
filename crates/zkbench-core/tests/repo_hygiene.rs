@@ -1,6 +1,11 @@
 use std::fs;
 use std::path::{Path, PathBuf};
 
+// State slice: `research-synthesis-trace-replay-v1-repo-hygiene-venv-boundary`.
+// A repository-local Python environment is an ignored dependency root, not
+// repository source. Its installed lab extensions must not affect the source
+// hygiene assertion.
+
 #[test]
 fn repo_preserves_level1_hygiene_boundary() {
     let repo_root = Path::new(env!("CARGO_MANIFEST_DIR"))
@@ -47,7 +52,7 @@ fn scan_repo(root: &Path, forbidden_artifacts: &mut Vec<PathBuf>, empty_files: &
         .unwrap_or("");
     if matches!(
         dir_name,
-        ".git" | "target" | ".autoresearch" | ".phala-capture"
+        ".git" | "target" | ".autoresearch" | ".phala-capture" | ".venv"
     ) {
         return;
     }

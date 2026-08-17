@@ -15,6 +15,16 @@ pub mod dashboard;
 pub mod dsl;
 pub mod error;
 pub mod evidence;
+pub mod experiment;
+pub mod experiment_identity;
+pub mod experiment_metacognitive;
+pub mod experiment_observability;
+pub mod experiment_packet;
+pub mod experiment_packet_job;
+pub mod experiment_packet_store;
+pub mod experiment_packet_store_compat;
+pub mod experiment_plugin_catalog;
+pub mod experiment_plugin_composition;
 pub mod external_runner;
 pub mod formal;
 pub mod generator;
@@ -35,14 +45,28 @@ pub mod zkml;
 
 pub use adapters::{
     build_default_zk_harness_adapter_manifest, build_manual_handoff_bundle_from_zk_harness_plan,
+    build_metacognitive_monitor_control_case, build_opaque_trace_replay_case,
     build_zk_harness_dry_run_plan_from_pack, build_zk_harness_manual_handoff_bundle,
     default_zk_harness_capability_declaration, default_zk_harness_future_execution_prerequisites,
     deserialize_zk_harness_dry_run_plan_json, deserialize_zk_harness_manifest_json,
-    export_pack_to_zk_harness_dry_run_plan, local_json_capabilities,
-    serialize_zk_harness_dry_run_plan_json, serialize_zk_harness_manifest_json,
-    validate_zk_harness_dry_run_plan, zk_harness_dry_run_capabilities, AdapterCapabilitySet,
-    BackendAdapter, BackendTarget, LocalJsonAdapter, LocalJsonAdapterConfig, LocalJsonReplayInput,
-    LocalJsonReplayOutput, LocalJsonReplaySummary, ZkHarnessAdapterManifest,
+    expected_metacognitive_monitor_control_verdict, expected_opaque_trace_replay_quarantine_status,
+    expected_opaque_trace_replay_verdict, export_pack_to_zk_harness_dry_run_plan,
+    local_json_capabilities, serialize_zk_harness_dry_run_plan_json,
+    serialize_zk_harness_manifest_json, validate_metacognitive_monitor_control_candidate,
+    validate_metacognitive_monitor_control_result, validate_opaque_trace_replay_adapter_result,
+    validate_opaque_trace_replay_candidate, validate_zk_harness_dry_run_plan,
+    zk_harness_dry_run_capabilities, AdapterCapabilitySet, BackendAdapter, BackendTarget,
+    LocalJsonAdapter, LocalJsonAdapterConfig, LocalJsonReplayInput, LocalJsonReplayOutput,
+    LocalJsonReplaySummary, MetacognitiveConfidenceMethod, MetacognitiveControlAction,
+    MetacognitiveMonitorControlCandidate, MetacognitiveMonitorControlCase,
+    MetacognitiveMonitorControlObservation, MetacognitiveMonitorControlResult,
+    MetacognitiveMonitorControlValidation, MetacognitiveMonitorControlValidationIssue,
+    MetacognitiveMonitorControlValidationIssueKind, MetacognitiveMonitorControlVariant,
+    MetacognitiveSignalSource, MetacognitiveSplit, OpaqueTraceReplayAdapterObservation,
+    OpaqueTraceReplayAdapterResult, OpaqueTraceReplayBoundary, OpaqueTraceReplayCandidate,
+    OpaqueTraceReplayCase, OpaqueTraceReplayContextBinding, OpaqueTraceReplayMutationProvenance,
+    OpaqueTraceReplayValidation, OpaqueTraceReplayValidationIssue,
+    OpaqueTraceReplayValidationIssueKind, OpaqueTraceReplayVariant, ZkHarnessAdapterManifest,
     ZkHarnessAdapterManifestId, ZkHarnessAdapterManifestVersion, ZkHarnessAdapterRegistryEntry,
     ZkHarnessAdapterScope, ZkHarnessAdapterStatus, ZkHarnessArtifactExpectation,
     ZkHarnessArtifactMapping, ZkHarnessClaimBoundaryPolicy, ZkHarnessCommandArgument,
@@ -57,7 +81,10 @@ pub use adapters::{
     ZkHarnessPackExportManifest, ZkHarnessPackMapping, ZkHarnessPlanStep, ZkHarnessPlanStepKind,
     ZkHarnessPlanSubject, ZkHarnessPlannedCommand, ZkHarnessResultImportExpectation,
     ZkHarnessReviewStatus, ZkHarnessSchemaAssumption, ZkHarnessSourcePolicy, ZkHarnessTraceMapping,
-    ZkHarnessUnsupportedFeature, LOCAL_JSON_ADAPTER_ID,
+    ZkHarnessUnsupportedFeature, LOCAL_JSON_ADAPTER_ID, METACOGNITIVE_MAX_CONFIDENCE_MILLI,
+    METACOGNITIVE_MONITOR_CONTROL_CLAIM_BOUNDARY, METACOGNITIVE_MONITOR_CONTROL_FAMILY_ID,
+    METACOGNITIVE_MONITOR_CONTROL_SCHEMA_VERSION, OPAQUE_TRACE_REPLAY_CLAIM_BOUNDARY,
+    OPAQUE_TRACE_REPLAY_FAMILY_ID, OPAQUE_TRACE_REPLAY_SCHEMA_VERSION,
 };
 pub use audit_index::{
     build_local_audit_index_cross_bundle_view, build_local_audit_index_ergonomics_view,
@@ -203,6 +230,83 @@ pub use evidence::{
     OFFICIAL_SUBMISSION_PACKAGE_METADATA_DIGEST_PATH, OFFICIAL_SUBMISSION_PACKAGE_METADATA_PATH,
     OFFICIAL_SUBMISSION_PACKAGE_VALIDATION_DIGEST_PATH,
     OFFICIAL_SUBMISSION_PACKAGE_VALIDATION_PATH,
+};
+pub use experiment::{
+    compute_experiment_bundle_digest, deserialize_experiment_bundle_json, execute_experiment,
+    local_json_experiment_plugin_descriptor, serialize_experiment_bundle_json,
+    validate_experiment_bundle, validate_experiment_plugin_output, Evaluator,
+    ExperimentArtifactKind, ExperimentArtifactRef, ExperimentBundle, ExperimentBundleValidation,
+    ExperimentBundleValidationIssue, ExperimentBundleValidationIssueKind, ExperimentBundleVersion,
+    ExperimentConfig, ExperimentDataVersion, ExperimentEvaluation, ExperimentLifecycle,
+    ExperimentMetrics, ExperimentModel, ExperimentModelRun, ExperimentModelVersion,
+    ExperimentPlugin, ExperimentPluginDescriptor, ExperimentPluginRegistry, ExperimentReport,
+    ExperimentTask, ExperimentTaskDescriptor, ExperimentTaskInput, LocalJsonExperimentModel,
+    LocalJsonExperimentPlugin, LocalJsonExperimentTask, LocalReplayEvaluator,
+    LocalReplayMechanismCollector, MeasurementStatus, MeasurementValue, MechanismCollector,
+    MechanismLedger, MechanismMeasurement, MechanismMeasurementKind, MetricKind, MetricMeasurement,
+    ValidatedExperimentPluginOutput, EXPERIMENT_BUNDLE_CLAIM_BOUNDARY,
+    EXPERIMENT_BUNDLE_SCHEMA_VERSION, LOCAL_JSON_EXPERIMENT_PLUGIN_ID,
+};
+pub use experiment_identity::PluginCompositionIdentity;
+pub use experiment_metacognitive::{
+    metacognitive_experiment_plugin_descriptor, MetacognitiveMonitorControlExperimentPlugin,
+    METACOGNITIVE_EXPERIMENT_COLLECTOR_ID, METACOGNITIVE_EXPERIMENT_EVALUATOR_ID,
+    METACOGNITIVE_EXPERIMENT_MODEL_ID, METACOGNITIVE_EXPERIMENT_PLUGIN_ID,
+    METACOGNITIVE_EXPERIMENT_TASK_ID,
+};
+pub use experiment_observability::{
+    compute_local_json_composition_config_digest, deserialize_local_json_composition_config_json,
+    deserialize_mechanism_ledger_json, deserialize_meta_evaluation_ledger_json,
+    local_json_composition_adapter_descriptor, serialize_local_json_composition_config_json,
+    serialize_mechanism_ledger_json, serialize_meta_evaluation_ledger_json,
+    validate_local_json_artifact_projection, validate_module_manifest,
+    validate_serialized_local_json_composition,
+    validate_serialized_local_json_composition_transport, LocalJsonArtifactBinding,
+    LocalJsonArtifactProjection, LocalJsonCompositionConfig, LocalJsonExperimentRunner,
+    LocalJsonProjectionRelation, LocalJsonSourceArtifactRef, ValidatedLocalJsonCompositionOutput,
+    LOCAL_JSON_ARTIFACT_PROJECTION_SCHEMA_VERSION, LOCAL_JSON_COMPOSITION_ADAPTER_ID,
+    LOCAL_JSON_COMPOSITION_ADAPTER_MODULE_ID, LOCAL_JSON_COMPOSITION_ADAPTER_SOURCE_REVISION,
+    LOCAL_JSON_COMPOSITION_CONFIG_SCHEMA_VERSION,
+};
+pub use experiment_packet::{
+    compute_experiment_packet_manifest_digest, deserialize_experiment_packet_manifest_json,
+    read_experiment_packet_outputs, read_plugin_composition_packet_outputs,
+    required_experiment_packet_limitations, serialize_experiment_packet_manifest_json,
+    validate_experiment_packet_manifest, write_experiment_packet_outputs,
+    write_plugin_composition_packet_outputs, ExperimentPacket, ExperimentPacketComposition,
+    ExperimentPacketFileRef, ExperimentPacketManifest, ExperimentPacketOutput,
+    LocalJsonExperimentPacket, LocalJsonExperimentPacketOutput, PluginCompositionPacket,
+    PluginCompositionPacketOutput, ValidatedExperimentPacketOutput,
+    ValidatedLocalJsonExperimentPacketOutput, ValidatedPluginCompositionPacketOutput,
+    EXPERIMENT_PACKET_COMPOSITION_CONFIG_DIGEST_PATH, EXPERIMENT_PACKET_COMPOSITION_CONFIG_PATH,
+    EXPERIMENT_PACKET_INNER_BUNDLE_DIGEST_PATH, EXPERIMENT_PACKET_INNER_BUNDLE_PATH,
+    EXPERIMENT_PACKET_MANIFEST_DIGEST_PATH, EXPERIMENT_PACKET_MANIFEST_PATH,
+    EXPERIMENT_PACKET_OUTER_BUNDLE_DIGEST_PATH, EXPERIMENT_PACKET_OUTER_BUNDLE_PATH,
+    EXPERIMENT_PACKET_SCHEMA_VERSION,
+};
+pub use experiment_packet_job::{
+    ExperimentPacketJob, ExperimentPacketJobConfig, ExperimentPacketJobRequest,
+    ExperimentPacketJobResult, StorageIndependentExperimentPacketJob,
+};
+pub use experiment_packet_store::{
+    FilesystemPluginCompositionPacketStore, InMemoryPluginCompositionPacketStore,
+    KeyedPluginCompositionPacketStore, LegacyPluginCompositionPacketStoreAdapter,
+    PacketStoreDestination, PacketStoreKey, PacketStoreMaterialization, PacketStoreReceipt,
+    PluginCompositionPacketStore, ValidatedPacketStoreMaterialization,
+};
+pub use experiment_plugin_catalog::{
+    ExperimentPluginFactory, ExperimentPluginFactoryCatalog, LocalJsonExperimentPluginFactory,
+    MetacognitiveMonitorControlExperimentPluginFactory,
+};
+pub use experiment_plugin_composition::{
+    compute_plugin_composition_config_digest, deserialize_plugin_composition_config_json,
+    plugin_composition_adapter_descriptor, serialize_plugin_composition_config_json,
+    PluginCompositionBinding, PluginCompositionConfig, PluginCompositionOutput,
+    PluginCompositionProjector, PluginCompositionRunner, PluginCompositionSource,
+    StandardPluginCompositionProjector, ValidatedPluginCompositionOutput,
+    PLUGIN_COMPOSITION_ADAPTER_ID, PLUGIN_COMPOSITION_ADAPTER_MODULE_ID,
+    PLUGIN_COMPOSITION_ADAPTER_SOURCE_REVISION, PLUGIN_COMPOSITION_PROJECTOR_MODULE_ID,
+    PLUGIN_COMPOSITION_SCHEMA_VERSION,
 };
 pub use external_runner::{
     build_default_artifact_capture_contract, build_default_external_result_import_schema,
