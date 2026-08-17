@@ -19,6 +19,7 @@
 // - `benchmark-os-observability-run-lifecycle-transaction-v1`
 // - `benchmark-os-observability-composition-adapter-durable-attribution-v1`
 // - `benchmark-os-local-json-composition-output-handoff-validation-v1`
+// - `benchmark-os-observability-scheduler-budget-transition-v1`
 
 use zkbench_core::evidence::{
     compute_artifact_digest, compute_artifact_digest_bytes, ArtifactKind, ArtifactRole,
@@ -372,6 +373,33 @@ impl MechanismCollector for FixtureMechanismCollector {
 
 struct TamperingScheduler {
     descriptor: ModuleDescriptor,
+}
+
+struct BudgetTamperingScheduler {
+    descriptor: ModuleDescriptor,
+}
+
+impl ObservabilityScheduler for BudgetTamperingScheduler {
+    fn descriptor(&self) -> ModuleDescriptor {
+        self.descriptor.clone()
+    }
+
+    fn allocate(
+        &self,
+        signals: ObservabilitySignals,
+        budget: &mut ObservabilityBudget,
+    ) -> zkbench_core::error::Result<ObservabilityDecision> {
+        let decision = WeightedObservabilityScheduler::default().allocate(signals, budget)?;
+        budget.tier1_samples_remaining = budget.tier1_samples_remaining.saturating_sub(1);
+        Ok(decision)
+    }
+
+    fn validate_decision(
+        &self,
+        decision: &ObservabilityDecision,
+    ) -> zkbench_core::error::Result<()> {
+        WeightedObservabilityScheduler::default().validate_decision(decision)
+    }
 }
 
 impl ObservabilityScheduler for TamperingScheduler {
@@ -1141,6 +1169,39 @@ fn local_json_runner_budget_commit_is_failure_atomic_after_allocation() {
         .run()
         .expect_err("invalid scheduler decision should abort after allocation");
     assert!(error.to_string().contains("weighted priority"));
+    assert_eq!(runner.remaining_budget().tier2_deep_dives_remaining, 1);
+    assert!(runner.mechanism_ledger().is_none());
+    assert!(runner.composition_config().is_none());
+}
+
+#[test]
+fn scheduler_budget_transition_rejects_unrelated_budget_spend() {
+    let mut runner = LocalJsonExperimentRunner::new_with_scheduler(
+        zkbench_core::GeneratorConfig::baseline_fsm(),
+        "budget-transition-experiment",
+        "budget-transition-run",
+        ObservabilitySignals {
+            novelty_milli: 100,
+            uncertainty_milli: 100,
+            failure_milli: 900,
+        },
+        provenance("budget-transition"),
+        ObservabilityBudget {
+            tier1_samples_remaining: 1,
+            tier2_deep_dives_remaining: 1,
+            tier3_gold_cases_remaining: 0,
+        },
+        Box::new(BudgetTamperingScheduler {
+            descriptor: module("budget-tampering-scheduler"),
+        }),
+    )
+    .expect("budget transition fixture should construct");
+
+    let error = runner
+        .run()
+        .expect_err("scheduler budget drift must fail closed");
+    assert!(error.to_string().contains("exactly the selected tier"));
+    assert_eq!(runner.remaining_budget().tier1_samples_remaining, 1);
     assert_eq!(runner.remaining_budget().tier2_deep_dives_remaining, 1);
     assert!(runner.mechanism_ledger().is_none());
     assert!(runner.composition_config().is_none());

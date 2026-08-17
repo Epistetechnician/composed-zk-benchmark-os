@@ -17,6 +17,7 @@
 //! Artifact policy slice: benchmark-os-observability-run-artifact-policy-v1.
 //! Shared artifact-reference policy locality slice: benchmark-os-plugin-composition-artifact-reference-policy-locality-v1.
 //! Local JSON composition output handoff slice: benchmark-os-local-json-composition-output-handoff-validation-v1.
+//! Scheduler budget transition validation slice: benchmark-os-observability-scheduler-budget-transition-v1.
 //! Durable composition-adapter attribution slice:
 //! benchmark-os-observability-composition-adapter-durable-attribution-v1.
 //!
@@ -724,6 +725,54 @@ pub struct ObservabilityBudget {
 }
 
 impl ObservabilityBudget {
+    /// Verify that one scheduler allocation consumes exactly the selected tier.
+    fn validate_allocation(before: &Self, after: &Self, tier: ObservabilityTier) -> Result<()> {
+        let mut expected = before.clone();
+        match tier {
+            ObservabilityTier::Tier0 => {}
+            ObservabilityTier::Tier1 => {
+                expected.tier1_samples_remaining = before
+                    .tier1_samples_remaining
+                    .checked_sub(1)
+                    .ok_or_else(|| {
+                        ZkBenchError::validation(
+                            "observability.budget",
+                            "scheduler selected Tier1 without remaining budget",
+                        )
+                    })?;
+            }
+            ObservabilityTier::Tier2 => {
+                expected.tier2_deep_dives_remaining = before
+                    .tier2_deep_dives_remaining
+                    .checked_sub(1)
+                    .ok_or_else(|| {
+                        ZkBenchError::validation(
+                            "observability.budget",
+                            "scheduler selected Tier2 without remaining budget",
+                        )
+                    })?;
+            }
+            ObservabilityTier::Tier3 => {
+                expected.tier3_gold_cases_remaining = before
+                    .tier3_gold_cases_remaining
+                    .checked_sub(1)
+                    .ok_or_else(|| {
+                        ZkBenchError::validation(
+                            "observability.budget",
+                            "scheduler selected Tier3 without remaining budget",
+                        )
+                    })?;
+            }
+        }
+        if after != &expected {
+            return Err(ZkBenchError::validation(
+                "observability.budget",
+                "scheduler allocation must consume exactly the selected tier",
+            ));
+        }
+        Ok(())
+    }
+
     fn consume(&mut self, tier: ObservabilityTier) {
         match tier {
             ObservabilityTier::Tier0 => {}
@@ -1833,8 +1882,10 @@ impl ObservabilityRunLifecycleTransaction {
         scheduler: &dyn ObservabilityScheduler,
         signals: ObservabilitySignals,
     ) -> Result<ObservabilityDecision> {
+        let before = self.next_budget.clone();
         let decision = scheduler.allocate(signals, &mut self.next_budget)?;
         scheduler.validate_decision(&decision)?;
+        ObservabilityBudget::validate_allocation(&before, &self.next_budget, decision.tier)?;
         Ok(decision)
     }
 
