@@ -274,6 +274,14 @@ pair. This concentrates readback equality and receipt binding in the job
 Seam without changing packet files, legacy output fields, execution,
 publication, evidence mutation, or the `Level0DesignNote` ceiling.
 
+The scheduler budget transition slice validates the mutable budget change at
+the observability allocation Seam. A replacement `ObservabilityScheduler` must
+decrement exactly the selected tier, leave unrelated tiers unchanged, and
+cannot select an exhausted tier. Decision validation and lifecycle transaction
+semantics remain intact; this is local budget-accounting plumbing only and
+adds no execution, publication, evidence mutation, production readiness,
+benchmark superiority, or runtime authority.
+
 The local JSON composition output handoff slice adds
 `ValidatedLocalJsonCompositionOutput` with private inner, config, and outer
 fields. The additive `LocalJsonExperimentRunner::run_validated_output`

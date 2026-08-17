@@ -23075,6 +23075,20 @@ execution, publication, evidence mutation, production readiness, benchmark
 superiority, runtime authority, and the `Level0DesignNote` ceiling remain
 unchanged.
 
+## Benchmark OS Track: Scheduler Budget Transition Validation
+
+Status: complete for named state slice
+`benchmark-os-observability-scheduler-budget-transition-v1`.
+
+`ObservabilityRunLifecycleTransaction` now validates the budget transition
+returned by every replacement `ObservabilityScheduler`: exactly one unit of the
+selected tier must be consumed, unrelated tiers must remain unchanged, and an
+exhausted tier is rejected. The deletion test is positive: removing this
+Invariant would let an Adapter overspend or silently alter another tier while
+returning an otherwise valid decision. Existing scheduler decisions, bundle
+bytes, append-only mechanism state, and the `Level0DesignNote` claim ceiling
+remain unchanged. This is local budget-accounting plumbing only.
+
 ## Benchmark OS Track: Local JSON Composition Output Handoff Validation
 
 Status: complete for named state slice
