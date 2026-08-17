@@ -21,6 +21,7 @@
 // - `benchmark-os-local-json-composition-output-handoff-validation-v1`
 // - `benchmark-os-observability-scheduler-budget-transition-v1`
 // - `benchmark-os-observability-append-only-ledger-precondition-v1`
+// - `benchmark-os-observability-allocation-receipt-v1`
 
 use zkbench_core::evidence::{
     compute_artifact_digest, compute_artifact_digest_bytes, ArtifactKind, ArtifactRole,
@@ -42,8 +43,8 @@ use zkbench_core::experiment_observability::{
     ExperimentRunSpec, LocalJsonExperimentRunner, MechanismCollector, MechanismLedger,
     MechanismRecord, MechanismRecordStatus, MetaEvaluationLedger, MetricMetaEvaluation,
     MetricMetaEvaluationBasis, MetricNoise, MetricObservation, MetricObservationStatus,
-    MetricStability, ModuleDescriptor, ObservabilityBudget, ObservabilityDecision,
-    ObservabilitySignals, ObservabilityTier, WeightedObservabilityScheduler,
+    MetricStability, ModuleDescriptor, ObservabilityAllocationReceipt, ObservabilityBudget,
+    ObservabilityDecision, ObservabilitySignals, ObservabilityTier, WeightedObservabilityScheduler,
     EXPERIMENT_UNIT_BUNDLE_SCHEMA_VERSION, OBSERVABILITY_SCORE_SCALE,
 };
 use zkbench_core::experiment_observability::{
@@ -1221,6 +1222,55 @@ fn scheduler_budget_transition_rejects_unrelated_budget_spend() {
     assert_eq!(runner.remaining_budget().tier2_deep_dives_remaining, 1);
     assert!(runner.mechanism_ledger().is_none());
     assert!(runner.composition_config().is_none());
+}
+
+#[test]
+fn scheduler_allocation_receipt_binds_transition_and_is_failure_atomic() {
+    let scheduler = WeightedObservabilityScheduler::default();
+    let budget = ObservabilityBudget {
+        tier1_samples_remaining: 2,
+        tier2_deep_dives_remaining: 1,
+        tier3_gold_cases_remaining: 0,
+    };
+    let receipt = scheduler
+        .allocate_with_receipt(
+            ObservabilitySignals {
+                novelty_milli: 700,
+                uncertainty_milli: 100,
+                failure_milli: 100,
+            },
+            &budget,
+        )
+        .expect("valid allocation should produce a receipt");
+    assert_eq!(receipt.before_budget, budget);
+    assert_eq!(receipt.decision.tier, ObservabilityTier::Tier1);
+    assert_eq!(receipt.after_budget.tier1_samples_remaining, 1);
+    assert_eq!(receipt.after_budget.tier2_deep_dives_remaining, 1);
+    receipt
+        .validate("test.allocation_receipt")
+        .expect("receipt transition should validate");
+
+    let tampering_scheduler = BudgetTamperingScheduler {
+        descriptor: module("receipt-budget-tampering-scheduler"),
+    };
+    let untouched_budget = budget.clone();
+    let error = tampering_scheduler
+        .allocate_with_receipt(
+            ObservabilitySignals {
+                novelty_milli: 100,
+                uncertainty_milli: 100,
+                failure_milli: 900,
+            },
+            &untouched_budget,
+        )
+        .expect_err("tampered transition must fail before caller mutation");
+    assert!(error.to_string().contains("exactly the selected tier"));
+    assert_eq!(untouched_budget, budget);
+
+    let serialized = serde_json::to_string(&receipt).expect("receipt should serialize");
+    let restored: ObservabilityAllocationReceipt =
+        serde_json::from_str(&serialized).expect("receipt should deserialize");
+    assert_eq!(restored, receipt);
 }
 
 #[test]

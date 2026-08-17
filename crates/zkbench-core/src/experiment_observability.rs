@@ -19,6 +19,7 @@
 //! Local JSON composition output handoff slice: benchmark-os-local-json-composition-output-handoff-validation-v1.
 //! Scheduler budget transition validation slice: benchmark-os-observability-scheduler-budget-transition-v1.
 //! Append-only ledger precondition slice: benchmark-os-observability-append-only-ledger-precondition-v1.
+//! Typed allocation receipt slice: benchmark-os-observability-allocation-receipt-v1.
 //! Durable composition-adapter attribution slice:
 //! benchmark-os-observability-composition-adapter-durable-attribution-v1.
 //!
@@ -828,6 +829,36 @@ impl ObservabilityDecision {
     }
 }
 
+/// Immutable record of one scheduler budget transition.
+///
+/// The receipt keeps the scheduler decision adjacent to the exact budget
+/// states it is allowed to transition between. It is metadata plumbing only;
+/// it does not represent scientific evidence or execution authority.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ObservabilityAllocationReceipt {
+    /// Budget visible before allocation.
+    pub before_budget: ObservabilityBudget,
+    /// Decision produced by the scheduler.
+    pub decision: ObservabilityDecision,
+    /// Budget visible after allocation.
+    pub after_budget: ObservabilityBudget,
+}
+
+impl ObservabilityAllocationReceipt {
+    /// Validate the generic transition invariant carried by this receipt.
+    pub fn validate(&self, path: &str) -> Result<()> {
+        self.decision.validate(&format!("{path}.decision"))?;
+        ObservabilityBudget::validate_allocation(
+            &self.before_budget,
+            &self.after_budget,
+            self.decision.tier,
+        )
+        .map_err(|error| {
+            ZkBenchError::validation(format!("{path}.after_budget"), error.to_string())
+        })
+    }
+}
+
 /// Replaceable scheduler seam.
 pub trait ObservabilityScheduler: Send + Sync {
     /// Implementation identity and policy version.
@@ -842,6 +873,25 @@ pub trait ObservabilityScheduler: Send + Sync {
         signals: ObservabilitySignals,
         budget: &mut ObservabilityBudget,
     ) -> Result<ObservabilityDecision>;
+    /// Allocate against an isolated budget and return a typed transition
+    /// receipt without mutating the caller's budget.
+    fn allocate_with_receipt(
+        &self,
+        signals: ObservabilitySignals,
+        budget: &ObservabilityBudget,
+    ) -> Result<ObservabilityAllocationReceipt> {
+        let before_budget = budget.clone();
+        let mut after_budget = before_budget.clone();
+        let decision = self.allocate(signals, &mut after_budget)?;
+        self.validate_decision(&decision)?;
+        let receipt = ObservabilityAllocationReceipt {
+            before_budget,
+            decision,
+            after_budget,
+        };
+        receipt.validate("observability.allocation_receipt")?;
+        Ok(receipt)
+    }
 }
 
 /// Reference scheduler adapter. It is deterministic policy, not evidence.
@@ -1884,11 +1934,9 @@ impl ObservabilityRunLifecycleTransaction {
         scheduler: &dyn ObservabilityScheduler,
         signals: ObservabilitySignals,
     ) -> Result<ObservabilityDecision> {
-        let before = self.next_budget.clone();
-        let decision = scheduler.allocate(signals, &mut self.next_budget)?;
-        scheduler.validate_decision(&decision)?;
-        ObservabilityBudget::validate_allocation(&before, &self.next_budget, decision.tier)?;
-        Ok(decision)
+        let receipt = scheduler.allocate_with_receipt(signals, &self.next_budget)?;
+        self.next_budget = receipt.after_budget.clone();
+        Ok(receipt.decision)
     }
 
     fn append_mechanism(&mut self, mechanism: MechanismRecord) -> Result<()> {

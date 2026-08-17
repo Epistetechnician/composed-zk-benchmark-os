@@ -282,6 +282,15 @@ semantics remain intact; this is local budget-accounting plumbing only and
 adds no execution, publication, evidence mutation, production readiness,
 benchmark superiority, or runtime authority.
 
+The typed allocation receipt slice adds the compatibility-preserving
+`ObservabilityScheduler::allocate_with_receipt` Interface. It isolates the
+caller budget and binds `before_budget`, the validated decision, and
+`after_budget` into one `ObservabilityAllocationReceipt`; failed transitions
+leave the caller budget unchanged. This keeps replacement scheduler logic at
+one Seam rather than making each runner reconstruct the transition invariant.
+Serialized bundle fields and the `Level0DesignNote` claim ceiling remain
+unchanged.
+
 The append-only ledger precondition slice makes both mechanism and metric
 meta-evaluation append Interfaces validate their existing digest chain before
 accepting new evidence. A caller cannot append onto tampered history and defer
