@@ -282,6 +282,13 @@ semantics remain intact; this is local budget-accounting plumbing only and
 adds no execution, publication, evidence mutation, production readiness,
 benchmark superiority, or runtime authority.
 
+The append-only ledger precondition slice makes both mechanism and metric
+meta-evaluation append Interfaces validate their existing digest chain before
+accepting new evidence. A caller cannot append onto tampered history and defer
+failure until serialization or later readback; failed appends leave the ledger
+unchanged. Serialized fields, append ordering, compatibility access, and the
+`Level0DesignNote` claim ceiling remain unchanged.
+
 The local JSON composition output handoff slice adds
 `ValidatedLocalJsonCompositionOutput` with private inner, config, and outer
 fields. The additive `LocalJsonExperimentRunner::run_validated_output`
