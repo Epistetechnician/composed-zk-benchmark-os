@@ -23103,6 +23103,20 @@ history integrity independently. Serialized fields, append ordering,
 compatibility access, and the `Level0DesignNote` claim ceiling remain
 unchanged.
 
+## Benchmark OS Track: Typed Allocation Receipt
+
+Status: complete for named state slice
+`benchmark-os-observability-allocation-receipt-v1`.
+
+The additive `ObservabilityScheduler::allocate_with_receipt` Interface runs a
+replacement scheduler against an isolated budget and binds the before-budget,
+validated decision, and after-budget into one
+`ObservabilityAllocationReceipt`. The lifecycle transaction consumes that
+receipt, so overspending or unrelated-tier mutation fails before retained
+runner state changes. The existing mutable `allocate` method remains the
+compatibility Adapter for older implementations. Serialized bundle fields and
+the `Level0DesignNote` claim ceiling remain unchanged.
+
 ## Benchmark OS Track: Local JSON Composition Output Handoff Validation
 
 Status: complete for named state slice

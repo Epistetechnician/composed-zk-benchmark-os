@@ -226,6 +226,14 @@ serialized schemas, scheduler policy, one-shot behavior, and Level0/Level1
 claim ceilings while making failure atomicity one implementation seam rather
 than duplicated runner choreography.
 
+The additive `ObservabilityScheduler::allocate_with_receipt` Interface runs a
+replacement scheduler against an isolated budget and returns one
+`ObservabilityAllocationReceipt` containing the before-budget, decision, and
+after-budget. The lifecycle transaction consumes that receipt, so a scheduler
+that overspends or mutates an unrelated tier fails before retained runner
+state changes. The existing mutable `allocate` method remains the compatibility
+Adapter for older scheduler implementations.
+
 The scheduler is policy, not scientific evidence. Its weights and thresholds
 are versioned configuration and must be frozen before a sealed assessment.
 Changing them defines a new experiment configuration.
