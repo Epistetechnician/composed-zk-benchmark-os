@@ -519,9 +519,7 @@ pub fn write_soak_report_bundle(root: impl AsRef<Path>, bundle: &SoakReportBundl
 }
 
 fn validate_report_bundle_write_root(root: &Path) -> Result<()> {
-    if let Some(parent) = root.parent() {
-        validate_soak_path_components(parent)?;
-    }
+    validate_soak_root(root)?;
     match fs::symlink_metadata(root) {
         Ok(metadata) => {
             if metadata.file_type().is_symlink() {
@@ -557,6 +555,7 @@ fn validate_report_bundle_write_root(root: &Path) -> Result<()> {
 /// Read a report bundle from a local directory.
 pub fn read_soak_report_bundle(root: impl AsRef<Path>) -> Result<SoakReportBundle> {
     let root = root.as_ref();
+    validate_soak_root(root)?;
     let path = root.join(SOAK_REPORT_BUNDLE_FILENAME);
     validate_report_bundle_read_root(root)?;
     let bytes = fs::read(&path)
@@ -575,9 +574,6 @@ pub fn read_soak_report_bundle(root: impl AsRef<Path>) -> Result<SoakReportBundl
 }
 
 fn validate_report_bundle_read_root(root: &Path) -> Result<()> {
-    if let Some(parent) = root.parent() {
-        validate_soak_path_components(parent)?;
-    }
     let metadata = fs::symlink_metadata(root).map_err(|error| {
         ZkBenchError::soak(
             root.join(SOAK_REPORT_BUNDLE_FILENAME).display().to_string(),
@@ -748,6 +744,19 @@ pub(crate) fn validate_soak_path_components(path: &Path) -> Result<()> {
         }
         candidate = parent;
         is_leaf = false;
+    }
+    Ok(())
+}
+
+fn validate_soak_root(root: &Path) -> Result<()> {
+    if root.as_os_str().is_empty() {
+        return Err(ZkBenchError::soak(
+            "soak.root",
+            "soak root must be non-empty",
+        ));
+    }
+    if let Some(parent) = root.parent() {
+        validate_soak_path_components(parent)?;
     }
     Ok(())
 }

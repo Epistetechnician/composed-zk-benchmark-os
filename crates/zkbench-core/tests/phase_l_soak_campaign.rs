@@ -1,4 +1,5 @@
 use std::fs;
+use std::path::Path;
 
 #[cfg(unix)]
 use std::os::unix::fs::symlink;
@@ -934,6 +935,20 @@ fn soak_report_bundle_io_rejects_file_roots_non_empty_roots_and_invalid_bundles(
     let error = write_soak_report_bundle(dir.path().join("invalid-bundle"), &invalid_bundle)
         .expect_err("invalid bundle should reject before write");
     assert!(error.to_string().contains("invalid bundle"));
+}
+
+#[test]
+fn soak_report_bundle_io_rejects_empty_roots_before_filesystem_access() {
+    let bundle = campaign_bundle("campaign_phase_225_empty_root", 1);
+    let empty_root = Path::new("");
+
+    let error = write_soak_report_bundle(empty_root, &bundle)
+        .expect_err("empty report bundle write root should reject");
+    assert!(error.to_string().contains("soak root must be non-empty"));
+
+    let error = read_soak_report_bundle(empty_root)
+        .expect_err("empty report bundle read root should reject");
+    assert!(error.to_string().contains("soak root must be non-empty"));
 }
 
 #[test]
