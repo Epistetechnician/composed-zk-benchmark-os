@@ -251,6 +251,37 @@ fn packet_output_root_rejects_protected_paths() {
     assert!(error.to_string().contains("protected path"));
 }
 
+#[test]
+fn packet_output_root_rejects_parent_directory_protected_paths() {
+    let dir = tempdir().expect("temporary output parent should exist");
+    let output_root = dir.path().join("packet");
+    let packet = packet(
+        "packet-experiment-protected-parent",
+        "packet-run-protected-parent",
+    );
+    let protected_path = dir.path().join("nested").join("..").join("protected");
+    let error = write_experiment_packet_outputs(&output_root, &packet, false, &[protected_path])
+        .expect_err("parent-directory protected paths must fail closed");
+    assert!(error.to_string().contains("protected path"));
+    assert!(!output_root.exists());
+}
+
+#[test]
+fn packet_output_root_rejects_empty_protected_paths() {
+    let dir = tempdir().expect("temporary output parent should exist");
+    let output_root = dir.path().join("packet");
+    let packet = packet(
+        "packet-experiment-protected-empty",
+        "packet-run-protected-empty",
+    );
+    let error = write_experiment_packet_outputs(&output_root, &packet, false, &["".into()])
+        .expect_err("empty protected paths must fail closed");
+    assert!(error
+        .to_string()
+        .contains("protected path must be non-empty"));
+    assert!(!output_root.exists());
+}
+
 #[cfg(unix)]
 #[test]
 fn packet_readback_rejects_symlinked_payload_paths() {

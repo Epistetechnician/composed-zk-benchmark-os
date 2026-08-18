@@ -8,6 +8,7 @@
 //! Packet output handoff validation slice: `benchmark-os-experiment-packet-output-handoff-validation-v1`.
 //! Canonical typed transport slice: `benchmark-os-experiment-packet-canonical-typed-transport-v1`.
 //! Packet-root readback preflight slice: `benchmark-os-experiment-packet-root-preflight-v1`.
+//! Packet protected-path preflight slice: `benchmark-os-experiment-packet-protected-path-preflight-v1`.
 //!
 //! This module writes only a caller-owned, declared-file packet containing the
 //! canonical inner experiment bundle, composition config, outer observability
@@ -979,6 +980,22 @@ fn validate_output_root(output_root: &Path, protected_paths: &[PathBuf]) -> Resu
     let normalized_output = normalize_path(output_root)?;
     let resolved_output = resolve_existing_prefix(output_root)?;
     for protected in protected_paths {
+        if protected.as_os_str().is_empty() {
+            return Err(packet_io_error(
+                "protected_path",
+                "packet protected path must be non-empty",
+            ));
+        }
+        if protected
+            .components()
+            .any(|component| matches!(component, Component::ParentDir))
+        {
+            return Err(packet_io_error(
+                protected.display().to_string(),
+                "packet protected path must not contain parent-directory components",
+            ));
+        }
+        validate_packet_path_components(protected)?;
         let normalized_protected = normalize_path(protected)?;
         let resolved_protected = resolve_existing_prefix(protected)?;
         if paths_overlap(&normalized_output, &normalized_protected)

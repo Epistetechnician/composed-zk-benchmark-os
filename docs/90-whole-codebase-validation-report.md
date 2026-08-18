@@ -63,6 +63,11 @@ packet roots before packet filesystem access. This remains local
 filesystem-safety regression evidence only; it does not elevate benchmark,
 proof, production, or external-evidence claims.
 
+The typed experiment-packet destination state slice now rejects empty,
+parent-traversing, or unsafe protected paths before overlap resolution. This
+remains local filesystem-safety regression evidence only; it does not elevate
+benchmark, proof, production, or external-evidence claims.
+
 The `zkbench-core` synthetic artifact-resolver path state slice now rejects
 parent-directory components in caller-supplied roots before local artifact
 reads. This remains local filesystem-safety regression evidence only; it does
