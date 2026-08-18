@@ -7,6 +7,7 @@
 //! Output handoff validation slice: `benchmark-os-plugin-composition-output-handoff-validation-v1`.
 //! Packet output handoff validation slice: `benchmark-os-experiment-packet-output-handoff-validation-v1`.
 //! Canonical typed transport slice: `benchmark-os-experiment-packet-canonical-typed-transport-v1`.
+//! Packet-root readback preflight slice: `benchmark-os-experiment-packet-root-preflight-v1`.
 //!
 //! This module writes only a caller-owned, declared-file packet containing the
 //! canonical inner experiment bundle, composition config, outer observability
@@ -974,6 +975,7 @@ fn validate_output_root(output_root: &Path, protected_paths: &[PathBuf]) -> Resu
             "packet output root must be non-empty",
         ));
     }
+    validate_packet_path_components(output_root)?;
     let normalized_output = normalize_path(output_root)?;
     let resolved_output = resolve_existing_prefix(output_root)?;
     for protected in protected_paths {
@@ -1145,6 +1147,58 @@ fn reject_existing_path(path: &Path) -> Result<()> {
     }
 }
 
+fn validate_packet_path_components(path: &Path) -> Result<()> {
+    if path
+        .components()
+        .any(|component| matches!(component, Component::ParentDir))
+    {
+        return Err(packet_io_error(
+            path.display().to_string(),
+            "packet output path must not contain parent-directory components",
+        ));
+    }
+
+    let mut candidate = path;
+    let mut is_leaf = true;
+    loop {
+        match fs::symlink_metadata(candidate) {
+            Ok(metadata) => {
+                let platform_symlink =
+                    metadata.file_type().is_symlink() && is_platform_provided_symlink(candidate);
+                if metadata.file_type().is_symlink() && !platform_symlink {
+                    return Err(packet_io_error(
+                        candidate.display().to_string(),
+                        "packet output path must not be a symlink",
+                    ));
+                }
+                if !is_leaf && !metadata.is_dir() && !platform_symlink {
+                    return Err(packet_io_error(
+                        candidate.display().to_string(),
+                        "packet output parent must be a directory",
+                    ));
+                }
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+            Err(error) => {
+                return Err(packet_io_error(
+                    candidate.display().to_string(),
+                    error.to_string(),
+                ));
+            }
+        }
+
+        let Some(parent) = candidate.parent() else {
+            break;
+        };
+        if parent == candidate || parent.as_os_str().is_empty() {
+            break;
+        }
+        candidate = parent;
+        is_leaf = false;
+    }
+    Ok(())
+}
+
 fn validate_relative_path(relative_path: &str) -> Result<()> {
     let path = Path::new(relative_path);
     if relative_path.trim().is_empty()
@@ -1248,6 +1302,20 @@ fn require_text(value: &str, path: &str) -> Result<()> {
 
 fn packet_io_error(path: impl Into<String>, message: impl Into<String>) -> ZkBenchError {
     ZkBenchError::artifact(path, message)
+}
+
+#[cfg(target_os = "macos")]
+fn is_platform_provided_symlink(path: &Path) -> bool {
+    matches!(path.parent(), Some(parent) if parent == Path::new("/"))
+        && matches!(
+            path.file_name().and_then(|name| name.to_str()),
+            Some("etc" | "home" | "tmp" | "var")
+        )
+}
+
+#[cfg(not(target_os = "macos"))]
+fn is_platform_provided_symlink(_path: &Path) -> bool {
+    false
 }
 
 #[cfg(all(test, unix))]

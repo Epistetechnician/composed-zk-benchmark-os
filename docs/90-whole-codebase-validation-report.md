@@ -57,6 +57,12 @@ empty or unsafe pack roots before constructing the sidecar path. This remains
 local filesystem-safety regression evidence only; it does not elevate benchmark,
 proof, production, or external-evidence claims.
 
+The current typed experiment-packet readback state slice now rejects
+parent-directory components and non-platform symlink ancestors in caller-owned
+packet roots before packet filesystem access. This remains local
+filesystem-safety regression evidence only; it does not elevate benchmark,
+proof, production, or external-evidence claims.
+
 The `zkbench-core` synthetic artifact-resolver path state slice now rejects
 parent-directory components in caller-supplied roots before local artifact
 reads. This remains local filesystem-safety regression evidence only; it does
