@@ -13,6 +13,7 @@ crates/zkbench-core/src/
   evidence/
   external_runner/
   adapters/
+  experiment.rs
   replay/
   pack/
   registry/
@@ -44,6 +45,7 @@ Surface DSL
 | `evidence/` | Define Evidence Record, Claim Boundary, Backend Outcome, provenance, review decisions, acceptance policies, candidates, append previews, eligibility reports, review ledgers, and local evidence ledgers. |
 | `external_runner/` | Define Phase H/I/J disabled/manual-only external-runner policy, manual handoff bundle, artifact capture contract, provenance contract, result import schema, quarantine schema, proposal workflow, and review-layer aliases. |
 | `adapters/` | Define BackendAdapter traits and capability declarations. |
+| `experiment.rs` | Compose static task, model/runtime, mechanism-collector, and evaluator seams into one validated ExperimentBundle. |
 | `replay/` | Define Replay Manifest and ReplayRunner behavior. |
 | `pack/` | Define local benchmark pack manifests, readers, writers, and validation. |
 | `registry/` | Provide source, adapter, benchmark family, and scoring registry metadata. |
@@ -106,6 +108,11 @@ ReplayRunner
 EvidenceNormalizer
 ScoreCalculator
 RegistryProvider
+ExperimentTask
+ExperimentModel
+MechanismCollector
+Evaluator
+ExperimentPlugin
 ```
 
 ## Interface Ownership
