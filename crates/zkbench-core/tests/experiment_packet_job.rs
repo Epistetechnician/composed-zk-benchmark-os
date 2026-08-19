@@ -11,6 +11,7 @@
 //! Materialization handoff validation slice: `benchmark-os-plugin-composition-packet-store-materialization-handoff-validation-v1`.
 //! Result handoff validation slice: `benchmark-os-plugin-composition-packet-job-result-handoff-validation-v1`.
 //! Typed job readback slice: `benchmark-os-plugin-composition-packet-job-typed-readback-v1`.
+//! Static destination lexical preflight slice: `benchmark-os-plugin-composition-packet-store-destination-preflight-v1`.
 //! This is local orchestration and packet-integrity coverage, not execution or
 //! scientific evidence.
 
@@ -391,6 +392,41 @@ fn job_config_rejects_empty_output_or_protected_paths_before_catalog_resolution(
     assert!(error
         .to_string()
         .contains("protected path must not be empty"));
+}
+
+#[test]
+fn job_config_rejects_parent_directory_destination_paths_before_catalog_resolution() {
+    let parent_output = config(
+        METACOGNITIVE_EXPERIMENT_PLUGIN_ID,
+        "job-invalid-parent-output",
+        "job-invalid-parent-output-run",
+        provenance("invalid-parent-output"),
+        std::path::PathBuf::from("nested/../packet-output"),
+        false,
+        Vec::new(),
+    );
+    let error = parent_output
+        .validate()
+        .expect_err("parent-directory output root must fail static validation");
+    assert!(error
+        .to_string()
+        .contains("output root must not contain parent-directory components"));
+
+    let parent_protected = config(
+        METACOGNITIVE_EXPERIMENT_PLUGIN_ID,
+        "job-invalid-parent-protected",
+        "job-invalid-parent-protected-run",
+        provenance("invalid-parent-protected"),
+        "packet-output",
+        false,
+        vec![std::path::PathBuf::from("nested/../protected")],
+    );
+    let error = parent_protected
+        .validate()
+        .expect_err("parent-directory protected path must fail static validation");
+    assert!(error
+        .to_string()
+        .contains("protected path must not contain parent-directory components"));
 }
 
 #[test]

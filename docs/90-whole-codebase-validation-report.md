@@ -68,6 +68,11 @@ parent-traversing, or unsafe protected paths before overlap resolution. This
 remains local filesystem-safety regression evidence only; it does not elevate
 benchmark, proof, production, or external-evidence claims.
 
+The packet-store configuration state slice now rejects parent-directory output
+and protected paths during static job validation, before catalog resolution or
+materialization. This remains local filesystem-safety regression evidence only;
+it does not elevate benchmark, proof, production, or external-evidence claims.
+
 The `zkbench-core` synthetic artifact-resolver path state slice now rejects
 parent-directory components in caller-supplied roots before local artifact
 reads. This remains local filesystem-safety regression evidence only; it does
