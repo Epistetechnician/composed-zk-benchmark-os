@@ -78,6 +78,12 @@ pack-component validation immediately before private JSON reads. This remains
 local filesystem-safety regression evidence only; it does not elevate
 benchmark, proof, production, or external-evidence claims.
 
+The external replay preflight output write boundary now rechecks every existing
+destination path component immediately before directory creation or file write,
+rejecting symlinked declared destinations and unsafe existing parents. This
+remains local filesystem-safety regression evidence only; it does not elevate
+benchmark, proof, production, or external-evidence claims.
+
 The `zkbench-core` synthetic artifact-resolver path state slice now rejects
 parent-directory components in caller-supplied roots before local artifact
 reads. This remains local filesystem-safety regression evidence only; it does
