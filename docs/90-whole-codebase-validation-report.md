@@ -84,6 +84,12 @@ rejecting symlinked declared destinations and unsafe existing parents. This
 remains local filesystem-safety regression evidence only; it does not elevate
 benchmark, proof, production, or external-evidence claims.
 
+The official-submission package output write boundary now applies the same
+immediate existing-component recheck before directory creation or file write,
+rejecting symlinked declared destinations and unsafe existing parents. This
+remains local filesystem-safety regression evidence only; it does not elevate
+benchmark, proof, production, or external-evidence claims.
+
 The `zkbench-core` synthetic artifact-resolver path state slice now rejects
 parent-directory components in caller-supplied roots before local artifact
 reads. This remains local filesystem-safety regression evidence only; it does
