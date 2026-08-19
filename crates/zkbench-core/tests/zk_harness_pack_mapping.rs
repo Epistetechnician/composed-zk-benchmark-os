@@ -1,3 +1,7 @@
+// State slice: benchmark-os-zk-harness-pack-mapping-read-preflight-v1.
+// Integration coverage remains focused on the public mapping contract; the
+// private helper's direct path-preflight regression lives beside its seam.
+
 use std::fs;
 
 use tempfile::tempdir;

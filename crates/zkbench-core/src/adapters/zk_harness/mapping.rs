@@ -1,4 +1,9 @@
 //! Mapping local benchmark packs into zk-Harness dry-run candidate labels.
+//!
+//! State slice: `benchmark-os-zk-harness-pack-mapping-read-preflight-v1`.
+//! The private JSON read seam repeats pack-relative and resolved-path checks so
+//! future mapping callers cannot turn a manifest path into an unguarded local
+//! filesystem read.
 
 use std::fs;
 
@@ -8,6 +13,7 @@ use crate::error::{Result, ZkBenchError};
 use crate::evidence::{compute_artifact_digest, ArtifactDigest, ExpectedVerdict};
 use crate::generator::{FamilyKind, GeneratedBenchmarkInstance};
 use crate::mutation::{MutatedBenchmarkInstance, MutationClass};
+use crate::pack::writer::{validate_pack_path_components, validate_relative_path};
 use crate::pack::{BenchmarkPackFileRole, BenchmarkPackReader};
 
 /// Unsupported feature recorded during candidate mapping.
@@ -368,7 +374,15 @@ fn read_pack_json<T: serde::de::DeserializeOwned>(
     reader: &BenchmarkPackReader,
     relative_path: &str,
 ) -> Result<T> {
+    validate_relative_path(relative_path).map_err(|error| {
+        ZkBenchError::zk_harness(
+            format!("zk_harness.pack_mapping.source_path.{relative_path}"),
+            error.to_string(),
+        )
+    })?;
     let path = reader.root().join(relative_path);
+    validate_pack_path_components(&path)
+        .map_err(|error| ZkBenchError::zk_harness(path.display().to_string(), error.to_string()))?;
     let json = fs::read_to_string(&path)
         .map_err(|error| ZkBenchError::zk_harness(path.display().to_string(), error.to_string()))?;
     serde_json::from_str(&json)
@@ -390,4 +404,30 @@ fn default_unsupported_features() -> Vec<ZkHarnessUnsupportedFeature> {
             "metric mappings are schema-only and contain no values",
         ),
     ]
+}
+
+#[cfg(test)]
+mod tests {
+    use super::read_pack_json;
+    use crate::pack::{BenchmarkPackReader, BenchmarkPackWriter};
+
+    #[test]
+    fn read_pack_json_rejects_unsafe_relative_paths_before_filesystem_read() {
+        // State slice: benchmark-os-zk-harness-pack-mapping-read-preflight-v1.
+        let directory = tempfile::tempdir().expect("temporary pack root should be available");
+        BenchmarkPackWriter::new("phase_g_mapping_read_preflight")
+            .include_score_report(false)
+            .write_to(directory.path())
+            .expect("minimal pack should write");
+        let reader = BenchmarkPackReader::read(directory.path()).expect("pack should read");
+
+        for relative_path in ["../outside.json", "/absolute.json"] {
+            let error = read_pack_json::<serde_json::Value>(&reader, relative_path)
+                .expect_err("unsafe mapping path should fail before reading");
+            assert!(
+                error.to_string().contains(relative_path),
+                "error should identify the rejected mapping path: {error}"
+            );
+        }
+    }
 }

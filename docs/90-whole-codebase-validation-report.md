@@ -73,6 +73,11 @@ and protected paths during static job validation, before catalog resolution or
 materialization. This remains local filesystem-safety regression evidence only;
 it does not elevate benchmark, proof, production, or external-evidence claims.
 
+The zk-Harness pack-mapping read boundary now repeats relative-path and resolved
+pack-component validation immediately before private JSON reads. This remains
+local filesystem-safety regression evidence only; it does not elevate
+benchmark, proof, production, or external-evidence claims.
+
 The `zkbench-core` synthetic artifact-resolver path state slice now rejects
 parent-directory components in caller-supplied roots before local artifact
 reads. This remains local filesystem-safety regression evidence only; it does
