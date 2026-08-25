@@ -102,6 +102,12 @@ rejecting symlinked declared destinations and unsafe existing parents. This
 remains local filesystem-safety regression evidence only; it does not elevate
 benchmark, proof, production, or external-evidence claims.
 
+The local audit-index output write boundary now applies the same immediate
+existing-component recheck before directory creation or file write, covering
+the manifest, ergonomics, and cross-bundle output families. This remains local
+filesystem-safety regression evidence only; it does not elevate benchmark,
+proof, production, or external-evidence claims.
+
 The `zkbench-core` synthetic artifact-resolver path state slice now rejects
 parent-directory components in caller-supplied roots before local artifact
 reads. This remains local filesystem-safety regression evidence only; it does

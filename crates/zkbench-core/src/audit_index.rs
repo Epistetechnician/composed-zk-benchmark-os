@@ -4,6 +4,8 @@
 //! Audit indexes are read-only local integrity summaries over existing local
 //! metadata. They do not create accepted evidence, execute replay commands,
 //! claim official benchmark evidence, or report ZK backend performance.
+//!
+//! State slice: benchmark-os-audit-index-output-write-symlink-preflight-v1.
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
@@ -2926,6 +2928,7 @@ fn read_relative_bytes(root: &Path, relative_path: &str) -> Result<Vec<u8>> {
 fn write_relative_bytes(root: &Path, relative_path: &str, bytes: &[u8]) -> Result<()> {
     validate_relative_output_path(relative_path)?;
     let path = root.join(relative_path);
+    validate_output_root_path_components(&path)?;
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent)
             .map_err(|error| audit_index_io_error(parent.display().to_string(), error))?;
@@ -3020,4 +3023,32 @@ fn digest_audit_index_output_bytes(bytes: &[u8]) -> ArtifactDigest {
 
 fn audit_index_io_error(path: impl Into<String>, message: impl ToString) -> ZkBenchError {
     ZkBenchError::benchmark_pack(path, message.to_string())
+}
+
+#[cfg(all(test, unix))]
+mod tests {
+    use super::*;
+
+    // State slice: benchmark-os-audit-index-output-write-symlink-preflight-v1.
+    #[test]
+    fn write_relative_bytes_rejects_symlinked_declared_destination() {
+        let directory = tempfile::tempdir().expect("temporary directory should create");
+        let output_root = directory.path().join("output");
+        fs::create_dir_all(&output_root).expect("output root should create");
+
+        let external_target = directory.path().join("external-target.json");
+        fs::write(&external_target, b"protected").expect("external target should write");
+        let declared_destination = output_root.join(AUDIT_INDEX_MANIFEST_PATH);
+        std::os::unix::fs::symlink(&external_target, &declared_destination)
+            .expect("declared destination symlink should create");
+
+        let error = write_relative_bytes(&output_root, AUDIT_INDEX_MANIFEST_PATH, b"replacement")
+            .expect_err("symlinked declared destination should reject");
+
+        assert!(error.to_string().contains("must not be a symlink"));
+        assert_eq!(
+            fs::read(&external_target).expect("external target should remain readable"),
+            b"protected"
+        );
+    }
 }
