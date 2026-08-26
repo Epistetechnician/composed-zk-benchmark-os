@@ -4,13 +4,19 @@
 
 use tempfile::tempdir;
 use zkbench_core::{
+    build_local_audit_index_cross_bundle_view, build_local_audit_index_ergonomics_view,
     build_local_audit_index_manifest_from_report_bundles, build_local_replay_manifest_for_instance,
     build_report_bundle_manifest_from_reports, build_report_bundle_rendered_markdown_payloads,
-    generate_instance, read_local_audit_index_outputs, read_pack_readiness_report,
-    read_pack_readiness_validation, read_report_bundle_outputs, run_local_replay,
-    write_local_audit_index_outputs, write_pack_readiness_outputs_for_pack,
-    write_report_bundle_outputs, BenchmarkPackReader, BenchmarkPackWriter, ClaimBoundary,
-    EvidenceLedger, GeneratorConfig, InstanceParams, ReportBundlePackReadinessInput,
+    generate_instance, read_local_audit_index_cross_bundle_outputs,
+    read_local_audit_index_ergonomics_outputs, read_local_audit_index_outputs,
+    read_pack_readiness_report, read_pack_readiness_validation, read_report_bundle_outputs,
+    run_local_replay, write_local_audit_index_cross_bundle_outputs,
+    write_local_audit_index_ergonomics_outputs, write_local_audit_index_outputs,
+    write_pack_readiness_outputs_for_pack, write_report_bundle_outputs, BenchmarkPackReader,
+    BenchmarkPackWriter, ClaimBoundary, EvidenceLedger, GeneratorConfig, InstanceParams,
+    LocalAuditIndexCrossBundleGroupKey, LocalAuditIndexCrossBundleInput,
+    LocalAuditIndexCrossBundleRequest, LocalAuditIndexCrossBundleSortKey,
+    LocalAuditIndexErgonomicsRequest, ReportBundlePackReadinessInput,
 };
 
 #[test]
@@ -137,4 +143,86 @@ fn local_reporting_chain_round_trips_without_claim_escalation() {
     assert!(!audit_readback.manifest.creates_level2_evidence);
     assert!(!audit_readback.manifest.zk_backend_performance_claims);
     assert!(!audit_readback.manifest.mutates_accepted_evidence_ledger);
+    // State slice: benchmark-os-local-reporting-chain-audit-views-e2e-v1.
+    let ergonomics_request = LocalAuditIndexErgonomicsRequest::default();
+    let ergonomics_view =
+        build_local_audit_index_ergonomics_view(&audit_readback.manifest, &ergonomics_request)
+            .expect("ergonomics view should build");
+    let ergonomics_root = workspace.path().join("audit-index-ergonomics");
+    let ergonomics_output = write_local_audit_index_ergonomics_outputs(
+        &ergonomics_root,
+        &audit_readback.manifest,
+        &ergonomics_request,
+        &ergonomics_view,
+        false,
+        &[audit_root.as_path()],
+    )
+    .expect("ergonomics output should write");
+    let ergonomics_readback = read_local_audit_index_ergonomics_outputs(
+        &ergonomics_root,
+        &audit_readback.manifest,
+        &ergonomics_request,
+        &[audit_root.as_path()],
+    )
+    .expect("ergonomics output should read");
+    assert_eq!(ergonomics_readback.view, ergonomics_view);
+    assert_eq!(
+        ergonomics_readback.view_digest,
+        ergonomics_output.view_digest
+    );
+    assert_eq!(
+        ergonomics_readback.output_claim_boundary,
+        ClaimBoundary::Level0DesignNote
+    );
+
+    let second_manifest = zkbench_core::LocalAuditIndexManifest {
+        index_id: "phase-e2e-audit-index-second".to_string(),
+        indexed_pack_id: "phase-e2e-local-reporting-chain-second".to_string(),
+        ..audit_readback.manifest.clone()
+    };
+    let cross_request = LocalAuditIndexCrossBundleRequest {
+        inputs: vec![
+            LocalAuditIndexCrossBundleInput {
+                source_id: "source-a".to_string(),
+                manifest: audit_readback.manifest.clone(),
+            },
+            LocalAuditIndexCrossBundleInput {
+                source_id: "source-b".to_string(),
+                manifest: second_manifest,
+            },
+        ],
+        group_by: LocalAuditIndexCrossBundleGroupKey::IndexedPackId,
+        sort_by: LocalAuditIndexCrossBundleSortKey::SourceId,
+    };
+    let cross_view = build_local_audit_index_cross_bundle_view(&cross_request)
+        .expect("cross-bundle view should build");
+    let cross_root = workspace.path().join("cross-bundle-audit-index");
+    let cross_output = write_local_audit_index_cross_bundle_outputs(
+        &cross_root,
+        &cross_request,
+        &cross_view,
+        false,
+        &[audit_root.as_path(), ergonomics_root.as_path()],
+    )
+    .expect("cross-bundle output should write");
+    let cross_readback = read_local_audit_index_cross_bundle_outputs(
+        &cross_root,
+        &cross_request,
+        &[audit_root.as_path(), ergonomics_root.as_path()],
+    )
+    .expect("cross-bundle output should read");
+    assert_eq!(cross_readback.view, cross_view);
+    assert_eq!(cross_readback.view_digest, cross_output.view_digest);
+    assert_eq!(
+        cross_readback.output_claim_boundary,
+        ClaimBoundary::Level0DesignNote
+    );
+    assert_eq!(cross_readback.view.sources.len(), 2);
+    assert_eq!(cross_readback.view.sources[0].source_id, "source-a");
+    assert_eq!(cross_readback.view.sources[1].source_id, "source-b");
+    assert!(cross_readback
+        .view
+        .sources
+        .iter()
+        .all(|source| source.max_input_claim_boundary <= ClaimBoundary::Level1LocalReplay));
 }

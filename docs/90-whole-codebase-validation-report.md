@@ -53,6 +53,12 @@ test while asserting every downstream claim ceiling and nonclaim flag. This
 remains local compositional regression evidence only; it does not elevate
 benchmark, proof, production, or external-evidence claims.
 
+The same E2E chain now covers Phase S ergonomics and Phase T cross-bundle
+audit-index materialization/readback, including deterministic view digests,
+protected output roots, source ordering, and Level0 claim ceilings. This
+remains local presentation regression evidence only; it does not elevate
+benchmark, proof, production, or external-evidence claims.
+
 The shared `zkbench-core` soak report-bundle root state slice now rejects empty
 roots before report-bundle directory inspection or manifest access. This remains
 local filesystem-safety regression evidence only; it does not elevate benchmark,
