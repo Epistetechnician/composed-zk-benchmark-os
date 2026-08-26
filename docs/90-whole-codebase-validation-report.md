@@ -46,6 +46,13 @@ destination symlink during overwrite, proving that an external target remains
 unchanged. This remains local filesystem-safety regression evidence only; it
 does not elevate benchmark, proof, production, or external-evidence claims.
 
+The local reporting-chain E2E regression now composes deterministic generation,
+local replay, benchmark-pack write/readback, pack-readiness write/readback,
+report-bundle write/readback, and audit-index write/readback in one hermetic
+test while asserting every downstream claim ceiling and nonclaim flag. This
+remains local compositional regression evidence only; it does not elevate
+benchmark, proof, production, or external-evidence claims.
+
 The shared `zkbench-core` soak report-bundle root state slice now rejects empty
 roots before report-bundle directory inspection or manifest access. This remains
 local filesystem-safety regression evidence only; it does not elevate benchmark,
