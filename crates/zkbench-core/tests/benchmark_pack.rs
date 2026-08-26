@@ -362,6 +362,27 @@ fn benchmark_pack_writer_rejects_symlinked_artifact_ancestor() {
 
 #[cfg(unix)]
 #[test]
+fn benchmark_pack_writer_rejects_symlinked_declared_destination() {
+    // State slice: benchmark-os-benchmark-pack-output-write-symlink-preflight-v1.
+    let dir = tempdir().expect("tempdir should be available");
+    let external_target = dir.path().join("protected-readme.txt");
+    std::fs::write(&external_target, "protected\n").expect("external target should write");
+    symlink(&external_target, dir.path().join("README.md"))
+        .expect("declared README symlink should create");
+
+    let error = BenchmarkPackWriter::new("phase_f_symlinked_declared_destination")
+        .overwrite(true)
+        .write_to(dir.path())
+        .expect_err("symlinked declared destination should reject before writing");
+    assert!(error.to_string().contains("must not be a symlink"));
+    assert_eq!(
+        std::fs::read(&external_target).expect("external target should remain readable"),
+        b"protected\n"
+    );
+}
+
+#[cfg(unix)]
+#[test]
 fn benchmark_pack_reader_rejects_symlinked_declared_files() {
     let dir = tempdir().expect("tempdir should be available");
     BenchmarkPackWriter::new("phase_f_symlinked_declared_file")

@@ -41,6 +41,11 @@ roots before writer directory creation or reader manifest access. This remains
 local filesystem-safety regression evidence only; it does not elevate
 benchmark, proof, production, or external-evidence claims.
 
+The benchmark-pack writer regression matrix now covers an exact declared
+destination symlink during overwrite, proving that an external target remains
+unchanged. This remains local filesystem-safety regression evidence only; it
+does not elevate benchmark, proof, production, or external-evidence claims.
+
 The shared `zkbench-core` soak report-bundle root state slice now rejects empty
 roots before report-bundle directory inspection or manifest access. This remains
 local filesystem-safety regression evidence only; it does not elevate benchmark,
