@@ -254,16 +254,41 @@ State slice: `benchmark-os-observability-allocation-witness-payload-readback-v1`
 `validate_serialized_local_json_composition_with_metadata` are additive
 payload-readback Adapters. They require canonical config and metadata bytes,
 bind each payload to the existing artifact digest and run identity, compare
-the config/metadata decision and module manifest, and reconstruct the shared
-allocation receipt. The historical three-argument composition transport and
+the config/metadata decision and module manifest, bind payload provenance to
+the artifact reference, and reconstruct the shared allocation receipt. The
+`ValidatedExperimentRunPayloads` handoff retains that config, metadata, and
+receipt as one read-only unit for both runner emission and serialized
+readback; callers cannot separate the allocation witness from the payloads
+after validation. The historical three-argument composition transport and
 packet readback Interfaces remain unchanged because their outer bundle carries
 only a metadata reference, not metadata bytes. This is authenticated local
 metadata plumbing, not execution, publication, accepted evidence, production
 readiness, or a claim above `Level0DesignNote`.
 
+State slice: `benchmark-os-observability-run-payload-handoff-v1`.
+
+The generic observability runner exposes the validated handoff after a
+successful one-shot run. Its typed constructor rechecks schema, identity,
+module, provenance, decision, and budget invariants; its serialized
+constructor additionally authenticates the canonical payload bytes against
+the enclosing bundle. Resealing a changed payload digest does not bypass
+provenance binding. No serialized fields or packet paths are added.
+
 The scheduler is policy, not scientific evidence. Its weights and thresholds
 are versioned configuration and must be frozen before a sealed assessment.
 Changing them defines a new experiment configuration.
+
+State slice: `benchmark-os-observability-outer-bundle-validated-readback-v1`.
+
+`ValidatedExperimentArtifactBundle` applies the same typed readback contract to
+the fixed nine-slot outer bundle. Generic and local packet Adapters now share
+canonical-byte, slot, identity, provenance, digest, and `Level0DesignNote`
+validation before consuming outer JSON. Packet paths and serialized fields
+remain unchanged. This is local readback plumbing only; it adds no execution,
+publication, accepted Evidence Ledger mutation, production readiness,
+benchmark superiority, or runtime authority. Deletion test: removing this
+Module forces both packet Adapters to repeat outer readback decisions, reopening
+the drift seam this slice closes.
 
 ## Mechanism ledger
 
@@ -306,6 +331,27 @@ emitting bytes. Readback validates the digest chain and rejects noncanonical
 bytes, malformed entries, schema drift, and tampering. The transport Adapter
 does not append, replace, or reinterpret evidence; it only makes the existing
 append-only state durable and verifiable.
+
+State slice: `benchmark-os-observability-append-only-digest-chain-kernel-v1`.
+
+The private `AppendOnlyDigestChain` Kernel is shared by the mechanism and
+metric meta-evaluation ledger Adapters. It owns sequence ordering,
+predecessor continuity, entry-digest recomputation, and tip-digest
+validation. Ledger-specific Modules continue to validate their own records
+and preserve their existing serialized shapes. This improves locality without
+adding execution, publication, accepted evidence, or a claim above
+`Level0DesignNote`.
+
+State slice: `benchmark-os-observability-provenance-bound-payload-admission-v1`.
+
+The private `ArtifactPayloadAdmission` Kernel combines the existing artifact
+kind, active-run identity, and canonical digest checks with a
+provenance-bearing payload Interface. Report, config, and metadata readback
+Adapters now share one provenance equality invariant; the public structural
+payload validator remains a compatibility Interface. Resealed payload bytes
+with changed provenance remain invalid. This is local metadata plumbing only,
+with no execution, publication, accepted evidence, or claim above
+`Level0DesignNote`.
 
 Tier and status must agree:
 

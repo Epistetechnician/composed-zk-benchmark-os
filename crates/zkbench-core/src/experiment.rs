@@ -11,6 +11,7 @@
 //! Integrity extension: `benchmark-os-experiment-bundle-integrity-v1`.
 //! Output-binding extension: `benchmark-os-plugin-output-binding-v1`.
 //! Validated-output extension: `benchmark-os-validated-plugin-output-value-v1`.
+//! Validated readback extension: `benchmark-os-experiment-bundle-validated-readback-v1`.
 //! Factory-catalog extension: `benchmark-os-experiment-plugin-factory-catalog-v1`.
 //! Artifact-access extension: `benchmark-os-experiment-bundle-artifact-access-v1`.
 //! Registry separation extension: `benchmark-os-plugin-registry-descriptor-only-separation-v1`.
@@ -333,6 +334,54 @@ pub struct ExperimentBundle {
     pub claim_boundary: ClaimBoundary,
     /// Bundle-level non-claims.
     pub non_claims: Vec<String>,
+}
+
+/// Canonical, semantically validated experiment-bundle readback.
+///
+/// This value is the typed handoff between serialized packet transport and
+/// composition adapters. Callers cannot consume a parsed bundle through this
+/// Interface until canonical bytes, component bindings, artifact completeness,
+/// measurement sources, and claim ceilings have all passed validation.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ValidatedExperimentBundle {
+    bundle: ExperimentBundle,
+}
+
+impl ValidatedExperimentBundle {
+    /// Validate one already-materialized bundle before handing it to callers.
+    pub fn from_bundle(bundle: ExperimentBundle) -> Result<Self> {
+        let validation = validate_experiment_bundle(&bundle);
+        if !validation.valid {
+            return Err(ZkBenchError::validation(
+                "validated_experiment_bundle",
+                format!("experiment bundle is invalid: {:?}", validation.issues),
+            ));
+        }
+        Ok(Self { bundle })
+    }
+
+    /// Parse canonical JSON and validate the complete bundle before handoff.
+    pub fn from_canonical_json(json: &str) -> Result<Self> {
+        let bundle = deserialize_experiment_bundle_json(json)?;
+        let canonical_json = serialize_experiment_bundle_json(&bundle)?;
+        if canonical_json != json {
+            return Err(ZkBenchError::validation(
+                "validated_experiment_bundle.inner_bytes",
+                "inner bundle bytes are not the canonical serialization",
+            ));
+        }
+        Self::from_bundle(bundle)
+    }
+
+    /// Borrow the validated experiment bundle.
+    pub fn bundle(&self) -> &ExperimentBundle {
+        &self.bundle
+    }
+
+    /// Consume the handoff after validation has already occurred.
+    pub fn into_bundle(self) -> ExperimentBundle {
+        self.bundle
+    }
 }
 
 impl ExperimentBundle {

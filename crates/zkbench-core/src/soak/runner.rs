@@ -152,6 +152,23 @@ pub struct SoakCaseResult {
     pub notes: Vec<String>,
 }
 
+/// Exact local replay inputs and outputs observed while running one soak case.
+///
+/// This is semantic/replay provenance only. It contains no timing telemetry,
+/// backend-performance metric, model output, network data, or evidence
+/// mutation authority.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SoakReplayObservation {
+    /// Case that produced the replay.
+    pub case_id: SoakCaseId,
+    /// Local replay manifest.
+    pub manifest: ReplayManifest,
+    /// Local replay result.
+    pub result: ReplayResult,
+    /// Claim boundary of the replay artifacts.
+    pub claim_boundary: ClaimBoundary,
+}
+
 /// Run result.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SoakRunResult {
@@ -165,6 +182,9 @@ pub struct SoakRunResult {
     pub health_report: SoakHealthReport,
     /// Failure corpus index.
     pub failure_corpus_index: FailureCorpusIndex,
+    /// Exact local replay observations retained for deterministic consumers.
+    #[serde(default)]
+    pub replay_observations: Vec<SoakReplayObservation>,
     /// Final checkpoint.
     pub checkpoint: SoakShardCheckpoint,
     /// Claim boundary.
@@ -198,6 +218,7 @@ pub struct LocalSoakRunner {
     output_dir: Option<PathBuf>,
     clock: Box<dyn SoakTelemetryClock>,
     config: LocalSoakRunnerConfig,
+    replay_observations: Vec<SoakReplayObservation>,
 }
 
 struct CasePackPayload {
@@ -217,6 +238,7 @@ impl LocalSoakRunner {
             output_dir: None,
             clock: Box::<SystemTelemetryClock>::default(),
             config: LocalSoakRunnerConfig::default(),
+            replay_observations: Vec::new(),
         }
     }
 
@@ -244,6 +266,11 @@ impl LocalSoakRunner {
         self
     }
 
+    /// Return the exact replay observations from the most recent request.
+    pub fn replay_observations(&self) -> &[SoakReplayObservation] {
+        &self.replay_observations
+    }
+
     /// Run a shard.
     pub fn run_shard(&mut self, shard_id: SoakShardId) -> Result<SoakRunResult> {
         self.run_request(SoakRunRequest {
@@ -254,6 +281,7 @@ impl LocalSoakRunner {
 
     /// Run a request.
     pub fn run_request(&mut self, request: SoakRunRequest) -> Result<SoakRunResult> {
+        self.replay_observations.clear();
         let manifest = self
             .plan
             .shard_manifests
@@ -277,7 +305,7 @@ impl LocalSoakRunner {
 
         self.write_static_artifacts(&layout, &manifest)?;
         for (case_index, case_id) in manifest.assigned_case_ids.iter().enumerate() {
-            let case_plan = self.case_plan(case_id)?;
+            let case_plan = self.case_plan(case_id)?.clone();
             if checkpoint.completed_case(case_id) {
                 checkpoint.mark_skipped(case_id.clone());
                 case_results.push(SoakCaseResult {
@@ -295,7 +323,7 @@ impl LocalSoakRunner {
             }
 
             let case_result = self.run_case(
-                case_plan,
+                &case_plan,
                 &layout,
                 &mut counters,
                 &mut durations,
@@ -386,6 +414,7 @@ impl LocalSoakRunner {
             telemetry_report,
             health_report,
             failure_corpus_index: corpus.index,
+            replay_observations: self.replay_observations.clone(),
             checkpoint,
             claim_boundary: ClaimBoundary::Level0DesignNote,
             notes: vec!["Local soak run result is a Level0DesignNote health artifact.".to_string()],
@@ -393,7 +422,7 @@ impl LocalSoakRunner {
     }
 
     fn run_case(
-        &self,
+        &mut self,
         case_plan: &SoakCasePlan,
         layout: &SoakArtifactLayout,
         counters: &mut SoakTelemetryCounters,
@@ -444,6 +473,12 @@ impl LocalSoakRunner {
         {
             Ok((manifest, result, summary)) => {
                 update_replay_counters(counters, &result, &summary);
+                self.replay_observations.push(SoakReplayObservation {
+                    case_id: case_plan.id.clone(),
+                    claim_boundary: ClaimBoundary::Level1LocalReplay,
+                    manifest: manifest.clone(),
+                    result: result.clone(),
+                });
                 replay_manifests.push(manifest);
                 replay_results.push(result);
             }
@@ -484,6 +519,12 @@ impl LocalSoakRunner {
                     {
                         Ok((manifest, result, summary)) => {
                             update_replay_counters(counters, &result, &summary);
+                            self.replay_observations.push(SoakReplayObservation {
+                                case_id: case_plan.id.clone(),
+                                claim_boundary: ClaimBoundary::Level1LocalReplay,
+                                manifest: manifest.clone(),
+                                result: result.clone(),
+                            });
                             if let Some(trace) = result.trace_results.first() {
                                 let axis = observed_distinguishability_axis(
                                     mutated.expected_verdict,

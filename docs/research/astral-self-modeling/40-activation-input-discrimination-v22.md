@@ -23,7 +23,7 @@ not sufficient evidence of access to an internal intervention.
 Lindsey's activation-injection study causally connected injected concept
 representations to model self-reports but reported unreliable,
 context-dependent behavior and an unnatural intervention setting:
-https://transformer-circuits.pub/2025/introspection/
+https://arxiv.org/abs/2601.01828
 
 Singh, Linzen, and Ravfogel's 2026 reality check found that open models did not
 reliably distinguish activation-level interventions from input-level

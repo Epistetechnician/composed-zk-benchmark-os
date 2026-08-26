@@ -1,7 +1,8 @@
 use std::fs;
 use std::path::{Path, PathBuf};
 
-// State slice: `research-synthesis-trace-replay-v1-repo-hygiene-venv-boundary`.
+// State slice: `repo-package-manager-contract-v1` extends the existing
+// Level 1 hygiene assertion with the explicitly authorized root pnpm contract.
 // A repository-local Python environment is an ignored dependency root, not
 // repository source. Its installed lab extensions must not affect the source
 // hygiene assertion.
@@ -15,11 +16,16 @@ fn repo_preserves_level1_hygiene_boundary() {
     let mut forbidden_artifacts = Vec::new();
     let mut empty_files = Vec::new();
 
-    scan_repo(repo_root, &mut forbidden_artifacts, &mut empty_files);
+    scan_repo(
+        repo_root,
+        repo_root,
+        &mut forbidden_artifacts,
+        &mut empty_files,
+    );
 
     assert!(
         forbidden_artifacts.is_empty(),
-        "Level 1 repo boundary forbids JS package-manager artifacts and node_modules: {forbidden_artifacts:?}"
+        "Level 1 repo boundary forbids unauthorized JS package-manager artifacts and node_modules: {forbidden_artifacts:?}"
     );
     assert!(
         empty_files.is_empty(),
@@ -27,17 +33,25 @@ fn repo_preserves_level1_hygiene_boundary() {
     );
 }
 
-fn scan_repo(root: &Path, forbidden_artifacts: &mut Vec<PathBuf>, empty_files: &mut Vec<PathBuf>) {
+fn scan_repo(
+    repo_root: &Path,
+    root: &Path,
+    forbidden_artifacts: &mut Vec<PathBuf>,
+    empty_files: &mut Vec<PathBuf>,
+) {
     let metadata = fs::metadata(root).expect("repo path should be readable");
     if metadata.is_file() {
         let file_name = root
             .file_name()
             .and_then(|name| name.to_str())
             .unwrap_or("");
+        let root_package_contract = root.parent() == Some(repo_root)
+            && matches!(file_name, "package.json" | "pnpm-lock.yaml");
         if matches!(
             file_name,
             "package.json" | "pnpm-lock.yaml" | "yarn.lock" | "package-lock.json"
-        ) {
+        ) && !root_package_contract
+        {
             forbidden_artifacts.push(root.to_path_buf());
         }
         if metadata.len() == 0 {
@@ -63,6 +77,6 @@ fn scan_repo(root: &Path, forbidden_artifacts: &mut Vec<PathBuf>, empty_files: &
 
     for entry in fs::read_dir(root).expect("repo directory should be readable") {
         let entry = entry.expect("repo directory entry should be readable");
-        scan_repo(&entry.path(), forbidden_artifacts, empty_files);
+        scan_repo(repo_root, &entry.path(), forbidden_artifacts, empty_files);
     }
 }

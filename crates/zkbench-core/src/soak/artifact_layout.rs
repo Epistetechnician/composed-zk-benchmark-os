@@ -10,6 +10,7 @@ use crate::error::{Result, ZkBenchError};
 use crate::evidence::{
     compute_artifact_digest, ArtifactDigest, ArtifactKind, ArtifactRole, ClaimBoundary,
 };
+use crate::exploration::{validate_exploration_artifact, ExplorationArtifact};
 
 use super::config::{validate_soak_run_config, SoakRunConfig};
 use super::failure_corpus::{validate_failure_corpus_index, FailureCorpusIndex};
@@ -47,6 +48,8 @@ pub enum SoakArtifactRole {
     AggregateReport,
     /// Bundle manifest.
     ReportBundle,
+    /// Optional deterministic exploration sidecar.
+    Exploration,
 }
 
 /// Deterministic artifact layout for one shard.
@@ -76,6 +79,8 @@ pub struct SoakArtifactLayout {
     pub local_summary_path: String,
     /// Aggregate root.
     pub aggregate_root: String,
+    /// Optional exploration sidecar path.
+    pub exploration_path: String,
 }
 
 impl SoakArtifactLayout {
@@ -94,6 +99,7 @@ impl SoakArtifactLayout {
             failure_packs_dir: format!("{shard_root}/failure_packs"),
             local_summary_path: format!("{shard_root}/reports/local_summary.json"),
             aggregate_root: "aggregate".to_string(),
+            exploration_path: "aggregate/exploration.json".to_string(),
             shard_root,
         }
     }
@@ -113,6 +119,7 @@ impl SoakArtifactLayout {
             &self.failure_packs_dir,
             &self.local_summary_path,
             &self.aggregate_root,
+            &self.exploration_path,
         ]
         .iter()
         .all(|path| relative_path_is_portable(path))
@@ -176,6 +183,9 @@ pub struct SoakReportBundle {
     /// Failure corpus indexes.
     #[serde(default)]
     pub failure_corpus_indexes: Vec<FailureCorpusIndex>,
+    /// Optional versioned exploration sidecar.
+    #[serde(default)]
+    pub exploration: Option<ExplorationArtifact>,
     /// Artifact digest set.
     pub artifact_digest_set: SoakArtifactDigestSet,
     /// Claim boundary.
@@ -234,6 +244,22 @@ pub fn validate_soak_report_bundle(bundle: &SoakReportBundle) -> SoakReportBundl
         shard_count,
         &mut issues,
     );
+    let exploration_count = count_artifacts_with_role(bundle, SoakArtifactRole::Exploration);
+    if bundle.exploration.is_some() && exploration_count != 1 {
+        issues.push(format!(
+            "exploration artifact count {exploration_count} must be exactly 1 when exploration is present"
+        ));
+    }
+    if bundle.exploration.is_none() && exploration_count != 0 {
+        issues.push(format!(
+            "exploration artifact count {exploration_count} must be 0 when exploration is absent"
+        ));
+    }
+    if let Some(exploration) = &bundle.exploration {
+        if let Err(error) = validate_exploration_artifact(exploration) {
+            issues.push(format!("exploration invalid: {error}"));
+        }
+    }
     push_bundle_count_issue(
         "artifact_digest_set.telemetry",
         count_artifacts_with_role(bundle, SoakArtifactRole::Telemetry),
@@ -260,6 +286,7 @@ pub fn validate_soak_report_bundle(bundle: &SoakReportBundle) -> SoakReportBundl
         ));
     }
     validate_aggregate_report_artifact_identity(bundle, &mut issues);
+    validate_exploration_artifact_identity(bundle, &mut issues);
     validate_report_artifact_identity(bundle, &mut issues);
     for (index, manifest) in bundle.shard_manifests.iter().enumerate() {
         let validation = validate_soak_shard_manifest(manifest);
@@ -436,6 +463,37 @@ fn validate_aggregate_report_artifact_identity(
     }
 }
 
+fn validate_exploration_artifact_identity(bundle: &SoakReportBundle, issues: &mut Vec<String>) {
+    if bundle.exploration.is_some() {
+        push_missing_expected_report_artifact(
+            bundle,
+            SoakArtifactRole::Exploration,
+            "exploration",
+            "aggregate/exploration.json",
+            issues,
+        );
+    }
+    for artifact in bundle
+        .artifact_digest_set
+        .artifacts
+        .iter()
+        .filter(|artifact| artifact.role == SoakArtifactRole::Exploration)
+    {
+        if artifact.relative_path != "aggregate/exploration.json" {
+            issues.push(format!(
+                "exploration artifact {} must use aggregate/exploration.json",
+                artifact.artifact_id
+            ));
+        }
+        if artifact.artifact_id != "exploration" {
+            issues.push(format!(
+                "exploration artifact id must be exploration: {}",
+                artifact.artifact_id
+            ));
+        }
+    }
+}
+
 fn push_missing_expected_report_artifact(
     bundle: &SoakReportBundle,
     role: SoakArtifactRole,
@@ -478,17 +536,94 @@ pub fn write_soak_report_bundle(root: impl AsRef<Path>, bundle: &SoakReportBundl
     }
     fs::create_dir_all(root)
         .map_err(|error| ZkBenchError::soak(root.display().to_string(), error.to_string()))?;
-    write_json(root.join("soak_report_bundle.json"), bundle)
+    write_json(root.join("soak_report_bundle.json"), bundle)?;
+    if let Some(exploration) = &bundle.exploration {
+        write_json(root.join("aggregate/exploration.json"), exploration)?;
+    }
+    Ok(())
 }
 
 /// Read a report bundle from a local directory.
 pub fn read_soak_report_bundle(root: impl AsRef<Path>) -> Result<SoakReportBundle> {
-    let path = root.as_ref().join("soak_report_bundle.json");
+    let root = root.as_ref();
+    let path = root.join("soak_report_bundle.json");
     let bytes = fs::read(&path)
         .map_err(|error| ZkBenchError::soak(path.display().to_string(), error.to_string()))?;
-    serde_json::from_slice(&bytes).map_err(|error| {
+    let bundle: SoakReportBundle = serde_json::from_slice(&bytes).map_err(|error| {
         ZkBenchError::deserialization("read_soak_report_bundle", error.to_string())
-    })
+    })?;
+    let validation = validate_soak_report_bundle(&bundle);
+    if !validation.valid {
+        return Err(ZkBenchError::soak(
+            "soak.report_bundle",
+            format!("invalid bundle: {:?}", validation.issues),
+        ));
+    }
+
+    let exploration_path = root.join("aggregate/exploration.json");
+    match &bundle.exploration {
+        Some(inline_exploration) => {
+            let sidecar_bytes = fs::read(&exploration_path).map_err(|error| {
+                ZkBenchError::soak(exploration_path.display().to_string(), error.to_string())
+            })?;
+            let sidecar_exploration: ExplorationArtifact = serde_json::from_slice(&sidecar_bytes)
+                .map_err(|error| {
+                ZkBenchError::deserialization(
+                    "read_soak_report_bundle.exploration",
+                    error.to_string(),
+                )
+            })?;
+            if let Err(error) = validate_exploration_artifact(&sidecar_exploration) {
+                return Err(ZkBenchError::soak(
+                    "soak.report_bundle.exploration",
+                    format!("invalid exploration sidecar: {error}"),
+                ));
+            }
+            if &sidecar_exploration != inline_exploration {
+                return Err(ZkBenchError::soak(
+                    "soak.report_bundle.exploration",
+                    "exploration sidecar does not match the inline bundle record",
+                ));
+            }
+            let manifest = bundle
+                .artifact_digest_set
+                .artifacts
+                .iter()
+                .find(|artifact| artifact.role == SoakArtifactRole::Exploration)
+                .ok_or_else(|| {
+                    ZkBenchError::soak(
+                        "soak.report_bundle.exploration",
+                        "exploration artifact manifest is missing",
+                    )
+                })?;
+            let expected_digest = manifest.digest.as_ref().ok_or_else(|| {
+                ZkBenchError::soak(
+                    "soak.report_bundle.exploration",
+                    "exploration artifact manifest digest is missing",
+                )
+            })?;
+            let observed_digest = compute_artifact_digest(
+                &sidecar_exploration,
+                Some(ArtifactKind::Other),
+                Some(ArtifactRole::Manifest),
+            )?;
+            if &observed_digest != expected_digest {
+                return Err(ZkBenchError::soak(
+                    "soak.report_bundle.exploration",
+                    "exploration sidecar digest does not match its artifact manifest",
+                ));
+            }
+        }
+        None => {
+            if exploration_path.exists() {
+                return Err(ZkBenchError::soak(
+                    exploration_path.display().to_string(),
+                    "unexpected exploration sidecar for a bundle without exploration",
+                ));
+            }
+        }
+    }
+    Ok(bundle)
 }
 
 /// Build an artifact manifest with a deterministic digest.

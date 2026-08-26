@@ -6,6 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
+from .benchmark_execution_gate import require_public_execution_source
 from .protocol import BenchmarkProtocolError, evaluate, load_input
 
 
@@ -16,6 +17,7 @@ def main() -> int:
     args = parser.parse_args()
     try:
         manifest, trials = load_input(args.input)
+        require_public_execution_source(manifest)
         result = evaluate(manifest, trials)
         Path(args.output).write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     except (OSError, json.JSONDecodeError, BenchmarkProtocolError) as exc:

@@ -22302,6 +22302,433 @@ or deployment mutation; candidate adoption; evidence promotion; claims above
 Exit criteria: crate compiles and passes all focused gates; adoption remains
 unauthorized without a separately reviewed phase.
 
+## Phase 801: Continual-Learning Update Governance Contract
+
+Status: implemented for named state slice
+`continual-learning-update-governance-v1`.
+
+Goal: make the deployment-governance gap executable without training, serving,
+deployment, or authority.
+
+Deliverables: digest-only update-candidate metadata; tenant and consent
+binding; safety, utility, and canary gates; per-tenant append-only lifecycle
+ledger; optimistic parent checks; quarantine of invalid and stale candidates;
+non-destructive rollback; candidate/event/bundle digests; independent bundle
+readback validation; hermetic tests; and the V19 protocol note.
+
+Dependencies: the V18 continual-learning retention/representation lane and
+the Phase 799 durable-memory boundary.
+
+Validation gate: focused V19 tests, the full continual-learning test suite,
+Python syntax/compile checks, and repository diff hygiene.
+
+Anti-goals: model execution, model training, deployment, provider calls,
+network, credentials, raw transcripts, privacy or legal certification,
+cryptographic signatures, accepted evidence, scientific claims, production
+readiness, or runtime/action authority.
+
+Exit criteria: the update lifecycle is executable as a local fail-closed
+contract, stale and failed transitions remain auditable, exported bundles
+read back independently, and every stronger capability remains separately
+authorized.
+
+## Phase 802: Continual-Learning Source Admission Contract
+
+Status: implemented for named state slice
+`continual-learning-source-admission-v1`.
+
+Goal: make the source-to-update-data boundary explicit and fail closed before
+V19 governance without collecting raw feedback or asserting source quality.
+
+Deliverables: raw-content-free source receipts; tenant, update-window, and
+consent binding; allowed declared source kinds; event, label, and
+quality-receipt digest checks; duplicate and conflicting-label rejection;
+explicit quality quarantine and unknown-quality outcomes; declared
+poisoning-marker quarantine; deterministic accepted update-data manifests;
+V19-compatible digest handoff; outer and nested bundle readback; hermetic
+adversarial tests; and the V20 protocol note.
+
+Dependencies: the V19 continual-learning update-governance contract and the
+V18 continual-learning retention/representation lane.
+
+Validation gate: focused V20 tests, the full continual-learning test suite,
+Python syntax/compile checks, and repository diff hygiene.
+
+Anti-goals: raw feedback or transcript collection; source identity, expertise,
+quality, poisoning, or consent-authority verification; model execution,
+training, serving, deployment, provider calls, network, credentials,
+cryptographic signatures, accepted evidence, scientific claims, production
+readiness, or runtime/action authority.
+
+Exit criteria: accepted source batches produce one deterministic V19-compatible
+digest-bound manifest; every unknown or explicitly adverse source batch emits
+no update-data digest; readback rejects tampering; and stronger source,
+quality, model, and deployment capabilities remain separately authorized.
+
+## Phase 803: Continual-Learning Fork Topology Contract
+
+Status: implemented for named state slice
+`continual-learning-fork-topology-v1`.
+
+Goal: define persistent shared and tenant learning lineage before any future
+model or adapter update execution, while preventing implicit cross-tenant
+pooling and provider lock-in.
+
+Deliverables: digest-only fork nodes; shared and tenant scope heads; tenant
+isolation and stale-parent checks; allowed update-kind policy; explicit
+reviewed tenant-to-shared merge proposals; non-destructive rollback; append-
+only topology events; topology bundle digest/readback; metadata-only portable
+lineage manifests; adversarial hermetic tests; and the V21 protocol note.
+
+Dependencies: the V20 source-admission contract, the V19 update-governance
+contract, and the V18 continual-learning retention/representation lane.
+
+Validation gate: focused V21 tests, the full continual-learning test suite,
+Python syntax/compile checks, and repository diff hygiene.
+
+Anti-goals: model weights, adapter storage, checkpoint loading, model training,
+inference, serving, batching economics, deployment, provider calls, network,
+credentials, source identity or expertise verification, quality or poisoning
+detection, privacy or legal certification, accepted evidence, scientific
+claims, production readiness, or runtime/action authority.
+
+Exit criteria: every invalid topology transition leaves state unchanged;
+accepted tenant and shared transitions preserve explicit lineage; rollback
+retains historical forks; portable manifests exclude weights and provider
+locks; readback rejects resealed drift; and actual learning execution remains
+separately authorized.
+
+## Phase 804: Continual-Learning Runtime Execution
+
+Status: implemented for named state slice
+`continual-learning-runtime-execution-v22`.
+
+Goal: execute one bounded inference probe through the already-cached local MLX
+model seam and preserve a receipt that independently binds model identity,
+runtime versions, prompt digest, candidate labels, prediction, and the
+offline/non-training contract.
+
+Deliverables: cached-checkpoint manifest; real model load and inference probe;
+external receipt writer; fail-closed receipt validator; hermetic contract
+tests; and the V22 protocol note.
+
+Dependencies: the V21 fork-topology boundary, the existing local MLX model
+benchmark seam, and an already-cached checkpoint. No download or network
+access is part of this phase.
+
+Validation gate: runtime smoke with `HF_HUB_OFFLINE=1` and
+`TRANSFORMERS_OFFLINE=1`; independent receipt readback; focused V22 tests;
+Python syntax/compile checks; and repository diff hygiene.
+
+Anti-goals: model download, network access, provider calls, deployment,
+accepted evidence, scientific claims, production readiness, or general
+continual-learning claims.
+
+Exit criteria: the cached model loads through the real seam; inference emits
+one valid prediction; the receipt binds the exact model manifest and prompt
+digest; offline and non-training flags are true; and tampering is rejected.
+
+## Phase 805: Continual-Learning Independent Execution Campaign
+
+Status: implemented for named state slice
+`continual-learning-independent-replication-v23`.
+
+Goal: reduce same-process and same-order bias by executing two fixed
+seed/order cases as separate subprocesses and independently validating their
+artifacts before emitting a campaign summary.
+
+Deliverables: fixed case manifest; external subprocess executor; separate
+validator subprocess; immutable run-root checks; executor/validator logs;
+campaign summary; hermetic tests; and the V23 protocol note.
+
+Dependencies: V22 runtime execution and the existing benchmark/validator
+contract. Results remain repository-external and are not accepted evidence.
+
+Validation gate: two disjoint seed/order cases; positive retention delta in
+each case; separate validator processes; independent artifact digest
+readback; focused V23 tests; and repository diff hygiene.
+
+Anti-goals: network access, provider calls, deployment, adaptive tuning,
+accepted evidence, scientific claims, production readiness, or claims of
+independent external replication.
+
+Exit criteria: both fixed cases execute in separate processes; each result
+passes the existing validator; summary inputs are digest-bound; and any
+negative or malformed case fails closed.
+
+## Phase 806: Continual-Learning Provider and Production Validation
+
+Status: boundary implemented for named state slice
+`continual-learning-provider-production-validation-v24`.
+
+Goal: make provider and production validation a separately gated operator
+workflow rather than inferring it from local tests or local model execution.
+
+Deliverables: existing feature-gated Phala/dstack operator-live client;
+explicit acknowledgment and bounded target requirements; out-of-band
+credential-source requirements; redacted artifact and rollback requirements;
+provider verification script; and the V24 protocol note.
+
+Dependencies: V22/V23 local evidence, a real operator target, a non-secret
+invocation JSON, an allowlisted credential source, and a documented rollback
+and acceptance owner. Missing live inputs keep the gate fail-closed.
+
+Validation gate: hermetic provider feature tests always; live provider
+validation only with the required operator inputs; no credential persistence;
+and explicit separation of `Attested`, provider-validation, and production
+claims.
+
+Anti-goals: secret capture, unbounded traffic, automatic deployment, live
+production mutation, accepted evidence without review, or claiming production
+behavior from local fixtures.
+
+Exit criteria: the provider gate is reproducible and fail-closed; live
+validation, when operator inputs exist, records target and rollback facts;
+and no local-only result is promoted to production or accepted evidence.
+
+## Phase 808: Continual-Learning Codebook-Alignment Counterfactual Boundary
+
+Status: documentation-first boundary complete for named state slice
+`continual-learning-llama-codebook-alignment-counterfactual-v46`.
+
+Goal: freeze the smallest counterfactual needed to investigate the unresolved
+V45 task-0 identity-codebook hypothesis without relabeling V44 or changing its
+model, optimizer, route prompt, or training budget.
+
+Deliverables: paired-arm protocol; fresh task-seed declaration; target-shift
+control; paired-fact digest contract; primary held-out delta; independent
+validation contract; immutable external-artifact requirements; and explicit
+diagnostic nonclaims.
+
+Dependencies: the independently validated V44 second-model replication and
+the read-only V45 failure diagnosis. No V44 adapter, result, seed, or
+assessment payload may be reused.
+
+Validation gate for a future implementation: six separate arm subprocesses;
+identical paired-fact digests; fixed target shifts `0` and `1`; independent
+readback; all structural gates passing; non-negative paired deltas; and median
+delta at least `0.25`. A future negative or mixed result remains diagnostic
+only.
+
+Anti-goals: model downloads, network access, adaptive tuning, seed mining,
+retention execution, order-retention execution, provider calls, production
+traffic, accepted Evidence Ledger mutation, benchmark claims, or claims above
+`LocalDevelopmentCodebookAlignmentCounterfactualDiagnosis`.
+
+Exit criteria for this docs-first phase: the protocol is source-cited within
+the repository, the state slice and claim ceiling are explicit, and no model
+run or generated artifact is created.
+
+## Phase 809: Continual-Learning Codebook-Alignment Counterfactual Execution
+
+Status: implementation authorized for named state slice
+`continual-learning-llama-codebook-alignment-counterfactual-execution-v47`.
+
+Goal: execute the V46 paired target-codebook counterfactual against the cached
+Llama checkpoint and diagnose the V45 task-0 constant-readout hypothesis.
+
+Deliverables: six separate arm subprocesses; fresh adapter roots; offline
+runtime flags; paired underlying-fact digests; target-mapping validation;
+independent arm and campaign readback; immutable external campaign report; and
+the diagnostic execution record.
+
+Dependencies: the V46 docs-first boundary, the cached Llama runtime receipt,
+and the V45 read-only diagnosis. V44 adapters and assessment payloads are not
+inputs to training.
+
+Validation gate: all six arms structurally valid; paired fact digests equal
+within each seed; target shifts exactly `0` and `1`; prediction locking and
+offline flags true; campaign digest readback valid; and classification limited
+to supported, not supported, or inconclusive codebook alignment.
+
+Anti-goals: adaptive tuning, seed mining, model downloads, network access,
+retention, order retention, provider calls, production traffic, accepted
+Evidence Ledger mutation, benchmark claims, or claims above
+`LocalDevelopmentCodebookAlignmentCounterfactualDiagnosis`.
+
+Exit criteria: the six-arm campaign either produces a valid diagnostic report
+or stops fail-closed at the first invalid arm; no positive continual-learning
+promotion is emitted.
+
+## Phase 810: Continual-Learning Qwen Inference-Time Recirculation
+
+Status: implementation complete for named state slice
+`continual-learning-qwen-inference-recirculation-v1`.
+
+Goal: test the paper-style inference-time deep-to-shallow residual recurrence
+against the already-cached Qwen2.5 checkpoint without changing model weights.
+
+Deliverables: manual Qwen layer/KV-cache seam; normalized residual mixing;
+zero-alpha native parity gate; frozen fit/assessment text split; bounded
+source/destination selection; immutable external results; independent
+validator; and a conservative feasibility record.
+
+Validation gate: manual layer-by-layer `alpha=0` must match native cached-token
+logits within `1e-5`; fit selection must precede assessment execution; the
+assessment repeat must be deterministic; the model manifest, config, results,
+and receipt must be digest-bound; and network access/training must remain
+false.
+
+Result: the canonical `r3` artifact passed independent validation. The locked
+configuration `(source=7, destination=2, alpha=0.10)` reduced mean assessment
+NLL from `5.932926829` to `5.893055695` on 82 target tokens. This is local
+feasibility evidence only. It is not a Gemma3 replication, accepted scientific
+evidence, a general Qwen result, a production result, or authorization for
+provider/production execution.
+
+Anti-goals: model downloads, network access, training, adapter updates,
+adaptive assessment tuning, paper-result claims, accepted Evidence Ledger
+mutation, benchmark claims, provider calls, production traffic, or claims
+above `LocalDevelopmentQwenInferenceRecirculationFeasibility`.
+
+Exit criteria: the manual seam is independently parity-validated, the locked
+campaign is immutable and independently readable, and all stronger claims
+remain closed pending a larger disjoint corpus and fresh cross-model evidence.
+
+## Phase 811: Continual-Learning Qwen Inference-Time Recirculation V2
+
+Status: implementation and execution complete for named state slice
+`continual-learning-qwen-inference-recirculation-v2`.
+
+Goal: broaden the V1 local feasibility evaluation to a fixed document-disjoint
+repository-owned corpus while preserving the frozen Qwen recirculation
+mechanism and no-training boundary.
+
+Deliverables: source-byte and text-unit corpus manifest; 12 fit and 12
+assessment sequences from six disjoint Markdown files; the unchanged manual
+Qwen layer/KV-cache seam; zero-alpha parity across the complete corpus; fit-only
+configuration selection; deterministic locked assessment repeat; immutable
+external artifacts; and an independent validator.
+
+Validation gate: every source and extracted unit must match the recomputed
+manifest; manual/native `alpha=0` parity must remain within `1e-5`; assessment
+execution must occur only after fit selection; configuration, model, corpus,
+results, and receipt digests must bind; and training/network flags must remain
+false.
+
+Anti-goals: model downloads, network access, training, adapter updates,
+adaptive assessment tuning, paper replication claims, accepted Evidence Ledger
+mutation, benchmark claims, provider calls, production traffic, or claims
+above `LocalDevelopmentQwenInferenceRecirculationBroaderFeasibility`.
+
+Exit criteria: the broader corpus campaign either produces an independently
+valid local feasibility receipt or stops fail-closed; no general continual-
+learning or production promotion is emitted.
+
+Result: the canonical `r2` artifact passed independent validation, complete
+zero-alpha parity, and deterministic repeat. The locked configuration
+`(source=12, destination=5, alpha=0.10)` increased assessment mean NLL from
+`5.238627717` to `5.240304740` (`+0.001677023`, lower is better), so the V1
+positive signal did not reproduce on the broader corpus. This closes V2 at
+`LocalDevelopmentQwenInferenceRecirculationBroaderFeasibility`; it does not
+authorize a general continual-learning claim, provider execution, production,
+or accepted evidence. The execution record is
+`docs/research/continual-learning/72-qwen-inference-recirculation-v2-execution.md`.
+
+## Phase 812: Continual-Learning Qwen Inference-Time Recirculation V3
+
+Status: implementation and campaign complete for named state slice
+`continual-learning-qwen-inference-recirculation-v3`.
+
+Goal: test the V2 local signal against the four alpha values reported by the
+source paper while changing no other experimental factor.
+
+Deliverables: the V2 corpus and frozen Qwen manual/native seam; the alpha grid
+`0.04`, `0.07`, `0.10`, `0.16` crossed with the four frozen layer pairs;
+fit-only selection; locked assessment and deterministic repeat; immutable
+external artifacts; independent validation; and a conservative execution
+record.
+
+Validation gate: every sequence must pass zero-alpha parity within `1e-5`; the
+assessment must remain locked after fit selection; configuration, model,
+corpus, results, and receipt digests must bind; and training/network flags
+must remain false.
+
+Result: the canonical `r1` artifact passed independent validation. Fit selected
+`source=12`, `destination=5`, `alpha=0.04`. Assessment mean NLL decreased from
+`5.238627717` to `5.237328535`, and perplexity decreased from
+`188.411371272` to `188.166749505` over 575 target tokens. Six of twelve
+sequences improved and six worsened; this is a small local feasibility signal,
+not proof of recirculation, a paper replication, or a general Qwen result.
+
+Anti-goals: model downloads, network access, training, adapter updates,
+adaptive assessment tuning, paper replication claims, accepted Evidence Ledger
+mutation, benchmark evidence, provider calls, production traffic, or claims
+above `LocalDevelopmentQwenInferenceRecirculationAlphaSweepFeasibility`.
+
+Exit criteria: complete. Independent validation passed, the locked repeat was
+deterministic, and no stronger claim or production promotion is emitted.
+
+## Phase 813: Continual-Learning Qwen Inference-Time Recirculation V4
+
+Status: implementation and campaign complete for named state slice
+`continual-learning-qwen-inference-recirculation-v4`.
+
+Goal: test whether the V3 alpha-sweep signal survives a fresh corpus while
+changing no model, mechanism, layer grid, alpha grid, or assessment procedure.
+
+Deliverables: eight fresh repository-owned Markdown sources; 16 fit and 16
+assessment sequences; source-byte and text-unit custody; the unchanged Qwen
+manual/native seam; the unchanged four-pair/four-alpha grid; fit-only
+selection; locked assessment and deterministic repeat; immutable external
+artifacts; independent validation; and an execution record.
+
+Validation gate: every sequence must pass zero-alpha parity within `1e-5`; the
+fresh corpus must be recomputed from current source bytes; the assessment must
+remain locked after fit selection; configuration, model, corpus, results, and
+receipt digests must bind; and training/network flags must remain false.
+
+Result: the canonical `r1` artifact passed independent validation. Fit selected
+`source=12`, `destination=5`, `alpha=0.07`. On 860 locked assessment target
+tokens, mean NLL decreased from `4.995389717` to `4.994936018` and perplexity
+decreased from `147.730507193` to `147.663497307`. Ten of sixteen sequences
+improved and six worsened. This is directional local feasibility evidence, not
+proof of recirculation, a paper replication, or a general Qwen result.
+
+Anti-goals: model downloads, network access, training, adapter updates,
+adaptive assessment tuning, paper replication claims, accepted Evidence Ledger
+mutation, benchmark evidence, provider calls, production traffic, or claims
+above `LocalDevelopmentQwenInferenceRecirculationFreshCorpusFeasibility`.
+
+Exit criteria: complete. Independent validation passed, the locked repeat was
+deterministic, and no stronger claim or production promotion is emitted.
+
+## Phase 814: Continual-Learning Qwen Inference-Time Recirculation V5
+
+Status: implementation and campaign complete for named state slice
+`continual-learning-qwen-inference-recirculation-v5`.
+
+Goal: test out-of-sample transfer by carrying V4's fit-selected configuration
+into a fresh corpus without searching or retuning on V5 data.
+
+Deliverables: eight new source-disjoint repository Markdown files; 16 fit and
+16 assessment sequences; a fixed transfer configuration bound to the V4
+receipt; unchanged Qwen manual/native inference; zero-alpha parity; locked
+assessment and deterministic repeat; immutable external artifacts; and an
+independent validator.
+
+Validation gate: the V4 transfer configuration must be fixed before V5
+assessment execution; the fresh corpus must be recomputed from current source
+bytes; every sequence must pass zero-alpha parity within `1e-5`; configuration,
+model, corpus, results, receipt, and transfer-source digests must bind; and
+training/network flags must remain false.
+
+Result: the canonical `r1` artifact passed independent validation. The locked
+configuration `(source=12, destination=5, alpha=0.07)` increased assessment
+mean NLL from `5.012090637` to `5.019982755` (`+0.007892118`) and perplexity
+from `150.218460294` to `151.408692670` over 1,355 target tokens. Five of
+sixteen sequences improved and eleven worsened. This is a valid negative
+transfer result, not a runner failure or a promotion.
+
+Anti-goals: model downloads, network access, training, adapter updates,
+configuration search on V5 data, adaptive assessment tuning, paper replication
+claims, accepted Evidence Ledger mutation, benchmark evidence, provider calls,
+production traffic, or claims above
+`LocalDevelopmentQwenInferenceRecirculationFixedTransferFeasibility`.
+
+Exit criteria: complete. Independent validation passed, the locked repeat was
+deterministic, and no stronger claim or production promotion is emitted.
+
 ## Integration Track: Statebook P4 Settlement Simulator Boundary
 
 Status: documentation-first boundary complete for named state slice
@@ -23177,6 +23604,48 @@ readback remain compatibility Adapters because they do not carry metadata
 payload bytes. No serialized fields, execution, publication, accepted
 Evidence Ledger mutation, or `Level0DesignNote` claim ceiling changed.
 
+## Benchmark OS Track: Generic Run Payload Handoff
+
+Status: complete for named state slice
+`benchmark-os-observability-run-payload-handoff-v1`.
+
+`ValidatedExperimentRunPayloads` now retains the generic run config, metadata,
+and allocation receipt as one invariant-bearing handoff. The generic runner
+issues it after successful bundle assembly, while the serialized constructor
+issues the same type only after canonical bytes, artifact digests, identities,
+module manifests, decisions, budgets, and payload/reference provenance pass
+validation. The historical tuple readback API remains a compatibility Adapter.
+No packet paths, serialized fields, execution, publication, accepted Evidence
+Ledger mutation, or `Level0DesignNote` claim ceiling changed.
+
+## Benchmark OS Track: Append-Only Digest-Chain Kernel
+
+Status: complete for named state slice
+`benchmark-os-observability-append-only-digest-chain-kernel-v1`.
+
+The private `AppendOnlyDigestChain` Kernel now owns the shared sequence,
+predecessor, entry-digest, and tip-digest invariants used by both
+`MechanismLedger` and `MetaEvaluationLedger`. The public ledger Adapters keep
+their existing domain-specific validation, serialized shapes, append-only
+semantics, and canonical JSON transport. The deletion test is positive:
+without this Module, both ledgers would reimplement the same chain rules and
+could drift. No evidence, execution, publication, or claim-boundary change
+occurred; the ceiling remains `Level0DesignNote`.
+
+## Benchmark OS Track: Provenance-Bound Payload Admission
+
+Status: complete for named state slice
+`benchmark-os-observability-provenance-bound-payload-admission-v1`.
+
+The private `ArtifactPayloadAdmission` Kernel now combines artifact kind,
+identity, digest, and payload-provenance equality for report, config, and
+metadata readback. The public structural payload validator remains available
+as a compatibility Interface, while serialized run Adapters use the deeper
+provenance-bearing payload Interface. Resealing changed payload bytes cannot
+make their provenance disagree with the artifact reference. No serialized
+shape, execution, publication, evidence mutation, or claim ceiling changed;
+the ceiling remains `Level0DesignNote`.
+
 ## Benchmark OS Track: Local JSON Composition Output Handoff Validation
 
 Status: complete for named state slice
@@ -23378,3 +23847,32 @@ attributed. Focused tests cover descriptor retention, implementation drift,
 legacy omission, config transport, and downstream digest binding. This is
 local metadata plumbing only; it adds no execution, publication, evidence
 mutation, production readiness, benchmark superiority, or runtime authority.
+
+## Benchmark OS Track: Validated Experiment-Bundle Readback
+
+Status: complete for named state slice
+`benchmark-os-experiment-bundle-validated-readback-v1`.
+
+`ValidatedExperimentBundle` centralizes canonical JSON and semantic validation
+for the inner experiment bundle. Generic and local packet Adapters now consume
+the same private-field handoff rather than duplicating parse, canonical-byte,
+artifact, measurement, and claim-ceiling checks. Raw deserialization remains a
+compatibility Adapter, serialized packet fields remain unchanged, and the
+`Level0DesignNote` claim ceiling is unchanged. This is local readback plumbing;
+it adds no execution, publication, accepted Evidence Ledger mutation,
+production readiness, benchmark superiority, or runtime authority.
+
+## Benchmark OS Track: Validated Outer-Bundle Readback
+
+Status: complete for named state slice
+`benchmark-os-observability-outer-bundle-validated-readback-v1`.
+
+`ValidatedExperimentArtifactBundle` centralizes canonical JSON and semantic
+validation for the fixed nine-slot outer observability bundle. Generic and
+local packet Adapters now consume the same private-field handoff for slot,
+identity, provenance, digest, and claim-ceiling checks. Raw deserialization and
+packet wire fields remain compatible; this is local readback plumbing only and
+does not add execution, publication, accepted Evidence Ledger mutation,
+production readiness, benchmark superiority, or runtime authority.
+Deletion test: removing this Module forces both packet Adapters to repeat outer
+readback decisions, reopening the drift seam this slice closes.

@@ -1,0 +1,15 @@
+{
+  "name": "composed-zk-benchmark-os",
+  "private": true,
+  "packageManager": "pnpm@10.32.1",
+  "scripts": {
+    "lint": "pnpm --ignore-workspace run lint:fast && pnpm --ignore-workspace run test:focused && pnpm --ignore-workspace run verify:contracts && pnpm --ignore-workspace run verify:full && pnpm --ignore-workspace run verify:features && pnpm --ignore-workspace run verify:clippy",
+    "lint:fast": "cargo fmt --all -- --check && python -B tools/verify_python_sources.py && git diff --check",
+    "test:focused": "PYTHONDONTWRITEBYTECODE=1 python -m pytest -q experiments/continual_learning/tests experiments/self_model_benchmark/tests",
+    "verify:provider": "cargo test -p hsai-attestation-phala --features operator-live-provider --quiet",
+    "verify:contracts": "cargo test -p zkbench-core --quiet && pnpm --ignore-workspace run verify:provider && pnpm --ignore-workspace run test:focused",
+    "verify:full": "cargo test --workspace --quiet",
+    "verify:features": "cargo test --workspace --all-features --quiet",
+    "verify:clippy": "cargo clippy --workspace --all-targets --all-features -- -D warnings"
+  }
+}

@@ -47,7 +47,7 @@ pub use health::{
     SoakHealthFinding, SoakHealthFindingSeverity, SoakHealthRecommendation, SoakHealthReport,
     SoakHealthReportId, SoakHealthStatus, SoakHealthSummary, SoakRegressionSignal,
 };
-pub use report::build_soak_report_bundle;
+pub use report::{build_soak_report_bundle, build_soak_report_bundle_with_exploration};
 pub use reproduction::{
     attach_reproduction_bundle_to_pack, read_reproduction_bundle_from_pack,
     validate_reproduction_bundle, ReproductionBundle, ReproductionBundleAttachment,
@@ -59,8 +59,8 @@ pub use resume::{
 };
 pub use runner::{
     extract_failure_corpus, resume_local_soak_shard, run_local_soak_shard, LocalSoakRunner,
-    LocalSoakRunnerConfig, SoakCaseFailure, SoakCaseResult, SoakCaseStatus, SoakRunRequest,
-    SoakRunResult, SoakRunnerErrorPolicy,
+    LocalSoakRunnerConfig, SoakCaseFailure, SoakCaseResult, SoakCaseStatus, SoakReplayObservation,
+    SoakRunRequest, SoakRunResult, SoakRunnerErrorPolicy,
 };
 pub use serialization::{
     deserialize_failure_corpus_index_json, deserialize_failure_reproduction_manifest_json,

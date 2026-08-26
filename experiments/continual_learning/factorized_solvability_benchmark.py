@@ -16,6 +16,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from experiments.continual_learning.compositional_calibration_benchmark import make_tasks  # noqa: E402
 from experiments.continual_learning.compositional_model_benchmark import (  # noqa: E402
     ANSWER_SUFFIX,
+    LABELS,
     SYMBOLS,
     ChoiceModel,
     Task,

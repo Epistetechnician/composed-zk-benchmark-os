@@ -24,6 +24,10 @@
 //! Allocation witness readback slice: benchmark-os-observability-allocation-witness-readback-v1.
 //! Allocation receipt lifecycle handoff slice: benchmark-os-observability-allocation-receipt-lifecycle-handoff-v1.
 //! Allocation witness payload readback slice: benchmark-os-observability-allocation-witness-payload-readback-v1.
+//! Run payload handoff slice: benchmark-os-observability-run-payload-handoff-v1.
+//! Append-only digest-chain kernel slice: benchmark-os-observability-append-only-digest-chain-kernel-v1.
+//! Provenance-bound payload admission slice: benchmark-os-observability-provenance-bound-payload-admission-v1.
+//! Validated outer-bundle readback slice: benchmark-os-observability-outer-bundle-validated-readback-v1.
 //! Durable composition-adapter attribution slice:
 //! benchmark-os-observability-composition-adapter-durable-attribution-v1.
 //!
@@ -42,10 +46,9 @@ use crate::evidence::{
     ArtifactDigestAlgorithm, ArtifactKind, ArtifactRole, ClaimBoundary,
 };
 use crate::experiment::{
-    compute_experiment_bundle_digest, deserialize_experiment_bundle_json,
-    serialize_experiment_bundle_json, validate_experiment_bundle,
-    ExperimentArtifactKind as LocalArtifactKind, ExperimentBundle as LocalExperimentBundle,
-    ExperimentPlugin, ExperimentPluginDescriptor,
+    compute_experiment_bundle_digest, ExperimentArtifactKind as LocalArtifactKind,
+    ExperimentBundle as LocalExperimentBundle, ExperimentPlugin, ExperimentPluginDescriptor,
+    ValidatedExperimentBundle,
 };
 use crate::experiment_plugin_catalog::ExperimentPluginFactoryCatalog;
 use crate::generator::GeneratorConfig;
@@ -346,6 +349,45 @@ pub fn validate_experiment_artifact_payload<T: Serialize>(
     Ok(())
 }
 
+/// Private provenance-bearing payload Interface for typed artifact admission.
+///
+/// The public payload validator remains available for callers that only need
+/// structural digest validation. Serialized run readback uses the deeper
+/// `ArtifactPayloadAdmission` Kernel so digest, kind, identity, and provenance
+/// are checked as one invariant at the Seam.
+trait ExperimentPayloadProvenance {
+    fn payload_provenance(&self) -> &ExperimentProvenance;
+}
+
+struct ArtifactPayloadAdmission;
+
+impl ArtifactPayloadAdmission {
+    fn validate<T: Serialize + ExperimentPayloadProvenance>(
+        artifact: &ExperimentArtifactRef,
+        expected_kind: ExperimentArtifactKind,
+        payload: &T,
+        experiment_id: &str,
+        run_id: &str,
+        path: &str,
+    ) -> Result<()> {
+        validate_experiment_artifact_payload(
+            artifact,
+            expected_kind,
+            payload,
+            experiment_id,
+            run_id,
+            path,
+        )?;
+        if artifact.provenance != *payload.payload_provenance() {
+            return Err(ZkBenchError::validation(
+                format!("{path}.provenance"),
+                "artifact reference provenance does not match the payload provenance",
+            ));
+        }
+        Ok(())
+    }
+}
+
 /// Fixed nine-slot artifact bundle. No slot is optional.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ExperimentArtifactBundle {
@@ -377,6 +419,47 @@ pub struct ExperimentArtifactBundle {
     pub report: ExperimentArtifactRef,
     /// This contract remains a local design/metadata claim.
     pub claim_boundary: ClaimBoundary,
+}
+
+/// Canonical, semantically validated outer observability-bundle readback.
+///
+/// This value is the typed handoff between packet transport and composition
+/// Adapters. It prevents each Adapter from independently deciding whether
+/// parsed outer JSON is canonical, structurally valid, and claim-safe.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ValidatedExperimentArtifactBundle {
+    bundle: ExperimentArtifactBundle,
+}
+
+impl ValidatedExperimentArtifactBundle {
+    /// Validate one already-materialized outer bundle before handoff.
+    pub fn from_bundle(bundle: ExperimentArtifactBundle) -> Result<Self> {
+        validate_experiment_artifact_bundle(&bundle)?;
+        Ok(Self { bundle })
+    }
+
+    /// Parse canonical JSON and validate the complete outer bundle.
+    pub fn from_canonical_json(json: &str) -> Result<Self> {
+        let bundle = deserialize_experiment_artifact_bundle_json(json)?;
+        let canonical_json = serialize_experiment_artifact_bundle_json(&bundle)?;
+        if canonical_json != json {
+            return Err(ZkBenchError::validation(
+                "validated_experiment_artifact_bundle.outer_bytes",
+                "outer bundle bytes are not the canonical serialization",
+            ));
+        }
+        Self::from_bundle(bundle)
+    }
+
+    /// Borrow the validated outer bundle.
+    pub fn bundle(&self) -> &ExperimentArtifactBundle {
+        &self.bundle
+    }
+
+    /// Consume the handoff after validation has already occurred.
+    pub fn into_bundle(self) -> ExperimentArtifactBundle {
+        self.bundle
+    }
 }
 
 impl ExperimentArtifactBundle {
@@ -1326,6 +1409,104 @@ pub struct MechanismLedgerEntry {
     pub entry_digest: ArtifactDigest,
 }
 
+/// Private digest-chain Kernel shared by append-only ledger Adapters.
+///
+/// The public ledgers retain their distinct wire shapes and domain-specific
+/// value validation. This Module owns only the common sequence, predecessor,
+/// entry-digest, and tip-digest invariants so those Implementations cannot
+/// drift apart.
+trait AppendOnlyDigestChainEntry {
+    type Value: Serialize;
+
+    fn sequence_number(&self) -> u64;
+    fn previous_digest(&self) -> Option<&ArtifactDigest>;
+    fn value(&self) -> &Self::Value;
+    fn entry_digest(&self) -> &ArtifactDigest;
+}
+
+struct AppendOnlyDigestChain;
+
+impl AppendOnlyDigestChain {
+    fn compute_entry_digest<T: Serialize>(
+        sequence_number: u64,
+        previous_digest: Option<&ArtifactDigest>,
+        value: &T,
+    ) -> Result<ArtifactDigest> {
+        compute_artifact_digest(
+            &(sequence_number, previous_digest, value),
+            Some(ArtifactKind::Other),
+            Some(ArtifactRole::Manifest),
+        )
+    }
+
+    fn validate<E, F>(
+        path: &str,
+        entries: &[E],
+        tip_digest: Option<&ArtifactDigest>,
+        mut validate_value: F,
+    ) -> Result<()>
+    where
+        E: AppendOnlyDigestChainEntry,
+        F: FnMut(usize, &E::Value) -> Result<()>,
+    {
+        let mut previous_digest = None;
+        for (index, entry) in entries.iter().enumerate() {
+            if entry.sequence_number() != index as u64 {
+                return Err(ZkBenchError::validation(
+                    format!("{path}.entries[{index}].sequence_number"),
+                    "sequence number does not match append position",
+                ));
+            }
+            if entry.previous_digest() != previous_digest.as_ref() {
+                return Err(ZkBenchError::validation(
+                    format!("{path}.entries[{index}].previous_digest"),
+                    "previous digest does not match prior entry",
+                ));
+            }
+            validate_value(index, entry.value())?;
+            let expected = Self::compute_entry_digest(
+                entry.sequence_number(),
+                entry.previous_digest(),
+                entry.value(),
+            )?;
+            if entry.entry_digest() != &expected {
+                return Err(ZkBenchError::validation(
+                    format!("{path}.entries[{index}].entry_digest"),
+                    "entry digest does not match append preimage",
+                ));
+            }
+            previous_digest = Some(entry.entry_digest().clone());
+        }
+        if tip_digest != previous_digest.as_ref() {
+            return Err(ZkBenchError::validation(
+                format!("{path}.tip_digest"),
+                "tip digest does not match final entry",
+            ));
+        }
+        Ok(())
+    }
+}
+
+impl AppendOnlyDigestChainEntry for MechanismLedgerEntry {
+    type Value = MechanismRecord;
+
+    fn sequence_number(&self) -> u64 {
+        self.sequence_number
+    }
+
+    fn previous_digest(&self) -> Option<&ArtifactDigest> {
+        self.previous_digest.as_ref()
+    }
+
+    fn value(&self) -> &Self::Value {
+        &self.record
+    }
+
+    fn entry_digest(&self) -> &ArtifactDigest {
+        &self.entry_digest
+    }
+}
+
 impl MechanismLedger {
     /// Create an empty ledger.
     pub fn new(experiment_id: impl Into<String>) -> Self {
@@ -1349,11 +1530,10 @@ impl MechanismLedger {
         }
         let sequence_number = self.entries.len() as u64;
         let previous_digest = self.entries.last().map(|entry| entry.entry_digest.clone());
-        let preimage = (sequence_number, previous_digest.as_ref(), &record);
-        let entry_digest = compute_artifact_digest(
-            &preimage,
-            Some(ArtifactKind::Other),
-            Some(ArtifactRole::Manifest),
+        let entry_digest = AppendOnlyDigestChain::compute_entry_digest(
+            sequence_number,
+            previous_digest.as_ref(),
+            &record,
         )?;
         self.entries.push(MechanismLedgerEntry {
             sequence_number,
@@ -1374,53 +1554,21 @@ impl MechanismLedger {
                 "unsupported mechanism ledger schema version",
             ));
         }
-        let mut previous_digest = None;
-        for (index, entry) in self.entries.iter().enumerate() {
-            if entry.sequence_number != index as u64 {
-                return Err(ZkBenchError::validation(
-                    format!("mechanism_ledger.entries[{index}].sequence_number"),
-                    "sequence number does not match append position",
-                ));
-            }
-            if entry.previous_digest != previous_digest {
-                return Err(ZkBenchError::validation(
-                    format!("mechanism_ledger.entries[{index}].previous_digest"),
-                    "previous digest does not match prior entry",
-                ));
-            }
-            entry
-                .record
-                .validate(&format!("mechanism_ledger.entries[{index}].record"))?;
-            if entry.record.experiment_id != self.experiment_id {
-                return Err(ZkBenchError::validation(
-                    format!("mechanism_ledger.entries[{index}].record.experiment_id"),
-                    "record experiment_id does not match ledger",
-                ));
-            }
-            let expected = compute_artifact_digest(
-                &(
-                    entry.sequence_number,
-                    entry.previous_digest.as_ref(),
-                    &entry.record,
-                ),
-                Some(ArtifactKind::Other),
-                Some(ArtifactRole::Manifest),
-            )?;
-            if entry.entry_digest != expected {
-                return Err(ZkBenchError::validation(
-                    format!("mechanism_ledger.entries[{index}].entry_digest"),
-                    "entry digest does not match append preimage",
-                ));
-            }
-            previous_digest = Some(entry.entry_digest.clone());
-        }
-        if self.tip_digest != previous_digest {
-            return Err(ZkBenchError::validation(
-                "mechanism_ledger.tip_digest",
-                "tip digest does not match final entry",
-            ));
-        }
-        Ok(())
+        AppendOnlyDigestChain::validate(
+            "mechanism_ledger",
+            &self.entries,
+            self.tip_digest.as_ref(),
+            |index, record| {
+                record.validate(&format!("mechanism_ledger.entries[{index}].record"))?;
+                if record.experiment_id != self.experiment_id {
+                    return Err(ZkBenchError::validation(
+                        format!("mechanism_ledger.entries[{index}].record.experiment_id"),
+                        "record experiment_id does not match ledger",
+                    ));
+                }
+                Ok(())
+            },
+        )
     }
 }
 
@@ -1854,6 +2002,24 @@ pub struct ExperimentRunReport {
     pub provenance: ExperimentProvenance,
 }
 
+impl ExperimentPayloadProvenance for ExperimentRunConfig {
+    fn payload_provenance(&self) -> &ExperimentProvenance {
+        &self.run_spec.provenance
+    }
+}
+
+impl ExperimentPayloadProvenance for ExperimentRunMetadata {
+    fn payload_provenance(&self) -> &ExperimentProvenance {
+        &self.provenance
+    }
+}
+
+impl ExperimentPayloadProvenance for ExperimentRunReport {
+    fn payload_provenance(&self) -> &ExperimentProvenance {
+        &self.provenance
+    }
+}
+
 impl ExperimentRunReport {
     /// Validate report identity, typed result semantics, limitations, and
     /// provenance without asserting scientific validity.
@@ -1937,7 +2103,7 @@ pub fn validate_experiment_report_artifact(
     path: &str,
 ) -> Result<()> {
     report.validate_for(&format!("{path}.payload"), experiment_id, run_id)?;
-    validate_experiment_artifact_payload(
+    ArtifactPayloadAdmission::validate(
         artifact,
         ExperimentArtifactKind::Report,
         report,
@@ -2078,7 +2244,7 @@ pub fn deserialize_experiment_run_config_json(
         ));
     }
     validate_module_manifest(&config.modules, "experiment_run_config.modules")?;
-    validate_experiment_artifact_payload(
+    ArtifactPayloadAdmission::validate(
         &bundle.config,
         ExperimentArtifactKind::Config,
         &config,
@@ -2143,7 +2309,7 @@ pub fn deserialize_experiment_run_metadata_json(
             "run metadata identity does not match the enclosing bundle",
         ));
     }
-    validate_experiment_artifact_payload(
+    ArtifactPayloadAdmission::validate(
         &bundle.metadata,
         ExperimentArtifactKind::Metadata,
         &metadata,
@@ -2154,19 +2320,125 @@ pub fn deserialize_experiment_run_metadata_json(
     Ok(metadata)
 }
 
-/// Read back generic config and metadata payloads as one receipt-bound unit.
-pub fn validate_serialized_experiment_run_payloads(
-    config_json: &str,
-    metadata_json: &str,
-    bundle: &ExperimentArtifactBundle,
-) -> Result<(
-    ExperimentRunConfig,
-    ExperimentRunMetadata,
-    ObservabilityAllocationReceipt,
-)> {
-    validate_experiment_artifact_bundle(bundle)?;
-    let config = deserialize_experiment_run_config_json(config_json, bundle)?;
-    let metadata = deserialize_experiment_run_metadata_json(metadata_json, bundle)?;
+/// Invariant-bearing handoff for one generic run's config, metadata, and
+/// allocation witness.
+///
+/// The fields stay private so callers cannot retain a config and metadata pair
+/// without the receipt that proves their scheduler transition agrees. This is
+/// a typed in-memory handoff; serialized callers should use
+/// [`Self::from_serialized`] to bind the payloads to the enclosing artifact
+/// references first.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ValidatedExperimentRunPayloads {
+    config: ExperimentRunConfig,
+    metadata: ExperimentRunMetadata,
+    allocation_receipt: ObservabilityAllocationReceipt,
+}
+
+impl ValidatedExperimentRunPayloads {
+    /// Validate and bind typed payloads without changing their wire shape.
+    pub fn from_parts(
+        config: ExperimentRunConfig,
+        metadata: ExperimentRunMetadata,
+        allocation_receipt: ObservabilityAllocationReceipt,
+    ) -> Result<Self> {
+        validate_experiment_run_payload_parts(&config, &metadata, &allocation_receipt)?;
+        Ok(Self {
+            config,
+            metadata,
+            allocation_receipt,
+        })
+    }
+
+    /// Deserialize canonical payloads and bind them to the enclosing bundle's
+    /// artifact references before issuing the typed handoff.
+    pub fn from_serialized(
+        config_json: &str,
+        metadata_json: &str,
+        bundle: &ExperimentArtifactBundle,
+    ) -> Result<Self> {
+        validate_experiment_artifact_bundle(bundle)?;
+        let config = deserialize_experiment_run_config_json(config_json, bundle)?;
+        let metadata = deserialize_experiment_run_metadata_json(metadata_json, bundle)?;
+        let allocation_receipt = config
+            .validate_allocation_witness(&metadata, "experiment_run_payloads.allocation_witness")?;
+        Self::from_parts(config, metadata, allocation_receipt)
+    }
+
+    /// Borrow the validated generic run config.
+    pub fn config(&self) -> &ExperimentRunConfig {
+        &self.config
+    }
+
+    /// Borrow the validated generic run metadata.
+    pub fn metadata(&self) -> &ExperimentRunMetadata {
+        &self.metadata
+    }
+
+    /// Borrow the allocation receipt bound to both payloads.
+    pub fn allocation_receipt(&self) -> &ObservabilityAllocationReceipt {
+        &self.allocation_receipt
+    }
+
+    /// Decompose the handoff after validation has already occurred.
+    pub fn into_parts(
+        self,
+    ) -> (
+        ExperimentRunConfig,
+        ExperimentRunMetadata,
+        ObservabilityAllocationReceipt,
+    ) {
+        (self.config, self.metadata, self.allocation_receipt)
+    }
+}
+
+fn validate_experiment_run_payload_parts(
+    config: &ExperimentRunConfig,
+    metadata: &ExperimentRunMetadata,
+    allocation_receipt: &ObservabilityAllocationReceipt,
+) -> Result<()> {
+    if config.schema_version != EXPERIMENT_UNIT_BUNDLE_SCHEMA_VERSION {
+        return Err(ZkBenchError::validation(
+            "experiment_run_payloads.config.schema_version",
+            "run config schema version is not supported",
+        ));
+    }
+    config.run_spec.validate()?;
+    validate_module_manifest(&config.modules, "experiment_run_payloads.config.modules")?;
+    if metadata.schema_version != EXPERIMENT_UNIT_BUNDLE_SCHEMA_VERSION {
+        return Err(ZkBenchError::validation(
+            "experiment_run_payloads.metadata.schema_version",
+            "run metadata schema version is not supported",
+        ));
+    }
+    require_text(
+        &metadata.experiment_id,
+        "experiment_run_payloads.metadata.experiment_id",
+    )?;
+    require_text(&metadata.run_id, "experiment_run_payloads.metadata.run_id")?;
+    require_text(
+        &metadata.hypothesis,
+        "experiment_run_payloads.metadata.hypothesis",
+    )?;
+    require_text(
+        &metadata.lifecycle,
+        "experiment_run_payloads.metadata.lifecycle",
+    )?;
+    metadata
+        .observability
+        .validate("experiment_run_payloads.metadata.observability")?;
+    validate_module_manifest(
+        &metadata.modules,
+        "experiment_run_payloads.metadata.modules",
+    )?;
+    if metadata.claim_boundary != ClaimBoundary::Level0DesignNote {
+        return Err(ZkBenchError::ClaimBoundary {
+            message: "run payload handoff remains Level0DesignNote".to_string(),
+        });
+    }
+    metadata
+        .provenance
+        .validate("experiment_run_payloads.metadata.provenance")?;
     if metadata.hypothesis != config.run_spec.hypothesis {
         return Err(ZkBenchError::validation(
             "experiment_run_payloads.hypothesis",
@@ -2185,9 +2457,35 @@ pub fn validate_serialized_experiment_run_payloads(
             "metadata module manifest does not match the run config",
         ));
     }
-    let receipt = config
-        .validate_allocation_witness(&metadata, "experiment_run_payloads.allocation_witness")?;
-    Ok((config, metadata, receipt))
+    if metadata.provenance != config.run_spec.provenance {
+        return Err(ZkBenchError::validation(
+            "experiment_run_payloads.provenance",
+            "metadata provenance does not match the run config provenance",
+        ));
+    }
+    let reconstructed = config
+        .validate_allocation_witness(metadata, "experiment_run_payloads.allocation_witness")?;
+    if &reconstructed != allocation_receipt {
+        return Err(ZkBenchError::validation(
+            "experiment_run_payloads.allocation_witness",
+            "allocation receipt does not match the config and metadata payloads",
+        ));
+    }
+    Ok(())
+}
+
+/// Read back generic config and metadata payloads as one receipt-bound unit.
+pub fn validate_serialized_experiment_run_payloads(
+    config_json: &str,
+    metadata_json: &str,
+    bundle: &ExperimentArtifactBundle,
+) -> Result<(
+    ExperimentRunConfig,
+    ExperimentRunMetadata,
+    ObservabilityAllocationReceipt,
+)> {
+    ValidatedExperimentRunPayloads::from_serialized(config_json, metadata_json, bundle)
+        .map(ValidatedExperimentRunPayloads::into_parts)
 }
 
 /// Concrete composition adapter for the fixed nine-slot experiment bundle.
@@ -2214,6 +2512,8 @@ pub struct ComposedExperimentRunner {
     pub budget: ObservabilityBudget,
     /// Append-only mechanism ledger for this fixed run.
     mechanism_ledger: Option<MechanismLedger>,
+    /// Receipt-bound config and metadata emitted by the most recent run.
+    run_payloads: Option<ValidatedExperimentRunPayloads>,
 }
 
 /// Private tentative state for one observability run lifecycle.
@@ -2317,6 +2617,7 @@ impl ComposedExperimentRunner {
             scheduler,
             budget,
             mechanism_ledger: None,
+            run_payloads: None,
         };
         runner.module_descriptors()?;
         Ok(runner)
@@ -2330,6 +2631,11 @@ impl ComposedExperimentRunner {
     /// Return the append-only mechanism ledger after a successful run.
     pub fn mechanism_ledger(&self) -> Option<&MechanismLedger> {
         self.mechanism_ledger.as_ref()
+    }
+
+    /// Return the receipt-bound config and metadata from the most recent run.
+    pub fn run_payloads(&self) -> Option<&ValidatedExperimentRunPayloads> {
+        self.run_payloads.as_ref()
     }
 
     fn module_descriptors(&self) -> Result<Vec<ModuleDescriptor>> {
@@ -2546,7 +2852,13 @@ impl ExperimentRunner for ComposedExperimentRunner {
                 report,
             ],
         )?;
+        let run_payloads = ValidatedExperimentRunPayloads::from_parts(
+            config_payload,
+            metadata_payload,
+            allocation,
+        )?;
         lifecycle.commit(&mut self.budget, &mut self.mechanism_ledger);
+        self.run_payloads = Some(run_payloads);
         Ok(bundle)
     }
 }
@@ -3186,30 +3498,9 @@ pub fn validate_serialized_local_json_composition_transport(
     LocalJsonCompositionConfig,
     ExperimentArtifactBundle,
 )> {
-    let inner = deserialize_experiment_bundle_json(inner_json)?;
-    let inner_validation = validate_experiment_bundle(&inner);
-    if !inner_validation.valid {
-        return Err(ZkBenchError::validation(
-            "local_json_composition_transport.inner_bundle",
-            format!("inner bundle is invalid: {:?}", inner_validation.issues),
-        ));
-    }
-    let canonical_inner_json = serialize_experiment_bundle_json(&inner)?;
-    if inner_json != canonical_inner_json {
-        return Err(ZkBenchError::validation(
-            "local_json_composition_transport.inner_bytes",
-            "inner bundle bytes are not the canonical serialization",
-        ));
-    }
+    let inner = ValidatedExperimentBundle::from_canonical_json(inner_json)?.into_bundle();
 
-    let outer = deserialize_experiment_artifact_bundle_json(outer_json)?;
-    let canonical_outer_json = serialize_experiment_artifact_bundle_json(&outer)?;
-    if outer_json != canonical_outer_json {
-        return Err(ZkBenchError::validation(
-            "local_json_composition_transport.outer_bytes",
-            "outer bundle bytes are not the canonical serialization",
-        ));
-    }
+    let outer = ValidatedExperimentArtifactBundle::from_canonical_json(outer_json)?.into_bundle();
     let config = validate_serialized_local_json_composition(config_json, &inner, &outer)?;
     Ok((inner, config, outer))
 }
@@ -3920,6 +4211,26 @@ pub struct MetaEvaluationLedgerEntry {
     pub entry_digest: ArtifactDigest,
 }
 
+impl AppendOnlyDigestChainEntry for MetaEvaluationLedgerEntry {
+    type Value = MetricMetaEvaluation;
+
+    fn sequence_number(&self) -> u64 {
+        self.sequence_number
+    }
+
+    fn previous_digest(&self) -> Option<&ArtifactDigest> {
+        self.previous_digest.as_ref()
+    }
+
+    fn value(&self) -> &Self::Value {
+        &self.evaluation
+    }
+
+    fn entry_digest(&self) -> &ArtifactDigest {
+        &self.entry_digest
+    }
+}
+
 impl Default for MetaEvaluationLedger {
     fn default() -> Self {
         Self {
@@ -3937,11 +4248,10 @@ impl MetaEvaluationLedger {
         evaluation.validate("meta_evaluation.evaluation")?;
         let sequence_number = self.entries.len() as u64;
         let previous_digest = self.entries.last().map(|entry| entry.entry_digest.clone());
-        let preimage = (sequence_number, previous_digest.as_ref(), &evaluation);
-        let entry_digest = compute_artifact_digest(
-            &preimage,
-            Some(ArtifactKind::Other),
-            Some(ArtifactRole::Manifest),
+        let entry_digest = AppendOnlyDigestChain::compute_entry_digest(
+            sequence_number,
+            previous_digest.as_ref(),
+            &evaluation,
         )?;
         self.entries.push(MetaEvaluationLedgerEntry {
             sequence_number,
@@ -3961,47 +4271,14 @@ impl MetaEvaluationLedger {
                 "unsupported metric meta-evaluation schema version",
             ));
         }
-        let mut previous_digest = None;
-        for (index, entry) in self.entries.iter().enumerate() {
-            if entry.sequence_number != index as u64 {
-                return Err(ZkBenchError::validation(
-                    format!("meta_evaluation.entries[{index}].sequence_number"),
-                    "sequence number does not match append position",
-                ));
-            }
-            if entry.previous_digest != previous_digest {
-                return Err(ZkBenchError::validation(
-                    format!("meta_evaluation.entries[{index}].previous_digest"),
-                    "previous digest does not match prior entry",
-                ));
-            }
-            entry
-                .evaluation
-                .validate(&format!("meta_evaluation.entries[{index}].evaluation"))?;
-            let expected = compute_artifact_digest(
-                &(
-                    entry.sequence_number,
-                    entry.previous_digest.as_ref(),
-                    &entry.evaluation,
-                ),
-                Some(ArtifactKind::Other),
-                Some(ArtifactRole::Manifest),
-            )?;
-            if entry.entry_digest != expected {
-                return Err(ZkBenchError::validation(
-                    format!("meta_evaluation.entries[{index}].entry_digest"),
-                    "entry digest does not match append preimage",
-                ));
-            }
-            previous_digest = Some(entry.entry_digest.clone());
-        }
-        if self.tip_digest != previous_digest {
-            return Err(ZkBenchError::validation(
-                "meta_evaluation.tip_digest",
-                "tip digest does not match final entry",
-            ));
-        }
-        Ok(())
+        AppendOnlyDigestChain::validate(
+            "meta_evaluation",
+            &self.entries,
+            self.tip_digest.as_ref(),
+            |index, evaluation| {
+                evaluation.validate(&format!("meta_evaluation.entries[{index}].evaluation"))
+            },
+        )
     }
 }
 

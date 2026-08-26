@@ -246,6 +246,7 @@ fn run_soak_campaign_with_runner(
             .iter()
             .map(|outcome| outcome.run_result.failure_corpus_index.clone())
             .collect(),
+        exploration: None,
         artifact_digest_set: SoakArtifactDigestSet { artifacts },
         claim_boundary: ClaimBoundary::Level0DesignNote,
         notes: vec![

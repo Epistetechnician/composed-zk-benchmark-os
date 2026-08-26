@@ -98,10 +98,111 @@ the current slice.
 
 ### Stage 1: capture adapter
 
-Add a read-only adapter for one real repository-change workflow. The adapter
-must emit externally verified aggregate rows, fixed budgets, model/runtime/
-checker digests, and a digest per trial. It must not execute arbitrary commands,
-retain raw model material, or grant authority.
+The read-only adapter now exists at
+`experiments/self_model_benchmark/repository_change_capture.py`. It accepts a
+validator-owned repository-change capture shape, requires fixed budgets,
+model/runtime/checker digests, validator report custody, exact repository check
+IDs, and a digest per observation. It derives outcome and limitation labels from
+validator facts and emits the frozen benchmark input. The adapter executes no
+commands, calls no model, retains no raw model material, and grants no
+authority.
+
+The checked-in adapter fixture is still contract smoke. The remaining Stage 1
+gate is a fresh capture from one separately controlled repository-change
+runner. `experiments/self_model_benchmark/capture_preflight.py` now provides
+the intervening process-free readiness gate: live source type, 60 trajectories,
+five families, `24/12/24` split coverage, paired variants, split isolation,
+contiguous horizons, unique validator digests, resource bounds, custody,
+prediction locking, and safe flags. It emits
+`LocalDevelopmentSelfModelCapturePreflightOnly` metadata and cannot execute a
+workflow, create validator custody, or promote its own fixture. A preflight
+pass is necessary for Stage 1 capture but is not benchmark or scientific
+evidence.
+
+The capture validator enforces the fixed resource envelope on every
+observation: latency, compute units, tool calls, and attempts must each remain
+at or below the manifest budget. Contract tests cover all four overage
+boundaries after recomputing the observation digest, so the check is semantic
+budget enforcement rather than stale-digest detection.
+
+State slice `verified-self-model-benchmark-resource-accounting-v1` adds a
+digest-bound, aggregate-only resource report. It preserves overall and
+per-variant success/failure counts plus mean and maximum latency, compute,
+tool-call, and attempt measurements, and rechecks each maximum against the
+capture budget. This report is local development metadata only; it does not
+convert live captures, create external custody, or produce benchmark or
+scientific evidence.
+
+The public adapter conversion path is deliberately closed for live captures in
+the current state slice; only the private deterministic contract-test helper
+can build synthetic live-shaped protocol input. A future separately authorized
+release phase must bind the held quarantine, manual-review decision, and
+independent custody before live capture conversion is enabled.
+
+The public execution boundary is also closed for live inputs in state slice
+`verified-self-model-benchmark-execution-gate-v1`. Both `run_benchmark.py` and
+`validate_benchmark.py` accept only the checked-in contract-smoke source and
+reject live or unknown sources before producing or validating results. The
+pure evaluator remains testable so recursive metrics and fail-closed gates can
+be verified without turning synthetic live-shaped data into benchmark
+evidence.
+
+The next handoff boundary is implemented at
+`experiments/self_model_benchmark/capture_handoff.py`. It builds a deterministic
+plan-only packet binding the source revision, task/corpus digests,
+model/runtime/checker digests, fixed budgets, expected capture schemas, and
+distinct declared runner/validator identities. The packet requires prediction
+locking and validator custody but remains `operator_authorization_status=
+not_authorized`, `packet_status=ready_for_external_runner`, and
+`capture_status=not_captured`. It is a handoff contract, not execution,
+custody, benchmark evidence, or scientific evidence. Declared identity
+separation does not establish independent custody.
+
+The received-capture boundary is implemented at
+`experiments/self_model_benchmark/capture_admission.py`. It recomputes the
+capture-manifest and preflight digests and requires an external-validator
+receipt to bind them to the handoff packet, task/corpus lineage,
+model/runtime/checker digests, and declared runner/validator identities. A
+fully valid result is only `eligible_for_manual_review`; smoke or incomplete
+captures are `rejected_preflight`. The operator-authorization reference is
+presence metadata, not verified authority. This slice cannot grant authority,
+prove independent custody, accept evidence, or establish scientific results.
+
+The quarantine boundary is implemented by
+`experiments/self_model_benchmark/capture_quarantine.py`. It binds the
+admission, handoff, capture, preflight, and validator-receipt digests into a
+held manifest. Eligible live captures enter `pending_manual_review`; rejected
+or smoke captures remain `rejected_preflight`. Both states force
+`release_status=held`, `conversion_eligible=false`, `accepted=false`, and
+`scientific_evidence=false`. This is local holding metadata, not external
+custody, benchmark input, evidence acceptance, or scientific execution.
+
+The manual-review boundary is implemented by
+`experiments/self_model_benchmark/capture_review.py` and
+`capture_review_decision.py`. Only an eligible live admission can produce a
+pending review packet. The packet binds the held quarantine and admission
+digests, freezes the review checklist, and offers only `not_evidence`,
+`request_recapture`, or `reject`. The explicit decision records reviewer and
+notes digests without retaining prose, and both packet and decision force
+`conversion_eligible=false`, `accepted=false`, and `scientific_evidence=false`.
+This is a review-state transition, not a quarantine release, benchmark input,
+evidence acceptance, operator authorization, independent-custody proof, or
+scientific execution. Reviewer references are supplied metadata and are not
+identity verification.
+
+The local composition test in
+`experiments/self_model_benchmark/tests/test_control_plane_e2e.py` now wires
+the synthetic live-shaped path through every current control-plane boundary,
+both directly and through the five CLI process boundaries: handoff, admission,
+quarantine, manual review, and an explicit `not_evidence` decision. It verifies
+digest-bound workflow continuity and asserts that the chain remains held,
+non-accepted, non-conversion-eligible, non-scientific, non-authoritative, and
+offline. The test also verifies that the public adapter rejects conversion of
+the same live-shaped input. A semantic tamper matrix recomputes each artifact
+digest after attempting to forge authorization, admission, release,
+conversion, or acceptance; all five forged states are rejected by their
+boundary validators. This is composition evidence for local contracts only; it
+is not external execution, custody, benchmark evidence, or scientific evidence.
 
 ### Stage 2: fit/tune corpus
 

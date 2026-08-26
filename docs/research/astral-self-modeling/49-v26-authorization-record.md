@@ -38,6 +38,11 @@ reuse, accepted Evidence Ledger mutation, Stage 0C confirmation, or Stage 1.
 - [x] Directly measured intervention effect is the causal target.
 - [x] Report-only, opaque-artifact, telemetry, and shuffled controls are
   explicitly separated.
+- [x] The S005-informed report endpoint scores the first structured decision
+  before later narrative and preserves exact-text, unrelated-intervention, and
+  report-order controls.
+- [x] Later phenomenological or mechanistic report language is unverified
+  metadata and cannot become a causal label, target feature, or H26-A gate.
 - [x] The opaque artifact is labeled as a synthetic proxy, not provider
   evidence or a cryptographic reproduction.
 - [x] V25 concepts, rows, sites, strengths, configuration, predictions, and

@@ -13,7 +13,6 @@ from __future__ import annotations
 from collections import defaultdict
 import hashlib
 import json
-import math
 from pathlib import Path
 from typing import Any
 
@@ -126,6 +125,7 @@ def _unsigned_trial(trial: dict[str, Any]) -> dict[str, Any]:
 
 
 def validate_manifest(manifest: dict[str, Any]) -> None:
+    _require(isinstance(manifest, dict), "manifest must be an object")
     _assert_no_forbidden_keys(manifest, "manifest")
     _require(manifest.get("record_type") == "manifest", "first record must be a manifest")
     _require(manifest.get("schema_version") == INPUT_SCHEMA_VERSION, "wrong input schema")
@@ -158,6 +158,8 @@ def update_direction(prior_milli: int, posterior_milli: int) -> str:
 
 
 def validate_trial(trial: dict[str, Any], manifest: dict[str, Any]) -> None:
+    _require(isinstance(trial, dict), "trial must be an object")
+    _require(isinstance(manifest, dict), "manifest must be an object")
     _assert_no_forbidden_keys(trial)
     required = (
         "record_type",
