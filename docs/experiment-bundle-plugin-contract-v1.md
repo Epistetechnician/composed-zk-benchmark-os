@@ -359,10 +359,32 @@ The serialized payload Adapter slice
 `validate_serialized_local_json_composition_with_metadata`. These Adapters
 authenticate canonical config and metadata bytes against the existing fixed
 artifact references before comparing identities, module manifests, decisions,
-and budget transitions. The existing packet transport remains a
-composition-only compatibility Adapter because it carries a metadata
-reference without the metadata payload bytes. No execution, publication,
-Evidence Ledger mutation, or claim-boundary promotion is implied.
+budget transitions, and payload/reference provenance. The additive
+`ValidatedExperimentRunPayloads` handoff keeps the generic config, metadata,
+and allocation receipt together for runner and serialized-readback consumers.
+The existing packet transport remains a composition-only compatibility Adapter
+because it carries a metadata reference without the metadata payload bytes. No
+execution, publication, Evidence Ledger mutation, or claim-boundary promotion
+is implied.
+
+The state slice
+`benchmark-os-observability-append-only-digest-chain-kernel-v1` deepens the
+append-only ledger Module with a private `AppendOnlyDigestChain` Kernel. Both
+the mechanism and metric meta-evaluation Adapters use the same sequence,
+predecessor, entry-digest, and tip-digest implementation, while retaining
+their distinct public wire shapes and domain validation. This concentrates
+chain correctness and tests at one Seam without changing transport or claim
+semantics.
+
+The state slice
+`benchmark-os-observability-provenance-bound-payload-admission-v1` adds a
+private `ArtifactPayloadAdmission` Kernel. Report, config, and metadata
+readback Adapters satisfy the same provenance-bearing payload Interface after
+their canonical bytes, kind, identity, and digest are checked. The historical
+structural payload validator remains a compatibility Interface for callers
+that do not have a provenance-bearing payload. This concentrates the
+provenance equality invariant without changing serialized shapes or claim
+semantics.
 
 The local JSON collector records trace/state-transition summaries and marks
 activation, attention, and causal-effect measurements `Unsupported` with
@@ -394,6 +416,17 @@ incompatible metric or mechanism value variants.
 `validate_experiment_plugin_output` adds the descriptor-to-bundle checks after
 bundle validation. It does not authorize execution or promotion; it only makes
 the static plugin seam fail closed on output identity and claim drift.
+
+State slice: `benchmark-os-experiment-bundle-validated-readback-v1`.
+
+`ValidatedExperimentBundle` is the typed readback Interface for the inner
+experiment bundle. Its canonical-JSON constructor parses, rejects byte drift,
+and validates component digests, artifact completeness, measurement sources,
+and claim ceilings before exposing the bundle to a packet Adapter. Generic and
+local composition packet readback both consume this handoff, so those Adapters
+cannot diverge in their inner-bundle acceptance rules. The existing raw
+deserializer remains available for compatibility, while the validated handoff
+is required for packet transport. No serialized fields or claim ceiling change.
 
 The factory catalog is separate construction infrastructure. Its metadata
 projection contains descriptors only; factory state and plugin pointers are

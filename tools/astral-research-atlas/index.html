@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0c1014" />
+    <meta name="description" content="Astral is a claim-sensitive research atlas for studying what an observer can learn from a model's hidden causes." />
+    <title>Astral / A research atlas</title>
+    <link rel="stylesheet" href="/tools/astral-research-atlas/styles.css" />
+  </head>
+  <body>
+    <div class="site-progress" aria-hidden="true"><span></span></div>
+    <header class="masthead" id="top">
+      <a class="wordmark" href="#top" aria-label="Astral home">ASTRAL<span> / research atlas</span></a>
+      <div class="masthead-meta">
+        <span>local research record</span>
+        <span>claim ceiling: narrow</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero chapter" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="kicker">A program for looking inside without pretending to see everything</p>
+          <h1 id="hero-title">What can an observer learn from a model’s hidden causes?</h1>
+          <p class="hero-dek">Astral studies whether privileged mechanistic telemetry can predict held-out intervention effects, and whether that prediction can improve behavior without outrunning its evidence.</p>
+          <div class="hero-meta">
+            <span>research atlas / current record</span>
+            <a href="/docs/research/astral-self-modeling/README.md">read the project boundary ↗</a>
+          </div>
+        </div>
+        <div class="hero-figure" role="img" aria-label="Animated abstract diagram of an actor, an observer, and a held-out intervention effect">
+          <div class="figure-label label-actor">actor</div>
+          <div class="figure-label label-observer">observer</div>
+          <div class="figure-label label-effect">held-out effect</div>
+          <div class="orb orb-actor"><span>state</span></div>
+          <div class="orb orb-observer"><span>telemetry</span></div>
+          <div class="effect-node"><span>?</span></div>
+          <svg class="hero-lines" viewBox="0 0 720 420" role="img" aria-label="Three paths from model state to an observer and a causal effect">
+            <path class="line line-a" d="M120 217 C235 96 274 86 364 198 S505 268 607 118" />
+            <path class="line line-b" d="M120 217 C245 338 286 330 367 226 S486 153 607 301" />
+            <path class="line line-c" d="M146 217 C300 217 430 217 607 217" />
+          </svg>
+          <div class="figure-readout"><span>signal / present</span><strong>read the state</strong><small>name it last</small></div>
+        </div>
+      </section>
+
+      <div class="atlas-layout">
+        <aside class="toc" aria-label="On this page">
+          <p class="toc-title">On this page</p>
+          <a class="toc-link active" href="#question" data-section="question" aria-current="location">The question</a>
+          <a class="toc-link" href="#architecture" data-section="architecture">The separation</a>
+          <a class="toc-link" href="#record" data-section="record">The record</a>
+          <a class="toc-link" href="#evidence" data-section="evidence">The evidence ladder</a>
+          <a class="toc-link" href="#whole-stack" data-section="whole-stack">The wider stack</a>
+          <a class="toc-link" href="#boundary" data-section="boundary">The boundary</a>
+          <div class="toc-rule"></div>
+          <span class="toc-status"><i></i> development / local</span>
+        </aside>
+
+        <article class="story">
+          <section class="story-section" id="question" data-observe-section>
+            <div class="section-heading">
+              <span class="section-index" aria-hidden="true">·</span>
+              <h2>The question is narrower than the name.</h2>
+            </div>
+            <div class="prose-grid">
+              <div class="prose prose-lead">
+                <p>Astral is not a search for a single hidden feeling inside a model. It is a controlled attempt to separate three things that are easy to conflate:</p>
+                <p class="big-line">what the model says,<br /><em>what its state contains,</em><br />and what its state can cause.</p>
+              </div>
+              <div class="prose">
+                <p>The actor runs a task. The observer receives a defined channel. The tracer records approximate internal measurements. Then an intervention changes one part of the actor and we ask whether the observer predicted the consequence before seeing it.</p>
+                <p>That sequence gives the project a falsifiable center. Better prose is not better evidence. A signal that is easy to decode is not automatically a signal that is causally useful.</p>
+                <a class="text-link" href="/docs/research/astral-self-modeling/01-research-protocol.md">open the research protocol ↗</a>
+              </div>
+            </div>
+            <div class="quote-block">
+              <p>“Can a preregistered estimator predict directly measured intervention effects on held-out actor seeds and prompt families better than activation-only, text-only, and capacity-matched controls?”</p>
+              <span>primary research question / Astral project README</span>
+            </div>
+          </section>
+
+          <section class="story-section" id="architecture" data-observe-section>
+            <div class="section-heading">
+              <span class="section-index" aria-hidden="true">·</span>
+              <h2>Keep the actor, observer, and effect in different rooms.</h2>
+            </div>
+            <p class="section-intro">The site makes the separation visible because the research depends on it. A report can be useful without being faithful. A telemetry stream can be privileged without being causal. An intervention effect is measured outside both.</p>
+            <div class="arch-controls">
+              <div class="arch-tabs" role="tablist" aria-label="Architecture inspection modes" data-architecture-tabs>
+                <button class="arch-control active" id="architecture-tab-report" type="button" data-architecture="report" role="tab" aria-selected="true" aria-controls="architecture-figure" tabindex="0">Report</button>
+                <button class="arch-control" id="architecture-tab-telemetry" type="button" data-architecture="telemetry" role="tab" aria-selected="false" aria-controls="architecture-figure" tabindex="-1">Telemetry</button>
+                <button class="arch-control" id="architecture-tab-effect" type="button" data-architecture="effect" role="tab" aria-selected="false" aria-controls="architecture-figure" tabindex="-1">Effect</button>
+              </div>
+              <span class="arch-control-status" data-architecture-status role="status" aria-live="polite">visible report / approximate observable</span>
+            </div>
+            <div class="architecture-figure" id="architecture-figure" data-architecture-figure role="tabpanel" aria-labelledby="architecture-tab-report" tabindex="0">
+              <div class="arch-stage arch-actor">
+                <span class="stage-code">A / actor</span>
+                <strong>forward state</strong>
+                <small>task, prompt, response</small>
+                <div class="state-strips"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              </div>
+              <div class="arch-connector connector-report" data-arch-node="report"><span>visible report</span><i></i></div>
+              <div class="arch-stage arch-report">
+                <span class="stage-code">R / report</span>
+                <strong>what it says</strong>
+                <small>an observable, not a ground truth</small>
+                <div class="report-lines"><i></i><i></i><i></i></div>
+              </div>
+              <div class="arch-connector connector-telemetry" data-arch-node="telemetry"><span>privileged channel</span><i></i></div>
+              <div class="arch-stage arch-telemetry">
+                <span class="stage-code">T / telemetry</span>
+                <strong>what is captured</strong>
+                <small>approximate state measurement</small>
+                <div class="telemetry-wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              </div>
+              <div class="arch-connector connector-effect" data-arch-node="effect"><span>intervention</span><i></i></div>
+              <div class="arch-stage arch-effect">
+                <span class="stage-code">E / effect</span>
+                <strong>what changes</strong>
+                <small>directly measured target</small>
+                <div class="effect-dots"><i></i><i></i><i></i></div>
+              </div>
+              <div class="arch-note">The claim only widens when the channel survives a held-out causal test.</div>
+            </div>
+            <div class="caption-row"><span>Figure A</span><span>Instrumentation is not interpretation.</span><span>Select a mode to trace one channel.</span></div>
+          </section>
+
+          <section class="story-section" id="record" data-observe-section>
+            <div class="section-heading">
+              <span class="section-index" aria-hidden="true">·</span>
+              <h2>The record is a sequence of stops, not a victory lap.</h2>
+            </div>
+            <p class="section-intro">Each phase is a new boundary with its own inputs, controls, and ceiling. Select a point in the record to see what it established, then inspect what it left unopened.</p>
+            <div class="record-shell">
+              <div class="record-rail" role="tablist" aria-label="Astral research phases" data-record-rail></div>
+              <div class="record-detail" id="phase-detail" data-record-detail role="tabpanel" aria-live="polite"></div>
+            </div>
+            <div class="caption-row"><span>Figure B</span><span>Fresh phase identities keep old results from leaking forward.</span><a href="/docs/research/astral-self-modeling/04-experiment-roadmap.md">open the roadmap ↗</a></div>
+          </section>
+
+          <section class="story-section" id="evidence" data-observe-section>
+            <div class="section-heading">
+              <span class="section-index" aria-hidden="true">·</span>
+              <h2>Presence is the first rung. Usefulness is farther up.</h2>
+            </div>
+            <div class="evidence-intro prose-grid">
+              <div class="prose prose-lead"><p class="big-line">A decoder finding<br /><em>information</em><br />is not yet a causal model.</p></div>
+              <div class="prose"><p>The evidence ladder is intentionally asymmetric. Each rung demands a stronger target and a stronger control. The interface lets you inspect the ladder without turning a lower rung into a claim about the next one.</p><p class="quiet-note">Current status is shown in orange. Unopened gates stay visibly unopened.</p></div>
+            </div>
+            <div class="evidence-ladder" data-evidence-ladder></div>
+            <div class="evidence-readout" id="evidence-readout" data-evidence-readout role="status" aria-live="polite"></div>
+            <div class="caption-row"><span>Figure C</span><span>Current ceiling: local development measurement.</span><a href="/docs/research/astral-self-modeling/03-claim-ledger.md">open the claim ledger ↗</a></div>
+          </section>
+
+          <section class="story-section" id="whole-stack" data-observe-section>
+            <div class="section-heading">
+              <span class="section-index" aria-hidden="true">·</span>
+              <h2>Astral is one lane in a larger evidence system.</h2>
+            </div>
+            <p class="section-intro">The surrounding work gives the research somewhere safe to land: a benchmark OS for reproducibility, HSAI for claim envelopes and authority boundaries, and Astral for the actor–observer question.</p>
+            <div class="stack-map">
+              <div class="stack-line" aria-hidden="true"><i></i><i></i><i></i></div>
+              <button class="stack-node node-benchmark active" data-stack="benchmark" aria-pressed="true"><span>benchmark</span><strong>benchmark OS</strong><small>replay, custody, validation</small></button>
+              <button class="stack-node node-astral" data-stack="astral" aria-pressed="false"><span>research</span><strong>Astral</strong><small>causal telemetry research</small></button>
+              <button class="stack-node node-hsai" data-stack="hsai" aria-pressed="false"><span>authority</span><strong>HSAI</strong><small>claim and authority envelopes</small></button>
+            </div>
+            <div class="stack-detail" data-stack-detail aria-live="polite"></div>
+            <div class="caption-row"><span>Figure D</span><span>Operational capability and scientific evidence remain separate.</span><a href="/README.md">open the repository map ↗</a></div>
+          </section>
+
+          <section class="story-section closing-section" id="boundary" data-observe-section>
+            <div class="section-heading">
+              <span class="section-index" aria-hidden="true">·</span>
+              <h2>The honest ending is a boundary.</h2>
+            </div>
+            <div class="closing-grid">
+              <div class="closing-statement"><p>We can measure a narrow signal. We can document the route to a causal test. We cannot skip the test because the visualization is compelling.</p><span>ASTRAL / ACTIVE LOCAL RESEARCH</span></div>
+              <div class="boundary-list">
+                <div><span class="boundary-state allowed">allowed</span><strong>local measurement and attribution diagnostics</strong></div>
+                <div><span class="boundary-state held">held</span><strong>causal-effect prediction until the validity gate passes</strong></div>
+                <div><span class="boundary-state blocked">blocked</span><strong>Stage 0C, Stage 1, and claims above the tested ceiling</strong></div>
+              </div>
+            </div>
+            <div class="source-dock"><a href="/docs/research/astral-self-modeling/README.md">project index ↗</a><a href="/docs/research/astral-self-modeling/47-v25-execution-record.md">V25 record ↗</a><a href="/docs/research/astral-self-modeling/05-risk-ethics-and-governance.md">risk and governance ↗</a></div>
+          </section>
+        </article>
+      </div>
+    </main>
+
+    <footer class="footer"><span>ASTRAL / research atlas</span><span>built from the local record · 2026-08-26</span><a href="#top">back to top ↑</a></footer>
+    <noscript><p class="noscript">This atlas needs JavaScript for the phase record, evidence ladder, and architecture inspection. The local research links remain available in the page source.</p></noscript>
+    <script src="/tools/astral-research-atlas/app.js"></script>
+  </body>
+</html>

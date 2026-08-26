@@ -264,6 +264,10 @@ When package scripts exist in a later phase, preserve:
 - `test:focused` for narrow unit/integration tests.
 - `verify:contracts` for schema, manifest, adapter, and evidence contracts.
 - `verify:full` for the heavy local verification ladder.
+- `verify:features` for the complete Cargo workspace with every declared
+  feature enabled.
+- `verify:clippy` for all workspace targets with all features enabled and
+  warnings treated as errors.
 
 ## Gate Meanings
 
@@ -273,6 +277,8 @@ When package scripts exist in a later phase, preserve:
 | `test:focused` | Targeted tests for the state slice. |
 | `verify:contracts` | Schema, evidence, manifest, and adapter contract validation. |
 | `verify:full` | Full local verification. |
+| `verify:features` | Full local verification with all declared crate features enabled. |
+| `verify:clippy` | All-target, all-feature Clippy with warnings treated as errors. |
 | `pnpm run lint` | Heavy root gate delegating to full verification. |
 
 ## Docs-Only Commands

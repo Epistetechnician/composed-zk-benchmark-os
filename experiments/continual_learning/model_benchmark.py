@@ -219,6 +219,21 @@ def training_command(
     return command
 
 
+def safe_training_command(
+    model: Path,
+    dataset: Path,
+    adapter_path: Path,
+    seed: int,
+    iters: int,
+    resume: Path | None,
+) -> list[str]:
+    """Build the opt-in tokenizer-policy-bound MLX-LM LoRA command."""
+
+    command = training_command(model, dataset, adapter_path, seed, iters, resume)
+    command[2:4] = ["experiments.continual_learning.safe_mlx_lora"]
+    return command
+
+
 def train_sequence(
     root: Path,
     model: Path,
@@ -305,13 +320,21 @@ def train_sequence(
 
 
 class ChoiceModel:
-    def __init__(self, model_path: Path, adapter_path: Path | None = None):
+    def __init__(self, model_path: Path | str, adapter_path: Path | None = None):
         import mlx.core as mx
         from mlx_lm import load
 
+        from experiments.continual_learning.mlx_tokenizer_policy import (
+            tokenizer_config_from_policy,
+            tokenizer_policy_for_model,
+        )
+
+        model_path = Path(model_path)
         self.mx = mx
+        self.tokenizer_policy = tokenizer_policy_for_model(model_path)
         self.model, self.tokenizer = load(
             str(model_path),
+            tokenizer_config=tokenizer_config_from_policy(self.tokenizer_policy) or None,
             adapter_path=str(adapter_path) if adapter_path else None,
         )
         self.candidate_ids = {

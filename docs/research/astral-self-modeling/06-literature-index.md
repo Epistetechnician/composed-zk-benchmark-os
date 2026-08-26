@@ -1,6 +1,6 @@
 # Literature Index
 
-Observed 2026-07-26. This is a seed index, not a systematic review. Source IDs
+Observed 2026-08-24. This is a seed index, not a systematic review. Source IDs
 map to the claim ledger. Each entry states what it supports and what it does not
 establish.
 
@@ -58,15 +58,22 @@ Themselves by Introspection," 2024.
 
 ## S005 — Emergent Introspective Awareness
 
-Jack Lindsey et al., "Emergent Introspective Awareness in Large Language
-Models," Transformer Circuits Thread, 2025.
+Jack Lindsey, "Emergent Introspective Awareness in Large Language Models,"
+arXiv:2601.01828, 2026.
 
-- URL: https://transformer-circuits.pub/2025/introspection/
-- Evidence class: primary empirical technical report.
-- Supports: activation-injection experiments testing whether models can report
-  some manipulated internal representations under particular conditions.
-- Does not establish: reliable general introspection. Reported effects are
-  context-dependent and vary by model and post-training.
+- URL: https://arxiv.org/abs/2601.01828
+- Full text: https://arxiv.org/html/2601.01828v1
+- Evidence class: primary empirical preprint.
+- Supports: activation-injection experiments in which several Claude models
+  sometimes detect and identify injected concepts, distinguish injected
+  representations from text inputs, and modulate concept representations when
+  instructed or incentivized.
+- Protocol consequence: distinguish causal influence on a self-report from
+  prediction of externally measured intervention effects; preserve unrelated-
+  injection, post-prefill, exact-text, and early-report controls.
+- Does not establish: reliable general introspection, a specific mechanism, a
+  directly observed metacognitive representation, held-out causal-effect
+  prediction, consciousness, or faithful explanation.
 
 ## Required Review Expansion
 
@@ -119,6 +126,27 @@ Opportunities," 2026.
   measured control effect with safety and calibration reporting.
 - Does not establish: any local actor's metacognition, mechanistic access,
   faithful self-report, causal self-model, consciousness, or Stage 0C/Stage 1.
+
+## S018 — Full-Bandwidth Transformer
+
+Xi Wang, Ziyang Cai, Zheng Zhan, Harry Dong, Ying Fan, Gustavo de Rosa, Tim
+Pearce, and John Langford, "Full-bandwidth transformer," arXiv:2608.08888,
+2026.
+
+- URL: https://arxiv.org/abs/2608.08888
+- Full text: https://arxiv.org/html/2608.08888v1
+- Evidence class: primary empirical preprint.
+- Supports: a latent-feedback architecture that fuses the previous top-layer
+  hidden state with the next token embedding, plus reported improvements in
+  validation loss, language-model evaluation, math and coding generation, and
+  instruction-tuned performance in the tested settings.
+- Protocol consequence: treat latent feedback as an architectural factor and
+  separate state accessibility, actor reporting, held-out intervention-effect
+  prediction, and downstream correction as distinct endpoints.
+- Does not establish: that latent feedback is causally used for a target
+  behavior, faithful introspection, self-modeling, held-out intervention-effect
+  prediction, causal explanation, generalization, consciousness, or Stage 0C/
+  Stage 1 authorization.
 
 ## S006 — Causal Abstractions of Neural Networks
 

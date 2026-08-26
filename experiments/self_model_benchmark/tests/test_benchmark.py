@@ -10,12 +10,16 @@ from unittest.mock import patch
 from experiments.self_model_benchmark.protocol import (
     BenchmarkProtocolError,
     LIVE_SOURCE,
+    SMOKE_SOURCE,
     VARIANTS,
     digest_json,
     evaluate,
     load_input,
     validate_result,
+    validate_manifest,
+    validate_trial,
 )
+from experiments.self_model_benchmark.benchmark_execution_gate import require_public_execution_source
 from experiments.self_model_benchmark.run_benchmark import main as run_main
 from experiments.self_model_benchmark.validate_benchmark import main as validate_main
 
@@ -92,6 +96,13 @@ def _live_records() -> tuple[dict, list[dict]]:
     return manifest, trials
 
 
+def _write_records(path: Path, manifest: dict, trials: list[dict]) -> None:
+    with path.open("w", encoding="utf-8") as handle:
+        handle.write(json.dumps(manifest, sort_keys=True) + "\n")
+        for trial in trials:
+            handle.write(json.dumps(trial, sort_keys=True) + "\n")
+
+
 class SelfModelBenchmarkTests(unittest.TestCase):
     def test_smoke_fixture_scores_without_claiming_self_model(self):
         manifest, trials = load_input("experiments/self_model_benchmark/fixtures/smoke.jsonl")
@@ -111,6 +122,31 @@ class SelfModelBenchmarkTests(unittest.TestCase):
         self.assertEqual(result["trajectory_count"], 60)
         self.assertEqual(result["trial_count"], 300)
         self.assertEqual(validate_result(result, result), [])
+
+    def test_public_execution_gate_is_smoke_only(self):
+        self.assertIsNone(require_public_execution_source(_manifest(SMOKE_SOURCE)))
+        with self.assertRaisesRegex(BenchmarkProtocolError, "separately authorized release"):
+            require_public_execution_source(_manifest(LIVE_SOURCE))
+
+    def test_public_clis_reject_live_input_without_writing_or_validating(self):
+        manifest, trials = _live_records()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            input_path = root / "live.jsonl"
+            result_path = root / "result.json"
+            _write_records(input_path, manifest, trials)
+
+            run_stdout = io.StringIO()
+            with patch.object(sys, "argv", ["run_benchmark", "--input", str(input_path), "--output", str(result_path)]), contextlib.redirect_stdout(run_stdout):
+                self.assertEqual(run_main(), 2)
+            self.assertFalse(result_path.exists())
+            self.assertIn("separately authorized release", run_stdout.getvalue())
+
+            result_path.write_text("{}\n", encoding="utf-8")
+            validate_stdout = io.StringIO()
+            with patch.object(sys, "argv", ["validate_benchmark", str(result_path), "--input", str(input_path)]), contextlib.redirect_stdout(validate_stdout):
+                self.assertEqual(validate_main(), 2)
+            self.assertIn("separately authorized release", validate_stdout.getvalue())
 
     def test_recursive_continuity_rejects_broken_prior(self):
         manifest, trials = _live_records()
@@ -136,6 +172,20 @@ class SelfModelBenchmarkTests(unittest.TestCase):
         trials[0]["authority_granted"] = True
         with self.assertRaisesRegex(BenchmarkProtocolError, "authority_granted"):
             load_input_from_records(manifest, trials)
+
+    def test_protocol_validators_reject_non_object_inputs_with_domain_errors(self):
+        manifest = _manifest(SMOKE_SOURCE)
+        trial = _trial(0, "fit", "base")
+        for malformed in (None, [], "not-an-object", 1):
+            with self.subTest(validator="manifest", value_type=type(malformed).__name__):
+                with self.assertRaisesRegex(BenchmarkProtocolError, "manifest must be an object"):
+                    validate_manifest(malformed)
+            with self.subTest(validator="trial", value_type=type(malformed).__name__):
+                with self.assertRaisesRegex(BenchmarkProtocolError, "trial must be an object"):
+                    validate_trial(malformed, manifest)
+            with self.subTest(validator="trial-manifest", value_type=type(malformed).__name__):
+                with self.assertRaisesRegex(BenchmarkProtocolError, "manifest must be an object"):
+                    validate_trial(trial, malformed)
 
     def test_cli_round_trip_and_result_tamper(self):
         with tempfile.TemporaryDirectory() as directory:

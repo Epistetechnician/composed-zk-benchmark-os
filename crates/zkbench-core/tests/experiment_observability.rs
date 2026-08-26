@@ -26,6 +26,9 @@
 // - `benchmark-os-observability-allocation-witness-readback-v1`
 // - `benchmark-os-observability-allocation-receipt-lifecycle-handoff-v1`
 // - `benchmark-os-observability-allocation-witness-payload-readback-v1`
+// - `benchmark-os-observability-append-only-digest-chain-kernel-v1`
+// - `benchmark-os-observability-provenance-bound-payload-admission-v1`
+// - `benchmark-os-observability-outer-bundle-validated-readback-v1`
 
 use zkbench_core::evidence::{
     compute_artifact_digest, compute_artifact_digest_bytes, ArtifactKind, ArtifactRole,
@@ -34,6 +37,7 @@ use zkbench_core::evidence::{
 use zkbench_core::experiment_observability::{
     compute_experiment_artifact_bundle_digest, compute_local_json_composition_config_digest,
     deserialize_experiment_artifact_bundle_json, deserialize_experiment_report_json,
+    deserialize_experiment_run_config_json, deserialize_experiment_run_metadata_json,
     deserialize_local_json_composition_config_json, deserialize_mechanism_ledger_json,
     deserialize_meta_evaluation_ledger_json, serialize_experiment_artifact_bundle_json,
     serialize_experiment_run_config_json, serialize_experiment_run_metadata_json,
@@ -52,7 +56,8 @@ use zkbench_core::experiment_observability::{
     MetaEvaluationLedger, MetricMetaEvaluation, MetricMetaEvaluationBasis, MetricNoise,
     MetricObservation, MetricObservationStatus, MetricStability, ModuleDescriptor,
     ObservabilityAllocationReceipt, ObservabilityBudget, ObservabilityDecision,
-    ObservabilitySignals, ObservabilityTier, WeightedObservabilityScheduler,
+    ObservabilitySignals, ObservabilityTier, ValidatedExperimentArtifactBundle,
+    ValidatedExperimentRunPayloads, WeightedObservabilityScheduler,
     EXPERIMENT_UNIT_BUNDLE_SCHEMA_VERSION, OBSERVABILITY_SCORE_SCALE,
 };
 use zkbench_core::experiment_observability::{
@@ -789,6 +794,21 @@ fn typed_report_readback_binds_payload_to_manifest_digest() {
     let error = deserialize_experiment_report_json(&pretty_json, &manifest)
         .expect_err("non-canonical report bytes must fail readback");
     assert!(error.to_string().contains("canonical serialization"));
+
+    let mut changed_provenance_report = report.clone();
+    changed_provenance_report.provenance = provenance("report-provenance-drift");
+    let changed_provenance_json = serde_json::to_string(&changed_provenance_report)
+        .expect("changed provenance should serialize");
+    let mut changed_provenance_manifest = manifest;
+    changed_provenance_manifest.report.digest = compute_artifact_digest_bytes(
+        changed_provenance_json.as_bytes(),
+        Some(ArtifactKind::Other),
+        Some(ArtifactRole::Manifest),
+    );
+    let error =
+        deserialize_experiment_report_json(&changed_provenance_json, &changed_provenance_manifest)
+            .expect_err("resealed payload provenance drift must fail readback");
+    assert!(error.to_string().contains("provenance"));
 }
 
 #[test]
@@ -1457,6 +1477,9 @@ fn serialized_generic_run_payloads_bind_allocation_receipt_and_reject_tampering(
     let mut runner = composed_runner(false);
     let initial_budget = runner.budget.clone();
     let bundle = runner.run().expect("generic runner should emit a bundle");
+    let emitted_payloads = runner
+        .run_payloads()
+        .expect("generic runner should retain a validated payload handoff");
     let modules = vec![
         runner.task.descriptor().clone(),
         runner.response_producer.descriptor().clone(),
@@ -1491,10 +1514,56 @@ fn serialized_generic_run_payloads_bind_allocation_receipt_and_reject_tampering(
         serialize_experiment_run_config_json(&config).expect("generic run config should serialize");
     let metadata_json = serialize_experiment_run_metadata_json(&metadata)
         .expect("generic run metadata should serialize");
+    assert_eq!(emitted_payloads.config(), &config);
+    assert_eq!(emitted_payloads.metadata(), &metadata);
+    assert_eq!(emitted_payloads.allocation_receipt(), &expected_receipt);
     let (_, _, receipt) =
         validate_serialized_experiment_run_payloads(&config_json, &metadata_json, &bundle)
             .expect("serialized generic payloads should reconstruct the allocation receipt");
     assert_eq!(receipt, expected_receipt);
+    let serialized_payloads =
+        ValidatedExperimentRunPayloads::from_serialized(&config_json, &metadata_json, &bundle)
+            .expect("serialized payloads should issue the typed handoff");
+    assert_eq!(serialized_payloads, *emitted_payloads);
+
+    let mut changed_config = config.clone();
+    changed_config.run_spec.provenance = provenance("config-provenance-drift");
+    let changed_config_json = serialize_experiment_run_config_json(&changed_config)
+        .expect("changed config provenance should serialize");
+    let mut changed_config_bundle = bundle.clone();
+    changed_config_bundle.config.digest = compute_artifact_digest_bytes(
+        changed_config_json.as_bytes(),
+        Some(ArtifactKind::Other),
+        Some(ArtifactRole::Manifest),
+    );
+    let config_provenance_error =
+        deserialize_experiment_run_config_json(&changed_config_json, &changed_config_bundle)
+            .expect_err("resealed config provenance drift must fail readback");
+    assert!(config_provenance_error.to_string().contains("provenance"));
+
+    let mut changed_metadata = metadata.clone();
+    changed_metadata.provenance = provenance("metadata-provenance-drift");
+    let changed_metadata_json = serialize_experiment_run_metadata_json(&changed_metadata)
+        .expect("changed metadata provenance should serialize");
+    let mut changed_metadata_bundle = bundle.clone();
+    changed_metadata_bundle.metadata.digest = compute_artifact_digest_bytes(
+        changed_metadata_json.as_bytes(),
+        Some(ArtifactKind::Other),
+        Some(ArtifactRole::Manifest),
+    );
+    let metadata_provenance_error =
+        deserialize_experiment_run_metadata_json(&changed_metadata_json, &changed_metadata_bundle)
+            .expect_err("resealed metadata provenance drift must fail readback");
+    assert!(metadata_provenance_error.to_string().contains("provenance"));
+
+    let mut mismatched_receipt = expected_receipt.clone();
+    mismatched_receipt.after_budget.tier1_samples_remaining += 1;
+    assert!(ValidatedExperimentRunPayloads::from_parts(
+        config.clone(),
+        metadata.clone(),
+        mismatched_receipt,
+    )
+    .is_err());
 
     let tampered_config_json =
         config_json.replace("\"failure_milli\":900", "\"failure_milli\":899");
@@ -1552,11 +1621,25 @@ fn bundle_json_round_trip_preserves_digest_and_rejects_invalid_shape() {
             .expect("restored bundle should digest"),
         compute_experiment_artifact_bundle_digest(&bundle).expect("bundle should digest")
     );
+    assert_eq!(
+        ValidatedExperimentArtifactBundle::from_canonical_json(&json)
+            .expect("canonical outer bundle should validate")
+            .bundle(),
+        &bundle
+    );
 
     let mut invalid = bundle;
     invalid.report.kind = ExperimentArtifactKind::Logs;
     let invalid_json = serde_json::to_string(&invalid).expect("fixture should serialize");
     assert!(deserialize_experiment_artifact_bundle_json(&invalid_json).is_err());
+}
+
+#[test]
+fn validated_outer_bundle_readback_rejects_noncanonical_json() {
+    let bundle = bundle();
+    let json = serialize_experiment_artifact_bundle_json(&bundle)
+        .expect("valid outer bundle should serialize");
+    assert!(ValidatedExperimentArtifactBundle::from_canonical_json(&format!(" {json}")).is_err());
 }
 
 #[test]

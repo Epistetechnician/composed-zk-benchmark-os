@@ -2,7 +2,7 @@
 
 ## Status and State Slice
 
-State slice: `astral-self-modeling-evidence-ledger-and-research-reset-v11`.
+State slice: `astral-claim-ledger-synchronization-v1`.
 
 Status: `ActiveLocalResearch / InformationPresenceReportGapObserved`. The compiled positive
 control completed, V5 returned a valid learned-model `Null`, V7 qualified the
@@ -11,9 +11,10 @@ family-complete actor-training recipe, and V10 completed with
 effect estimator. Stage 1 remains blocked. The evidence ceiling is
 setup-scoped local measurement and attribution-method diagnostics, not a
 mechanistic explanation, benchmark result, proof, or accepted Evidence Ledger
-record. The latest V25 result is limited to
-`LocalDevelopmentPrivilegedTelemetryInformationPresence`; Stage 0C and Stage 1
-remain blocked.
+record. The latest executed Astral result is V25, limited to
+`LocalDevelopmentPrivilegedTelemetryInformationPresence`; later V26-V82
+documents are design, preflight, feasibility, review, or literature records
+and do not change that ceiling. Stage 0C and Stage 1 remain blocked.
 
 ## Project Thesis
 
@@ -75,6 +76,8 @@ review and experiments rule out equivalent prior work.
 - [Risk, ethics, and governance](05-risk-ethics-and-governance.md): misuse,
   privacy, gaming, review, and reporting controls.
 - [Literature index](06-literature-index.md): source-scoped prior work.
+- [Lindsey introspection crosswalk](79-lindsey-introspection-crosswalk.md):
+  paper-to-Astral protocol mapping, control checklist, and claim separation.
 - [Metacognition cross-system synthesis](../2607.11881-metacognition-synthesis-v1.md):
   survey-grounded separation of monitoring, reporting, control, calibration,
   and authority, plus the synthetic benchmark contract boundary.
@@ -220,7 +223,15 @@ review and experiments rule out equivalent prior work.
 - [Independent review record](60-research-synthesis-trace-replay-v1-review-2026-08-13.md):
   source, experiment, privacy, validator, claim-ceiling, and repository-gate
   review with no open findings.
-- [OpaqueTraceReplay scientific admission validation](../../61-opaque-trace-replay-scientific-admission-validation-v1.md):
+- [Full-bandwidth causal-fidelity comparison V1](61-full-bandwidth-causal-fidelity-v1-boundary.md):
+  docs-only boundary for comparing standard and latent-feedback actors on
+  telemetry accessibility, actor reporting, held-out intervention-effect
+  prediction, and locked correction. Execution is not authorized.
+- [Neural Chameleon replication V1 custody preflight](82-neural-chameleon-replication-v1-preflight.md):
+  fail-closed artifact and execution boundary for the monitor-evasion and
+  mechanistic-transplant arms; required external artifacts are missing and
+  scientific execution is not authorized.
+- [OpaqueTraceReplay scientific admission validation](../61-opaque-trace-replay-scientific-admission-validation-v1.md):
   ten-case synthetic comparison of typed fail-closed admission against a
   raw-output passthrough control; local control evidence only.
 - [Narrative–Mechanism–Verification V30](../62-narrative-mechanism-verification-v30.md):
@@ -294,3 +305,5 @@ outputs require an explicit retention and privacy decision before collection.
 | 2026-08-14 | Validate V35 custody packet integrity as a design-only preflight | Canonical serialization, digest recomputation, schema denial, nonce uniqueness, and predecessor ordering all reject the tested tamper and replay mutations | Durable replay-state ownership and separately verified real custody are required before any execution authorization |
 | 2026-08-14 | Validate V36 custody replay manifest as a design-only preflight | The local append-only chain rejects tested tampering, duplicate nonce, wrong predecessor, invalid packet, and unknown-field mutations while retaining only typed quarantine metadata | Durable operator-owned replay state and independently verified real custody are required before execution authorization |
 | 2026-08-15 | Validate V37 Astral execution-eligibility gate as a design-only preflight | The gate grants only eligibility for separate human authorization when synthetic custody, instrument, review, nonclaim, ceiling, and disabled-execution controls pass; all denial mutations fail closed | Independently verified real custody, instrument readiness, and explicit authorization are required before any future run |
+| 2026-08-24 | Register S018 and freeze V61 as a docs-only full-bandwidth causal-fidelity boundary | Latent feedback is an architectural factor for comparing telemetry accessibility, actor reporting, held-out intervention-effect prediction, and locked correction; no fresh actor or execution authorization exists | A separately authorized actor pair passes custody, parity, behavioral-effect, prediction-lock, causal-fidelity, correction, and independent-readback gates |
+| 2026-08-26 | Register V82 as a Neural Chameleon custody preflight only | The required Gemma checkpoint, precursor, activation-oracle, monitor, corpus, and runtime artifacts are absent; the cached Qwen3.6 seam is not a per-head or Q/K/V transplant instrument | An immutable external artifact manifest and separately authorized runner, validator, retention root, frozen corpus, and claim ceiling are supplied |

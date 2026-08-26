@@ -2,6 +2,7 @@
 
 use crate::error::Result;
 use crate::evidence::ClaimBoundary;
+use crate::exploration::ExplorationArtifact;
 
 use super::artifact_layout::{
     soak_artifact_manifest, SoakArtifactDigestSet, SoakArtifactLayout, SoakArtifactRole,
@@ -19,6 +20,27 @@ pub fn build_soak_report_bundle(
     telemetry_reports: Vec<SoakTelemetryReport>,
     health_reports: Vec<SoakHealthReport>,
     failure_corpus_indexes: Vec<FailureCorpusIndex>,
+) -> Result<SoakReportBundle> {
+    build_soak_report_bundle_with_exploration(
+        bundle_id,
+        shard_plan,
+        telemetry_reports,
+        health_reports,
+        failure_corpus_indexes,
+        None,
+    )
+}
+
+/// Build a local-only report bundle with an optional deterministic exploration
+/// sidecar for the named state slice
+/// `antithesis-inspired-deterministic-exploration-v1`.
+pub fn build_soak_report_bundle_with_exploration(
+    bundle_id: impl Into<String>,
+    shard_plan: SoakShardPlan,
+    telemetry_reports: Vec<SoakTelemetryReport>,
+    health_reports: Vec<SoakHealthReport>,
+    failure_corpus_indexes: Vec<FailureCorpusIndex>,
+    exploration: Option<ExplorationArtifact>,
 ) -> Result<SoakReportBundle> {
     let bundle_id = bundle_id.into();
     let mut artifacts = vec![
@@ -66,6 +88,14 @@ pub fn build_soak_report_bundle(
             report,
         )?);
     }
+    if let Some(exploration) = &exploration {
+        artifacts.push(soak_artifact_manifest(
+            "exploration",
+            SoakArtifactRole::Exploration,
+            "aggregate/exploration.json",
+            exploration,
+        )?);
+    }
     Ok(SoakReportBundle {
         bundle_id,
         bundle_version: "phase-k-soak-report-bundle-v0".to_string(),
@@ -75,6 +105,7 @@ pub fn build_soak_report_bundle(
         telemetry_reports,
         health_reports,
         failure_corpus_indexes,
+        exploration,
         artifact_digest_set: SoakArtifactDigestSet { artifacts },
         claim_boundary: ClaimBoundary::Level0DesignNote,
         notes: vec![

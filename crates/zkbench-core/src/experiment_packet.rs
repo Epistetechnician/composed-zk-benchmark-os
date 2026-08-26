@@ -27,13 +27,13 @@ use crate::evidence::{
 };
 use crate::experiment::{
     compute_experiment_bundle_digest, serialize_experiment_bundle_json, validate_experiment_bundle,
-    ExperimentBundle,
+    ExperimentBundle, ValidatedExperimentBundle,
 };
 use crate::experiment_observability::{
     compute_experiment_artifact_bundle_digest, deserialize_experiment_artifact_bundle_json,
     serialize_experiment_artifact_bundle_json, serialize_local_json_composition_config_json,
     validate_local_json_artifact_projection, validate_serialized_local_json_composition_transport,
-    ExperimentArtifactBundle, LocalJsonCompositionConfig,
+    ExperimentArtifactBundle, LocalJsonCompositionConfig, ValidatedExperimentArtifactBundle,
 };
 use crate::experiment_plugin_composition::{
     deserialize_plugin_composition_config_json, serialize_plugin_composition_config_json,
@@ -355,27 +355,9 @@ impl ExperimentPacketComposition for PluginCompositionConfig {
         config_json: &str,
         outer_json: &str,
     ) -> Result<(ExperimentBundle, Self, ExperimentArtifactBundle)> {
-        let inner = crate::experiment::deserialize_experiment_bundle_json(inner_json)?;
-        let inner_validation = validate_experiment_bundle(&inner);
-        if !inner_validation.valid {
-            return Err(ZkBenchError::validation(
-                "plugin_composition_packet.inner_bundle",
-                format!("inner bundle is invalid: {:?}", inner_validation.issues),
-            ));
-        }
-        if serialize_experiment_bundle_json(&inner)? != inner_json {
-            return Err(ZkBenchError::validation(
-                "plugin_composition_packet.inner_bytes",
-                "inner bundle bytes are not the canonical serialization",
-            ));
-        }
-        let outer = deserialize_experiment_artifact_bundle_json(outer_json)?;
-        if serialize_experiment_artifact_bundle_json(&outer)? != outer_json {
-            return Err(ZkBenchError::validation(
-                "plugin_composition_packet.outer_bytes",
-                "outer bundle bytes are not the canonical serialization",
-            ));
-        }
+        let inner = ValidatedExperimentBundle::from_canonical_json(inner_json)?.into_bundle();
+        let outer =
+            ValidatedExperimentArtifactBundle::from_canonical_json(outer_json)?.into_bundle();
         let config = deserialize_plugin_composition_config_json(config_json)?;
         if config.serialize_config_json()? != config_json {
             return Err(ZkBenchError::validation(

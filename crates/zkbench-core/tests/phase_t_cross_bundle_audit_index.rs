@@ -1044,7 +1044,10 @@ fn cross_bundle_outputs_reject_partial_unexpected_and_protected_roots() {
 fn cross_bundle_outputs_reject_relative_absolute_protected_overlap() {
     let request = simple_cross_bundle_request();
     let view = build_local_audit_index_cross_bundle_view(&request).expect("view builds");
-    let relative_protected_root = std::path::PathBuf::from("target/phase-t-cross-bundle-source");
+    let relative_protected_root = std::path::PathBuf::from(format!(
+        "target/phase-t-cross-bundle-source-{}",
+        std::process::id()
+    ));
     let relative_output_root = relative_protected_root.join("cross-bundle-audit-index");
     let absolute_protected_root = std::env::current_dir()
         .expect("current dir")

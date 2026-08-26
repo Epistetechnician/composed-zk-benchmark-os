@@ -98,6 +98,7 @@ Surface DSL
 | [docs/09-mutation-engine.md](docs/09-mutation-engine.md) | Mutation taxonomy, verdicts, triage, provenance. |
 | [docs/10-scoring-rubric.md](docs/10-scoring-rubric.md) | Separate performance and soundness scoring with claim-boundary warnings. |
 | [docs/11-validation-gates.md](docs/11-validation-gates.md) | Docs-only validation and future gate ladder. |
+| [docs/research/repo-package-manager-contract-v1.md](docs/research/repo-package-manager-contract-v1.md) | Repository-local pnpm gate contract, including default and all-features Rust verification. |
 | [docs/12-task-list.md](docs/12-task-list.md) | Phased execution plan from docs to benchmark packs. |
 | [docs/13-semantics-oracles-and-claim-boundaries.md](docs/13-semantics-oracles-and-claim-boundaries.md) | Semantic spine, oracle model, result matrix, claim boundary levels. |
 | [docs/14-phase-b-implementation-notes.md](docs/14-phase-b-implementation-notes.md) | Phase B/C local Rust foundation notes and limitations. |
@@ -2754,3 +2755,313 @@ unauthorized without a separately reviewed adoption phase. See
 It performs no execution, serving, benchmarking, network, process, or
 filesystem I/O, adopts no candidate technology, changes no deployment, and
 creates no claim above `Level0DesignNote`.
+
+## Continual-Learning Update Governance Contract
+
+The named state slice `continual-learning-update-governance-v1` adds a local,
+digest-only lifecycle contract for tenant-scoped model-update candidates. It
+binds source-event scope, consent, safety and utility non-regression, canary
+outcomes, optimistic parent checks, append-only promotion, quarantine, and
+non-destructive rollback. It carries no model weights, runs no model, changes
+no deployment, and grants no runtime authority. See
+[docs/research/continual-learning/38-v19-update-governance-protocol.md](docs/research/continual-learning/38-v19-update-governance-protocol.md).
+
+## Continual-Learning Source Admission
+
+The named state slice `continual-learning-source-admission-v1` adds the local
+source-to-update-data boundary immediately before V19. It admits only
+digest-bound, raw-content-free receipts for one tenant and update window,
+rejecting duplicates, conflicts, scope mismatches, explicit quality
+quarantine, unknown quality, and declared poisoning markers before emitting a
+deterministic V19-compatible update-data digest. It does not verify source
+identity, quality, expertise, poisoning, consent authority, model behavior, or
+deployment. See
+[docs/research/continual-learning/39-v20-source-admission-protocol.md](docs/research/continual-learning/39-v20-source-admission-protocol.md).
+
+## Continual-Learning Fork Topology
+
+The named state slice `continual-learning-fork-topology-v1` adds the
+digest-only persistent topology required before actual continual parameter
+updates: one shared model lineage, isolated tenant heads, explicit reviewed
+tenant-to-shared merge proposals, non-destructive rollback, and metadata-only
+portable lineage manifests. It stores no weights, executes no training or
+inference, and grants no deployment authority. See
+[docs/research/continual-learning/40-v21-fork-topology-protocol.md](docs/research/continual-learning/40-v21-fork-topology-protocol.md).
+
+## Continual-Learning Runtime Execution
+
+The named state slice `continual-learning-runtime-execution-v22` loads the
+already-cached MLX checkpoint through the real local inference seam, runs a
+bounded probe, and emits an externally stored model/runtime receipt with
+offline and non-training flags. Independent readback validates the receipt;
+this is local runtime evidence, not a production or scientific claim. See
+[docs/research/continual-learning/41-v22-runtime-execution-protocol.md](docs/research/continual-learning/41-v22-runtime-execution-protocol.md).
+
+## Continual-Learning Independent Execution
+
+The named state slice `continual-learning-independent-replication-v23` runs
+fixed seed/order cases in separate subprocesses and validates each result in a
+separate process. It is a local independent-execution campaign, not accepted
+evidence or provider validation. See
+[docs/research/continual-learning/42-v23-independent-replication-protocol.md](docs/research/continual-learning/42-v23-independent-replication-protocol.md).
+
+## Continual-Learning Provider and Production Validation
+
+The named state slice `continual-learning-provider-production-validation-v24`
+connects only through the existing feature-gated Phala/dstack operator-live
+client. Live execution requires explicit operator acknowledgment, a bounded
+target, an out-of-band credential source, redacted artifacts, and rollback and
+acceptance records. See
+[docs/research/continual-learning/43-v24-provider-production-validation-protocol.md](docs/research/continual-learning/43-v24-provider-production-validation-protocol.md).
+
+## Continual-Learning Task-Routed Adapter-Bank Candidate
+
+The named state slice `continual-learning-candidate-task-routed-adapter-bank-v26`
+evaluates an append-only fresh adapter per task with exact task-token routing
+against shared sequential and replay baselines. Three fresh seed/order cases
+passed independent local validation and the preregistered held-out gates.
+This is bounded local candidate evidence, not shared-replay learning,
+production validation, or a general continual-learning claim. See
+[docs/research/continual-learning/46-v26-task-routed-adapter-bank-candidate-record.md](docs/research/continual-learning/46-v26-task-routed-adapter-bank-candidate-record.md).
+
+## Continual-Learning Second-Model Replication
+
+The named state slice `continual-learning-replication-task-routed-adapter-bank-v27`
+reuses the V26 route contract against a separately cached Llama-3.2-1B model
+after an offline runtime-receipt preflight. All three corrected cases were
+structurally valid but failed target routed-bank acquisition and retention at
+`2/8`; read-only diagnosis classified this as target-task non-acquisition,
+with constant T0 outputs, not demonstrated forgetting. No second-model,
+provider, or production claim is promoted. See
+[docs/research/continual-learning/48-v27-second-model-replication-record.md](docs/research/continual-learning/48-v27-second-model-replication-record.md)
+and
+[docs/research/continual-learning/49-v27-failure-diagnosis.md](docs/research/continual-learning/49-v27-failure-diagnosis.md).
+
+## Continual-Learning Model Eligibility Preflight
+
+The named state slice `continual-learning-model-eligibility-preflight-v28`
+adds an inference-only gate before future retention campaigns. It requires
+every task adapter to beat its own no-update train baseline, T0 train and
+held-out floors of `6/8`, and nonconstant target output. V26 and V27 both fail
+this broader eligibility gate for different reasons; no new retention run is
+authorized until it passes. See
+[docs/research/continual-learning/50-v28-model-eligibility-preflight.md](docs/research/continual-learning/50-v28-model-eligibility-preflight.md).
+
+## Continual-Learning Model-Candidate Runtime Preflight
+
+The named state slice `continual-learning-model-candidate-runtime-preflight-v29`
+validated the complete cached Qwen3.6 model through the offline MLX runtime
+seam and independent receipt validator. Its learning eligibility remains
+unproven because the bounded 160-step acquisition attempt did not complete.
+See
+[docs/research/continual-learning/51-v29-model-candidate-runtime-preflight.md](docs/research/continual-learning/51-v29-model-candidate-runtime-preflight.md).
+
+## Continual-Learning V30 Raw-Text Parity Repair
+
+The named state slice `continual-learning-model-acquisition-eligibility-v30`
+tests raw-text train/evaluation parity against the failed Qwen3.6 acquisition
+boundary. The complete durable rerun is independently validated but remains
+ineligible: T0 reaches `4/8` on train and held-out facts, while T1--T3 remain
+at `2/8`; no retention or promotion claim is emitted. See
+[docs/research/continual-learning/52-v30-raw-text-parity-repair-record.md](docs/research/continual-learning/52-v30-raw-text-parity-repair-record.md).
+
+## Continual-Learning V31 Resumable Acquisition Control Plane
+
+The named state slice `continual-learning-model-acquisition-eligibility-v31-resumable`
+validates V30 task artifacts as immutable input, records per-task status and
+resource receipts, and stops before assessment. The executed receipt is
+independently valid with all four task artifacts available, but remains
+`eligible: false` and does not authorize retention, provider, production, or
+scientific claims. See
+[docs/research/continual-learning/53-v31-resumable-acquisition-control-plane.md](docs/research/continual-learning/53-v31-resumable-acquisition-control-plane.md).
+
+## Continual-Learning V32 Qwen2.5 Acquisition Eligibility
+
+The named state slice `continual-learning-qwen25-acquisition-eligibility-v32`
+ran three fixed Qwen2.5 acquisition-only cases with independent validation.
+Two passed and one failed the all-task acquisition gate; the campaign is
+valid but ineligible and does not authorize retention or promotion. See
+[docs/research/continual-learning/54-v32-qwen25-acquisition-eligibility-record.md](docs/research/continual-learning/54-v32-qwen25-acquisition-eligibility-record.md).
+
+## Continual-Learning V33 Qwen2.5 Acquisition Diagnosis
+
+The named state slice `continual-learning-diagnosis-qwen25-acquisition-v33`
+read-only diagnoses V32 as non-target acquisition instability, with robust
+T0 acquisition and no retention or promotion authorization. See
+[docs/research/continual-learning/55-v33-qwen25-acquisition-diagnosis.md](docs/research/continual-learning/55-v33-qwen25-acquisition-diagnosis.md).
+
+## Continual-Learning V34 Qwen2.5 Raw-Text Acquisition Repair
+
+The named state slice `continual-learning-qwen25-raw-text-acquisition-v34`
+tests one raw-text, unmasked-label serialization change against that
+diagnosis, while preserving the exact route-bound task and assessment
+contract. Three fresh fixed cases are independently validated before campaign
+aggregation. The phase remains acquisition-only: no retention, provider,
+production, or general continual-learning claim is authorized. See
+[docs/research/continual-learning/56-v34-qwen25-raw-text-acquisition-record.md](docs/research/continual-learning/56-v34-qwen25-raw-text-acquisition-record.md).
+
+## Continual-Learning V35 Cross-Campaign Diagnosis
+
+The named state slice `continual-learning-cross-campaign-diagnosis-v35`
+compares independently validated V32 and V34 receipts. V34 is consistent
+with improved non-target stability (`9/9` versus `7/9`), but target T0 remains
+seed-sensitive and both campaigns are `2/3` eligible. The disjoint-seed
+comparison is not causal proof. No training, retention, provider, or
+production work occurred. See
+[docs/research/continual-learning/57-v35-cross-campaign-diagnosis.md](docs/research/continual-learning/57-v35-cross-campaign-diagnosis.md).
+
+## Continual-Learning V36 T0 Seed-Factorial Diagnosis
+
+The named state slice `continual-learning-qwen25-t0-seed-factorial-diagnosis-v36`
+separates task-split seed from optimizer seed in two controlled target-only
+arms. The model, raw-text format, route contract, budget, and readout remain
+fixed. This is a local diagnosis only; no retention, provider, or production
+execution is authorized. See
+[docs/research/continual-learning/58-v36-t0-seed-factorial-diagnosis.md](docs/research/continual-learning/58-v36-t0-seed-factorial-diagnosis.md).
+
+## Continual-Learning V37 Fixed-Optimizer Acquisition Preflight
+
+The named state slice `continual-learning-qwen25-fixed-optimizer-acquisition-v37`
+validates the V36 optimizer-seed diagnosis at full four-task scale with one
+frozen optimizer-seed policy. It is post-diagnosis repair validation, not
+independent confirmation, and does not authorize retention, provider, or
+production execution. See
+[docs/research/continual-learning/59-v37-fixed-optimizer-acquisition-record.md](docs/research/continual-learning/59-v37-fixed-optimizer-acquisition-record.md).
+
+## Continual-Learning V38 Fixed-Optimizer Retention Preflight
+
+The named state slice `continual-learning-qwen25-fixed-optimizer-retention-v38`
+consumes only independently validated V37 acquisition artifacts and compares
+immutable task-routed adapters with raw-text naive and bounded-replay
+sequential updates. Its primary metric is replay retention minus naive
+retention. The slice remains local retention evidence only; provider,
+production, second-model, and accepted-scientific-evidence claims remain
+closed. See
+[docs/research/continual-learning/60-v38-fixed-optimizer-retention-record.md](docs/research/continual-learning/60-v38-fixed-optimizer-retention-record.md).
+
+## Continual-Learning V39 Task-Order Retention Replication
+
+The named state slice `continual-learning-qwen25-fixed-optimizer-order-replication-v39`
+crosses the V38 task seeds with three frozen noncanonical task orders. It
+re-executes the retention panel with the same local model/runtime seam and
+primary replay-minus-naive metric. This remains order-replication evidence
+below general continual-learning, provider, and production claims. See
+[docs/research/continual-learning/61-v39-order-replication-record.md](docs/research/continual-learning/61-v39-order-replication-record.md).
+
+## Continual-Learning V40 Fresh-Task Acquisition Eligibility
+
+The named state slice `continual-learning-qwen25-fresh-fixed-optimizer-acquisition-v40`
+executes the separately frozen V37 repair policy on fresh task seeds
+`20260859`, `20260860`, and `20260861`. It keeps the cached Qwen2.5 model,
+raw-text route-bound prompt, fixed optimizer seed base, task order, update
+budget, and acquisition gates unchanged. Retention is considered only after
+campaign-wide acquisition eligibility; provider and production execution stay
+closed. See
+[docs/research/continual-learning/62-v40-fresh-acquisition-record.md](docs/research/continual-learning/62-v40-fresh-acquisition-record.md).
+
+## Continual-Learning V40 Fresh-Task Retention Preflight
+
+The named state slice `continual-learning-qwen25-fresh-fixed-optimizer-retention-v40`
+consumes only the durable, campaign-eligible V40 acquisition source. It
+re-executes the V38 naive, bounded-replay, immutable-bank, interference, and
+recovery panel for the same three fresh task seeds. The primary metric remains
+replay retention minus naive retention; provider and production claims remain
+closed. The acquisition and retention results are recorded together in
+[docs/research/continual-learning/62-v40-fresh-acquisition-record.md](docs/research/continual-learning/62-v40-fresh-acquisition-record.md).
+
+## Continual-Learning V41 Fresh-Task Order Retention Replication
+
+The named state slice `continual-learning-qwen25-fresh-fixed-optimizer-order-retention-v41`
+crosses the eligible V40 fresh task seeds with frozen noncanonical orders
+`0213`, `0312`, and `0132`. It reuses only the durable V40 acquisition source
+and preserves the V40 retention gates. This remains same-model local order
+replication, not second-model, provider, production, or general scientific
+evidence. See
+[docs/research/continual-learning/63-v41-order-retention-record.md](docs/research/continual-learning/63-v41-order-retention-record.md).
+
+## Continual-Learning V46 Codebook-Alignment Counterfactual Boundary
+
+The named state slice `continual-learning-llama-codebook-alignment-counterfactual-v46`
+freezes a docs-first paired counterfactual for the unresolved V45 task-0
+codebook hypothesis. It changes only the target mapping across fresh task
+seeds, binds identical underlying facts across arms, and keeps the cached
+Llama model, optimizer, route prompt, and training budget fixed. This boundary
+creates no model run or scientific evidence; provider and production claims
+remain closed. See
+[docs/research/continual-learning/68-v46-llama-codebook-alignment-counterfactual-boundary.md](docs/research/continual-learning/68-v46-llama-codebook-alignment-counterfactual-boundary.md).
+
+## Continual-Learning V47 Codebook-Alignment Counterfactual Execution
+
+The named state slice `continual-learning-llama-codebook-alignment-counterfactual-execution-v47`
+executes only the frozen V46 paired arms against the cached Llama checkpoint.
+It uses fresh task seeds, target shifts `0` and `1`, separate adapters,
+paired-fact digests, offline flags, and independent validation. It stops after
+the six acquisition arms; retention, provider, production, and positive
+promotion remain closed. See
+[docs/research/continual-learning/69-v47-llama-codebook-alignment-counterfactual-execution.md](docs/research/continual-learning/69-v47-llama-codebook-alignment-counterfactual-execution.md).
+
+## Continual-Learning Qwen Inference-Time Recirculation V1
+
+The named state slice `continual-learning-qwen-inference-recirculation-v1`
+implements the paper-style inference-time deep-to-shallow residual recurrence
+against the cached Qwen2.5-0.5B-Instruct-4bit checkpoint. It freezes the model,
+uses offline token-by-token KV-cached execution, selects a source/destination
+pair on fixed fit text, and evaluates once on disjoint fixed assessment text.
+The independently validated `r3` artifact shows a local feasibility signal,
+not a Gemma3 replication, accepted scientific evidence, a general Qwen claim,
+or provider/production readiness. See
+[docs/research/continual-learning/70-qwen-inference-recirculation-v1.md](docs/research/continual-learning/70-qwen-inference-recirculation-v1.md).
+
+## Continual-Learning Qwen Inference-Time Recirculation V2
+
+The named state slice `continual-learning-qwen-inference-recirculation-v2`
+extends V1 to 12 fit and 12 disjoint assessment prose sequences extracted from
+six repository-owned Markdown sources, with source-byte and text-unit custody.
+It keeps the cached Qwen2.5 checkpoint and frozen inference mechanism unchanged,
+requires manual/native zero-alpha parity, and independently validates the locked
+assessment repeat. The canonical `r2` artifact passed independent validation,
+but the locked recirculation assessment was negative: mean NLL increased by
+`0.001677023`. This remains broader local feasibility evidence only; it is not
+a paper replication, a general continual-learning claim, or provider and
+production readiness. See the
+[V2 boundary](docs/research/continual-learning/71-qwen-inference-recirculation-v2-boundary.md)
+and [V2 execution record](docs/research/continual-learning/72-qwen-inference-recirculation-v2-execution.md).
+
+## Continual-Learning Qwen Inference-Time Recirculation V3
+
+The named state slice `continual-learning-qwen-inference-recirculation-v3`
+holds a paper-aligned alpha sweep over the unchanged V2 Qwen mechanism and
+document-disjoint corpus. It evaluates the four source/destination pairs at
+alphas `0.04`, `0.07`, `0.10`, and `0.16`, selects on fit text only, and locks
+the assessment before repeating it. The independently validated result selects
+`source=12`, `destination=5`, `alpha=0.04` and lowers assessment mean NLL by
+`0.001299182` on 575 target tokens; six of twelve sequences improve and six
+worsen. This is a small local feasibility signal, not proof of recirculation,
+a paper replication, a general Qwen result, or provider/production readiness.
+See
+[docs/research/continual-learning/73-qwen-inference-recirculation-v3.md](docs/research/continual-learning/73-qwen-inference-recirculation-v3.md).
+
+## Continual-Learning Qwen Inference-Time Recirculation V4
+
+The named state slice `continual-learning-qwen-inference-recirculation-v4`
+keeps the V3 Qwen mechanism, layer grid, alpha grid, fit-only selection, and
+locked repeat fixed while moving to eight fresh repository documents: 16 fit
+and 16 assessment sequences with source and unit digest custody. The
+independently validated result selects `source=12`, `destination=5`,
+`alpha=0.07` and lowers assessment mean NLL by `0.000453699` over 860 target
+tokens; 10 of 16 sequences improve and 6 worsen. This is directional local
+feasibility evidence, not proof of recirculation, a paper replication, a
+general Qwen result, or provider/production readiness. See
+[docs/research/continual-learning/74-qwen-inference-recirculation-v4.md](docs/research/continual-learning/74-qwen-inference-recirculation-v4.md).
+
+## Continual-Learning Qwen Inference-Time Recirculation V5
+
+The named state slice `continual-learning-qwen-inference-recirculation-v5`
+locks V4's fit-selected `(source=12, destination=5, alpha=0.07)` before
+evaluating eight new repository documents. On the 16-sequence assessment,
+the transferred configuration increased mean NLL by `0.007892118` over 1,355
+target tokens; 5 sequences improved and 11 worsened. The transfer gate is
+therefore negative. This is valid local transfer evidence, not proof of
+recirculation, a paper replication, a general Qwen result, or provider/
+production readiness. See
+[docs/research/continual-learning/75-qwen-inference-recirculation-v5.md](docs/research/continual-learning/75-qwen-inference-recirculation-v5.md).

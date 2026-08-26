@@ -4,6 +4,7 @@
 // - `benchmark-os-experiment-bundle-integrity-v1`
 // - `benchmark-os-plugin-output-binding-v1`
 // - `benchmark-os-validated-plugin-output-value-v1`
+// - `benchmark-os-experiment-bundle-validated-readback-v1`
 // - `benchmark-os-experiment-plugin-factory-catalog-v1`
 // - `benchmark-os-plugin-registry-descriptor-only-separation-v1`
 
@@ -14,6 +15,7 @@ use zkbench_core::{
     ExperimentBundleValidationIssueKind, ExperimentPlugin, ExperimentPluginDescriptor,
     ExperimentPluginFactory, ExperimentPluginFactoryCatalog, ExperimentPluginRegistry,
     LocalJsonExperimentPlugin, MeasurementStatus, MechanismMeasurementKind, MetricKind,
+    ValidatedExperimentBundle,
 };
 
 #[test]
@@ -108,6 +110,29 @@ fn bundle_json_and_digest_are_deterministic_and_round_trip() {
         deserialize_experiment_bundle_json(&first_json).expect("bundle should deserialize"),
         first
     );
+    assert_eq!(
+        ValidatedExperimentBundle::from_canonical_json(&first_json)
+            .expect("canonical bundle should validate")
+            .bundle(),
+        &first
+    );
+}
+
+#[test]
+fn validated_bundle_readback_rejects_noncanonical_and_semantically_invalid_json() {
+    let bundle = LocalJsonExperimentPlugin::baseline()
+        .expect("local plugin should construct")
+        .run()
+        .expect("bundle should emit");
+    let json = serialize_experiment_bundle_json(&bundle).expect("bundle should serialize");
+    assert!(ValidatedExperimentBundle::from_canonical_json(&format!(" {json}")).is_err());
+
+    let mut invalid = bundle;
+    invalid.report.claim_boundary =
+        zkbench_core::ClaimBoundary::Level2ReproducibleBenchmarkArtifact;
+    let invalid_json = serialize_experiment_bundle_json(&invalid)
+        .expect("semantically invalid bundle should still serialize");
+    assert!(ValidatedExperimentBundle::from_canonical_json(&invalid_json).is_err());
 }
 
 #[test]
