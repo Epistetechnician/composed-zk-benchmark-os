@@ -59,6 +59,13 @@ protected output roots, source ordering, and Level0 claim ceilings. This
 remains local presentation regression evidence only; it does not elevate
 benchmark, proof, production, or external-evidence claims.
 
+The local reporting-chain E2E regression now also tampers a temporary score
+report and verifies that failed pack readiness remains failed and visible
+through readiness output, report-bundle rendering, and audit-index readback,
+while every escalation flag remains false. This is local failure-preservation
+and claim-boundary regression evidence only; it does not elevate benchmark,
+proof, production, or external-evidence claims.
+
 The shared `zkbench-core` soak report-bundle root state slice now rejects empty
 roots before report-bundle directory inspection or manifest access. This remains
 local filesystem-safety regression evidence only; it does not elevate benchmark,
