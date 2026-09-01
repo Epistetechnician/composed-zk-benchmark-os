@@ -1,0 +1,24 @@
+{
+  "schema": "gemma3-fineweb-edu-replication-v27-independent-review-rejection",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v27",
+  "protocol_sha256": "966ad4a195f675dfb54e72331e6a5fe3c06ba1b7ad7753000795f94fd7740171",
+  "review_packet_sha256": "f32901d0f92a775f0207bb33dacbf703143527e228d8ad265e64efb6e41306fd",
+  "implementation_manifest_sha256": "9b6c57055f2b20aedd20193c8d9c7b7ccd8830b7fdf895cd62d6ca5a98a79f8e",
+  "reviewer": "OpenAI Codex independent static reviewer",
+  "reviewed_at_utc": "2026-08-31T06:31:14Z",
+  "effects_run": false,
+  "review_decision": "REJECT",
+  "findings": {
+    "custody_exact_pinned_data_identity": false,
+    "fit_assessment_prior_pilot_disjointness": true,
+    "locked_configuration_and_paper_target_treatment": true,
+    "controls_and_frozen_weight_behavior": true,
+    "exact_bootstrap_and_uncertainty_rule": true,
+    "aggregate_per_document_retention_and_validator_behavior": true,
+    "v1_v2_v3_v4_rejections_preserved_and_prohibited_actions_enforced": true
+  },
+  "material_findings": [
+    "Model-snapshot rollback is not reliable: materialize_model_snapshot freezes files and directories to 0444/0555 before publication, but failure cleanup calls shutil.rmtree without restoring directory write permission. A rename race or post-publication verification failure can therefore leave a failed staging or published snapshot, violating the required transactional rollback and discard guarantee."
+  ],
+  "disposition": "V27 sealed without an acceptance receipt, acquisition, model effects, or published result. The recirculation replication branch remains closed pending a materially new reviewed protocol identity."
+}

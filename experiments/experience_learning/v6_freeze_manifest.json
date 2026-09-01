@@ -1,0 +1,17 @@
+{
+  "schema_version": "oaklab.cup.v6.freeze_manifest.v1",
+  "state_slice": "oaklab-experience-learning-constrained-update-policy-v6",
+  "files": [
+    {"path": "AGENTS.md", "sha256": "f80ac0cde545dc27ce4cbb88ce8ab1f4bed02724b2eb7b6618f4ccefd976cdc3"},
+    {"path": "experiments/experience_learning/v6_protocol_spec.json", "sha256": "999793806303d3fccaa8ff157c3fcc14cb17b89d70d7e1d466ee12f8e600f788"},
+    {"path": "experiments/experience_learning/v6_compiled_protocol.json", "sha256": "0fe519e537bd00d70619c913d2251541a1eae5df794b14fde189da7d01e14932"},
+    {"path": "experiments/experience_learning/compile_v6_protocol.py", "sha256": "1fc84644db9e6a283afcd5c8a65a77ac623a9d82dd208c21e031380f7831b17e"},
+    {"path": "experiments/experience_learning/validate_v6_protocol_compilation.py", "sha256": "e49fafcc828e7e80a55ccc8b6013ea4979415e264111ee82604f7a2f86af04c9"},
+    {"path": "experiments/experience_learning/tests/test_v6_protocol_compiler.py", "sha256": "fba5f0f94380913865b5b8aab4c567521f0c8ee7d38352c7dfcf1ea2b8a86921"},
+    {"path": "docs/research/experience-learning/39-oaklab-v6-protocol-compiler.md", "sha256": "74bf07c4a0ec6959442f28fa5cbbff6bfbb60957a9100077066a69be381980a9"}
+  ],
+  "assessment_materialization_state": "absent",
+  "implementation_before_review": false,
+  "provider_execution": "not_authorized",
+  "manifest_digest_rule": "SHA-256 of exact UTF-8 bytes with this field omitted; no self-reference"
+}

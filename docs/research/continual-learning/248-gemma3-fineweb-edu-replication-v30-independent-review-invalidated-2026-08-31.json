@@ -1,0 +1,17 @@
+{
+  "schema": "gemma3-fineweb-edu-replication-v30-independent-review-invalidated",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v30",
+  "protocol_sha256": "9dfc3f54aa9458e7962881ce5594aa6050359b81a75ec9bd463213e912d81f8c",
+  "review_packet_sha256": "52869a726047672d26e0c6d12a9c03d6ae7cb13e62f0af2a6980f7aed5e49f89",
+  "implementation_manifest_sha256": "334cb20a32d1353ba8f4f8ee9de4b7c8cb77d298be60b60ccd4dacf873627853",
+  "reviewer": "Codex independent static reviewer",
+  "reviewed_at_utc": "2026-08-31T06:55:07Z",
+  "review_report_valid": false,
+  "effects_run": false,
+  "review_decision": "INVALIDATED",
+  "material_findings": [
+    "The independent review became stale because a reviewed V30 byte changed during the review. The stale report was discarded and cannot support an acceptance receipt.",
+    "No V30 acceptance receipt, acquisition, model effect, or result was created. V30 is closed pending a fresh protocol identity and a stable review freeze."
+  ],
+  "disposition": "V30 sealed without an acceptance receipt, acquisition, model effects, or published result. Its current files remain historical inputs only and are not approved protocol."
+}

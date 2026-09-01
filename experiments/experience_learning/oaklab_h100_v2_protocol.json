@@ -1,0 +1,36 @@
+{
+  "schema": "oaklab-h100-replication-v2-protocol",
+  "state_slice": "oaklab-experience-learning-h100-replication-v2",
+  "protocol_version": "2.0.0",
+  "estimand": {
+    "name": "paired_post_washout_block_regret_difference",
+    "formula": "E[R(policy)-R(sgd_b1)]",
+    "arm_assignment": "episode_once",
+    "propensity_num": 1,
+    "propensity_den": 2,
+    "washout_blocks": 1,
+    "post_washout_blocks": 32,
+    "items_per_block": 128,
+    "carryover": "state_reset_episode_boundary_and_blockwise_reporting"
+  },
+  "controller": {
+    "name": "lagged_cross_fitted_selective_credit",
+    "decision_inputs": ["previous_block_residual", "previous_block_uncertainty", "previous_block_resource_counters"],
+    "current_outcome_access": false,
+    "replay": false,
+    "reshuffle": false,
+    "hidden_accumulation": false,
+    "threshold": 0.25,
+    "transition_table_digest": "TO_BE_COMPILED"
+  },
+  "arms": ["sgd_b1", "lagged_selective_credit"],
+  "stream_families": ["noisy_mnist", "event_camera_or_sensor"],
+  "synthetic_qualification_families": ["predictable_noise", "delayed_reward", "feature_relevance_drift", "event_sparsity"],
+  "split": {"fit": "document_or_stream_disjoint", "tune": "document_or_stream_disjoint", "assessment": "document_or_stream_disjoint"},
+  "statistics": {"paired_test": "two_sided_randomization_test", "multiplicity": "holm", "planned_power": 0.8, "minimum_effect": 0.05, "bootstrap_resamples": 10000, "bootstrap_seed_mode": "sha256_counter"},
+  "resource_gate": {"operations": "non_inferior", "parameter_updates": "non_inferior", "storage_bytes": "non_inferior", "wall_clock_latency": "non_inferior", "measured_joules_per_event": "non_inferior"},
+  "provider": {"name": "givemeanode", "node_type": "h100-1", "job_mode": "batch", "network_during_effects": false, "hard_usd_ceiling_required": true, "cost_receipt_required": true, "stop_receipt_required": true},
+  "result_root": {"mode": "closed_world", "symlinks": false, "extra_paths": "reject", "required_receipts": ["campaign_manifest", "provider_allocation", "provider_cost", "provider_stop", "raw_energy_trace", "joule_integration", "independent_validator"]},
+  "execution": {"implementation_before_review": false, "synthetic_before_tune_lock": true, "real_before_synthetic_candidate": false, "assessment_before_independent_review": false, "effects_run": false},
+  "manifest_sha256": "TO_BE_COMPILED"
+}

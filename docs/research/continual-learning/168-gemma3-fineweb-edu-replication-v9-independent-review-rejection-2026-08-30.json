@@ -1,0 +1,46 @@
+{
+  "effects_run": false,
+  "findings": {
+    "aggregate_per_document_retention_and_validator_behavior": true,
+    "controls_and_frozen_weight_behavior": true,
+    "custody_exact_pinned_data_identity": true,
+    "exact_bootstrap_and_uncertainty_rule": true,
+    "fit_assessment_prior_pilot_disjointness": true,
+    "locked_configuration_and_paper_target_treatment": true,
+    "v1_v2_v3_v4_rejections_preserved_and_prohibited_actions_enforced": false
+  },
+  "implementation_manifest_sha256": "c831f6679f24ab4f647435b76b67dd7b7d6006964acb889fb81b36200d65d96f",
+  "material_findings": [
+    {
+      "evidence": "_review adds review_sha256 and review to c.snapshot_code(), while _assert_review passes that enlarged mapping to c.assert_code_snapshot(). The comparator requires exact equality with snapshot_code(), so stage_corpus and run_campaign abort before tokenizer loading.",
+      "file": "experiments/continual_learning/stage_and_run_gemma3_fineweb_edu_replication_v9.py",
+      "finding_key": "v1_v2_v3_v4_rejections_preserved_and_prohibited_actions_enforced",
+      "lines": [
+        68,
+        74,
+        77,
+        78,
+        763
+      ],
+      "minimal_remedy": "Keep review metadata separate from the code snapshot or make _assert_review compare only the snapshot_code-shaped fields, and add a regression test for enriched review snapshots."
+    }
+  ],
+  "protocol_sha256": "32bcdb5c449453fe311e0fcaccbfa160172360abcae68d533c5e2cabffffb536",
+  "record_sha256": "350f7bb42af4e78ec3f89b9ad4b1c6fd8bb04649a5c023e5fdbc189f8ca8966e",
+  "review_decision": "REJECT",
+  "review_packet_sha256": "b5e75229374991ca205a796af6e0f1c7fb061df9176fdad30492a8aa62ef6376",
+  "reviewed_at_utc": "2026-08-30T15:53:32Z",
+  "reviewed_files": [
+    "docs/research/continual-learning/166-gemma3-fineweb-edu-replication-v9-protocol.md",
+    "docs/research/continual-learning/167-gemma3-fineweb-edu-replication-v9-review-packet.md",
+    "experiments/continual_learning/gemma3_fineweb_edu_replication_v9_contract.py",
+    "experiments/continual_learning/prepare_gemma3_fineweb_edu_replication_v9.py",
+    "experiments/continual_learning/validate_gemma3_fineweb_edu_replication_v9.py",
+    "experiments/continual_learning/stage_and_run_gemma3_fineweb_edu_replication_v9.py",
+    "experiments/continual_learning/tests/test_gemma3_fineweb_edu_replication_v9.py"
+  ],
+  "reviewer": "codex-independent-static-reviewer",
+  "schema": "gemma3-fineweb-edu-replication-v9-independent-review-rejection",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v9"
+}
+

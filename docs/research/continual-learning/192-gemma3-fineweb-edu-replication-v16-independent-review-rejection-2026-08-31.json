@@ -1,0 +1,15 @@
+{
+  "schema": "gemma3-fineweb-edu-replication-v16-independent-review-rejection",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v16",
+  "protocol_sha256": "311697866fb9243b8a85b0ec51327b457d10b8624c4110ce772bdbf66b30804c",
+  "review_packet_sha256": "76ee951c895c7faf6d1fa01771350aee1c0b5d78dd4094b1e1ada63dc41f95d1",
+  "implementation_manifest_sha256": "232087f2b87d578fb8a41b053686d441277b7c74849aba4b121859aadbbfa4d8",
+  "reviewer": "Codex independent static reviewer",
+  "reviewed_at_utc": "2026-08-31T04:22:46Z",
+  "effects_run": false,
+  "review_decision": "REJECT",
+  "material_findings": [
+    "The contract PRIOR_HISTORY pins the V15 rejection closure but omits the V15 protocol and review-packet bytes required by the review packet; V15 history is incomplete."
+  ],
+  "disposition": "V16 sealed without an acceptance receipt, acquisition, model effects, or published result. A fresh V17 identity is required for correction."
+}

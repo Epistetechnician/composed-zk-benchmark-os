@@ -99,6 +99,41 @@ Surface DSL
 | [docs/10-scoring-rubric.md](docs/10-scoring-rubric.md) | Separate performance and soundness scoring with claim-boundary warnings. |
 | [docs/11-validation-gates.md](docs/11-validation-gates.md) | Docs-only validation and future gate ladder. |
 | [docs/research/repo-package-manager-contract-v1.md](docs/research/repo-package-manager-contract-v1.md) | Repository-local pnpm gate contract, including default and all-features Rust verification. |
+| [experiments/experience_learning/README.md](experiments/experience_learning/README.md) | Oak Lab experience-stream baselines: SGD/Adam batch controls, IDBD-family learners, replay/EWC/plasticity guard, sparse event-driven execution, deterministic streams, and independent result validation. |
+| [docs/research/experience-learning/01-oaklab-experience-learning-baselines-v1.md](docs/research/experience-learning/01-oaklab-experience-learning-baselines-v1.md) | V1 protocol, equations, metric endpoints, batch-one/event accounting, and local claim ceiling for the experience-learning lane. |
+| [docs/research/experience-learning/02-oaklab-experience-learning-benchmark-v2.md](docs/research/experience-learning/02-oaklab-experience-learning-benchmark-v2.md) | V2 sealed hyperparameters, multi-seed statistics, noise/oracle controls, Pareto publication gate, custody adapter, and measured-energy boundary. |
+| [docs/research/experience-learning/03-oaklab-real-data-custody-v1.md](docs/research/experience-learning/03-oaklab-real-data-custody-v1.md) | Immutable external custody receipt for AWGN n-MNIST, UCI HAR, UCI household power, and EDHT21 AEDAT event panels with independent readback. |
+| [docs/research/experience-learning/04-oaklab-backend-parity-v1.md](docs/research/experience-learning/04-oaklab-backend-parity-v1.md) | Dense CPU, sparse CPU, optional CUDA GPU, and event-driven backend contract with digest-bound real-panel receipts. |
+| [docs/research/experience-learning/05-oaklab-energy-measurement-v1.md](docs/research/experience-learning/05-oaklab-energy-measurement-v1.md) | Declared macOS `powermetrics` CPU path, trapezoidal power integration, and fail-closed privilege gate. |
+| [docs/research/experience-learning/06-oaklab-plasticity-guard-fresh-cohort-v1.md](docs/research/experience-learning/06-oaklab-plasticity-guard-fresh-cohort-v1.md) | Preregistered power-analysis plan and independent fresh-cohort plasticity-guard assessment receipts. |
+| [docs/research/experience-learning/07-oaklab-publication-gate-v1.md](docs/research/experience-learning/07-oaklab-publication-gate-v1.md) | Global strict publication gate requiring powered multi-stream wins and measured hardware energy. |
+| [docs/research/experience-learning/08-oaklab-powered-guard-assessment-v2.md](docs/research/experience-learning/08-oaklab-powered-guard-assessment-v2.md) | Powered 32-cohort plasticity-guard assessment and negative result. |
+| [docs/research/experience-learning/09-oaklab-real-baseline-matrix-v1.md](docs/research/experience-learning/09-oaklab-real-baseline-matrix-v1.md) | All-baseline real-panel matrix with fit/tune/assessment splits and controls. |
+| [docs/research/experience-learning/10-oaklab-real-derived-streams-v1.md](docs/research/experience-learning/10-oaklab-real-derived-streams-v1.md) | Custodied target drift, feature-relevance shift, and delayed-reward streams. |
+| [docs/research/experience-learning/11-oaklab-long-event-matrix-v1.md](docs/research/experience-learning/11-oaklab-long-event-matrix-v1.md) | Extended EDHT21 event-stream custody and matrix. |
+| [docs/research/experience-learning/12-oaklab-publication-gate-v2.md](docs/research/experience-learning/12-oaklab-publication-gate-v2.md) | Full-campaign quality/adaptation/resource/energy publication gate. |
+| [docs/research/experience-learning/13-oaklab-selective-credit-theory-v1.md](docs/research/experience-learning/13-oaklab-selective-credit-theory-v1.md) | New delayed-predictive-utility selective-credit theory; synthetic qualification is independently validated and `no_candidate`. |
+| [docs/research/experience-learning/14-oaklab-privileged-energy-followup-v2.md](docs/research/experience-learning/14-oaklab-privileged-energy-followup-v2.md) | Rechecked privileged `powermetrics` path and operator receipt contract. |
+| [docs/research/experience-learning/15-oaklab-selective-credit-theory-v2.md](docs/research/experience-learning/15-oaklab-selective-credit-theory-v2.md) | Fresh scalar temporal-utility selective-credit theory with new estimand, seeds, and prediction locking. |
+| [docs/research/experience-learning/16-oaklab-selective-credit-v2-execution-record.md](docs/research/experience-learning/16-oaklab-selective-credit-v2-execution-record.md) | Independently validated V2 qualification; `no_candidate`, real execution sealed. |
+| [docs/research/experience-learning/17-oaklab-selective-credit-v2-independent-review-gate.md](docs/research/experience-learning/17-oaklab-selective-credit-v2-independent-review-gate.md) | Independent closure-only review; execution authorization remains false. |
+| [docs/research/experience-learning/18-oaklab-selective-credit-v2-terminal-closure.md](docs/research/experience-learning/18-oaklab-selective-credit-v2-terminal-closure.md) | V2 independent closure-only review and terminal `NoCandidate` decision; real execution prohibited. |
+| [docs/research/experience-learning/19-oaklab-replication-sensitivity-v1-protocol.md](docs/research/experience-learning/19-oaklab-replication-sensitivity-v1-protocol.md) | Fresh ten-seed surviving-baseline replication and preregistered tune-only sensitivity protocol; guard remains closed. |
+| [docs/research/experience-learning/20-oaklab-replication-sensitivity-v1-execution-record.md](docs/research/experience-learning/20-oaklab-replication-sensitivity-v1-execution-record.md) | Validated synthetic sensitivity receipt; publication remains `no_candidate` pending real panels and measured joules. |
+| [docs/research/experience-learning/21-oaklab-equation-parity-v1.md](docs/research/experience-learning/21-oaklab-equation-parity-v1.md) | Independent multi-step parity receipt for published IDBD/TIDBD equations and the explicitly bounded deployment variant. |
+| [docs/research/experience-learning/22-oaklab-real-sensitivity-v1-protocol.md](docs/research/experience-learning/22-oaklab-real-sensitivity-v1-protocol.md) | Frozen fresh-custody real-panel sensitivity protocol with review-before-assessment and BH correction. |
+| [docs/research/experience-learning/23-oaklab-real-sensitivity-v1-execution-record.md](docs/research/experience-learning/23-oaklab-real-sensitivity-v1-execution-record.md) | Corrected fresh real-panel sensitivity execution; local gate result and publication-energy boundary. |
+| [docs/research/experience-learning/24-oaklab-publication-gate-v2-r5-recomputation.md](docs/research/experience-learning/24-oaklab-publication-gate-v2-r5-recomputation.md) | Recomputed strict global gate from exact real matrices, guard, and backend receipts; validated `no_candidate` without energy. |
+| [docs/research/experience-learning/25-oaklab-operator-capture-wrapper-v1.md](docs/research/experience-learning/25-oaklab-operator-capture-wrapper-v1.md) | Tested privileged capture wrapper with explicit workload/capture markers and bounded sampler cleanup. |
+| [docs/research/experience-learning/26-oaklab-publication-gate-v2-r6-independent-review-closure.md](docs/research/experience-learning/26-oaklab-publication-gate-v2-r6-independent-review-closure.md) | Independent mechanical review of the exact operator-bound campaign and terminal V2 `no_candidate` closure. |
+| [docs/research/experience-learning/27-oaklab-plasticity-guard-permanent-historical-closure.md](docs/research/experience-learning/27-oaklab-plasticity-guard-permanent-historical-closure.md) | Permanent closure of the failed plasticity guard as a historical comparator only; retuning and reuse are prohibited. |
+| [docs/research/experience-learning/28-oaklab-selective-credit-v3-protocol.md](docs/research/experience-learning/28-oaklab-selective-credit-v3-protocol.md) | Frozen V3 micro-randomized horizon-credit design submitted for review before implementation. |
+| [docs/research/experience-learning/29-oaklab-selective-credit-v3-independent-protocol-review.md](docs/research/experience-learning/29-oaklab-selective-credit-v3-independent-protocol-review.md) | Independent V3 protocol rejection with nine blocking executable-contract findings and no execution authorization. |
+| [docs/research/experience-learning/30-oaklab-selective-credit-v3-terminal-closure.md](docs/research/experience-learning/30-oaklab-selective-credit-v3-terminal-closure.md) | Terminal V3 `NoCandidate` closure before implementation; synthetic, real, energy, publication, and Astral execution were not run. |
+| [docs/research/experience-learning/31-oaklab-constrained-update-policy-v4-protocol.md](docs/research/experience-learning/31-oaklab-constrained-update-policy-v4-protocol.md) | Frozen V4 complete-policy paired estimand and resource-constrained eligibility-trace controller design. |
+| [docs/research/experience-learning/32-oaklab-constrained-update-policy-v4-review-packet.md](docs/research/experience-learning/32-oaklab-constrained-update-policy-v4-review-packet.md) | V4 fail-closed pre-implementation review checklist and authorization boundary. |
+| [docs/research/experience-learning/33-oaklab-constrained-update-policy-v4-independent-protocol-review.md](docs/research/experience-learning/33-oaklab-constrained-update-policy-v4-independent-protocol-review.md) | Independent V4 protocol rejection with eight blocking executable-contract findings. |
+| [docs/research/experience-learning/34-oaklab-constrained-update-policy-v4-terminal-closure.md](docs/research/experience-learning/34-oaklab-constrained-update-policy-v4-terminal-closure.md) | Terminal V4 `NoCandidate` closure before implementation, fit, tune, assessment, real execution, or energy measurement. |
 | [docs/12-task-list.md](docs/12-task-list.md) | Phased execution plan from docs to benchmark packs. |
 | [docs/13-semantics-oracles-and-claim-boundaries.md](docs/13-semantics-oracles-and-claim-boundaries.md) | Semantic spine, oracle model, result matrix, claim boundary levels. |
 | [docs/14-phase-b-implementation-notes.md](docs/14-phase-b-implementation-notes.md) | Phase B/C local Rust foundation notes and limitations. |
@@ -936,7 +971,7 @@ Surface DSL
 | [docs/experiment-bundle-plugin-contract-v1.md](docs/experiment-bundle-plugin-contract-v1.md) | Versioned experiment bundle, sparse mechanism ledger, typed plugin seams, two typed catalog implementations, and descriptor-only metadata registry. |
 | [docs/experiment-unit-adaptive-observability-v1.md](docs/experiment-unit-adaptive-observability-v1.md) | Fixed experiment-unit artifact slots, provenance, adaptive observability tiers, append-only mechanism history, and metric meta-evaluation. |
 | [docs/research/2607.11881-metacognition-synthesis-v1.md](docs/research/2607.11881-metacognition-synthesis-v1.md) | Survey-grounded metacognitive monitoring/reporting/control cross-system synthesis and synthetic benchmark contract boundary. |
-| [docs/research/astral-self-modeling/README.md](docs/research/astral-self-modeling/README.md) | Level 0 research project for mechanistic self-model prediction and causally validated self-correction. |
+| [docs/research/astral-self-modeling/README.md](docs/research/astral-self-modeling/README.md) | Astral status synchronization: V41 independently validated `DevelopmentNoCandidate` disposition after a fixed tune-gate failure; Stage 0C/Stage 1 remain blocked. |
 | [docs/research/astral-self-modeling/30-pretrained-lm-effect-explainer-v17.md](docs/research/astral-self-modeling/30-pretrained-lm-effect-explainer-v17.md) | V17 prospective pretrained-LM intervention-effect explainer feasibility protocol and claim boundary. |
 | [docs/research/astral-self-modeling/31-v17-execution-record.md](docs/research/astral-self-modeling/31-v17-execution-record.md) | V17 validated execution record: exact intervention plumbing and no nonlinear-telemetry candidate. |
 | [docs/research/astral-self-modeling/32-trained-lm-input-ablation-explainer-v18.md](docs/research/astral-self-modeling/32-trained-lm-input-ablation-explainer-v18.md) | V18 prospective local LoRA-trained language-model input-ablation explainer protocol. |
@@ -951,6 +986,56 @@ Surface DSL
 | [docs/research/astral-self-modeling/41-v22-execution-record.md](docs/research/astral-self-modeling/41-v22-execution-record.md) | V22 validated qualification stop with assessment unopened. |
 | [docs/research/astral-self-modeling/42-capability-tier-replication-v23.md](docs/research/astral-self-modeling/42-capability-tier-replication-v23.md) | V23 prospective fresh-concept Llama 1B perturbation replication. |
 | [docs/research/astral-self-modeling/43-v23-execution-record.md](docs/research/astral-self-modeling/43-v23-execution-record.md) | V23 validated Llama 1B qualification stop with assessment unopened. |
+| [docs/research/astral-self-modeling/80-qwen36-layer-instrument-feasibility-v38.md](docs/research/astral-self-modeling/80-qwen36-layer-instrument-feasibility-v38.md) | V38 latest executed Qwen3.6 layer-instrument feasibility slice; assessment closed and claim ceiling unchanged. |
+| [docs/research/astral-self-modeling/83-stage0c-qwen36-layer-effect-protocol-v39.md](docs/research/astral-self-modeling/83-stage0c-qwen36-layer-effect-protocol-v39.md) | Fresh V39 V38-derived Stage 0C protocol; qualification first, assessment sealed pending independent review. |
+| [docs/research/astral-self-modeling/84-v39-qualification-record-2026-08-26.md](docs/research/astral-self-modeling/84-v39-qualification-record-2026-08-26.md) | V39 qualification passed independently; local instrument feasibility only. |
+| [docs/research/astral-self-modeling/87-v39-panel-sealing-and-preassessment.md](docs/research/astral-self-modeling/87-v39-panel-sealing-and-preassessment.md) | V39 fresh Gutenberg panel and fit/tune-only preassessment; historical preassessment record with prediction lock and aggregate-only controls. |
+| [docs/research/astral-self-modeling/88-v39-independent-review-packet-record.md](docs/research/astral-self-modeling/88-v39-independent-review-packet-record.md) | V39 independent-review checklist and accepted user-attested receipt that preceded assessment. |
+| [docs/research/astral-self-modeling/89-v39-assessment-final-result-2026-08-26.md](docs/research/astral-self-modeling/89-v39-assessment-final-result-2026-08-26.md) | V39 independently validated aggregate assessment and `DevelopmentNoCandidate` final disposition; no Stage 0C/Stage 1 promotion. |
+| [docs/research/astral-self-modeling/90-stage0c-intervention-conditioned-target-protocol-v40.md](docs/research/astral-self-modeling/90-stage0c-intervention-conditioned-target-protocol-v40.md) | V40 authorized protocol through qualification and fit/tune lock; assessment remains closed pending independent review. |
+| [docs/research/astral-self-modeling/91-v40-qualification-preassessment-record-2026-08-27.md](docs/research/astral-self-modeling/91-v40-qualification-preassessment-record-2026-08-27.md) | V40 fresh corpus, panel, instrument qualification, fit/tune preassessment, early utility-gate stop, and `DevelopmentNoCandidate` final disposition; no assessment effects. |
+| [docs/research/astral-self-modeling/92-stage0c-qwen36-directional-block-protocol-v41.md](docs/research/astral-self-modeling/92-stage0c-qwen36-directional-block-protocol-v41.md) | V41 freshly authorized design-only successor; fixed signed directional-block observer, unchanged target and absolute gates, and no V40 scientific-artifact reuse. |
+| [docs/research/astral-self-modeling/93-v41-qualification-record-2026-08-27.md](docs/research/astral-self-modeling/93-v41-qualification-record-2026-08-27.md) | V41 independent Qwen3.6 instrument qualification passed against the final protocol digest. |
+| [docs/research/astral-self-modeling/94-v41-preassessment-record-2026-08-27.md](docs/research/astral-self-modeling/94-v41-preassessment-record-2026-08-27.md) | V41 fresh Gutenberg custody, panel, fit/tune lock, and fixed tune-gate failure; review and assessment remained closed at `DevelopmentNoCandidate`. |
+| [docs/research/astral-self-modeling/95-stage0c-qwen36-causal-target-reliability-protocol-v42.md](docs/research/astral-self-modeling/95-stage0c-qwen36-causal-target-reliability-protocol-v42.md) | V42 fresh two-wrapper layer-19 causal-target reliability protocol under separately authorized state slice; no V39–V41 scientific-artifact reuse. |
+| [docs/research/astral-self-modeling/96-v42-execution-record-2026-08-27.md](docs/research/astral-self-modeling/96-v42-execution-record-2026-08-27.md) | V42 independently validated corpus, qualification, panel, and aggregate-only fit/tune result; tune reliability failed and assessment stayed closed. |
+| [docs/research/astral-self-modeling/97-stage0c-qwen36-causal-target-localization-protocol-v43.md](docs/research/astral-self-modeling/97-stage0c-qwen36-causal-target-localization-protocol-v43.md) | V43 fresh three-layer final-position localization protocol under separately authorized state slice; fixed wrappers, controls, review ordering, and no prior scientific-artifact reuse. |
+| [docs/research/astral-self-modeling/98-v43-execution-record-2026-08-27.md](docs/research/astral-self-modeling/98-v43-execution-record-2026-08-27.md) | V43 qualification, corpus, panel, fit/tune, and independent validation passed; all candidate layers failed the complete tune invariance gate and assessment stayed closed. |
+| [docs/research/astral-self-modeling/99-stage0c-qwen36-causal-target-measurement-invariance-protocol-v44.md](docs/research/astral-self-modeling/99-stage0c-qwen36-causal-target-measurement-invariance-protocol-v44.md) | Fresh V44 measurement-invariance protocol: new corpus identity, three wrappers, layers 12/19/26, final/penultimate positions, unchanged controls, qualification-first execution, review ordering, and aggregate-only validation. |
+| [docs/research/astral-self-modeling/100-v44-execution-record-2026-08-27.md](docs/research/astral-self-modeling/100-v44-execution-record-2026-08-27.md) | V44 corrected qualification, corpus, panel, fit/tune, and independent validation passed; all six tune cells failed wrapper-invariance gates and assessment stayed closed. |
+| [docs/research/astral-self-modeling/101-stage0c-qwen36-response-anchored-canonical-task-protocol-v45.md](docs/research/astral-self-modeling/101-stage0c-qwen36-response-anchored-canonical-task-protocol-v45.md) | Fresh V45 response-anchored canonical-task measurement-audit authorization; fixed content anchor, signed-block ridge prediction, unchanged controls, qualification-first execution, review ordering, and no guaranteed positive outcome. |
+| [docs/research/astral-self-modeling/102-v45-execution-record-2026-08-28.md](docs/research/astral-self-modeling/102-v45-execution-record-2026-08-28.md) | V45 final-code qualification, fresh corpus/panel custody, fit/tune execution, and independent validation passed; all predictors failed fixed tune gates and assessment stayed closed at `CanonicalTaskNoCandidate`. |
+| [docs/research/astral-self-modeling/103-stage0c-qwen36-answer-aligned-causal-target-protocol-v46.md](docs/research/astral-self-modeling/103-stage0c-qwen36-answer-aligned-causal-target-protocol-v46.md) | Fresh V46 answer-aligned causal-target authorization: new Gutenberg identity, fixed response-unembedding feature, unchanged controls, qualification-first execution, prediction locking, and aggregate-only validation. |
+| [docs/research/astral-self-modeling/104-v46-execution-record-2026-08-28.md](docs/research/astral-self-modeling/104-v46-execution-record-2026-08-28.md) | V46 fresh custody, qualification, panel, fit/tune, and independent validation passed; all predictors failed complete tune gates and V46 was permanently closed at `AnswerAlignedNoCandidate`. |
+| [docs/research/astral-self-modeling/107-stage0c-cross-view-causal-state-transport-audit-v48.md](docs/research/astral-self-modeling/107-stage0c-cross-view-causal-state-transport-audit-v48.md) | V48 independently reviewed cross-view causal-state-transport rationale with a new estimand, fixed operator, power/reliability plan, fresh corpus identity, unchanged controls, prediction locking, and claim ceiling. |
+| [docs/research/astral-self-modeling/109-v48-independent-design-review-r2-2026-08-28.md](docs/research/astral-self-modeling/109-v48-independent-design-review-r2-2026-08-28.md) | V48 design review round 2 accepted the repaired null-cell algebra and implementation boundary. |
+| [docs/research/astral-self-modeling/110-stage0c-cross-view-causal-state-transport-implementation-authorization-v48.md](docs/research/astral-self-modeling/110-stage0c-cross-view-causal-state-transport-implementation-authorization-v48.md) | V48 separately authorized implementation and qualification only; assessment stayed closed pending all fixed prerequisites and independent review. |
+| [docs/research/astral-self-modeling/111-v48-execution-record-2026-08-28.md](docs/research/astral-self-modeling/111-v48-execution-record-2026-08-28.md) | V48 corrected independent repeats passed custody/retention validation but failed locked localization, prediction, and recoverability gates; final disposition `DevelopmentNoCandidate`. |
+| [docs/research/astral-self-modeling/112-astral-cumulative-evidence-synthesis-stop-v48.md](docs/research/astral-self-modeling/112-astral-cumulative-evidence-synthesis-stop-v48.md) | Cumulative V1-V48 evidence synthesis and theory audit; V48 is the terminal Astral result unless a materially stronger theory is independently reviewed and sealed. |
+| [docs/research/astral-self-modeling/116-astral-literature-coverage-and-theory-audit-v48.md](docs/research/astral-self-modeling/116-astral-literature-coverage-and-theory-audit-v48.md) | Documentation-only audit of six theoretical directions: partial coverage versus untested hypotheses, a bounded causal-abstraction/localization reopening skeleton, and no reopening of Astral execution. |
+| [docs/research/astral-self-modeling/117-astral-theory-review-packet-v48.md](docs/research/astral-self-modeling/117-astral-theory-review-packet-v48.md) | Frozen four-document theory-review packet with SHA-256 custody, independent verdict schema, and execution blocked until `ACCEPT` or `REJECT`. |
+| [docs/research/astral-self-modeling/118-astral-theory-independent-review-v48-2026-08-28.md](docs/research/astral-self-modeling/118-astral-theory-independent-review-v48-2026-08-28.md) | Separate theory-review receipt: packet custody passed, but the reopening rationale was `REJECT`ed for missing executable causal/statistical specifications; no execution authorized. |
+| [docs/research/astral-self-modeling/119-astral-theory-review-rejection-terminal-closure-v48.md](docs/research/astral-self-modeling/119-astral-theory-review-rejection-terminal-closure-v48.md) | Terminal post-review closure: Astral experimentation terminated after V48; protocol drafting, qualification, assessment, Stage 0C, and Stage 1 remain blocked. |
+| [docs/research/astral-self-modeling/astral-theory-docket-v48-closed.md](docs/research/astral-self-modeling/astral-theory-docket-v48-closed.md) | Closed Astral theory docket containing unexecuted hypotheses only; no entry authorizes a new experiment. |
+| [docs/research/astral-self-modeling/125-v4-terminal-freeze-2026-08-31.md](docs/research/astral-self-modeling/125-v4-terminal-freeze-2026-08-31.md) | V4 permanent freeze: qualification-only result, immutable scientific bytes, and no assessment receipt. |
+| [docs/research/astral-self-modeling/126-trace-completeness-gemma3-causal-feature-effects-v1-protocol.md](docs/research/astral-self-modeling/126-trace-completeness-gemma3-causal-feature-effects-v1-protocol.md) | New V1 causal feature-effects protocol with exact estimand, interventions, controls, power, locking, scrubbing, custody, and claim ceiling. |
+| [docs/research/astral-self-modeling/129-trace-completeness-gemma3-causal-feature-effects-v1-preflight-stop-2026-08-31.md](docs/research/astral-self-modeling/129-trace-completeness-gemma3-causal-feature-effects-v1-preflight-stop-2026-08-31.md) | V1 implementation/qualification packet passed local contract tests but stopped before node execution because external node, spend, and independent ACCEPT receipts are absent. |
+| [docs/research/astral-self-modeling/130-trace-completeness-gemma3-causal-feature-effects-v1-gman-admission-2026-08-31.md](docs/research/astral-self-modeling/130-trace-completeness-gemma3-causal-feature-effects-v1-gman-admission-2026-08-31.md) | V1 GiveMeANode admission record: exact H100 allocation, USD 50 ceiling, staged transfer identities, current packet digests, and the remaining independent signed ACCEPT gate. |
+| [docs/research/astral-self-modeling/131-trace-completeness-gemma3-causal-feature-effects-v1-independent-acceptance-and-launch-2026-08-31.md](docs/research/astral-self-modeling/131-trace-completeness-gemma3-causal-feature-effects-v1-independent-acceptance-and-launch-2026-08-31.md) | V1 Luna defect corrections, final packet digest, independent Ed25519 ACCEPT, accepted preflight, and exact GiveMeANode launch; no model-bearing result yet. |
+| [docs/research/astral-self-modeling/132-trace-completeness-gemma3-causal-feature-effects-v1-corrected-qualification-2026-08-31.md](docs/research/astral-self-modeling/132-trace-completeness-gemma3-causal-feature-effects-v1-corrected-qualification-2026-08-31.md) | V1 corrected append-only finalization, packet-bound Luna ACCEPT, preflight-gated GiveMeANode qualification, aggregate-only NoCandidate result, and raw-custody closure. |
+| [docs/research/astral-self-modeling/133-trace-completeness-gemma3-causal-feature-effects-v1-terminal-closure-2026-09-01.md](docs/research/astral-self-modeling/133-trace-completeness-gemma3-causal-feature-effects-v1-terminal-closure-2026-09-01.md) | V1 permanent `NoCandidate` closure; V1 scientific bytes are historical and excluded from the fresh V2 input boundary. |
+| [docs/research/astral-self-modeling/134-trace-completeness-gemma3-causal-feature-effects-v2-protocol.md](docs/research/astral-self-modeling/134-trace-completeness-gemma3-causal-feature-effects-v2-protocol.md) | Fresh V2 cross-half feature-stability estimand, exact causal operators, gates, custody, and held-out claim ceiling under independent review. |
+| [docs/research/astral-self-modeling/135-trace-completeness-gemma3-causal-feature-effects-v2-qualification-2026-09-01.md](docs/research/astral-self-modeling/135-trace-completeness-gemma3-causal-feature-effects-v2-qualification-2026-09-01.md) | V2 one-run GiveMeANode qualification: fit and stability passed, tune prediction/effect gates failed, assessment and held-out scrubbing stayed closed, and raw custody was deleted. |
+| [docs/research/astral-self-modeling/112-evidence-conditioned-multiscale-plasticity-v1.md](docs/research/astral-self-modeling/112-evidence-conditioned-multiscale-plasticity-v1.md) | Contract-only protocol for evidence-conditioned multiscale plasticity; no model-bearing execution or cryptographic proof claim. |
+| [docs/research/astral-self-modeling/113-evidence-conditioned-multiscale-plasticity-v1-execution-record-2026-08-28.md](docs/research/astral-self-modeling/113-evidence-conditioned-multiscale-plasticity-v1-execution-record-2026-08-28.md) | Contract-only evidence-conditioned multiscale plasticity mechanics: digest-bound shards and receipts, bounded waves, shadow-before-commit, rollback, and explicit nonclaims; no model or proof backend. |
+| [experiments/astral_dynamics/README.md](experiments/astral_dynamics/README.md) | Runnable contract-mechanics harness for the evidence-conditioned multiscale plasticity state slice. |
+| [experiments/astral_dynamics/README-v2.md](experiments/astral_dynamics/README-v2.md) | Exact synthetic learner and 4 x 2 x 4 factorial controller harness with equal-compute guards, prediction locking, and an independent validator. |
+| [docs/research/astral-self-modeling/114-evidence-conditioned-multiscale-plasticity-v2-protocol.md](docs/research/astral-self-modeling/114-evidence-conditioned-multiscale-plasticity-v2-protocol.md) | Frozen exact-synthetic learner protocol: one held-out adaptation endpoint, preregistered seeds/orders, taxonomy controls, waves, gating, guards, and model-bearing boundary. |
+| [docs/research/astral-self-modeling/115-evidence-conditioned-multiscale-plasticity-v2-execution-record-2026-08-28.md](docs/research/astral-self-modeling/115-evidence-conditioned-multiscale-plasticity-v2-execution-record-2026-08-28.md) | Validated 288-replicate v2 result: adaptive verification improved the deterministic/oracle synthetic endpoint; waves were discarded for this learner. |
+| [experiments/astral_dynamics/README-v3.md](experiments/astral_dynamics/README-v3.md) | Literature-informed v3 exact-synthetic factorial: fast/slow state, replay, EWC-style protection, plasticity guard, bounded schedules, measurable taxonomy controls, prediction locking, and independent validation. |
+| [docs/research/astral-self-modeling/118-evidence-conditioned-multiscale-plasticity-v3-protocol.md](docs/research/astral-self-modeling/118-evidence-conditioned-multiscale-plasticity-v3-protocol.md) | Frozen literature-informed v3 protocol with 192 cells, one primary endpoint, equal compute, hard guards, taxonomy controls, and explicit model-bearing/cryptographic boundaries. |
+| [docs/research/astral-self-modeling/119-evidence-conditioned-multiscale-plasticity-v3-execution-record-2026-08-28.md](docs/research/astral-self-modeling/119-evidence-conditioned-multiscale-plasticity-v3-execution-record-2026-08-28.md) | Validated 1,728-replicate v3 result: plasticity protection is the strongest synthetic candidate; replay, integrated coupling, dual waves, and unstable stochastic scheduling are not carried forward. |
+| [docs/research/astral-self-modeling/82-neural-chameleon-replication-v1-preflight.md](docs/research/astral-self-modeling/82-neural-chameleon-replication-v1-preflight.md) | V82 fail-closed Neural Chameleon custody preflight; required external artifacts are missing and scientific execution is unauthorized. |
 | [docs/research/catalyst-strategy/README.md](docs/research/catalyst-strategy/README.md) | Catalyst strategy operating model: market-facing loop, claim boundary, cadence, artifact index. |
 | [docs/research/catalyst-strategy/catalyst-ledger.md](docs/research/catalyst-strategy/catalyst-ledger.md) | Append-only ledger of market catalysts, statuses, and dated iterations. |
 | [docs/research/catalyst-strategy/module-sensitivity-matrix.md](docs/research/catalyst-strategy/module-sensitivity-matrix.md) | Targeting system mapping modules to catalysts and pre-declared exercise actions. |
@@ -3065,3 +3150,270 @@ therefore negative. This is valid local transfer evidence, not proof of
 recirculation, a paper replication, a general Qwen result, or provider/
 production readiness. See
 [docs/research/continual-learning/75-qwen-inference-recirculation-v5.md](docs/research/continual-learning/75-qwen-inference-recirculation-v5.md).
+
+## Continual-Learning Gemma3 Paper-Aligned Recirculation V1
+
+The named state slice `continual-learning-gemma3-paper-recirculation-v1` is
+activated for a bounded offline replication of the pretrained Gemma3 1B
+perplexity arm from the [Recirculation paper](https://arxiv.org/html/2608.17981v1).
+It uses the already-cached Gemma3 1B PT checkpoint and BF16 MLX conversion,
+requires an immutable external paper-corpus artifact root, and keeps fit,
+locked assessment, parity, controls, validator, and claim-boundary gates
+separate. Activation does not indicate that execution has started or that a
+result exists; it does not alter Astral status or authorize Astral evidence.
+See [the V1 authorization record](docs/research/continual-learning/76-gemma3-paper-recirculation-authorization-proposal-v1.md).
+
+The subsequent local pilots produced bounded NEWSROOM mechanics evidence, but
+the paper-aligned acquisition is not complete. The official OpenWebText
+manual input for TFDS `c4/webtextlike` is staged and mirrored externally; the
+required C4 `train.jsonl` and `validation.jsonl` export remains blocked on the
+Common Crawl preparation step. A separate pinned OpenWebText substitute pilot
+has completed locally; it is not exact C4 or a full paper replication. See
+[the acquisition checkpoint](docs/research/continual-learning/82-gemma3-c4-openwebtext-staging-20260827.md)
+and [the substitute execution record](docs/research/continual-learning/85-gemma3-openwebtext-substitute-execution-20260828.md).
+
+## Continual-Learning Gemma3 OpenWebText Substitute Pilot
+
+The separately named state slice
+`continual-learning-gemma3-paper-recirculation-openwebtext-substitute-v1`
+completed a bounded offline Gemma3 1B mechanics pilot using pinned
+`Skylion007/openwebtext` data. The run used 16 disjoint fit windows and 16
+disjoint assessment windows of 1024 tokens, fixed controls, frozen weights,
+and an independent validator. It selected the paper's expected `(11,4)` layer
+pair and measured a selected-minus-baseline assessment mean-NLL delta of
+`-0.071975952`. Raw data and receipts are mirrored in the dedicated
+GiveMeANode bucket `gemma3-openwebtext-substitute-v1`. The claim ceiling is
+`LocalDevelopmentGemma3OpenWebTextSubstitutePilot`; this does not establish
+exact `c4/webtextlike`, full-paper replication, general recirculation,
+benchmark evidence, or production readiness. See the [protocol](docs/research/continual-learning/84-gemma3-openwebtext-substitute-v1.md)
+and [execution record](docs/research/continual-learning/85-gemma3-openwebtext-substitute-execution-20260828.md).
+
+## Continual-Learning Gemma3 FineWeb-Edu H100 Replication V1
+
+The named state slice
+`continual-learning-gemma3-fineweb-edu-replication-h100-v1` is terminally
+closed as `ProtocolReviewRejectedNoExecution`. Its independent review found
+an invalid implementation-manifest self-digest plus missing provider
+cost/stop-receipt binding and incomplete result-root closure. No H100 job,
+provider spend, model execution, or scientific result exists. The rejection
+receipt, review record, and closure are [255](docs/research/continual-learning/255-gemma3-fineweb-edu-replication-h100-v1-independent-review-rejection.json),
+[256](docs/research/continual-learning/256-gemma3-fineweb-edu-replication-h100-v1-independent-review.md),
+and [257](docs/research/continual-learning/257-gemma3-fineweb-edu-replication-h100-v1-terminal-closure-2026-08-31.md).
+No patch, launch, benchmark, production, H100-superiority, or breakthrough
+claim is permitted under this identity. A continuation requires a fresh
+protocol identity and independent review.
+
+## Oak Lab H100 Replication V2
+
+The fresh state slice `oaklab-experience-learning-h100-replication-v2` was
+independently reviewed and terminally rejected before execution. The packet
+did not define an executable pairing rule, canonical campaign-manifest
+binding, complete provider cost/stop receipts, content/digest result-root
+validation, fit/tune/prediction locks, or measurable resource/energy gates.
+See the [protocol](docs/research/experience-learning/43-oaklab-h100-replication-v2-protocol.md),
+[review receipt](docs/research/experience-learning/45-oaklab-h100-replication-v2-independent-review.json),
+and [terminal closure](docs/research/experience-learning/47-oaklab-h100-replication-v2-terminal-closure.md).
+No model, provider, H100, energy, or scientific result exists; status remains
+`no_candidate`.
+
+## Oak Lab H100 Replication V3
+
+The fresh state slice `oaklab-experience-learning-h100-replication-v3` was
+independently reviewed and terminally rejected before execution. The review
+accepted only the paired estimand and carryover-control contract. It rejected
+canonical campaign-manifest byte validation, signed provider cost/stop
+verification, closed-world result-file content binding, fit/tune/prediction-
+lock validation, executable resource and joule gates, and execution-order or
+lane-isolation enforcement. The review ran only the five hermetic protocol
+tests. See the [protocol](docs/research/experience-learning/48-oaklab-h100-replication-v3-protocol.md),
+[review receipt](docs/research/experience-learning/50-oaklab-h100-replication-v3-independent-review.json),
+[review record](docs/research/experience-learning/51-oaklab-h100-replication-v3-independent-review.md),
+and [terminal closure](docs/research/experience-learning/52-oaklab-h100-replication-v3-terminal-closure.md).
+No model, data, provider, H100, paid job, energy trace, learner, or
+assessment effect exists; status remains `no_candidate`. No patch or retune is
+authorized under V3. Any continuation requires a fresh protocol identity,
+corrected executable contracts, a new byte freeze, and a new independent
+review. Astral remains isolated.
+
+## Oak Lab H100 Replication V4
+
+The fresh state slice `oaklab-experience-learning-h100-replication-v4` was
+independently reviewed and rejected before implementation. The packet and
+hermetic tests passed, but the validator did not fully enforce nested protocol
+semantics, provider ceiling/currency/node/interval binding, independent
+prediction-lock ordering, counter-derived resource and per-family scientific
+gates, packet-bound execution authorization, or plasticity-guard isolation.
+See the [protocol](docs/research/experience-learning/53-oaklab-h100-replication-v4-protocol.md),
+[review packet](docs/research/experience-learning/54-oaklab-h100-replication-v4-review-packet.md),
+[review receipt](docs/research/experience-learning/55-oaklab-h100-replication-v4-independent-review.json),
+[review record](docs/research/experience-learning/56-oaklab-h100-replication-v4-independent-review.md),
+and [terminal closure](docs/research/experience-learning/56-oaklab-h100-replication-v4-terminal-closure.md).
+No model, data, provider, H100, paid job, energy trace, learner, or assessment
+effect exists; status remains `no_candidate`. V4 cannot be patched or
+retuned. Any continuation requires a new protocol identity and independent
+review. Astral remains isolated.
+
+## Oak Lab H100 Replication V7
+
+The fresh state slice `oaklab-experience-learning-h100-replication-v7` is a
+new executable-contract identity after V4's terminal rejection. Its compiler
+and validator recursively enforce nested protocol semantics, provider and
+review bindings, counter-derived statistics and energy denominators, current
+packet authorization, and explicit historical-lane isolation. The packet
+validator passes and nine hermetic tests pass, but the independent packet-bound
+review rejected the identity before implementation.
+See the [protocol](docs/research/experience-learning/57-oaklab-h100-replication-v7-protocol.md),
+[review packet](docs/research/experience-learning/58-oaklab-h100-replication-v7-review-packet.md),
+and [compiled protocol](experiments/experience_learning/oaklab_h100_v7_compiled_protocol.json),
+[independent review receipt](docs/research/experience-learning/59-oaklab-h100-replication-v7-independent-review.json),
+[review record](docs/research/experience-learning/59-oaklab-h100-replication-v7-independent-review.md),
+and [terminal closure](docs/research/experience-learning/60-oaklab-h100-replication-v7-terminal-closure.md).
+The sole failed finding was `execution_authorization_current_packet_bindings`:
+the authorization plan did not bind its campaign manifest digest to an actual
+validated campaign manifest. Status is
+`ProtocolReviewRejectedNoExecution` / `no_candidate`; no provider, H100,
+model, data, energy, assessment, or publication work is authorized under V7.
+Astral remains isolated.
+
+## Oak Lab H100 Replication V8
+
+The fresh state slice `oaklab-experience-learning-h100-replication-v8` is a
+new protocol identity after V7's terminal rejection. V8 adds a materialized,
+canonical campaign-manifest artifact with current source, compiler, validator,
+tests, `AGENTS.md`, compiled-file, and review-packet bindings. Execution
+authorization must load and validate the actual campaign manifest at the plan's
+path; a caller-supplied digest is insufficient. The artifact is explicitly
+pre-execution and does not authorize provider work.
+
+The local packet validator passes, the campaign artifact validates, and the
+hermetic suite reports `11 passed`. The packet-bound independent review is
+`ACCEPT`, with a valid Ed25519 signature and self-digest. The bounded synthetic
+qualification then ran on six deterministic families and 48 locked seeds; its
+independently validated result is `no_candidate`. Loss and adaptation/resource
+predicates are derived from raw qualification rows and counters. No fit/tune
+lock, assessment rows, real stream, provider, H100, spend, energy, or
+publication claim exists or is authorized. V7, V6, Phase 836, and the
+plasticity guard remain closed; Astral remains isolated.
+
+See the [V8 protocol](docs/research/experience-learning/61-oaklab-h100-replication-v8-protocol.md),
+[review packet](docs/research/experience-learning/62-oaklab-h100-replication-v8-review-packet.md),
+[campaign-manifest artifact](experiments/experience_learning/oaklab_h100_v8_campaign_manifest.json),
+and [compiled protocol](experiments/experience_learning/oaklab_h100_v8_compiled_protocol.json),
+[independent review receipt](docs/research/experience-learning/63-oaklab-h100-replication-v8-independent-review.json),
+[synthetic qualification](experiments/experience_learning/oaklab_h100_v8_synthetic_qualification.json),
+and [synthetic qualification record](docs/research/experience-learning/64-oaklab-h100-replication-v8-synthetic-qualification.md).
+V8 is terminally closed at `no_candidate`; see the [terminal closure](docs/research/experience-learning/65-oaklab-h100-replication-v8-terminal-closure.md).
+
+## Oak Lab H100 Replication V9
+
+V9 introduced a segment-bounded cost-adjusted update policy with explicit
+controller-memory accounting. Its independent packet-bound review returned a
+cryptographically valid `REJECT` because the frozen campaign artifact bound a
+stale `AGENTS.md` digest. No implementation or synthetic execution occurred.
+V9 is terminally closed as `ProtocolReviewRejectedNoExecution`; see the
+[protocol](docs/research/experience-learning/66-oaklab-h100-replication-v9-protocol.md),
+[review packet](docs/research/experience-learning/67-oaklab-h100-replication-v9-review-packet.md),
+[rejection receipt](docs/research/experience-learning/68-oaklab-h100-replication-v9-independent-review.json),
+and [terminal closure](docs/research/experience-learning/69-oaklab-h100-replication-v9-terminal-closure.md).
+No provider, H100, spend, energy, assessment, SOTA, or publication work is
+authorized. Astral remains isolated.
+
+## Continual-Learning Recursive Update-Policy V1
+
+The state slice `continual-learning-recursive-update-policy-v1` defined a
+protocol-only, model-free package for testing whether update-policy improvement
+compounds across fresh generations. Its independent review rejected the
+package before execution for incomplete rollback, custody, receipt,
+plasticity-reserve, order-guard, and result-freezing invariants. See the
+[V1 review record](docs/research/continual-learning/138-recursive-update-policy-v1-independent-review-2026-08-29.json).
+
+The separate V2 state slice `continual-learning-recursive-update-policy-v2`
+repaired those defects with a causal reserve equation, stable
+procedural-memory prototypes, real checkpoint restoration, exact custody-root
+enforcement, canonical review receipts, an explicit base-state digest, and
+mechanically recomputed classification. Its approved fixed synthetic campaign
+was independently validated and classified `NoCandidate`: recursive selection
+lost to random selection (`U=-0.0011354145513036448`) and compounding remained
+below threshold (`G=0.004179722339390019`), although all hard guards passed.
+This closes the V2 protocol identity under its preregistered rules. No
+model-bearing execution, reversible adapters, GiveMeANode, Astral integration,
+or ZK/PQC custody work is authorized. See the [V2 protocol](docs/research/continual-learning/139-recursive-update-policy-v2-protocol.md),
+[V2 execution record](docs/research/continual-learning/140-recursive-update-policy-v2-execution-record-2026-08-29.md),
+and [V2 contract](.autoresearch/continual-learning-recursive-update-policy-v2/contract.md).
+
+## Continual-Learning Plasticity Guard With Reversible Adapters V1
+
+The separately authorized state slice
+`continual-learning-plasticity-guard-reversible-adapter-v1` tests the surviving
+synthetic `plasticity_guard` mechanism on the already-cached Gemma3 1B PT
+checkpoint. It runs a fixed two-arm, two-seed, forward/reverse-order case
+factorial with equal LoRA budgets, per-update candidate adapters, and rollback
+by active-adapter pointer. The base model remains byte-identical and is never
+merged. The primary endpoint is paired held-out adaptation improvement after a
+fixed update budget; forgetting, calibration, repeatability, adapter restore,
+custody, and independent validation are hard guards. Astral integration and
+ZK/PQC backends are not run. The completed bounded run classified as
+`DevelopmentCandidate` with a `0.064052287` NLL/token paired endpoint;
+independent validation passed for both external roots and the base model
+manifest remained unchanged. See the [protocol](docs/research/continual-learning/89-plasticity-guard-reversible-adapter-v1-protocol.md),
+[authorization](docs/research/continual-learning/90-plasticity-guard-reversible-adapter-v1-execution-authorization-2026-08-28.md),
+and [execution record](docs/research/continual-learning/91-plasticity-guard-reversible-adapter-v1-execution-record-2026-08-28.md).
+
+## Continual-Learning Plasticity Guard Replication V1
+
+The separately authorized state slice
+`continual-learning-plasticity-guard-replication-v1` freezes the prior result
+and runs a fresh NEWSROOM cohort with new seeds and shard orders. It compares
+an untouched-base/no-update arm, fixed cadence, and the unchanged
+`plasticity_guard` under equal disposable LoRA budgets. Absolute held-out
+improvement versus the untouched base is primary; guarded-versus-fixed is
+secondary. Base weights remain byte-identical, adapters remain reversible, and
+Astral integration is not run. See the [protocol](docs/research/continual-learning/105-plasticity-guard-replication-v1-protocol.md),
+[authorization](docs/research/continual-learning/106-plasticity-guard-replication-v1-execution-authorization-2026-08-28.md),
+and [execution record](docs/research/continual-learning/107-plasticity-guard-replication-v1-execution-record-2026-08-28.md).
+The result was `RollbackInfrastructureOnly`: the guard's absolute improvement
+versus the untouched base was `-0.041830065` NLL/token, while its secondary
+improvement over fixed cadence was `0.117647059`. It is retained only as
+rollback/safety infrastructure.
+
+## Continual-Learning Plasticity Recovery V1
+
+The separately authorized state slice
+`continual-learning-plasticity-recovery-v1` runs an exact synthetic learner
+with fresh deterministic panels and five equal-compute arms: untouched base,
+fixed adapter, bounded replay, selective low-utility reinitialization, and the
+combined policy. Tune predictions are sealed before assessment; adapter state
+is reversible and base weights remain unchanged. The local result failed the
+fixed forgetting guard for every updating arm, so no candidate was promoted.
+The external artifact, independent validator, and boundaries are recorded in
+the [protocol](docs/research/continual-learning/112-plasticity-recovery-v1-protocol.md),
+[authorization](docs/research/continual-learning/113-plasticity-recovery-v1-execution-authorization-2026-08-29.md),
+and [execution record](docs/research/continual-learning/114-plasticity-recovery-v1-execution-record-2026-08-29.md).
+GiveMeANode is not submitted without a hard USD spend ceiling; Astral and
+ZK/PQC remain not run.
+
+The read-only forgetting diagnosis found that replay lowers mean forgetting
+but does not satisfy the per-case guard, while selective reinitialization
+alone does not improve aggregate forgetting. Protected-shard, unit, replay,
+reinitialization, and order findings are recorded in
+[the diagnosis record](docs/research/continual-learning/116-plasticity-recovery-v1-forgetting-diagnosis-2026-08-29.md)
+and its external artifact. V1 remains `NoCandidate`; no new mechanism has
+been run.
+
+## Continual-Learning Plasticity Recovery V2
+
+The fresh `continual-learning-plasticity-recovery-v2` factorial tested one
+new mechanism: protected replay memory for the first four protected fit
+shards. It retained the V1 endpoint, thresholds, equal compute, reversible
+adapter boundary, sealed prediction lock, and hard guards while using fresh
+data and order seeds. Protected replay produced the strongest held-out
+improvement, `0.03220089`, but failed the unchanged per-case forgetting guard.
+V2 is `NoCandidate`; no model-bearing, GiveMeANode, Astral, or ZK/PQC work is
+authorized from this result. See the [protocol](docs/research/continual-learning/117-plasticity-recovery-v2-protocol.md),
+[authorization](docs/research/continual-learning/118-plasticity-recovery-v2-execution-authorization-2026-08-29.md),
+and [execution record](docs/research/continual-learning/119-plasticity-recovery-v2-execution-record-2026-08-29.md).
+
+The plasticity-recovery mechanism family is terminally closed as
+`NoCandidate`. Any continuation requires a materially new theory and estimand
+for the adaptation-forgetting tradeoff, with a fresh protocol, fresh guards,
+and separate authorization. See the [terminal closure record](docs/research/continual-learning/120-plasticity-recovery-family-terminal-closure-2026-08-29.md).

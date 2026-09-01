@@ -2,3 +2,18 @@
 # Keep their bytes intact and exclude them from source-text whitespace checks.
 output/pdf/statebook-whitepaper.pdf binary
 output/pdf/statebook-product-requirements.pdf binary
+
+# repo-package-manager-contract-v1: these historical protocol inputs are
+# digest-pinned; their original blank-at-EOF byte is part of the sealed hash.
+docs/research/continual-learning/143-gemma3-fineweb-edu-replication-v1-protocol.md whitespace=-blank-at-eof
+docs/research/continual-learning/157-gemma3-fineweb-edu-replication-v6-protocol.md whitespace=-blank-at-eof
+docs/research/continual-learning/158-gemma3-fineweb-edu-replication-v6-review-packet.md whitespace=-blank-at-eof
+docs/research/continual-learning/160-gemma3-fineweb-edu-replication-v7-protocol.md whitespace=-blank-at-eof
+docs/research/continual-learning/161-gemma3-fineweb-edu-replication-v7-review-packet.md whitespace=-blank-at-eof
+docs/research/continual-learning/165-gemma3-fineweb-edu-replication-v8-independent-review-rejection-2026-08-30.json whitespace=-blank-at-eof
+docs/research/continual-learning/168-gemma3-fineweb-edu-replication-v9-independent-review-rejection-2026-08-30.json whitespace=-blank-at-eof
+
+# The V3 Oak Lab protocol and historical-closure bytes are bound by the
+# independent review receipt; preserve their reviewed trailing blank line.
+docs/research/experience-learning/27-oaklab-plasticity-guard-permanent-historical-closure.md whitespace=-blank-at-eof
+docs/research/experience-learning/28-oaklab-selective-credit-v3-protocol.md whitespace=-blank-at-eof

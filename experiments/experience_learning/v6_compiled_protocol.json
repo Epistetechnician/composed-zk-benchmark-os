@@ -1,0 +1,1812 @@
+{
+  "assessment_materialization_state": "absent",
+  "boundaries": {
+    "astral": "isolated_not_run",
+    "givemeanode_h100": "requires separate operator authorization after synthetic candidate and execution review",
+    "plasticity_guard": "closed_historical_comparator_only",
+    "provider": "not_authorized_in_compiler_slice",
+    "publication": "no_candidate_until_strict_multi_family_gate"
+  },
+  "claim_ceiling": "LocalDevelopmentOakLabConstrainedUpdatePolicyV6ProtocolCompilerOnly",
+  "compiled": {
+    "ablation_execution_multiplicity": {
+      "arm_order": [
+        "fixed_sgd_b1",
+        "hcup_candidate",
+        "lambda_zero",
+        "no_dual",
+        "matched_random",
+        "always_skip",
+        "noise_floor",
+        "oracle_feature_sgd"
+      ],
+      "arm_reset": "each arm and each seed starts from zero model and zero trajectory state; no state crosses arms",
+      "confidence_interval": "95 percent normal paired interval mean(X)+/-1.959963984540054*sample_sd(X)/sqrt(n)",
+      "execution_matrix": {
+        "always_skip": {
+          "assessment": "skip",
+          "fit": "skip",
+          "tune": "skip"
+        },
+        "fixed_sgd_b1": {
+          "assessment": "locked",
+          "fit": "fixed",
+          "tune": "locked"
+        },
+        "hcup_candidate": {
+          "assessment": "locked",
+          "fit": "controller",
+          "tune": "locked"
+        },
+        "lambda_zero": {
+          "assessment": "locked",
+          "fit": "controller_lambda_0",
+          "tune": "locked"
+        },
+        "matched_random": {
+          "assessment": "locked_probability",
+          "fit": "fixed_random_probability_locked_from_candidate_fit",
+          "tune": "locked_probability"
+        },
+        "no_dual": {
+          "assessment": "locked",
+          "fit": "controller_dual_disabled",
+          "tune": "locked"
+        },
+        "noise_floor": {
+          "assessment": "fixed_noise_target",
+          "fit": "fixed_noise_target",
+          "tune": "fixed_noise_target"
+        },
+        "oracle_feature_sgd": {
+          "assessment": "locked",
+          "fit": "fixed_oracle_features",
+          "tune": "locked"
+        }
+      },
+      "gate_predicates": [
+        "primary adjusted p<=0.05 in at least two distinct non-null families",
+        "candidate mean loss is no worse than fixed SGD in every qualifying family",
+        "candidate adaptation lag is no worse in every shift family and strictly better in one",
+        "candidate operations and storage are non-inferior with a 5 percent margin",
+        "pure-noise null does not show candidate advantage"
+      ],
+      "holm_groups": [
+        {
+          "adjustment": "sort raw p by (p,comparison_key), adjusted=max(previous,min(1,(m-rank+1)*raw_p))",
+          "alternative": "candidate lower cumulative loss",
+          "comparisons": "hcup_candidate vs fixed_sgd_b1 for all six stream families",
+          "name": "primary"
+        },
+        {
+          "adjustment": "sort raw p by (p,comparison_key), adjusted=max(previous,min(1,(m-rank+1)*raw_p))",
+          "alternative": "candidate lower cumulative loss",
+          "comparisons": "hcup_candidate vs lambda_zero, no_dual, matched_random for all six families",
+          "name": "mechanism"
+        },
+        {
+          "adjustment": "sort raw p by (p,comparison_key), adjusted=max(previous,min(1,(m-rank+1)*raw_p))",
+          "alternative": "candidate lower adaptation lag",
+          "comparisons": "hcup_candidate vs fixed_sgd_b1 for drift, delayed_reward, event, and long_horizon",
+          "name": "adaptation"
+        }
+      ],
+      "matched_random_probability": "exact candidate fit apply fraction computed before tune as p_num=sum(candidate_apply), p_den=number_of_fit_rows, then reduced by gcd; no tune-derived probability",
+      "missing_rules": "missing, nonfinite, censored, or incomplete trajectories fail the arm and cannot be imputed",
+      "paired_statistic": "for each seed and family, D=mean_stream(log((candidate_loss+1e-12)/(reference_loss+1e-12))); use the statistic_formula over independent seeds; two-sided primary and one-sided mechanism/adaptation",
+      "reward_shift_control": "not an arm; forbidden because shifted reward changes the estimand; any future use requires a new protocol identity",
+      "statistic_formula": "X_seed=-D_seed for candidate-better tests; z=mean(X)/(sample_sd(X)/sqrt(n)); p_two=erfc(abs(z)/sqrt(2)); p_one=0.5*erfc(-z/sqrt(2)); n<2 or sample_sd=0 is invalid unless every X is exactly zero, in which case z=0 and p=1"
+    },
+    "adaptation_metrics": {
+      "aggregation": "aggregate the mean stream lag per seed, then compare paired seed means; never scan across a shift or attribute later recovery to an earlier shift",
+      "baseline": "median of the 16 finite losses immediately preceding the change point; if fewer than 16 rows exist, metric is invalid",
+      "censoring": "if no qualifying pair occurs before next_shift or trajectory end, lag=segment_end-change_point and censored=true",
+      "change_points": "use only generator stream segments; no inferred change points",
+      "lag": "k+16-change_point",
+      "primary_temporal_endpoint": "mean per-seed adaptation lag after each declared change point",
+      "qualification": "candidate lag no worse than reference by two rows in every qualifying shift family and strictly better in at least one delayed-reward or drift family",
+      "recovery_scan": "search adjacent eight-row windows [k,k+8) and [k+8,k+16) fully contained in the current segment; first k with both means<=threshold wins",
+      "threshold": "1.10*baseline",
+      "zero_and_nonfinite": "zero baseline is valid and yields threshold zero; empty, nonfinite, or negative losses fail closed"
+    },
+    "controller_transition_table": {
+      "action_features": {
+        "apply": "[0,pre_loss_context,event_density,budget_debt]",
+        "skip": "[1,pre_loss_context,event_density,budget_debt]"
+      },
+      "actions": [
+        "skip",
+        "apply"
+      ],
+      "constants": {
+        "apply_budget": "0.50 of eligible rows",
+        "apply_cost": "1.0 binary64",
+        "controller_alpha": "0.05 binary64",
+        "discount_gamma": "0.90 binary64",
+        "dual_alpha": "0.01 binary64",
+        "dual_max": "2.0 binary64",
+        "eligibility_lambda": "0.80 binary64",
+        "fit_exploration_probability": "1/4 exact rational"
+      },
+      "feature_formula": {
+        "budget_debt": "min(1,max(0,(cumulative_apply_cost-budget*processed_rows)/(budget*max(1,processed_rows))))",
+        "event_density": "min(1,active_event_count/dimension)",
+        "intercept": "1",
+        "pre_loss_context": "min(1,max(0,log1p(pre_update_loss)/4))"
+      },
+      "features": [
+        "intercept",
+        "pre_loss_context",
+        "event_density",
+        "budget_debt"
+      ],
+      "name": "horizon-credit constrained update policy",
+      "pending_rule": "all pending and previous fields are consumed, overwritten, or reset by an indexed row; undeclared state is invalid",
+      "q_formula": "q(action)=left_to_right_dot(theta,action_features[action])",
+      "recurrence": [
+        "delta=reward+discount_gamma*q_current-previous_q",
+        "eligibility_new=discount_gamma*eligibility_lambda*eligibility+previous_features",
+        "theta_new=theta+controller_alpha*delta*eligibility_new",
+        "dual_mu_new=clip(dual_mu+dual_alpha*(previous_cost-apply_budget),0,dual_max)",
+        "q_old_new=q_current"
+      ],
+      "reward": "-pending_loss - dual_mu*(pending_cost-apply_budget)",
+      "rhs_evaluation": "every right-hand side is evaluated from the pre-transition snapshot; updates are committed simultaneously in listed order",
+      "rows": [
+        {
+          "event": "trajectory_init",
+          "index": 0,
+          "order": "reset all trajectory and pending fields before row zero; retain theta and dual_mu only across fit trajectories",
+          "reads": [],
+          "writes": [
+            "eligibility",
+            "q_old",
+            "pending_valid",
+            "previous_action",
+            "previous_features",
+            "previous_q",
+            "previous_cost",
+            "processed_rows",
+            "cumulative_apply_cost",
+            "pending_features",
+            "pending_prediction",
+            "pending_loss",
+            "pending_event_count",
+            "pending_action",
+            "pending_cost",
+            "pending_reward",
+            "pending_terminal",
+            "pending_local_row"
+          ]
+        },
+        {
+          "event": "observe_pre_action",
+          "index": 1,
+          "order": "compute prediction and finite half-squared loss before any write or action",
+          "reads": [
+            "Experience.features",
+            "Experience.target",
+            "Experience.event_indices"
+          ],
+          "writes": [
+            "pending_prediction",
+            "pending_loss",
+            "pending_event_count",
+            "pending_features"
+          ]
+        },
+        {
+          "event": "credit_previous",
+          "index": 2,
+          "order": "if pending_valid, apply the complete recurrence using only pre-transition values; no credit on the first row",
+          "reads": [
+            "pending_valid",
+            "pending_reward",
+            "previous_features",
+            "previous_q",
+            "q_old",
+            "previous_cost",
+            "dual_mu"
+          ],
+          "writes": [
+            "eligibility",
+            "theta",
+            "q_old",
+            "dual_mu"
+          ]
+        },
+        {
+          "event": "select_action",
+          "index": 3,
+          "order": "compute q_skip and q_apply from theta before mutation; fit uses exact 1/4 hash assignment and tune/assessment use locked greedy selection",
+          "reads": [
+            "pending_features",
+            "theta",
+            "pending_loss",
+            "pending_event_count",
+            "action_hash"
+          ],
+          "writes": [
+            "pending_action",
+            "pending_cost"
+          ]
+        },
+        {
+          "event": "model_action",
+          "index": 4,
+          "order": "apply performs exactly one fixed-rate SGD update; skip performs zero parameter writes; then processed_rows=processed_rows+1 and cumulative_apply_cost=cumulative_apply_cost+pending_cost; no hidden accumulation or replay",
+          "reads": [
+            "pending_action",
+            "pending_cost",
+            "Experience.features",
+            "Experience.target",
+            "processed_rows",
+            "cumulative_apply_cost"
+          ],
+          "writes": [
+            "model_parameters",
+            "processed_rows",
+            "cumulative_apply_cost",
+            "counter_row"
+          ]
+        },
+        {
+          "event": "publish_pending",
+          "index": 5,
+          "order": "compute pending_reward=-pending_loss-dual_mu*(pending_cost-apply_budget) from the pre-transition dual snapshot, then publish every field consumed by the next row; undeclared carryover is invalid",
+          "reads": [
+            "pending_features",
+            "pending_prediction",
+            "pending_loss",
+            "pending_action",
+            "pending_cost",
+            "dual_mu",
+            "local_row"
+          ],
+          "writes": [
+            "pending_valid",
+            "previous_features",
+            "previous_q",
+            "previous_action",
+            "previous_cost",
+            "pending_reward",
+            "pending_local_row"
+          ]
+        },
+        {
+          "event": "terminal_credit",
+          "index": 6,
+          "order": "after the final row loss, set q_current=0 and gamma=0, credit the final pending action, and execute no model action",
+          "reads": [
+            "pending_valid",
+            "pending_local_row",
+            "terminal_loss"
+          ],
+          "writes": [
+            "pending_reward",
+            "theta",
+            "eligibility",
+            "dual_mu",
+            "pending_valid",
+            "pending_terminal"
+          ]
+        },
+        {
+          "event": "counter_finalize",
+          "index": 7,
+          "order": "append exactly one canonical counter row per observed row after action",
+          "reads": [
+            "counter_row"
+          ],
+          "writes": [
+            "counter_receipt"
+          ]
+        }
+      ],
+      "state_fields": [
+        [
+          "theta",
+          "float64[4]",
+          "fit_persistent",
+          "zeros"
+        ],
+        [
+          "eligibility",
+          "float64[4]",
+          "trajectory",
+          "zeros"
+        ],
+        [
+          "q_old",
+          "float64",
+          "trajectory",
+          "0"
+        ],
+        [
+          "dual_mu",
+          "float64",
+          "fit_persistent",
+          "0"
+        ],
+        [
+          "processed_rows",
+          "uint32",
+          "trajectory",
+          "0"
+        ],
+        [
+          "cumulative_apply_cost",
+          "float64",
+          "trajectory",
+          "0"
+        ],
+        [
+          "pending_valid",
+          "uint8",
+          "trajectory",
+          "0"
+        ],
+        [
+          "previous_action",
+          "uint8",
+          "trajectory",
+          "255"
+        ],
+        [
+          "previous_features",
+          "float64[4]",
+          "trajectory",
+          "zeros"
+        ],
+        [
+          "previous_q",
+          "float64",
+          "trajectory",
+          "0"
+        ],
+        [
+          "previous_cost",
+          "float64",
+          "trajectory",
+          "0"
+        ],
+        [
+          "pending_features",
+          "float64[4]",
+          "one_transition",
+          "zeros"
+        ],
+        [
+          "pending_prediction",
+          "float64",
+          "one_transition",
+          "0"
+        ],
+        [
+          "pending_loss",
+          "float64",
+          "one_transition",
+          "0"
+        ],
+        [
+          "pending_event_count",
+          "uint32",
+          "one_transition",
+          "0"
+        ],
+        [
+          "pending_action",
+          "uint8",
+          "one_transition",
+          "255"
+        ],
+        [
+          "pending_cost",
+          "float64",
+          "one_transition",
+          "0"
+        ],
+        [
+          "pending_reward",
+          "float64",
+          "one_transition",
+          "0"
+        ],
+        [
+          "pending_local_row",
+          "uint32",
+          "one_transition",
+          "0"
+        ],
+        [
+          "pending_terminal",
+          "uint8",
+          "one_transition",
+          "0"
+        ]
+      ],
+      "terminal_rule": "trajectory length is 256 rows; row 255 records loss and terminal credit only, with no model action"
+    },
+    "generator_roster": {
+      "cohort_order": [
+        "fit",
+        "tune",
+        "assessment"
+      ],
+      "cohort_seeds": {
+        "assessment": {
+          "count": 48,
+          "start": 6000
+        },
+        "fit": {
+          "count": 48,
+          "start": 4000
+        },
+        "tune": {
+          "count": 24,
+          "start": 5000
+        }
+      },
+      "draw_policy": "each row consumes every typed roster entry in ordinal order and repeat order; conditional semantics select, mask, or zero already-drawn values; redraw is forbidden",
+      "draw_roster": {
+        "delayed_reward_v6": [
+          [
+            0,
+            "cue",
+            "rademacher",
+            1
+          ],
+          [
+            1,
+            "unused_cue",
+            "rademacher",
+            1
+          ],
+          [
+            2,
+            "target_noise",
+            "normal12",
+            1
+          ]
+        ],
+        "drifting_relevance_v6": [
+          [
+            0,
+            "feature_uniform",
+            "uniform53",
+            8
+          ],
+          [
+            1,
+            "target_noise",
+            "normal12",
+            1
+          ]
+        ],
+        "event_sensor_v6": [
+          [
+            0,
+            "event_index",
+            "uniform53",
+            3
+          ],
+          [
+            1,
+            "event_polarity",
+            "rademacher",
+            3
+          ],
+          [
+            2,
+            "target_noise",
+            "normal12",
+            1
+          ]
+        ],
+        "long_horizon_v6": [
+          [
+            0,
+            "feature_uniform",
+            "uniform53",
+            8
+          ],
+          [
+            1,
+            "target_noise",
+            "normal12",
+            1
+          ]
+        ],
+        "pure_noise_v6": [
+          [
+            0,
+            "activity",
+            "uniform53",
+            16
+          ],
+          [
+            1,
+            "polarity",
+            "rademacher",
+            16
+          ],
+          [
+            2,
+            "target_noise",
+            "normal12",
+            1
+          ]
+        ],
+        "sparse_signal_v6": [
+          [
+            0,
+            "signal",
+            "rademacher",
+            1
+          ],
+          [
+            1,
+            "activity",
+            "uniform53",
+            15
+          ],
+          [
+            2,
+            "polarity",
+            "rademacher",
+            15
+          ],
+          [
+            3,
+            "target_noise",
+            "normal12",
+            1
+          ]
+        ]
+      },
+      "family_map": {
+        "delayed_reward": [
+          "delayed_reward_v6"
+        ],
+        "drift": [
+          "drifting_relevance_v6"
+        ],
+        "event": [
+          "event_sensor_v6"
+        ],
+        "long_horizon": [
+          "long_horizon_v6"
+        ],
+        "null": [
+          "pure_noise_v6"
+        ],
+        "predictable_noise": [
+          "sparse_signal_v6"
+        ]
+      },
+      "generator_digest_rule": "SHA-256(canonical_json of stream_order, family_map, source_id_frame, draw_policy, draw_roster, streams, cohort_seeds, rows_per_trajectory)",
+      "rows_per_trajectory": 256,
+      "source_id_frame": [
+        "LP32(cohort_id_utf8)",
+        "LP32(stream_id_utf8)",
+        "uint64_le(data_seed)",
+        "uint32_le(local_row)"
+      ],
+      "stream_order": [
+        "sparse_signal_v6",
+        "drifting_relevance_v6",
+        "delayed_reward_v6",
+        "event_sensor_v6",
+        "long_horizon_v6",
+        "pure_noise_v6"
+      ],
+      "streams": {
+        "delayed_reward_v6": {
+          "dimension": 4,
+          "draw_mapping": "cue=rademacher(repeat=0) and cached at episode phase zero; unused_cue=rademacher(repeat=0) always consumed; z=normal12(draw_ordinal=2)",
+          "draw_order": "cue, unused_cue, target_noise on every row",
+          "equation": "32 episodes of eight rows; cue cached at phase zero; y=0 for phase<7 else sign*cue+0.05*z; sign flips at episode 16",
+          "events": "nonzero feature indices",
+          "family": "delayed_reward",
+          "oracle_features": [
+            0,
+            2,
+            3
+          ],
+          "segments": [
+            0,
+            128,
+            256
+          ]
+        },
+        "drifting_relevance_v6": {
+          "dimension": 8,
+          "draw_mapping": "for i=0..7 u_i=uniform53(repeat=i) and x_i=2*u_i-1; z=normal12(draw_ordinal=1)",
+          "draw_order": "feature_uniform[0..7], target_noise",
+          "equation": "xi=2*uniform_i-1; y=(2*x0 if row<128 else -2*x1)+0.1*z",
+          "events": "all indices",
+          "family": "drift",
+          "oracle_features": [
+            0,
+            1
+          ],
+          "segments": [
+            0,
+            128,
+            256
+          ]
+        },
+        "event_sensor_v6": {
+          "dimension": 64,
+          "draw_mapping": "index_j=min(63,floor(uniform53(repeat=j)*64)); polarity_j=rademacher(repeat=j); z=normal12(draw_ordinal=2)",
+          "draw_order": "event_index[0..2], event_polarity[0..2], target_noise",
+          "equation": "three drawn events are deduplicated by summing polarity; x0 is forced to (-1,+1) by row parity after all draws; y=(1 before row128 else -1)*x0+0.15*z",
+          "events": "sorted unique nonzero indices",
+          "family": "event",
+          "oracle_features": [
+            0
+          ],
+          "segments": [
+            0,
+            128,
+            256
+          ]
+        },
+        "long_horizon_v6": {
+          "dimension": 8,
+          "draw_mapping": "for i=0..7 u_i=uniform53(repeat=i) and x_i=2*u_i-1; z=normal12(draw_ordinal=1)",
+          "draw_order": "feature_uniform[0..7], target_noise",
+          "equation": "xi=2*uniform_i-1; y=sign(row)*ring_buffer(x0,row-32)+0.1*z with sign=+1 for row<128 and -1 otherwise; ring prefill is zero",
+          "events": "all indices",
+          "family": "long_horizon",
+          "oracle_features": [
+            0
+          ],
+          "segments": [
+            0,
+            128,
+            256
+          ]
+        },
+        "pure_noise_v6": {
+          "dimension": 16,
+          "draw_mapping": "activity_i=uniform53(repeat=i); polarity_i=rademacher(repeat=i); z=normal12(draw_ordinal=2)",
+          "draw_order": "activity[0..15], polarity[0..15], target_noise",
+          "equation": "xi=(activity_i<0.15)*polarity_i; y=target_noise independent of x",
+          "events": "sorted active indices",
+          "family": "null",
+          "oracle_features": [],
+          "segments": [
+            0,
+            256
+          ]
+        },
+        "sparse_signal_v6": {
+          "dimension": 16,
+          "draw_mapping": "signal=rademacher(repeat=0); for j=0..14 activity_(1+j)=uniform53(repeat=j) and polarity_(1+j)=rademacher(repeat=j); z=normal12(draw_ordinal=3)",
+          "draw_order": "signal, activity[1..15], polarity[1..15], target_noise",
+          "equation": "x0=signal; xi=(activity_i<0.15)*polarity_i; y=1.5*x0+0.25*z",
+          "events": "sorted indices with nonzero x",
+          "family": "predictable_noise",
+          "oracle_features": [
+            0
+          ],
+          "segments": [
+            0,
+            256
+          ]
+        }
+      }
+    },
+    "hash_prng_transcript": {
+      "action_hash": {
+        "action_seed_hex": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+        "domain": "oaklab.cup.v6.action.v1",
+        "fields": [
+          "protocol_digest_raw_32",
+          "action_seed_raw_32",
+          "cohort_id_utf8",
+          "stream_id_utf8",
+          "data_seed_uint64_le",
+          "local_row_uint32_le"
+        ],
+        "fit_only": true,
+        "probability": {
+          "comparison": "apply iff uint256_be(SHA256(frame)) < threshold",
+          "p_den": 4,
+          "p_num": 1,
+          "threshold": "floor((p_num*2^256)/p_den)"
+        },
+        "tune_assessment": "greedy argmax q with apply winning exact ties"
+      },
+      "canonical_json": "UTF-8 JSON with sort_keys=true, separators=(',',':'), ensure_ascii=true, allow_nan=false",
+      "digest_encoding": "lowercase hexadecimal SHA-256, 64 ASCII characters; digest fields decode to raw 32 bytes before framing",
+      "fixed_width": {
+        "float64": "IEEE-754 binary64 little-endian",
+        "uint32": "little-endian four bytes",
+        "uint64": "little-endian eight bytes",
+        "uint8": "little-endian one byte"
+      },
+      "generator_draw_frame": [
+        "LP32('oaklab.cup.v6.generator-draw.v1')",
+        "cohort_id_utf8",
+        "stream_id_utf8",
+        "uint64_le(data_seed)",
+        "uint32_le(local_row)",
+        "uint32_le(draw_ordinal)",
+        "LP32(draw_label_utf8)",
+        "uint64_le(raw_uint64)"
+      ],
+      "lp32": "u32 big-endian byte length followed by payload bytes; payload length must be <= 2^32-1",
+      "protocol_seed_frame": [
+        "LP32('oaklab.cup.v6.prng.seed.v1')",
+        "protocol_digest_raw_32",
+        "LP32(cohort_id)",
+        "LP32(stream_id)",
+        "uint64_le(data_seed)"
+      ],
+      "source_file_bytes": "UTF-8 without BOM, LF line endings, exactly one final LF; source digest is over exact bytes",
+      "splitmix64": {
+        "index": "min(dimension-1,floor(uniform53()*dimension))",
+        "next_uint64": [
+          "state=(state+0x9E3779B97F4A7C15) mod 2^64",
+          "z=state",
+          "z=((z xor (z>>30))*0xBF58476D1CE4E5B9) mod 2^64",
+          "z=((z xor (z>>27))*0x94D049BB133111EB) mod 2^64",
+          "return (z xor (z>>31)) mod 2^64"
+        ],
+        "normal12": "sum((next_uint64()>>11)/9007199254740992 for exactly 12 draws)-6",
+        "state_initialization": "uint64_le(SHA256(seed_frame)[0:8])",
+        "uniform53": "(next_uint64()>>11)/9007199254740992"
+      },
+      "transcript_schema": {
+        "fields": [
+          [
+            "draw_ordinal",
+            "uint32_le",
+            true
+          ],
+          [
+            "draw_label",
+            "utf8",
+            true
+          ],
+          [
+            "raw_uint64",
+            "uint64_le",
+            true
+          ],
+          [
+            "derived_value",
+            "typed_value",
+            true
+          ]
+        ],
+        "ordering": "ascending draw ordinal; every roster entry is consumed exactly once per repeat; no conditional draws",
+        "test_vector": "compiler emits seed frame, initial state, first 12 raw outputs, first uniform53, first normal12, and first action hash for fit/sparse_signal_v6/4000/0"
+      }
+    },
+    "lock_counter_control_schemas": {
+      "assessment_absence": {
+        "fields": [
+          [
+            "schema_version",
+            "utf8",
+            true
+          ],
+          [
+            "materialization_state",
+            "enum(absent)",
+            true
+          ],
+          [
+            "assessment_root_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "directory_listing_sha256",
+            "sha256_digest",
+            true
+          ],
+          [
+            "entry_count",
+            "uint64_zero",
+            true
+          ],
+          [
+            "materialization_counter",
+            "uint64_zero",
+            true
+          ],
+          [
+            "lock_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "validator_digest",
+            "sha256_digest",
+            true
+          ]
+        ],
+        "rule": "assessment files, rows, effects, and result payloads must not exist before tune lock and review authorization",
+        "schema_id": "oaklab.cup.v6.assessment_absence.v1"
+      },
+      "control_result": {
+        "fields": [
+          [
+            "arm",
+            "utf8",
+            true
+          ],
+          [
+            "family",
+            "utf8",
+            true
+          ],
+          [
+            "stream",
+            "utf8",
+            true
+          ],
+          [
+            "seed_count",
+            "uint32",
+            true
+          ],
+          [
+            "endpoint",
+            "enum(loss|adaptation_lag|operations|storage)",
+            true
+          ],
+          [
+            "paired_statistic",
+            "float64",
+            true
+          ],
+          [
+            "raw_p_value",
+            "float64",
+            true
+          ],
+          [
+            "holm_group",
+            "utf8",
+            true
+          ],
+          [
+            "holm_adjusted_p",
+            "float64",
+            true
+          ],
+          [
+            "direction_pass",
+            "boolean",
+            true
+          ],
+          [
+            "gate_pass",
+            "boolean",
+            true
+          ]
+        ],
+        "schema_id": "oaklab.cup.v6.control_result.v1"
+      },
+      "counter_row": {
+        "fields": [
+          [
+            "phase",
+            "uint8",
+            true
+          ],
+          [
+            "cohort",
+            "uint8",
+            true
+          ],
+          [
+            "stream_id_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "data_seed",
+            "uint64",
+            true
+          ],
+          [
+            "local_row",
+            "uint32",
+            true
+          ],
+          [
+            "arm_id",
+            "uint8",
+            true
+          ],
+          [
+            "updates",
+            "uint64",
+            true
+          ],
+          [
+            "forward_ops",
+            "uint64",
+            true
+          ],
+          [
+            "gradient_ops",
+            "uint64",
+            true
+          ],
+          [
+            "model_update_ops",
+            "uint64",
+            true
+          ],
+          [
+            "controller_ops",
+            "uint64",
+            true
+          ],
+          [
+            "parameter_writes",
+            "uint64",
+            true
+          ],
+          [
+            "event_count",
+            "uint64",
+            true
+          ],
+          [
+            "active_synaptic_ops",
+            "uint64",
+            true
+          ],
+          [
+            "logical_state_bytes",
+            "uint64",
+            true
+          ],
+          [
+            "replay_bytes",
+            "uint64",
+            true
+          ],
+          [
+            "latency_ns",
+            "uint64",
+            true
+          ],
+          [
+            "energy_joules",
+            "float64_or_absent",
+            true
+          ]
+        ],
+        "schema_id": "oaklab.cup.v6.counter_row.v1"
+      },
+      "fit_lock": {
+        "fields": [
+          [
+            "protocol_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "review_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "compiler_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "freeze_manifest_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "implementation_source_digests",
+            "map[utf8,sha256_digest]",
+            true
+          ],
+          [
+            "runtime_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "generator_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "fit_manifest_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "theta_binary64_hex",
+            "hex[4]",
+            true
+          ],
+          [
+            "dual_mu_binary64_hex",
+            "hex",
+            true
+          ],
+          [
+            "matched_random_p_num",
+            "uint64",
+            true
+          ],
+          [
+            "matched_random_p_den",
+            "uint64",
+            true
+          ],
+          [
+            "counter_schema_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "fit_result_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "gate_boolean_table",
+            "map[utf8,bool]",
+            true
+          ],
+          [
+            "decision",
+            "enum(locked|rejected)",
+            true
+          ]
+        ],
+        "schema_id": "oaklab.cup.v6.fit_lock.v1"
+      },
+      "protocol_compile_receipt": {
+        "fields": [
+          [
+            "schema_version",
+            "utf8",
+            true
+          ],
+          [
+            "state_slice",
+            "utf8",
+            true
+          ],
+          [
+            "source_spec_sha256",
+            "sha256_digest",
+            true
+          ],
+          [
+            "compiled_protocol_sha256",
+            "sha256_digest",
+            true
+          ],
+          [
+            "section_digests",
+            "map[utf8,sha256_digest]",
+            true
+          ],
+          [
+            "freeze_manifest_sha256",
+            "sha256_digest",
+            true
+          ],
+          [
+            "agents_sha256",
+            "sha256_digest",
+            true
+          ],
+          [
+            "compiler_sha256",
+            "sha256_digest",
+            true
+          ],
+          [
+            "validator_sha256",
+            "sha256_digest",
+            true
+          ],
+          [
+            "test_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "assessment_materialization_state",
+            "enum(absent)",
+            true
+          ]
+        ],
+        "schema_id": "oaklab.cup.v6.protocol_compile_receipt.v1"
+      },
+      "schema_policy": "all fields are required, ordered, typed, and unknown fields reject validation",
+      "tune_lock": {
+        "fields": [
+          [
+            "protocol_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "fit_lock_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "tune_manifest_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "locked_hyperparameters",
+            "map[utf8,typed_value]",
+            true
+          ],
+          [
+            "prediction_lock_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "tune_result_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "gate_boolean_table",
+            "map[utf8,bool]",
+            true
+          ],
+          [
+            "decision",
+            "enum(locked|rejected)",
+            true
+          ]
+        ],
+        "schema_id": "oaklab.cup.v6.tune_lock.v1"
+      },
+      "validator_receipt": {
+        "fields": [
+          [
+            "decision",
+            "enum(accepted|rejected)",
+            true
+          ],
+          [
+            "source_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "compiled_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "section_recomputations",
+            "map[utf8,sha256_digest]",
+            true
+          ],
+          [
+            "freeze_manifest_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "agents_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "review_digest",
+            "sha256_digest",
+            true
+          ],
+          [
+            "schema_checks",
+            "map[utf8,bool]",
+            true
+          ],
+          [
+            "unknown_field_checks",
+            "map[utf8,bool]",
+            true
+          ],
+          [
+            "assessment_absence_check",
+            "boolean",
+            true
+          ],
+          [
+            "rejection_reasons",
+            "list[utf8]",
+            true
+          ],
+          [
+            "claim_ceiling",
+            "utf8",
+            true
+          ]
+        ],
+        "schema_id": "oaklab.cup.v6.validator_receipt.v1"
+      }
+    },
+    "operation_and_byte_algebra": {
+      "byte_layouts": {
+        "controller_fit_state": {
+          "alignment": "none",
+          "bytes": "40",
+          "fields": [
+            [
+              "theta",
+              "float64[4]",
+              "0",
+              "32"
+            ],
+            [
+              "dual_mu",
+              "float64",
+              "32",
+              "8"
+            ]
+          ]
+        },
+        "controller_trajectory_state": {
+          "alignment": "none",
+          "bytes": "102",
+          "fields": [
+            [
+              "eligibility",
+              "float64[4]",
+              "0",
+              "32"
+            ],
+            [
+              "q_old",
+              "float64",
+              "32",
+              "8"
+            ],
+            [
+              "pending_valid",
+              "uint8",
+              "40",
+              "1"
+            ],
+            [
+              "previous_action",
+              "uint8",
+              "41",
+              "1"
+            ],
+            [
+              "previous_features",
+              "float64[4]",
+              "42",
+              "32"
+            ],
+            [
+              "previous_q",
+              "float64",
+              "74",
+              "8"
+            ],
+            [
+              "previous_cost",
+              "float64",
+              "82",
+              "8"
+            ],
+            [
+              "processed_rows",
+              "uint32",
+              "90",
+              "4"
+            ],
+            [
+              "cumulative_apply_cost",
+              "float64",
+              "94",
+              "8"
+            ]
+          ]
+        },
+        "counter_row": {
+          "alignment": "none",
+          "bytes": "143",
+          "fields": [
+            [
+              "phase",
+              "uint8",
+              "0",
+              "1"
+            ],
+            [
+              "cohort",
+              "uint8",
+              "1",
+              "1"
+            ],
+            [
+              "stream_id_digest",
+              "sha256_digest",
+              "2",
+              "32"
+            ],
+            [
+              "data_seed",
+              "uint64",
+              "34",
+              "8"
+            ],
+            [
+              "local_row",
+              "uint32",
+              "42",
+              "4"
+            ],
+            [
+              "arm_id",
+              "uint8",
+              "46",
+              "1"
+            ],
+            [
+              "updates",
+              "uint64",
+              "47",
+              "8"
+            ],
+            [
+              "forward_ops",
+              "uint64",
+              "55",
+              "8"
+            ],
+            [
+              "gradient_ops",
+              "uint64",
+              "63",
+              "8"
+            ],
+            [
+              "model_update_ops",
+              "uint64",
+              "71",
+              "8"
+            ],
+            [
+              "controller_ops",
+              "uint64",
+              "79",
+              "8"
+            ],
+            [
+              "parameter_writes",
+              "uint64",
+              "87",
+              "8"
+            ],
+            [
+              "event_count",
+              "uint64",
+              "95",
+              "8"
+            ],
+            [
+              "active_synaptic_ops",
+              "uint64",
+              "103",
+              "8"
+            ],
+            [
+              "logical_state_bytes",
+              "uint64",
+              "111",
+              "8"
+            ],
+            [
+              "replay_bytes",
+              "uint64",
+              "119",
+              "8"
+            ],
+            [
+              "latency_ns",
+              "uint64",
+              "127",
+              "8"
+            ],
+            [
+              "energy_joules",
+              "float64",
+              "135",
+              "8"
+            ]
+          ]
+        },
+        "lock_receipt": {
+          "alignment": "none",
+          "bytes": "225",
+          "fields": [
+            [
+              "protocol_digest",
+              "sha256_digest",
+              "0",
+              "32"
+            ],
+            [
+              "review_digest",
+              "sha256_digest",
+              "32",
+              "32"
+            ],
+            [
+              "compiler_digest",
+              "sha256_digest",
+              "64",
+              "32"
+            ],
+            [
+              "source_digest",
+              "sha256_digest",
+              "96",
+              "32"
+            ],
+            [
+              "agents_digest",
+              "sha256_digest",
+              "128",
+              "32"
+            ],
+            [
+              "generator_digest",
+              "sha256_digest",
+              "160",
+              "32"
+            ],
+            [
+              "result_digest",
+              "sha256_digest",
+              "192",
+              "32"
+            ],
+            [
+              "decision",
+              "uint8",
+              "224",
+              "1"
+            ]
+          ]
+        },
+        "model_state": {
+          "alignment": "none",
+          "bytes": "8*(dimension+1)",
+          "fields": [
+            [
+              "weights",
+              "float64[dimension]",
+              "0",
+              "8*dimension"
+            ],
+            [
+              "bias",
+              "float64",
+              "8*dimension",
+              "8"
+            ]
+          ]
+        },
+        "pending_row": {
+          "alignment": "none",
+          "bytes": "74",
+          "fields": [
+            [
+              "pending_features",
+              "float64[4]",
+              "0",
+              "32"
+            ],
+            [
+              "pending_prediction",
+              "float64",
+              "32",
+              "8"
+            ],
+            [
+              "pending_loss",
+              "float64",
+              "40",
+              "8"
+            ],
+            [
+              "pending_event_count",
+              "uint32",
+              "48",
+              "4"
+            ],
+            [
+              "pending_action",
+              "uint8",
+              "52",
+              "1"
+            ],
+            [
+              "pending_cost",
+              "float64",
+              "53",
+              "8"
+            ],
+            [
+              "pending_reward",
+              "float64",
+              "61",
+              "8"
+            ],
+            [
+              "pending_local_row",
+              "uint32",
+              "69",
+              "4"
+            ],
+            [
+              "pending_terminal",
+              "uint8",
+              "73",
+              "1"
+            ]
+          ]
+        }
+      },
+      "formula_ast": {
+        "controller_dot": {
+          "ast": {
+            "args": [
+              {
+                "args": [
+                  "width",
+                  2
+                ],
+                "op": "mul"
+              },
+              1
+            ],
+            "op": "sub"
+          },
+          "inputs": [
+            "width:uint64"
+          ],
+          "output": "uint64"
+        },
+        "eligibility_update": {
+          "ast": {
+            "args": [
+              {
+                "args": [
+                  "width",
+                  2
+                ],
+                "op": "mul"
+              },
+              1
+            ],
+            "op": "add"
+          },
+          "inputs": [
+            "width:uint64"
+          ],
+          "output": "uint64"
+        },
+        "event_count": {
+          "ast": {
+            "args": [
+              "unique_valid_events"
+            ],
+            "op": "identity"
+          },
+          "inputs": [
+            "unique_valid_events:uint64"
+          ],
+          "output": "uint64"
+        },
+        "forward_dense": {
+          "ast": {
+            "args": [
+              {
+                "args": [
+                  "dimension",
+                  2
+                ],
+                "op": "mul"
+              },
+              1
+            ],
+            "op": "add"
+          },
+          "inputs": [
+            "dimension:uint64"
+          ],
+          "output": "uint64"
+        },
+        "gradient": {
+          "ast": {
+            "args": [
+              "apply",
+              {
+                "args": [
+                  "dimension",
+                  1
+                ],
+                "op": "add"
+              }
+            ],
+            "op": "mul"
+          },
+          "inputs": [
+            "dimension:uint64",
+            "apply:uint8"
+          ],
+          "output": "uint64"
+        },
+        "loss_half_squared": {
+          "ast": {
+            "args": [
+              0.5,
+              {
+                "args": [
+                  "error",
+                  "error"
+                ],
+                "op": "mul"
+              }
+            ],
+            "op": "mul"
+          },
+          "inputs": [
+            "error:float64"
+          ],
+          "output": "float64"
+        },
+        "model_update": {
+          "ast": {
+            "args": [
+              "apply",
+              {
+                "args": [
+                  2,
+                  {
+                    "args": [
+                      "dimension",
+                      1
+                    ],
+                    "op": "add"
+                  }
+                ],
+                "op": "mul"
+              }
+            ],
+            "op": "mul"
+          },
+          "inputs": [
+            "dimension:uint64",
+            "apply:uint8"
+          ],
+          "output": "uint64"
+        }
+      },
+      "numeric_rules": "binary64 round-to-nearest-even; no fused multiply-add; left-to-right reduction; overflow, NaN, and infinity are fatal; operation counts exclude hash and PRNG unless separately named",
+      "numeric_type_widths": {
+        "float64": 8,
+        "sha256_digest": 32,
+        "uint32": 4,
+        "uint64": 8,
+        "uint8": 1
+      },
+      "operation_units": "one multiply, add, subtract, compare, divide, min, max, clip, counter increment, parameter write, hash invocation, or PRNG draw counts one; no fused-operation credit",
+      "resource_invariants": [
+        "one input row enters each update",
+        "replay bytes are zero unless the explicit replay arm is present",
+        "energy joules are absent until a privileged workload-specific receipt exists",
+        "operation counts and measured joules are reported independently"
+      ],
+      "row_formulas": {
+        "active_synaptic_ops": "apply*count(nonzero gradient coordinates)",
+        "controller_inference_ops": "2*4-1",
+        "controller_update_ops": "5*4+9",
+        "forward_ops": "2*dimension+1",
+        "gradient_ops": "apply*(dimension+1)",
+        "loss_ops": "3",
+        "model_update_ops": "apply*2*(dimension+1)",
+        "parameter_writes": "apply*(dimension+1)"
+      }
+    }
+  },
+  "compiled_protocol_sha256": "abf2d178520207fb157f5d5c32ec00d618019f96ccbe1107c6e8ad26970515f4",
+  "compiler_version": "oaklab.cup.v6.protocol-compiler.v1",
+  "estimand": {
+    "favorable_direction": "mean(D_seed_f)<0 with bounded adaptation lag and non-inferior resources",
+    "identification": [
+      "candidate and fixed reference start from byte-identical zero model state",
+      "each paired arm consumes the identical ordered stream and one row per observe",
+      "fit action assignment is deterministic from the sealed hash transcript",
+      "tune and assessment actions are deterministic from the locked policy",
+      "assessment seeds are disjoint from fit and tune seeds",
+      "controller state is immutable during tune and assessment",
+      "all losses are recorded before any model or controller mutation"
+    ],
+    "loss": "0.5*(prediction-target)^2 measured before the row action",
+    "name": "paired complete-policy cumulative pre-update loss effect",
+    "notation": "tau_f=E_seed[sum_t loss_t(fixed_sgd_b1)-sum_t loss_t(locked_hcup)]",
+    "primary_transform": "D_seed_f=log((candidate_cumulative_loss+1e-12)/(reference_cumulative_loss+1e-12))",
+    "scope": "complete constrained update-policy trajectory including controller, model, and carryover state",
+    "unit": "independent assessment seed trajectory"
+  },
+  "protocol_id": "oaklab.cup.v6",
+  "schema_version": "oaklab.experience-learning.constrained-update-policy-v6.compiled.v1",
+  "section_digests": {
+    "ablation_execution_multiplicity": "7d3c29891b35a3961a100016936e6e6c10bc94631099b9d8572fc13ea294eef6",
+    "adaptation_metrics": "b71baf860faf398b8012ec2c74847caa34dc3fe7ea8b85b3e15d5af5c5e86cee",
+    "controller_transition_table": "f9ca7ddb3183c4b883769a2db5d3765c758e2bed46f973a8afe50760aff4f001",
+    "generator_roster": "a34839a7aa54f744b2240bf36dc7ac90470b4a480e09794a643c7b147dc985b6",
+    "hash_prng_transcript": "c350e7f7e50470eb2d8991bc47ba355926e18312a2ede5a42d9ba04597c5f057",
+    "lock_counter_control_schemas": "21b1ee264789ca4d182a93500aab9e3bd264f6e6d25df078d2a662d7f7bf4652",
+    "operation_and_byte_algebra": "265777db11a0336ca1df55790983828b2641c957bcd78102dc77b401ea0f2039"
+  },
+  "sections": [
+    "hash_prng_transcript",
+    "controller_transition_table",
+    "generator_roster",
+    "operation_and_byte_algebra",
+    "ablation_execution_multiplicity",
+    "adaptation_metrics",
+    "lock_counter_control_schemas"
+  ],
+  "source_spec_sha256": "999793806303d3fccaa8ff157c3fcc14cb17b89d70d7e1d466ee12f8e600f788",
+  "state_slice": "oaklab-experience-learning-constrained-update-policy-v6",
+  "stop_rules": [
+    "stop immediately on any digest, source-byte, schema, or independent-review mismatch",
+    "stop on any nonfinite numeric value, overflow, undeclared state, or hidden draw",
+    "stop and close V6 if independent review rejects the exact frozen packet",
+    "stop and close V6 if synthetic qualification is not candidate under the fixed gate",
+    "stop before assessment if fit or tune lock is absent or invalid",
+    "stop before real execution if synthetic candidate or separate execution review is absent",
+    "stop before energy claim if privileged workload-specific trace and receipt are absent",
+    "retain no_candidate when any quality, adaptation, resource, statistical, custody, or energy predicate fails"
+  ],
+  "transcript_test_vector": {
+    "action_hash_sha256_hex": "d16a0722a941ff26161dc34ceb08dbe8bf704aa22d1910f7433509f64b184cb1",
+    "first_12_raw_uint64_hex": [
+      "ccca1039680acde7",
+      "8a7a09bb524f292b",
+      "90da6f50448de356",
+      "53f361763240ddaa",
+      "d90b4d1d7007f249",
+      "69694889df7c2445",
+      "cf38f92d762c5f0f",
+      "408f0111ef189f92",
+      "1efa2b26040f86da",
+      "0ef9f55bdd2b6316",
+      "513ece2245739b5e",
+      "d515310a95716453"
+    ],
+    "first_normal12_after_first_draw": -0.31937007329085887,
+    "first_uniform53": 0.7999582424309138,
+    "initial_state_uint64_le": 4995785472395330620,
+    "root_sha256_hex": "3c442e186b985445894079247b32b1644ef619d1a18c3df3142d998e5737b042",
+    "seed_frame_hex": "0000001a6f616b6c61622e6375702e76362e70726e672e736565642e7631999793806303d3fccaa8ff157c3fcc14cb17b89d70d7e1d466ee12f8e600f78800000003666974000000107370617273655f7369676e616c5f7636a00f000000000000"
+  }
+}

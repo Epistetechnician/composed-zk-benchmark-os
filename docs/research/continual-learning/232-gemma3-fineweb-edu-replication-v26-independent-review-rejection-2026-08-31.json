@@ -1,0 +1,27 @@
+{
+  "schema": "gemma3-fineweb-edu-replication-v26-independent-review-rejection",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v26",
+  "protocol_sha256": "c87c75042b866e5777cf0077d0bbf6201c4ba9838e565816a474de0a79843316",
+  "review_packet_sha256": "905f3a3c82b21ddf2d5bc32d134150d3e52f34bba18e4c99a2c7edcd9446fbbe",
+  "implementation_manifest_sha256": "0d842142cb2cc9aa704ee0fa22fbec7f24de5f47b7144d590bc7891789c9d40e",
+  "reviewer": "OpenAI Codex independent static reviewer",
+  "reviewed_at_utc": "2026-08-31T06:16:37Z",
+  "effects_run": false,
+  "review_decision": "REJECT",
+  "findings": {
+    "custody_exact_pinned_data_identity": false,
+    "fit_assessment_prior_pilot_disjointness": true,
+    "locked_configuration_and_paper_target_treatment": true,
+    "controls_and_frozen_weight_behavior": true,
+    "exact_bootstrap_and_uncertainty_rule": true,
+    "aggregate_per_document_retention_and_validator_behavior": true,
+    "v1_v2_v3_v4_rejections_preserved_and_prohibited_actions_enforced": false
+  },
+  "material_findings": [
+    "The review packet names files 225 and 226 as the V26 protocol and packet, while the reviewed files and contract implementation manifest bind files 229 and 230.",
+    "PRIOR_HISTORY pins only the V25 rejection closure and omits the V25 protocol and review packet, so complete V1-V25 history is not frozen.",
+    "Pinned Parquet hashing and Parquet row parsing use separate descriptor opens; parquet_rows does not verify the pinned byte length and SHA-256 on the descriptor it parses, permitting a swap-read-restore custody failure.",
+    "Runner and validator model/tokenizer loader helpers remain directly callable without validating the independent review receipt, despite the stated universal review-before-load boundary."
+  ],
+  "disposition": "V26 sealed without an acceptance receipt, acquisition, model effects, or published result. The recirculation replication branch remains closed pending a materially new reviewed protocol identity."
+}

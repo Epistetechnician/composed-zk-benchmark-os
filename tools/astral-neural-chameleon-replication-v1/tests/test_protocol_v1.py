@@ -527,6 +527,14 @@ class ProtocolV1Tests(unittest.TestCase):
         self.assertIn("missing_root_artifact_roles_mismatch", errors)
         self.assertIn("missing_root_verified_artifact_count_mismatch", errors)
 
+    def test_independent_validator_rejects_noncanonical_artifact_root(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory).resolve() / "missing"
+            result = PROTOCOL.inspect(root)
+            result["artifact_root"] = str(root.parent / "missing" / ".." / "missing")
+            errors = VALIDATOR.validate(result, root)
+        self.assertIn("artifact_root_revalidation_noncanonical", errors)
+
     def test_independent_validator_binds_missing_manifest_to_empty_state(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory).resolve()
@@ -555,6 +563,14 @@ class ProtocolV1Tests(unittest.TestCase):
             result["model_execution"] = 0
             errors = VALIDATOR.validate(result, root)
         self.assertIn("model_execution_mismatch", errors)
+
+    def test_independent_validator_rejects_unhashable_classification_without_crashing(self) -> None:
+        for classification in ([], {}):
+            with self.subTest(classification_type=type(classification).__name__):
+                result = PROTOCOL.inspect(Path("/definitely/missing/neural-chameleon-root"))
+                result["classification"] = classification
+                errors = VALIDATOR.validate(result, Path("/definitely/missing/neural-chameleon-root"))
+            self.assertIn("unknown_classification", errors)
 
     def test_validator_cli_reopens_trusted_artifact_root(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

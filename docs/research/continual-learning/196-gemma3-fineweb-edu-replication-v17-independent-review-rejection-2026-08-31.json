@@ -1,0 +1,25 @@
+{
+  "schema": "gemma3-fineweb-edu-replication-v17-independent-review-rejection",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v17",
+  "protocol_sha256": "c5279ff97371aa8441b92eb39f19022cfc7b48c1d9b91ce761224060b63b0334",
+  "review_packet_sha256": "bda9a0812b0a42f7f759f13363015a1e492d5522f0ffbda0404abef1f271a23f",
+  "implementation_manifest_sha256": "9aca569e0e06a831e6eb8cf6c79135f1ede3110a836aed2d716b58dc82e3bb4d",
+  "reviewer": "OpenAI Codex independent reviewer",
+  "reviewed_at_utc": "2026-08-31T04:38:49Z",
+  "effects_run": false,
+  "review_decision": "REJECT",
+  "findings": {
+    "aggregate_per_document_retention_and_validator_behavior": false,
+    "controls_and_frozen_weight_behavior": false,
+    "custody_exact_pinned_data_identity": true,
+    "exact_bootstrap_and_uncertainty_rule": true,
+    "fit_assessment_prior_pilot_disjointness": true,
+    "locked_configuration_and_paper_target_treatment": true,
+    "v1_v2_v3_v4_rejections_preserved_and_prohibited_actions_enforced": true
+  },
+  "material_findings": [
+    "Failed nonzero intervention reach did not stop V17: a failed qualification could validate and publish.",
+    "validator-receipt.json was authored before independent validation and did not bind the validator returned validity, decision, bootstrap, or custody recomputation."
+  ],
+  "disposition": "V17 sealed without an acceptance receipt, acquisition, model effects, or published result. A fresh V18 identity is required for correction."
+}

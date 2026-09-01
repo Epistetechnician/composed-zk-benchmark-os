@@ -1,0 +1,17 @@
+{
+  "schema": "gemma3-fineweb-edu-replication-v15-independent-review-rejection",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v15",
+  "protocol_sha256": "087ef49c12c06428bc992ed8b48145cd3bae2a12898ca66d108ef7d65c6bb4d3",
+  "review_packet_sha256": "2a1206f286b4eb08b8e5495199ef720455f83457e7900569dfa45c488e492637",
+  "implementation_manifest_sha256": "d12db8f386f6426d03cd3e31d8a1c06d2144367925803d084de15bae0f199d71",
+  "reviewer": "codex-independent-static-reviewer",
+  "reviewed_at_utc": "2026-08-31T04:08:59Z",
+  "effects_run": false,
+  "review_decision": "REJECT",
+  "review_output_valid": false,
+  "material_findings": [
+    "Source, corpus, and result publication had no post-publication code/input custody recheck; a concurrent change after the final pre-publication check could leave an artifact published under stale reviewed bytes.",
+    "The independent validator ran in a separate process but reused runner parity and evaluation functions, so shared recurrence or evaluation defects could pass both execution and validation paths."
+  ],
+  "disposition": "V15 sealed without an acceptance receipt, acquisition, model effects, or published result. A fresh V16 identity is required for correction."
+}

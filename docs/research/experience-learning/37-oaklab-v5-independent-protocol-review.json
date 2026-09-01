@@ -1,0 +1,116 @@
+{
+  "schema_version": "oaklab.experience-learning.constrained-update-policy-v5-independent-protocol-review.v1",
+  "state_slice": "oaklab-experience-learning-constrained-update-policy-v5",
+  "reviewer": "independent-agent-review",
+  "decision": "REJECT",
+  "implementation_authorized": false,
+  "fit_tune_assessment_authorization": false,
+  "real_execution_authorization": false,
+  "energy_authorization": false,
+  "claim_ceiling": "ProtocolReviewRejectedNoExecution",
+  "astral": "isolated_not_run",
+  "plasticity_guard": "closed_historical_comparator_only",
+  "compiled_protocol_sha256": "d3d677cff22f9a4587ed204cb0c182a71ac85db6009e2db2200fbc77306e3117",
+  "source_spec_sha256": "ac02dca181feea32b1e9547e381c94c9399f3a34c4bc0ac3df2ed9095b0c813c",
+  "reviewed_files": {
+    "AGENTS.md": "4d4c790169f0521e9d419687da38fd001505fbde831e7f9155d237d30b1496f5",
+    "experiments/experience_learning/v5_protocol_spec.json": "ac02dca181feea32b1e9547e381c94c9399f3a34c4bc0ac3df2ed9095b0c813c",
+    "experiments/experience_learning/compile_v5_protocol.py": "82a5075a1c39c629ec4b5d169d1d4c171f1a5de7fff791e5b2734538e5e211ad",
+    "experiments/experience_learning/validate_v5_protocol_compilation.py": "b4ab7e542a4665de2e2cc6837fe828cea65304ab593d534862b0487b996f9c22",
+    "experiments/experience_learning/v5_compiled_protocol.json": "9be25c99303912b695e025f97da02a5ccd7459896855d24eb9c9ea9e54e188d3",
+    "experiments/experience_learning/tests/test_v5_protocol_compiler.py": "f3d4d46c2b530491691d5abfc4203fc46a6fb8bcfa0386b20452097a49b509eb",
+    "docs/research/experience-learning/35-oaklab-v5-protocol-compiler.md": "58478e30f6441c0c783b97ef514c58731f0eef0231813c7d2aaa9dddac1142ae",
+    "docs/research/experience-learning/36-oaklab-v5-independent-review-packet.md": "8fa7a1e197995e7938cafbe0779f90b37e63c194b48d7fac40c642fe8185638f"
+  },
+  "recomputed": {
+    "packet_declared_agents_digest": "7068251ae9ecfea8bebc99499a1842447dcc87a200f9ab2548d00d7d2d93f4ff",
+    "observed_agents_digest": "4d4c790169f0521e9d419687da38fd001505fbde831e7f9155d237d30b1496f5",
+    "frozen_input_hashes_match": false,
+    "source_digest_matches": true,
+    "compiled_file_digest_matches_packet": true,
+    "compiled_digest_matches_field": true,
+    "section_digests_match": true,
+    "compiled_sections_equal_source": true,
+    "prng_action_vector_matches": true,
+    "compiler_check": "valid",
+    "independent_validator": "valid",
+    "compiler_tests": "5 passed",
+    "assessment_materialization_state": "absent"
+  },
+  "section_digests": {
+    "hash_prng_transcript": "d309248db0bbd31bb0b842e19226f32ee4dec31822eaec16c5b1811722640c70",
+    "controller_transition_table": "fec01e89449c1403693c92f512188355ddfe7e41ef1bb5bf8ce84e8c7e4af0d1",
+    "generator_roster": "02161c9e0ae472eb544a6e60c799bb3917cd0a68e9face9b0e33face695e9175",
+    "operation_and_byte_algebra": "dbe76d09c071334cdbd119c01f0ea46802e1f8859edb876578230d55fa260352",
+    "ablation_execution_multiplicity": "bec731f386d81621a9627506cc09a82a0c05d9746287cdbfaed1f40dc2239073",
+    "adaptation_metrics": "f08795c98dfc303fa574169b9c605878c1d69e3051b521990233d34046914093",
+    "lock_counter_control_schemas": "5ff00a0f28c4a840200ff2fa6d1c4e8002216de9e59c31c6b413b286f70a50e8"
+  },
+  "blocking_findings": [
+    {
+      "id": "V5-ID-000",
+      "finding": "The review packet declares AGENTS.md digest 7068251ae9ecfea8bebc99499a1842447dcc87a200f9ab2548d00d7d2d93f4ff, but the current repository bytes hash to 4d4c790169f0521e9d419687da38fd001505fbde831e7f9155d237d30b1496f5. The frozen input set is stale and cannot receive an affirmative review."
+    },
+    {
+      "id": "V5-HASH-001",
+      "finding": "The action hash defines a generic p_num/p_den threshold but does not declare the actual numerator and denominator or bind them into the action frame; fit and matched-random assignments are therefore not unique."
+    },
+    {
+      "id": "V5-CTRL-002",
+      "finding": "The transition array lists model_action index 4 before credit index 3 even though credit is declared to precede model action. q_skip, q_apply, reward, q_current, theta/dual carryover, and ordinary-row pending_reward production are not defined as executable formulas."
+    },
+    {
+      "id": "V5-GEN-003",
+      "finding": "noisy_mnist draw prose conflicts with its typed roster; event-camera collision and forced-zero behavior are absent; long-horizon sign reversal and full piecewise-drift coefficients are incomplete; source_id_layout is a display string rather than an exact byte encoding."
+    },
+    {
+      "id": "V5-ALG-004",
+      "finding": "Sparse/event formulas, recurrence ASTs, reward/clip/comparison/counter algebra, exact offsets, and binary64 rules are absent. fit_controller_state and pending_row omit most of the twenty state fields; counter_row declares 11 uint64 fields while its schema has 14 fields including strings and booleans; the dual formula omits subtraction."
+    },
+    {
+      "id": "V5-ABL-005",
+      "finding": "The control Holm group tests predictable_noise/oracle_feature_sgd although that arm has assessment=no. reward_shift_37 has no exact shifted-reward or publication predicate, matched-random probability sealing is not numeric, and trajectory/arm execution reset order is not fixed."
+    },
+    {
+      "id": "V5-STAT-006",
+      "finding": "The paired test is named t but uses a normal erfc tail; mechanism Holm omits no_dual and reward_shift_37; per-seed units, missing values, confidence intervals, effect thresholds, and exact resource/adaptation predicates are unspecified."
+    },
+    {
+      "id": "V5-MET-007",
+      "finding": "Adaptation does not exclude the initial zero boundary from shift scans, define zero/empty/nonfinite baseline handling, or define aggregation of stationary null values; the arm-specific baseline is not represented in a result schema."
+    },
+    {
+      "id": "V5-SCHEMA-008",
+      "finding": "Fit/tune locks omit complete controller snapshots and required counter/control/adaptation/absence schema digests. Counter rows omit active operations, active writes, logical bytes, wall-clock policy, and update counts. Control lacks an expected predicate; assessment absence lacks materialized_paths and result_digest; validator receipt lacks review and section/schema bindings."
+    },
+    {
+      "id": "V5-ENTRY-009",
+      "finding": "Direct script execution fails because experience_learning/types.py shadows the standard-library types module; only module execution works, so the executable compiler entrypoint is not hermetic."
+    }
+  ],
+  "nonblocking_findings": [
+    {
+      "id": "N1",
+      "finding": "The complete-policy cumulative loss estimand correctly retains carryover and is the sound scientific object for a future corrected protocol."
+    },
+    {
+      "id": "N2",
+      "finding": "Fit, tune, and assessment seed ranges are disjoint and the artifact explicitly remains assessment-absent."
+    },
+    {
+      "id": "N3",
+      "finding": "Replay, plasticity guard, prior V1-V4 artifacts, and Astral are explicitly outside the V5 execution boundary."
+    }
+  ],
+  "required_successor_corrections": [
+    "Instantiate and frame the action probability, protocol identity, all digest encodings, and every transcript row byte layout.",
+    "Replace the transition prose with one ordered indexed state machine containing q, reward, update, carryover, terminal, and all pending-state formulas and offsets.",
+    "Resolve every generator draw/value/collision/forced-feature equation and use one exact framed source-ID encoding.",
+    "Provide typed ASTs and exact layouts for dense, sparse, event, controller, counters, locks, and all resource operations.",
+    "Make ablation execution and assessment participation agree with every Holm group, and define every mechanism/control predicate.",
+    "Choose and specify one paired-test distribution, complete multiplicity tables, sample units, missing rules, intervals, power, and numerical gates.",
+    "Define adaptation initial-boundary, zero/finite, stationary-null, and aggregation semantics in a canonical result schema.",
+    "Bind complete controller snapshots, all schema digests, exact control predicates, and explicit materialized_paths/result_digest absence evidence."
+  ],
+  "review_digest": "0e5beb027bf015e3ccb7f5e7f86c3adba88722d3d80608177808d3e9c1255375"
+}

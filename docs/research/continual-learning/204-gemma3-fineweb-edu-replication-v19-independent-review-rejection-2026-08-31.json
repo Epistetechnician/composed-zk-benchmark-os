@@ -1,0 +1,24 @@
+{
+  "schema": "gemma3-fineweb-edu-replication-v19-independent-review-rejection",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v19",
+  "protocol_sha256": "dfb5de0834a656fb07cebbad7dfb47aa26473cfada3da793ee4b4ff3314dd442",
+  "review_packet_sha256": "b86d24b26e0bd127f81ba5834674e41ba8091a70f87d5a8c87c98198e32bd6c1",
+  "implementation_manifest_sha256": "72e409c47a4ebd8034f9c9a9717f056147f37d927e914103b986cc4f651fb9ed",
+  "reviewer": "OpenAI Codex independent reviewer",
+  "reviewed_at_utc": "2026-08-31T04:52:55Z",
+  "effects_run": false,
+  "review_decision": "REJECT",
+  "findings": {
+    "custody_exact_pinned_data_identity": true,
+    "fit_assessment_prior_pilot_disjointness": true,
+    "locked_configuration_and_paper_target_treatment": true,
+    "controls_and_frozen_weight_behavior": true,
+    "exact_bootstrap_and_uncertainty_rule": true,
+    "aggregate_per_document_retention_and_validator_behavior": false,
+    "v1_v2_v3_v4_rejections_preserved_and_prohibited_actions_enforced": false
+  },
+  "material_findings": [
+    "PRIOR_HISTORY pins the V1 rejection but only protocol and packet entries for V2, V3, and V4; validate_prior_history validates only declared entries, so V2/V3/V4 rejection bytes are not pinned or validated. V5 and V6 likewise have only protocol and packet entries."
+  ],
+  "disposition": "V19 sealed without an acceptance receipt, acquisition, model effects, or published result. A fresh V20 identity is required for correction."
+}

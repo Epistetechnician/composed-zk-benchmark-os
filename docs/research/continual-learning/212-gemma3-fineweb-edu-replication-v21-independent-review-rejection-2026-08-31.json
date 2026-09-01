@@ -1,0 +1,26 @@
+{
+  "schema": "gemma3-fineweb-edu-replication-v21-independent-review-rejection",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v21",
+  "protocol_sha256": "968c11659184a6b0517cbfbd412c228b6e3d0113594ac17b6f34e2cb5e0ff255",
+  "review_packet_sha256": "d47e9edad6965504b3775f9bf10b96a5f1296bfa09a2310affbeb17552c46cbc",
+  "implementation_manifest_sha256": "b9da49b267951c380d06f5465e6d9f15653b8ddf4f2fc2aef158cefd1517dbe9",
+  "reviewer": "Codex independent implementation reviewer",
+  "reviewed_at_utc": "2026-08-31T05:14:57Z",
+  "effects_run": false,
+  "review_decision": "REJECT",
+  "findings": {
+    "custody_exact_pinned_data_identity": true,
+    "fit_assessment_prior_pilot_disjointness": true,
+    "locked_configuration_and_paper_target_treatment": true,
+    "controls_and_frozen_weight_behavior": true,
+    "exact_bootstrap_and_uncertainty_rule": true,
+    "aggregate_per_document_retention_and_validator_behavior": false,
+    "v1_v2_v3_v4_rejections_preserved_and_prohibited_actions_enforced": false
+  },
+  "material_findings": [
+    "gemma3_fineweb_edu_replication_v21_contract.py:775-812 validate_review_receipt uses dictionary equality against boolean True findings and does not enforce a closed-world receipt key set. Python treats integer 1 as equal to True, so a receipt without explicit boolean finding values, or with arbitrary additional fields, can authorize execution.",
+    "validate_gemma3_fineweb_edu_replication_v21.py:780-802 common and 1323-1366 validate_result enforce required subsets but not exact schemas for config.json, results.json, receipt.json, or assessment_per_document rows. Self-digests bind but do not prohibit extra fields, so unvalidated raw tokens, logits, activations, or other non-aggregate payloads can be added and transactionally published.",
+    "validate_gemma3_fineweb_edu_replication_v21.py:1070-1091 validate_validator_receipt also uses equality for required boolean fields and lacks an exact key-set check. Integer 1 values for validator_valid or custody_recomputed and arbitrary additional receipt fields remain accepted after self-digest recomputation."
+  ],
+  "disposition": "V21 sealed without an acceptance receipt, acquisition, model effects, or published result. A fresh V22 identity is required for correction."
+}

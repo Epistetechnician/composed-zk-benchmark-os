@@ -1,0 +1,229 @@
+{
+  "ablations": {
+    "horizon_one": {
+      "description": "same randomized estimator with horizon 1 and anchor stride 2",
+      "horizon": 1,
+      "stride": 2
+    },
+    "no_moderation": {
+      "context_features": [
+        "intercept"
+      ],
+      "description": "randomized horizon estimator without loss-context moderation"
+    },
+    "random_policy": {
+      "assessment_action_probability": 0.5,
+      "description": "fit-identical estimator but randomized rather than learned assessment actions"
+    }
+  },
+  "anti_leakage": [
+    "one Experience enters every observe call",
+    "no replay examples or gradient accumulation",
+    "no future labels enter the pre-action context",
+    "no overlapping proximal-outcome windows",
+    "fit estimator freezes before tune",
+    "tune eligibility is decided before assessment effects",
+    "assessment restores only digest-bound tune snapshots",
+    "no post-hoc seed stream endpoint threshold or ablation changes"
+  ],
+  "assessment": {
+    "action_rule": "apply anchor update iff beta_0 + beta_1 * context_loss < 0",
+    "estimator_updates": false,
+    "randomization": false
+  },
+  "candidate": "micro_randomized_horizon_credit",
+  "claim_ceiling": "LocalDevelopmentOakLabSelectiveCreditV3SyntheticQualification",
+  "context": {
+    "features": [
+      "intercept",
+      "min(1,log1p(pre_update_loss)/4)"
+    ],
+    "forbidden": [
+      "future target",
+      "future loss",
+      "task_id",
+      "oracle feature identity",
+      "assessment outcome"
+    ]
+  },
+  "controls": [
+    "noise_floor",
+    "oracle_feature_sgd_b1"
+  ],
+  "estimand": {
+    "interpretation": "positive tau means applying the anchor update lowers discounted future loss under the fixed continuation policy",
+    "name": "conditional H-step causal excursion effect of one SGD anchor update",
+    "notation": "tau_H(c_t)=E[Y_t(0)-Y_t(1)|C_t=c_t,I_t=1]",
+    "outcome": "Y_t(a)=sum_{j=1}^{H} gamma^(j-1) * loss_{t+j}(a)",
+    "scope": "randomized eligible anchor decisions only; not a global parameter-level causal claim"
+  },
+  "estimator": {
+    "algorithm": "online weighted-and-centered least-squares SGD",
+    "coefficient_count": 4,
+    "fit_learning_rate": 0.05,
+    "parameters": [
+      "alpha_0",
+      "alpha_1",
+      "beta_0",
+      "beta_1"
+    ],
+    "prediction": "alpha_0 + alpha_1*c + (A-p)*(beta_0+beta_1*c)",
+    "ridge": 0.001,
+    "weight": "1/(p*(1-p))"
+  },
+  "execution": {
+    "assessment_seed_offsets": [
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127,
+      128,
+      129,
+      130,
+      131,
+      132,
+      133,
+      134,
+      135,
+      136,
+      137,
+      138,
+      139,
+      140,
+      141,
+      142,
+      143,
+      144,
+      145,
+      146,
+      147
+    ],
+    "steps_per_stream": 768,
+    "synthetic_streams": [
+      "sparse_noisy",
+      "noisy_mnist_like",
+      "delayed_reward",
+      "nonstationary",
+      "drifting",
+      "event_camera_like"
+    ]
+  },
+  "family_map": {
+    "delayed_reward": [
+      "delayed_reward"
+    ],
+    "drift": [
+      "nonstationary",
+      "drifting"
+    ],
+    "event": [
+      "event_camera_like"
+    ],
+    "predictable_noise": [
+      "sparse_noisy",
+      "noisy_mnist_like"
+    ]
+  },
+  "gate": {
+    "adaptation": "candidate adaptation lag <= reference in every qualifying family and strictly lower in at least one qualifying delayed_reward or drift family",
+    "alpha": 0.05,
+    "family_multiplicity": "Holm-Bonferroni over four primary family loss tests",
+    "loss": "candidate family mean loss < reference with Holm-adjusted p <= 0.05",
+    "mechanism": "candidate mean loss < horizon_one and random_policy in at least one qualifying family",
+    "minimum_families": 2,
+    "required_temporal_family": "at least one of delayed_reward or drift",
+    "resources": {
+      "active_synaptic_ops": "candidate <= 0.95 * reference in each qualifying family",
+      "replay_storage_bytes": 0,
+      "state_noninferiority_margin_bytes": 64,
+      "updates": "candidate <= reference in each qualifying family"
+    }
+  },
+  "historical_guard": {
+    "active_arm": false,
+    "retuning": false,
+    "status": "permanently_closed_historical_comparator"
+  },
+  "horizon": {
+    "anchor_stride": 9,
+    "discount": 0.9,
+    "H": 8,
+    "windows_overlap": false
+  },
+  "power": {
+    "assessment_pairs": 48,
+    "minimum_detectable_standardized_effect": 0.5,
+    "normal_approximation_power": 0.8330770040094296,
+    "target_power": 0.8,
+    "worst_case_holm_alpha": 0.0125
+  },
+  "real_execution": {
+    "current_v2_energy_receipt_eligible": false,
+    "fresh_campaign_manifest_required": true,
+    "fresh_custody_identity_required": true,
+    "fresh_privileged_energy_receipt_required": true,
+    "minimum_qualifying_real_families": 2,
+    "status": "sealed_pending_synthetic_candidate_and_independent_review"
+  },
+  "reference": {
+    "algorithm": "sgd_b1",
+    "learning_rate": 0.03
+  },
+  "resource_accounting": {
+    "active_operations": "count every parameter update and estimator multiply-add",
+    "estimator_state_bytes": 64,
+    "event_count": "sum declared event indices for every consumed Experience",
+    "replay_bytes": 0,
+    "storage": "weights, bias, four estimator coefficients, and four pending-window scalars",
+    "update_count": "count only applied model updates; skipped anchor actions count as zero"
+  },
+  "schema_version": "oaklab.experience-learning.selective-credit-v3-protocol.v1",
+  "splits": {
+    "assessment": "final third; deterministic frozen policy",
+    "fit": "first third; randomized anchors and estimator updates",
+    "tune": "middle third; randomized anchors, frozen estimator, eligibility checks only"
+  },
+  "state_slice": "oaklab-experience-learning-selective-credit-v3",
+  "stop_rules": [
+    "reject before implementation if independent protocol review is not accepted",
+    "stop before assessment if tune lock validation fails",
+    "close V3 as NoCandidate if the synthetic strict gate fails",
+    "do not run real streams unless synthetic status is candidate and an independent execution review authorizes it",
+    "close V3 as NoCandidate if the real strict gate fails",
+    "do not retune V3 after assessment effects",
+    "never reopen or retune the plasticity guard",
+    "keep Astral isolated"
+  ],
+  "treatment": {
+    "action_0": "skip the SGD update at the eligible anchor",
+    "action_1": "apply the fixed-rate SGD update at the eligible anchor",
+    "assignment": "stateless SHA-256(seed,stream,anchor_index) thresholded at propensity during fit and tune",
+    "continuation": "apply fixed-rate SGD on each non-anchor item for both actions",
+    "eligibility": "one anchor every H+1 items",
+    "propensity": 0.5
+  }
+}

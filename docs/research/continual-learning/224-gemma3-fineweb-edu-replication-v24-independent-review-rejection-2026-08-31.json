@@ -1,0 +1,25 @@
+{
+  "schema": "gemma3-fineweb-edu-replication-v24-independent-review-rejection",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v24",
+  "protocol_sha256": "02d65b554c62650ed3bc2ab07e33c07ec994451ce67f768bb0684281db188178",
+  "review_packet_sha256": "03d7b72e3114eb0d43aaf05c6680467b02305193f01796408f6743d1bfbd7c67",
+  "implementation_manifest_sha256": "46b986781c95ffde721c13d54ef1c7b9079648dcfbc5c41b3519e4a8d320e49d",
+  "reviewer": "OpenAI Codex independent static reviewer",
+  "reviewed_at_utc": "2026-08-31T05:54:01Z",
+  "effects_run": false,
+  "review_decision": "REJECT",
+  "findings": {
+    "custody_exact_pinned_data_identity": false,
+    "fit_assessment_prior_pilot_disjointness": true,
+    "locked_configuration_and_paper_target_treatment": true,
+    "controls_and_frozen_weight_behavior": false,
+    "exact_bootstrap_and_uncertainty_rule": true,
+    "aggregate_per_document_retention_and_validator_behavior": true,
+    "v1_v2_v3_v4_rejections_preserved_and_prohibited_actions_enforced": false
+  },
+  "material_findings": [
+    "sha256_file used pathname stat/open/stat without descriptor binding; parquet_rows and audit_raw passed pathnames directly to PyArrow after separate checks; model loading likewise used pathname files after separate manifest checks. These paths remained vulnerable to exchange-and-restore TOCTOU substitution.",
+    "validate_result did not require config.evidence_ledger_mutation to be false, so a correctly self-digested config could declare a prohibited ledger mutation."
+  ],
+  "disposition": "V24 sealed without an acceptance receipt, acquisition, model effects, or published result. A fresh V25 identity is required for correction."
+}

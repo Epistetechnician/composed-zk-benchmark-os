@@ -1,0 +1,20 @@
+{
+  "assessment_effects_started": true,
+  "claim_status": "No scientific result retained or claim authorized.",
+  "corrective_action": "Discard V14 review and in-progress result; require a fresh protocol revision and independent review before another execution.",
+  "current_implementation_manifest_sha256": "66ec27945fdbad7dd2eb6ae20bd12bd38fbddb69b549474f9278a9212db4e578",
+  "disposition": "StaleReviewSnapshot",
+  "effects_started": true,
+  "failed_gate": "reviewed-byte custody / exact implementation snapshot",
+  "failure": "Implementation files changed after independent ACCEPT; V14 review receipt no longer bound to current implementation bytes.",
+  "failure_record_sha256": "7ab8423d0f609e3fb4effe2b48b4817170e28cf820af616adfd24b8d507bbf8b",
+  "protocol_path": "docs/research/continual-learning/183-gemma3-fineweb-edu-replication-v14-protocol.md",
+  "protocol_sha256": "80c1e441359eb28e16b5b2208a7976cbe9ad9c23448c90f4c6ee2fbaa6d9d4ec",
+  "result_published": false,
+  "review_receipt_path": "docs/research/continual-learning/185-gemma3-fineweb-edu-replication-v14-independent-review-2026-08-30.json",
+  "review_receipt_sha256": "c9dd921736e6ca2fe24592e92718aae5405be0a735adb28f635c08f0c6a947ff",
+  "reviewed_implementation_manifest_sha256": "f12dbf649b9373287e8467bab8051b28fbde8f3cb76657488f2f34f12e3587cf",
+  "schema": "gemma3-fineweb-edu-replication-v14-execution-failure",
+  "staging_cleaned": true,
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v14"
+}

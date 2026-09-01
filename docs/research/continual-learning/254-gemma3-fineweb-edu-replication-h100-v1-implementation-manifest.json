@@ -1,0 +1,59 @@
+{
+  "files": [
+    {
+      "path": "docs/research/continual-learning/252-gemma3-fineweb-edu-replication-h100-v1-protocol.md",
+      "sha256": "33828d9f8c57f515314310b9bf22be6e32289f52381da43869adfbb2ecd552cc"
+    },
+    {
+      "path": "docs/research/continual-learning/253-gemma3-fineweb-edu-replication-h100-v1-review-packet.md",
+      "sha256": "cd3912c2b9c85701bd41f00fc0f89bd8c270424dfe01d1285d121ade3637ab3e"
+    },
+    {
+      "path": "experiments/continual_learning/gemma3_fineweb_edu_replication_h100_v1_preflight.py",
+      "sha256": "975b7a114a23163ae92d5dbe8c590f0d727b4a3eef20e9e5be04a0acb057cd89"
+    },
+    {
+      "path": "experiments/continual_learning/gemma3_fineweb_edu_replication_h100_v1.py",
+      "sha256": "0ab4b33a19e73358a9ede9c60d50d7fe173a482ce9069093f2948565b8c87d06"
+    },
+    {
+      "path": "experiments/continual_learning/validate_gemma3_fineweb_edu_replication_h100_v1.py",
+      "sha256": "bb069d32e1ec91ddd27a5d561c342e93901e33dfc2c820c7b1760137cf0475d3"
+    },
+    {
+      "path": "experiments/continual_learning/pack_gemma3_fineweb_edu_replication_h100_v1.py",
+      "sha256": "4f2a493514ad5ab309187afd6bde3daa6bb690b5daeb5314d81e2f4891127839"
+    },
+    {
+      "path": "experiments/continual_learning/tests/test_gemma3_fineweb_edu_replication_h100_v1_preflight.py",
+      "sha256": "44938fd1d634539de9cecf2f9825519bbfb1c39a9ba961bf487c7c3dc6f9ea68"
+    },
+    {
+      "path": "experiments/continual_learning/tests/test_gemma3_fineweb_edu_replication_h100_v1.py",
+      "sha256": "f24c25ad6131cf7aa9b8f27aa2a9376949a74e9ca8b2a0a1af156d2ebb0c27ad"
+    },
+    {
+      "path": "experiments/continual_learning/gemma3_fineweb_edu_replication_h100_v1_provider/Dockerfile",
+      "sha256": "2e9a87968afd20eeaa2143831ace8ec82a12efbe064894255310074dec39a603"
+    },
+    {
+      "path": "experiments/continual_learning/gemma3_fineweb_edu_replication_h100_v1_provider/requirements.lock",
+      "sha256": "ede49767638e4a2f047a4142eae193da93997033fb147d9d44a95aee9865b493"
+    },
+    {
+      "path": "experiments/continual_learning/gemma3_fineweb_edu_replication_h100_v1_provider/runtime-lock.json",
+      "sha256": "1078f73fea51a7c78d56be2806112bd029ad8d0af778c0298ca6b2b28b3c3958"
+    },
+    {
+      "path": "experiments/continual_learning/gemma3_fineweb_edu_replication_h100_v1_provider/run_h100_v1.sh",
+      "sha256": "5b701f58d7093c0a491d9b935b5b12ccf18951ea4153129b04c2bcc5535841f4"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "e3a8c73ec125c4f66d8bb2cc8294ed0bf4bf57278e1f3c7e5ae6dc0c55162bf4"
+    }
+  ],
+  "manifest_sha256": "ec7006de7ec5bfc88857fb5135b2720e4c067ce824ffb5cf5994af0032f25ec1",
+  "schema": "gemma3-fineweb-edu-replication-h100-v1-implementation",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-h100-v1"
+}

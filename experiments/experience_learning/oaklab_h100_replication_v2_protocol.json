@@ -1,0 +1,108 @@
+{
+  "schema": "oaklab-experience-learning-h100-replication-v2-protocol",
+  "protocol_id": "oaklab.h100.experience-learning.v2",
+  "state_slice": "oaklab-experience-learning-h100-replication-v2",
+  "claim_ceiling": "LocalDevelopmentOakLabH100ReplicationProtocolOnly",
+  "status": "frozen_pending_independent_review",
+  "implementation_before_review": false,
+  "provider_before_review": false,
+  "scientific_object": "paired online experience-learning policy trajectory on identical ordered real streams",
+  "canonicalization": {
+    "encoding": "UTF-8",
+    "json": "sort_keys=true,separators=(',',':'),ensure_ascii=true,allow_nan=false",
+    "terminator": "exactly one LF after the canonical JSON object",
+    "digest": "lowercase SHA-256 hex over canonical bytes",
+    "self_digest": "manifest_sha256 is omitted before hashing; all other keys remain unchanged",
+    "path_encoding": "POSIX UTF-8 relative paths; no absolute paths, dot segments, symlinks, or duplicate entries"
+  },
+  "estimand": {
+    "name": "paired cumulative pre-update loss difference",
+    "formula": "mean_seed(sum_t loss_fixed_sgd_b1(t) - sum_t loss_candidate(t))",
+    "primary_direction": "candidate lower loss",
+    "unit": "fresh independent assessment seed and ordered stream trajectory",
+    "families": ["noisy_mnist", "event_camera", "sensor_drift", "delayed_reward"],
+    "minimum_real_families": 2,
+    "arms": ["fixed_sgd_b1", "candidate_policy"],
+    "fit_tune_assessment": "disjoint source identities and seed identities; assessment configuration is locked before effects",
+    "no_reuse": "Phase836, V6, plasticity-guard, and Astral scientific artifacts are not inputs"
+  },
+  "provider_contract": {
+    "provider": "givemeanode",
+    "node_type": "h100-1",
+    "job_mode": "batch",
+    "max_jobs": 1,
+    "network_during_effects": false,
+    "training": false,
+    "hard_budget": "hard_usd_ceiling is a positive user-supplied finite decimal; quoted_rate*max_runtime_minutes <= estimated_max_total_usd <= hard_usd_ceiling",
+    "stop_triggers": ["first_failed_gate", "budget_boundary", "timeout", "operator_abort", "completed"],
+    "credential_rule": "credentials and tokens are never serialized in repository or receipts",
+    "cost_receipt": "allocation receipt binds quoted rate, maximum minutes, ceiling, provider project, node ID, job ID, and launch manifest digest",
+    "stop_receipt": "stop receipt binds allocation receipt, billed minutes, billed USD, terminal trigger, raw provider receipt digest, and launch manifest digest"
+  },
+  "launch_manifest": {
+    "schema": "oaklab.h100.experience-learning.v2.launch-manifest",
+    "required_flags": {
+      "assessment_enabled": true,
+      "training_enabled": false,
+      "replay_enabled": false,
+      "network_during_effects": false,
+      "effects_run": false
+    },
+    "command": "./run_oaklab_h100_v2.sh",
+    "network_lock": "network-none-v1",
+    "manifest_self_digest": true,
+    "review_binding": "protocol, packet, freeze manifest, and signed independent ACCEPT receipt must be digest-bound before launch"
+  },
+  "result_root": {
+    "schema": "oaklab.h100.experience-learning.v2.result-root-manifest",
+    "manifest_name": "result_root_manifest.json",
+    "exact_payload_files": [
+      "campaign_manifest.json",
+      "launch_manifest.json",
+      "qualification.json",
+      "aggregate_result.json",
+      "provider/allocation_receipt.json",
+      "provider/stop_receipt.json",
+      "energy/joules_receipt.json",
+      "transcript/workload.jsonl"
+    ],
+    "forbidden": ["extra files", "extra directories", "symlinks", "raw prompts", "raw feature tensors", "credentials", "undeclared logs"],
+    "root_binding": "result_root_manifest lists every payload path, byte length, and SHA-256 digest; validator rejects any actual path not listed",
+    "result_binding": "aggregate_result binds campaign, launch, qualification, provider allocation, provider stop, energy, and root manifest digests"
+  },
+  "energy_contract": {
+    "proxy_energy": false,
+    "required": true,
+    "raw_trace": "retained outside the repository with a SHA-256 digest, sample count, declared hardware path, and start/end timestamps",
+    "integration": "finite nonnegative power samples, monotonic timestamps, trapezoidal joule integration or hardware energy counter explicitly declared",
+    "receipt_binding": "energy receipt binds launch manifest, provider job, node ID, raw trace, and aggregate result"
+  },
+  "publication_gate": {
+    "status_before_gate": "no_candidate",
+    "quality": "paired loss improvement and adaptation improvement versus fixed SGD on at least two real families",
+    "resource": "non-inferior active updates, storage bytes, latency, and event operations",
+    "statistics": "predeclared seeds, paired tests, confidence intervals, and Holm correction; no post-hoc seed or endpoint selection",
+    "custody": "all source, code, container, campaign, launch, provider, result-root, transcript, and energy digests validate",
+    "energy": "measured receipt validates; proxy or absent energy fails",
+    "failure": "any failed gate closes the identity as no_candidate without retuning"
+  },
+  "stop_rules": [
+    "reject before review receipt is an independent signed ACCEPT",
+    "reject if any frozen byte digest changes",
+    "reject if hard USD ceiling is absent, nonfinite, or exceeded",
+    "stop on first provider, custody, runtime, qualification, or validator failure",
+    "stop at timeout or budget boundary",
+    "reject any result root with an extra file, directory, or symlink",
+    "reject any missing, proxy, stale, or unbound energy receipt",
+    "retain no_candidate unless every publication gate passes"
+  ],
+  "boundaries": {
+    "plasticity_guard": "closed_historical_comparator_only",
+    "phase_836": "closed_historical_no_input",
+    "oaklab_v6": "closed_historical_no_input",
+    "astral": "isolated_not_run",
+    "provider": "not_authorized_until independent ACCEPT and operator spend ceiling",
+    "h100": "one bounded batch job only after no-spend preflight",
+    "publication": "no_candidate_until_strict_multi_family_gate"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "compiled_sha256": "3cda379efa5ccbca44580d37550748eac3d3f5601cf099082d002053d2a7b084",
+  "effects_run": false,
+  "findings": {
+    "canonical_manifest_hashing": false,
+    "closed_world_result_root": false,
+    "execution_boundary_and_isolation": true,
+    "fit_tune_assessment_locking": false,
+    "fresh_estimand_and_carryover_controls": false,
+    "provider_cost_stop_receipts": false,
+    "resource_and_energy_gate": false
+  },
+  "protocol_sha256": "c0217aed17a682dffa58ecb42888c609a0c4f6759221b8aac29507c2aaf9e125",
+  "receipt_sha256": "838a3a23132f536a4d9dcab9408c6b507a99935a4218571f5f39a595dad2cdbe",
+  "review_decision": "REJECT",
+  "review_packet_sha256": "4f8accdbb6188cadd066ea34cbf07535560c48fe76187c004f632584276afbbd",
+  "reviewed_at_utc": "2026-08-31T19:49:52Z",
+  "reviewed_file_sha256": {
+    "AGENTS.md": "e3a8c73ec125c4f66d8bb2cc8294ed0bf4bf57278e1f3c7e5ae6dc0c55162bf4",
+    "docs/research/experience-learning/43-oaklab-h100-replication-v2-protocol.md": "c0217aed17a682dffa58ecb42888c609a0c4f6759221b8aac29507c2aaf9e125",
+    "docs/research/experience-learning/44-oaklab-h100-replication-v2-review-packet.md": "4f8accdbb6188cadd066ea34cbf07535560c48fe76187c004f632584276afbbd",
+    "experiments/experience_learning/compile_oaklab_h100_v2_protocol.py": "6cc30050fd9ed88a0a3280fd5da6d64647349d427f243e6582877a1af8bb0277",
+    "experiments/experience_learning/oaklab_h100_v2_compiled_protocol.json": "3cda379efa5ccbca44580d37550748eac3d3f5601cf099082d002053d2a7b084",
+    "experiments/experience_learning/oaklab_h100_v2_protocol.json": "5f8afdc6012a93e5c694d83ff200e844a45aa1ffff6e220c8882366c423c78eb",
+    "experiments/experience_learning/tests/test_oaklab_h100_v2_protocol.py": "40488e2f276b5e8865e957f10506104faf7a886cf0cbf8fa3c20e1222e77db67",
+    "experiments/experience_learning/validate_oaklab_h100_v2_protocol.py": "9a28d36c462991150bfa7f601d4b1c579e62ec0f2ac146e86bb0505fbd378fa8"
+  },
+  "reviewed_files": [
+    "docs/research/experience-learning/43-oaklab-h100-replication-v2-protocol.md",
+    "docs/research/experience-learning/44-oaklab-h100-replication-v2-review-packet.md",
+    "experiments/experience_learning/oaklab_h100_v2_protocol.json",
+    "experiments/experience_learning/compile_oaklab_h100_v2_protocol.py",
+    "experiments/experience_learning/validate_oaklab_h100_v2_protocol.py",
+    "experiments/experience_learning/tests/test_oaklab_h100_v2_protocol.py",
+    "experiments/experience_learning/oaklab_h100_v2_compiled_protocol.json",
+    "AGENTS.md"
+  ],
+  "reviewer": "codex-independent-reviewer-oaklab-h100-v2",
+  "schema": "oaklab-h100-replication-v2-independent-review",
+  "state_slice": "oaklab-experience-learning-h100-replication-v2"
+}

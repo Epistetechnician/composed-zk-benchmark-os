@@ -13,8 +13,9 @@ redirect the gate.
 
 - `pnpm --ignore-workspace run lint:fast`: Rust formatting, Python AST parsing,
   and diff hygiene.
-- `pnpm --ignore-workspace run test:focused`: continual-learning and
-  self-model benchmark/control-plane Python tests.
+- `pnpm --ignore-workspace run test:focused`: continual-learning,
+  self-model benchmark/control-plane, Astral dynamics, experience-learning,
+  Qwen3.6 protocol, and trace-completeness Python tests.
 - `pnpm --ignore-workspace run verify:provider`: feature-gated Phala
   provider-client tests with
   fake transport and no credentials.
@@ -27,6 +28,11 @@ redirect the gate.
 - `pnpm --ignore-workspace run verify:clippy`: all workspace targets with all
   features enabled under Clippy's warnings-as-errors policy.
 - `pnpm --ignore-workspace run lint`: all six gates in order.
+
+All repository-owned Python test gates clear ambient pytest/plugin controls,
+force `PYTHONOPTIMIZE=0`, disable bytecode writes, and invoke `python -B`.
+This keeps the canonical suite independent of user plugin configuration and
+prevents optimized test execution from stripping assertion checks.
 
 The parent package is not part of this contract. The repository-local
 `packageManager` field and explicit workspace isolation make the package

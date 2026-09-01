@@ -1,0 +1,44 @@
+{
+  "schema": "oaklab.h100.v4.independent-review-receipt",
+  "state_slice": "oaklab-experience-learning-h100-replication-v4",
+  "review_decision": "REJECT",
+  "reviewer": "codex-oaklab-h100-v4-independent-reviewer",
+  "reviewed_at_utc": "2026-08-31T20:43:59Z",
+  "reviewed_files": [
+    "docs/research/experience-learning/54-oaklab-h100-replication-v4-review-packet.md",
+    "docs/research/experience-learning/53-oaklab-h100-replication-v4-protocol.md",
+    "experiments/experience_learning/oaklab_h100_v4_protocol.json",
+    "experiments/experience_learning/compile_oaklab_h100_v4_protocol.py",
+    "experiments/experience_learning/validate_oaklab_h100_v4_protocol.py",
+    "experiments/experience_learning/tests/test_oaklab_h100_v4_protocol.py",
+    "experiments/experience_learning/oaklab_h100_v4_compiled_protocol.json",
+    "AGENTS.md"
+  ],
+  "reviewed_file_sha256": {
+    "docs/research/experience-learning/54-oaklab-h100-replication-v4-review-packet.md": "cc927fe7bd6ad67359d7e4ce3457db5e5a3178b8e65c2b98cd1e50a2a2d36c28",
+    "docs/research/experience-learning/53-oaklab-h100-replication-v4-protocol.md": "b8adf99f1f870a1a4cf17bdadc6837036e4691bb2ba8cd0d1d1ca0851c556e4a",
+    "experiments/experience_learning/oaklab_h100_v4_protocol.json": "6b86c2e28910a58b58ee2c7df57c7227cd6bdef4ebc814f381d8e1e833f715c2",
+    "experiments/experience_learning/compile_oaklab_h100_v4_protocol.py": "83645571b344c4e7c5d475c8d0a578b13947a8a4308579679c5d787ac5da7778",
+    "experiments/experience_learning/validate_oaklab_h100_v4_protocol.py": "424f2ac5357e5b12440a9011ddc68c1878c8fcc435c449885d8a4705beb41fd5",
+    "experiments/experience_learning/tests/test_oaklab_h100_v4_protocol.py": "c5237f196bfa9e96c12fa7d123bea77c1baba7a5d47e5006c94c320a7c6aeb15",
+    "experiments/experience_learning/oaklab_h100_v4_compiled_protocol.json": "1effd508e856bb3f84d0ebbce2bd6799ddb1c7a426010bb4466cbcf2d59d9d5b",
+    "AGENTS.md": "e3a8c73ec125c4f66d8bb2cc8294ed0bf4bf57278e1f3c7e5ae6dc0c55162bf4"
+  },
+  "compiled_self_digest": "762fb78fb8606cc5a0637bc790292cb5ace0550d27f80932e0d51fdd848c92af",
+  "test_result": "8 passed",
+  "findings": {
+    "exact_sections_estimand_prng_controller_pending": false,
+    "canonical_self_digests_non_circular_campaign_core": true,
+    "provider_signatures_cross_binding_utc_ceiling": false,
+    "fit_tune_lock_schema_binding_prediction_order": false,
+    "closed_world_result_root_content_bindings": true,
+    "trace_joules_denominator_resource_noninferiority": false,
+    "quality_adaptation_statistics_gates_derived": false,
+    "execution_authorization_current_source_compiled_binding": false,
+    "phase836_v6_plasticity_astral_isolation_assessment_absence": false,
+    "positive_valid_root_and_negative_tamper_tests": true,
+    "all_packet_hashes_sections_freeze_transcript_exact": true
+  },
+  "effects_run": false,
+  "receipt_sha256": "295aa77a9618c800386ddf6ade42b15a99f1f35e935177dbefae0ea1ed471c39"
+}

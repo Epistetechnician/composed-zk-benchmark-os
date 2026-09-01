@@ -1,0 +1,531 @@
+{
+  "ablations": {
+    "always_skip": "skip all 251 actionable model updates",
+    "lambda_zero": "same controller with eligibility lambda fixed to zero from fit onward",
+    "matched_random": "assessment-only hash policy with apply probability equal to the locked tune candidate apply fraction",
+    "no_dual": "same controller with dual multiplier fixed to zero",
+    "reward_shift_37": "fit controller reward sequence cyclically shifted by 37 within each trajectory; model observations remain ordered",
+    "twin_oracle": "tune-only duplicate-state H=8 apply-versus-skip rollout used only to validate controller margin sign; excluded from candidate resources and assessment",
+    "always_update": "the fixed SGD reference"
+  },
+  "action_protocol": {
+    "actionable_rows": "local rows 0 through 250; row 251 contributes pre-update loss but neither arm updates",
+    "apply": "one fixed-rate SGD update on the current Experience",
+    "assessment": "deterministic greedy action from the locked controller; ties apply",
+    "fit": "epsilon-opposite-greedy with exact hash assignment",
+    "fit_exploration_probability": 0.2,
+    "fit_hash": {
+      "digest": "SHA-256",
+      "domain_tag_utf8": "oaklab.cup.v4.fit-action.v1",
+      "fields": [
+        "protocol_digest",
+        "exploration_master_seed_hex",
+        "stream_id",
+        "data_seed_uint64",
+        "local_row_uint32"
+      ],
+      "framing": "each field is UTF-8 or fixed-width unsigned big-endian as declared, preceded by a uint32 big-endian byte length",
+      "integer_conversion": "digest is an unsigned 256-bit big-endian integer",
+      "opposite_greedy_rule": "choose the nongreedy action iff digest_integer < floor(0.2 * 2^256); otherwise choose greedy",
+      "tie_greedy_action": "apply"
+    },
+    "matched_random_hash": {
+      "digest": "SHA-256",
+      "domain_tag_utf8": "oaklab.cup.v4.matched-random.v1",
+      "fields": [
+        "protocol_digest",
+        "exploration_master_seed_hex",
+        "stream_id",
+        "data_seed_uint64",
+        "local_row_uint32"
+      ],
+      "framing_and_integer_conversion": "identical to fit_hash",
+      "rule": "apply iff digest_integer < floor(locked_matched_random_probability * 2^256)"
+    },
+    "fit_tune_assessment_model_initialization": "zero weights and zero bias independently for every stream and data seed",
+    "skip": "no model gradient-coordinate update and no parameter write",
+    "tune": "deterministic greedy action from the fit-frozen controller; ties apply",
+    "update_learning_rate": 0.03
+  },
+  "anti_leakage": [
+    "one ordered Experience enters each observe call",
+    "pre-update loss is recorded before the action",
+    "no replay, minibatch, hidden accumulation, or future target access",
+    "fit, tune, and assessment use disjoint data seeds and zero-initialized models",
+    "controller weights mutate only in fit",
+    "tune produces eligibility and a canonical lock but cannot change candidate hyperparameters",
+    "assessment panels and results do not exist before independent lock acceptance",
+    "assessment restores the exact locked controller and never updates it",
+    "no post-effect changes to streams, seeds, thresholds, endpoints, controls, or gates"
+  ],
+  "assessment": {
+    "controller_updates": false,
+    "data_seeds": [
+      6000, 6001, 6002, 6003, 6004, 6005, 6006, 6007,
+      6008, 6009, 6010, 6011, 6012, 6013, 6014, 6015,
+      6016, 6017, 6018, 6019, 6020, 6021, 6022, 6023,
+      6024, 6025, 6026, 6027, 6028, 6029, 6030, 6031,
+      6032, 6033, 6034, 6035, 6036, 6037, 6038, 6039,
+      6040, 6041, 6042, 6043, 6044, 6045, 6046, 6047
+    ],
+    "generation_before_lock": "prohibited",
+    "hyperparameter_updates": false,
+    "model_initialization": "zero independently for every arm, stream, and seed",
+    "paired_execution": "candidate and reference consume byte-identical rows in source order"
+  },
+  "boundaries": {
+    "astral": "isolated_not_run",
+    "guard": "permanently_closed_historical_receipt_only",
+    "model_bearing_execution": false,
+    "production": false,
+    "v1_v2_v3": "closed_historical_evidence_only",
+    "v2_energy_reuse": false
+  },
+  "candidate": "constrained_sequential_update_policy",
+  "canonicalization": {
+    "float": "finite IEEE-754 binary64 only; JSON decimal round-trip must reproduce the same binary64 value",
+    "json": "UTF-8 json.dumps(sort_keys=True,separators=(comma,colon),ensure_ascii=True,allow_nan=False)",
+    "protocol_digest": "SHA-256 of the exact UTF-8 bytes of this machine protocol file",
+    "receipt_digest": "SHA-256 of canonical payload after removing its own digest field"
+  },
+  "claim_ceiling": "LocalDevelopmentOakLabConstrainedUpdatePolicyV4ProtocolOnly",
+  "controller": {
+    "action_feature": {
+      "apply": [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        "loss_context",
+        "event_density"
+      ],
+      "skip": [
+        1.0,
+        "loss_context",
+        "event_density",
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "action_order": [
+      "skip",
+      "apply"
+    ],
+    "discount_gamma": 0.9,
+    "dual": {
+      "apply_cost": 1.0,
+      "budget": "b_d=min(0.75,max(0,(3*dimensions-8)/(3*dimensions+3))); this is the maximum apply fraction whose declared dense model savings cover eleven compiled-controller scalar operations per row",
+      "initial_mu": 0.0,
+      "learning_rate": 0.01,
+      "maximum_mu": 2.0,
+      "minimum_mu": 0.0,
+      "recurrence": "after each fit controller transition, mu=clip(mu+0.01*(previous_apply_cost-b_d),0,2)"
+    },
+    "eligibility_lambda": 0.8,
+    "fit_order": "stream_id ascending, then data_seed ascending, then local row ascending",
+    "initial_q_old": 0.0,
+    "initial_trace": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "initial_weights": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "loss_context": "min(1,max(0,log1p(pre_update_half_squared_error)/4))",
+    "event_density": "min(1,len(unique_valid_event_indices)/dimensions)",
+    "learning_rate_alpha": 0.05,
+    "q": "dot(theta,action_feature)",
+    "reward": "at local row t>0, reward for action t-1 is -loss_context_t - mu*(apply_cost_t_minus_1-b_d)",
+    "trace_reset": "trace and q_old reset to zero at each trajectory boundary; theta and mu persist across fit trajectories",
+    "true_online_sarsa_recurrence": [
+      "delta=reward+0.9*q_current-q_previous",
+      "trace=0.9*0.8*trace+x_previous-0.05*0.9*0.8*dot(trace,x_previous)*x_previous",
+      "theta=theta+0.05*(delta+q_previous-q_old)*trace-0.05*(q_previous-q_old)*x_previous",
+      "q_old=q_current",
+      "reject immediately if any intermediate is nonfinite"
+    ],
+    "trajectory_finalization": "row 251 supplies the terminal reward for row 250 with q_current=0 and gamma=0; no row-251 action occurs",
+    "weights": 6
+  },
+  "controls": {
+    "all_unlearnable_null": "pure_noise_v4",
+    "noise_floor": "causal running target mean with one scalar state",
+    "oracle_feature_sgd": "fixed SGD restricted to protocol-declared oracle features; qualification control only",
+    "required_arms": [
+      "fixed_sgd_b1",
+      "constrained_sequential_update_policy",
+      "lambda_zero",
+      "no_dual",
+      "matched_random",
+      "reward_shift_37",
+      "always_skip",
+      "noise_floor",
+      "oracle_feature_sgd",
+      "twin_oracle"
+    ]
+  },
+  "estimand": {
+    "identification": [
+      "candidate and fixed SGD start from identical zero model state",
+      "candidate and fixed SGD consume identical immutable ordered rows",
+      "pre-update loss is measured before either action",
+      "all candidate actions are deterministic from the locked controller during assessment",
+      "the two learner runs are isolated and cannot interfere",
+      "assessment data seeds are independent experimental units"
+    ],
+    "name": "paired complete-policy cumulative pre-update loss effect",
+    "notation": "tau_f=E_seed[sum_t loss_t(fixed_sgd)-sum_t loss_t(locked_policy)]",
+    "primary_test_transform": "D_seed_f=mean_stream_in_family(log((candidate_cumulative_loss+1e-12)/(reference_cumulative_loss+1e-12)))",
+    "scope": "the complete policy trajectory, including all parameter carryover; not an isolated-update causal effect",
+    "sign": "tau_f>0 and D_seed_f<0 favor the candidate"
+  },
+  "execution": {
+    "assessment_pairs": 48,
+    "fit_seeds": 16,
+    "rows_per_trajectory": 252,
+    "synthetic_only_until_separate_authorization": true,
+    "tune_seeds": 16
+  },
+  "exploration_master_seed_hex": "7fefd5e1fbc346fbe8c20dfba40c7c362a0f6935d6d5f4707291ded5ea87cd56",
+  "family_map": {
+    "delayed_reward": [
+      "delayed_reward_v4"
+    ],
+    "drift": [
+      "feature_relevance_v4",
+      "piecewise_drift_v4"
+    ],
+    "event": [
+      "event_camera_v4"
+    ],
+    "predictable_noise": [
+      "sparse_predictable_v4",
+      "noisy_mnist_v4"
+    ]
+  },
+  "fit": {
+    "controller_updates": true,
+    "data_seeds": [
+      4000, 4001, 4002, 4003, 4004, 4005, 4006, 4007,
+      4008, 4009, 4010, 4011, 4012, 4013, 4014, 4015
+    ],
+    "effects_are_not_assessment_evidence": true,
+    "exploration_seed_independent_from_data_seeds": true
+  },
+  "gates": {
+    "assessment_mechanism": [
+      "within at least one qualifying family, candidate loss is lower than both lambda_zero and matched_random with Holm-adjusted p<=0.05 across the eight family-by-ablation tests",
+      "candidate loss is lower than always_skip in predictable_noise with Holm-adjusted p<=0.05",
+      "reward_shift_37 does not meet the candidate publication gate"
+    ],
+    "assessment_primary": [
+      "candidate family mean D_seed_f is negative",
+      "two-sided paired normal-approximation p value is Holm-adjusted across four families and adjusted p<=0.05",
+      "at least two families qualify",
+      "at least one qualifying family is delayed_reward or drift"
+    ],
+    "assessment_resources": [
+      "candidate model parameter writes <=0.75*reference in every qualifying family",
+      "candidate total declared assessment operations <=reference in every qualifying family",
+      "candidate peak assessment logical state bytes <=reference+64; assessment stores only three compiled action-margin coefficients",
+      "candidate replay bytes=0 and hidden accumulation=false",
+      "fit peak logical state bytes <=reference+128 and are reported separately"
+    ],
+    "assessment_temporal": [
+      "candidate mean adaptation lag <=reference mean lag+2 rows in every qualifying temporal family",
+      "candidate mean adaptation lag is strictly lower in at least one qualifying delayed_reward or drift family"
+    ],
+    "control": [
+      "oracle_feature_sgd cumulative loss < noise_floor cumulative loss in both predictable_noise streams on tune",
+      "candidate does not produce nonfinite loss and its declared total operations do not exceed fixed SGD on pure_noise_v4",
+      "always_skip is worse than fixed SGD on tune predictable_noise"
+    ],
+    "synthetic_status": "candidate only if every primary, temporal, resource, mechanism, control, custody, lock, and validator predicate passes",
+    "tune": [
+      "candidate family mean log loss ratio <0 in at least two families including delayed_reward or drift",
+      "candidate model parameter writes <=0.75*reference and total declared operations <=reference in every family",
+      "candidate mean loss <lambda_zero and matched_random in at least one family",
+      "twin_oracle has at least 128 probes and Wilson-95 lower bound for controller-margin sign agreement >0.50, using z=1.96 and the standard Wilson lower-bound formula",
+      "all control predicates pass",
+      "all values are finite and all accounting invariants pass"
+    ]
+  },
+  "historical_guard": {
+    "active_arm": false,
+    "retuning": false,
+    "status": "permanently_closed_historical_comparator"
+  },
+  "lock": {
+    "assessment_outputs_absent_before_acceptance": true,
+    "canonical_payload": [
+      "protocol_digest",
+      "review_digest",
+      "implementation_source_digests",
+      "runtime_digest",
+      "generator_spec_digest",
+      "fit_panel_manifest_digest",
+      "tune_panel_manifest_digest",
+      "controller_theta_binary64_hex",
+      "compiled_action_margin_binary64_hex",
+      "dual_mu_binary64_hex",
+      "matched_random_probability_binary64_hex",
+      "counter_schema_digest",
+      "fit_result_digest",
+      "tune_result_digest",
+      "tune_gate_booleans",
+      "empty_trace_and_pending_state",
+      "independent_validator_digest",
+      "independent_lock_review_decision"
+    ],
+    "decision": "accepted or rejected before assessment panel materialization",
+    "snapshot_restore": "assessment reconstructs a fresh zero model and exact locked controller; no fit or tune model weights are restored"
+  },
+  "power": {
+    "alpha_familywise": 0.05,
+    "assessment_pairs": 48,
+    "minimum_detectable_standardized_effect": 0.5,
+    "normal_approximation_power": 0.8330770040094296,
+    "scope": "primary family log-loss-ratio tests only; adaptation, mechanisms, and composite gates are not claimed powered",
+    "test": "two-sided paired normal approximation",
+    "worst_case_holm_alpha": 0.0125
+  },
+  "prng": {
+    "initialization": "first eight bytes, unsigned big-endian, of SHA-256 over uint32-length-framed UTF-8 protocol_id, cohort_id, stream_id, and decimal data_seed",
+    "name": "SplitMix64",
+    "next_uint64": [
+      "state=(state+0x9E3779B97F4A7C15) mod 2^64",
+      "z=state",
+      "z=((z xor (z>>30))*0xBF58476D1CE4E5B9) mod 2^64",
+      "z=((z xor (z>>27))*0x94D049BB133111EB) mod 2^64",
+      "return z xor (z>>31)"
+    ],
+    "normal_approximation": "sum of twelve consecutive uniform53 draws minus 6; no Gaussian library call",
+    "rademacher": "-1 if uniform53<0.5 else +1",
+    "uniform53": "(next_uint64>>11)/2^53"
+  },
+  "real_execution": {
+    "current_energy_receipts_eligible": false,
+    "fresh_backend_manifest_required": true,
+    "fresh_campaign_manifest_required": true,
+    "fresh_custody_required": true,
+    "fresh_privileged_energy_receipt_required": true,
+    "minimum_real_families": 2,
+    "separate_independent_execution_review_required": true,
+    "status": "sealed"
+  },
+  "reference": {
+    "algorithm": "fixed_sgd_b1",
+    "batch_size": 1,
+    "learning_rate": 0.03,
+    "row_251_update": false
+  },
+  "resource_accounting": {
+    "event_count": "sum len(unique valid event_indices) over consumed rows",
+    "fit_controller_fields": "theta[6],trace[6],mu,q_old as binary64; 112 bytes beyond the model",
+    "hidden_accumulation": false,
+    "line_items": {
+      "controller_action_ops": "fit: 6 multiplies+4 adds+1 comparison; tune/assessment: compile delta_theta=theta_apply-theta_skip once, then charge 2 multiplies+2 adds+1 comparison plus 4 loss-context and 2 event-density scalar operations =11 scalar operations per actionable row; fit exploration and matched-random additionally charge one hash and one threshold comparison",
+      "controller_fit_update_ops": "charge every multiply, add, comparison, clip, and each of six theta or trace writes in the declared recurrence",
+      "model_forward_ops": "dense fixed-SGD comparison: dimensions multiplies+dimensions adds including bias accumulation",
+      "model_gradient_ops": "if apply: dimensions multiplies plus one bias-gradient scalar operation",
+      "model_parameter_writes": "if apply: dimensions feature-weight writes plus one bias write; if skip: zero; active nonzero-coordinate writes are also reported separately",
+      "model_update_ops": "if apply: for every dimension and bias, one learning-rate multiply and one subtraction",
+      "scalar_control_ops": "count log1p, min, max, division, comparison, hash, and counter increments separately"
+    },
+    "logical_type_widths": {
+      "boolean": 1,
+      "counter_uint64": 8,
+      "float64": 8,
+      "index_uint32": 4
+    },
+    "measured_energy": "joules remain separate from logical operations",
+    "model_state": "dimensions+1 binary64 model parameters for both arms",
+    "replay_bytes": 0,
+    "assessment_controller_fields": "compiled delta_theta[3] binary64 derived from locked theta_apply-theta_skip; 24 bytes beyond the model",
+    "runner_counters": "identical external receipt instrumentation for candidate and reference; reported separately from algorithm state",
+    "update_count": "one if any model parameter is written for the row, otherwise zero"
+  },
+  "schema_version": "oaklab.experience-learning.constrained-update-policy-v4-protocol.v1",
+  "source_contract": {
+    "implementation_before_review": false,
+    "postimplementation_requirements": [
+      "additive V4-only source and tests",
+      "source-to-protocol equation parity",
+      "independent assignment and recurrence oracle",
+      "tamper-rejecting validator",
+      "no edits to V1-V3 or guard implementations"
+    ],
+    "read_only_reusable_sha256": {
+      "backends.py": "cd99c18dd53619f660ec6c2fac9e95061b346bebf5b6cf25a394f8beb38e5957",
+      "controls.py": "a070a9a7eac633f0be2aa01469f79b8b052a20a79fcaffa81a9bfdcd7a34525d",
+      "custody.py": "dc5d3361a35bc5f053fafaa1878457f1f610677fb14c254ba4aa27d362c60405",
+      "energy.py": "54e574d309d625421dd777d93145a47c83e55ae9a3df9e20f20a2062feafbfcb",
+      "learners.py": "5730acac2173294010521b613c8d1763441d0b5d063815c681f557b93081b593",
+      "types.py": "0b6757ef950dc807f4a5dc958bca1609318842998818804c35c3b27d1a1cb65d"
+    }
+  },
+  "state_slice": "oaklab-experience-learning-constrained-update-policy-v4",
+  "statistics": {
+    "epsilon": 1e-12,
+    "family_order": [
+      "delayed_reward",
+      "drift",
+      "event",
+      "predictable_noise"
+    ],
+    "holm": "sort by raw p then family_order; adjusted_i=max(previous_adjusted,min(1,(m-rank+1)*raw_p_i)); map to original family",
+    "paired_test": "for 48 D_seed_f values, mean, sample standard deviation with denominator 47, t=mean/(sd/sqrt(48)), two-sided p=erfc(abs(t)/sqrt(2))",
+    "per_stream_endpoint": "sum of 252 finite pre-update half-squared errors",
+    "zero_variance": "if sd=0 and mean=0 then p=1; if sd=0 and mean!=0 then p=0 with statistic=sign(mean); direction gate still required"
+  },
+  "stop_rules": [
+    "close V4 as NoCandidate before implementation if exact protocol review is not accepted",
+    "close V4 if implementation parity or validator review fails",
+    "close V4 before assessment if any tune predicate or independent tune-lock review fails",
+    "close V4 if the synthetic strict gate fails; no retuning or second assessment",
+    "do not materialize real panels unless synthetic status is candidate and a separate review authorizes execution",
+    "close V4 if real quality, temporal, resource, statistics, custody, or measured-energy gates fail",
+    "never reopen the plasticity guard or reuse V1-V3 mechanisms under aliases",
+    "never reuse a V2 energy trace or receipt",
+    "keep Astral isolated"
+  ],
+  "stream_protocol": {
+    "common": {
+      "loss": "0.5*(prediction-target)^2 before action",
+      "rows": 252,
+      "source_id": "cohort:stream_id:data_seed:local_row",
+      "task_id": "the declared segment or episode index only; forbidden from controller context"
+    },
+    "definitions": {
+      "delayed_reward_v4": {
+        "change_points": [
+          126
+        ],
+        "dimensions": 4,
+        "equations": "28 episodes of nine rows; cue is one Rademacher draw per episode; phase=t mod 9; features=(cue,phase/8,1[phase=8],1); target=0 for phase<8 and mapping*cue for phase=8; mapping=+1 for episodes 0..13 and -1 for episodes 14..27",
+        "events": "indices of nonzero features",
+        "oracle_features": [
+          0,
+          2,
+          3
+        ]
+      },
+      "event_camera_v4": {
+        "change_points": [
+          126
+        ],
+        "dimensions": 64,
+        "equations": "draw three indices uniformly by floor(64*u), deduplicate, set each to a Rademacher polarity; force feature0 to alternating -1,+1 by row parity; target=mapping*feature0+0.15*z where mapping=+1 before row126 and -1 afterward",
+        "events": "sorted unique nonzero feature indices",
+        "oracle_features": [
+          0
+        ]
+      },
+      "feature_relevance_v4": {
+        "change_points": [
+          126
+        ],
+        "dimensions": 8,
+        "equations": "each feature=2*u-1; target=2*x0+0.1*z before row126 and -2*x1+0.1*z afterward",
+        "events": "all eight feature indices",
+        "oracle_features": [
+          0,
+          1
+        ]
+      },
+      "noisy_mnist_v4": {
+        "change_points": [],
+        "dimensions": 784,
+        "equations": "label=row mod 2; zero vector; if label1 set indices 377,378,405,406 to1 else set index377 to-1; perform 40 draws of index=floor(784*u) and add one Rademacher; target=(1 if label1 else -1)+0.2*z",
+        "events": "sorted unique nonzero feature indices",
+        "oracle_features": [
+          377,
+          378,
+          405,
+          406
+        ]
+      },
+      "piecewise_drift_v4": {
+        "change_points": [
+          84,
+          168
+        ],
+        "dimensions": 6,
+        "equations": "each feature=2*u-1; coefficient pairs (x0,x1) are (1,-0.75) rows0..83, (-1.5,0.5) rows84..167, and (0.75,1.25) rows168..251; target is the segment dot product+0.1*z",
+        "events": "all six feature indices",
+        "oracle_features": [
+          0,
+          1
+        ]
+      },
+      "pure_noise_v4": {
+        "change_points": [],
+        "dimensions": 16,
+        "equations": "each feature is active with probability0.15 and when active is Rademacher; target is an independent z draw",
+        "events": "sorted active feature indices",
+        "oracle_features": []
+      },
+      "sparse_predictable_v4": {
+        "change_points": [],
+        "dimensions": 16,
+        "equations": "feature0 is always Rademacher; each other feature is active with probability0.15 and when active is Rademacher; target=1.5*x0+0.25*z",
+        "events": "sorted active feature indices",
+        "oracle_features": [
+          0
+        ]
+      }
+    },
+    "generator_spec_digest_rule": "canonical SHA-256 of prng and stream_protocol objects"
+  },
+  "temporal_metric": {
+    "adaptation_lag": "at each declared change point, baseline is median of the 16 immediately preceding pre-update losses; threshold=1.10*baseline; scan post-change eight-row rolling means and require two consecutive windows <=threshold; lag is the first window start minus change point",
+    "aggregation": "per seed take maximum lag across stream change points; per family average stream lags then average seeds",
+    "censoring": "if recovery is absent, lag equals rows-change_point; delayed_reward and drift/event boundaries use the same rule",
+    "stationary_streams": "not applicable"
+  },
+  "tune": {
+    "controller_updates": false,
+    "data_seeds": [
+      5000, 5001, 5002, 5003, 5004, 5005, 5006, 5007,
+      5008, 5009, 5010, 5011, 5012, 5013, 5014, 5015
+    ],
+    "matched_random_probability": "arithmetic mean candidate apply fraction over every tune stream and seed, encoded as binary64 and locked",
+    "model_initialization": "zero independently for every arm, stream, and seed",
+    "no_hyperparameter_selection": true
+  },
+  "ablation_execution": {
+    "reward_shift_37": "during its separate fit only, replace the loss_context reward component at row t with the component from row (t+37) mod 252 from the same immutable trajectory; keep the action cost, dual multiplier, rows, model updates, and resource penalty at t; this arm is forbidden from candidate inputs",
+    "twin_oracle": "on tune local rows 0,9,...,243, clone the current candidate model before action; branch apply versus skip; run each clone over rows t+1 through t+8 using the same locked greedy controller independently on each branch and no controller updates; utility=sum(skip_branch_pre_update_loss)-sum(apply_branch_pre_update_loss); margin=Q_apply-Q_skip at t; a sign match requires both nonzero and equal sign, while either zero is a mismatch; probes never alter the candidate trajectory",
+    "wilson_lower_95": "for n probes and k sign matches, p=k/n and lower=(p+z^2/(2n)-z*sqrt(p*(1-p)/n+z^2/(4n^2)))/(1+z^2/n), z=1.96"
+  },
+  "validator_contract": {
+    "independent_recomputation": [
+      "SplitMix64 rows and source IDs",
+      "fit exploration and matched-random hash actions",
+      "every pre-update prediction, loss, action, model update, controller reward, trace, theta, and dual recurrence",
+      "all tune gates, twin-oracle probes, snapshot fields, and lock digests",
+      "assessment actions, cumulative losses, adaptation lags, controls, ablations, operation counts, storage bytes, paired tests, Holm adjustments, and final status"
+    ],
+    "mandatory_rejections": [
+      "digest drift or missing required arm",
+      "nonfinite value or malformed source order",
+      "assessment materialization before accepted lock",
+      "controller mutation outside fit",
+      "more or fewer than one Experience per observe call",
+      "replay, hidden accumulation, minibatch normalization, reshuffling, future-field access, or leaked task_id",
+      "plasticity-guard execution or V1-V3 alias reuse",
+      "V2 energy reuse or Astral coupling",
+      "claim above the current ceiling"
+    ]
+  }
+}

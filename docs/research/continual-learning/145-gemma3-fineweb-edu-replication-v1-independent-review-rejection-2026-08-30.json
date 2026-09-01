@@ -1,0 +1,30 @@
+{
+  "schema": "gemma3-fineweb-edu-replication-v1-independent-review",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v1",
+  "review_status": "REJECT",
+  "reviewer": "independent-review-agent",
+  "protocol_sha256": "1e42fc79c8486b1534fd2996f58c7a78de93e287249d14b347f013846d2756ff",
+  "findings": {
+    "r1_preserved": true,
+    "fresh_ranges_disjoint": true,
+    "crawl_document_split_disjoint": true,
+    "window_64_and_no_r1_fallback": false,
+    "configuration_locked": true,
+    "controls_executable": false,
+    "uncertainty_rule_locked": false,
+    "external_custody": true,
+    "prohibited_actions_enforced": false,
+    "validator_behavior_accepted": false
+  },
+  "concise_findings": [
+    "r1 semantic digests and the live cached-model manifest match the frozen pins.",
+    "Fresh row ranges, document identities, and 64-window eligibility were independently confirmed.",
+    "No replication-specific source packer, runner, validator, tests, or fresh roots exist.",
+    "The referenced validator is r1-only and cannot enforce the 64-window replication, exact configuration, control retention, bootstrap decision rule, or fresh claim ceiling.",
+    "The bootstrap algorithm and replication claim ceiling are not specified exactly enough for deterministic validation.",
+    "Fresh assessment effects remain unauthorized."
+  ],
+  "authorization": "none; fresh assessment effects remain closed",
+  "receipt_digest_method": "sha256 of UTF-8 canonical JSON with sorted keys and compact separators, excluding receipt_sha256",
+  "receipt_sha256": "268e6b0525435d62f8e977355c73ceb9a8495b4e4df2b03bbf366f3c26bb55f1"
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "gemma3-fineweb-edu-replication-v25-independent-review-rejection",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v25",
+  "protocol_sha256": "47fa38a2002ba9635de5c9f7a9849e273d1fa5bd8e77721770275a1761046f54",
+  "review_packet_sha256": "8bbcc05230f5105c77147d088bc8191b2ead9d139f9a9230225c93e7803d8661",
+  "implementation_manifest_sha256": "7e73a7424d669f59657dd32c20feb1b94bb1cf8cf71935bd4b65bb434d1aad4f",
+  "reviewer": "OpenAI Codex independent static reviewer",
+  "reviewed_at_utc": "2026-08-31T06:08:51Z",
+  "effects_run": false,
+  "review_decision": "REJECT",
+  "findings": {
+    "custody_exact_pinned_data_identity": false,
+    "fit_assessment_prior_pilot_disjointness": true,
+    "locked_configuration_and_paper_target_treatment": true,
+    "controls_and_frozen_weight_behavior": false,
+    "exact_bootstrap_and_uncertainty_rule": true,
+    "aggregate_per_document_retention_and_validator_behavior": false,
+    "v1_v2_v3_v4_rejections_preserved_and_prohibited_actions_enforced": false
+  },
+  "material_findings": [
+    "The validator CLI corpus mode evaluates _tokenizer_for_validation(args.model) before validate_corpus validates the independent review receipt, permitting tokenizer/model-snapshot loading before review acceptance.",
+    "materialize_model_snapshot accepts an existing byte-identical snapshot without verifying or restoring read-only file and directory modes; model_manifest_at binds bytes but not permissions, so a writable preexisting snapshot can pass custody checks and remain pathname-mutable during loading."
+  ],
+  "disposition": "V25 sealed without an acceptance receipt, acquisition, model effects, or published result. A fresh V26 identity is required for correction."
+}

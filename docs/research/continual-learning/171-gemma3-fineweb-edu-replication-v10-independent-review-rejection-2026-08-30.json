@@ -1,0 +1,34 @@
+{
+  "effects_run": false,
+  "findings": {
+    "aggregate_per_document_retention_and_validator_behavior": false,
+    "controls_and_frozen_weight_behavior": true,
+    "custody_exact_pinned_data_identity": false,
+    "exact_bootstrap_and_uncertainty_rule": false,
+    "fit_assessment_prior_pilot_disjointness": false,
+    "locked_configuration_and_paper_target_treatment": true,
+    "v1_v2_v3_v4_rejections_preserved_and_prohibited_actions_enforced": true
+  },
+  "implementation_manifest_sha256": "dfa436340928a1e0c9984f58c20664684ff0879c80b7c44179df11f9e501b647",
+  "material_findings": [
+    "audit_corpus and parse_window verify the selected document identities and retained window hashes but never verify that each window's token IDs equal the first 1024 token IDs of its claimed source row; they also do not require a unique path under the declared split. Arbitrary, reused, cross-split, or prior-pilot window bytes can therefore be accepted while carrying valid claimed source hashes, so exact data identity and evaluated-content disjointness are not established.",
+    "validate_result accepts assessment_per_document rows in any permutation and feeds that supplied order directly into the SHA-256-counter bootstrap. Because the finite deterministic resample weights are index-dependent, reordering the same document deltas can change the confidence limits while still validating; the canonical runner order is not independently enforced or reconstructed."
+  ],
+  "protocol_sha256": "b5652653f04b1970af662cea7cca36ad274f4ffb67c1a840a40b7a249bd35503",
+  "review_decision": "REJECT",
+  "review_packet_sha256": "ffa7d2204757d776bd755475b37e7f67433fb5ccb8a4b1d45b884a13699a8f15",
+  "reviewed_at_utc": "2026-08-30T16:10:00Z",
+  "reviewed_files": [
+    "docs/research/continual-learning/169-gemma3-fineweb-edu-replication-v10-protocol.md",
+    "docs/research/continual-learning/170-gemma3-fineweb-edu-replication-v10-review-packet.md",
+    "experiments/continual_learning/gemma3_fineweb_edu_replication_v10_contract.py",
+    "experiments/continual_learning/prepare_gemma3_fineweb_edu_replication_v10.py",
+    "experiments/continual_learning/validate_gemma3_fineweb_edu_replication_v10.py",
+    "experiments/continual_learning/stage_and_run_gemma3_fineweb_edu_replication_v10.py",
+    "experiments/continual_learning/tests/test_gemma3_fineweb_edu_replication_v10.py"
+  ],
+  "reviewer": "independent-static-reviewer-2",
+  "schema": "gemma3-fineweb-edu-replication-v10-independent-review-rejection",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v10",
+  "receipt_sha256": "ee51e716883581e08465e528599dda7fb853c6c125d90e3a6c02a99fe8ea44d7"
+}

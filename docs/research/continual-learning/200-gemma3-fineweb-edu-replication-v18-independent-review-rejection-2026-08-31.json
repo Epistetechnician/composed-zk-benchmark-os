@@ -1,0 +1,24 @@
+{
+  "schema": "gemma3-fineweb-edu-replication-v18-independent-review-rejection",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v18",
+  "protocol_sha256": "9d345f2a07f276de51930d5cb90ce56aa31610fc993140f1194aaf91fa10b290",
+  "review_packet_sha256": "72cbd60931b6a007912505a0c0ce7112e503977864fce83dc6868a20fe3eaab6",
+  "implementation_manifest_sha256": "2ad73371b40800a0e000260995adfc1afa83c9ecc6f98190382e1ac3b79c4958",
+  "reviewer": "OpenAI Codex independent reviewer",
+  "reviewed_at_utc": "2026-08-31T04:47:05Z",
+  "effects_run": false,
+  "review_decision": "REJECT",
+  "findings": {
+    "custody_exact_pinned_data_identity": true,
+    "fit_assessment_prior_pilot_disjointness": true,
+    "locked_configuration_and_paper_target_treatment": true,
+    "controls_and_frozen_weight_behavior": true,
+    "exact_bootstrap_and_uncertainty_rule": true,
+    "aggregate_per_document_retention_and_validator_behavior": false,
+    "v1_v2_v3_v4_rejections_preserved_and_prohibited_actions_enforced": true
+  },
+  "material_findings": [
+    "The runner invokes full independent result validation only with --allow-missing-validator-receipt. After creating validator-receipt.json, it calls only validate_validator_receipt against the earlier returned object and then publishes; it never performs the required final validate_result pass with the receipt required. Result bytes can therefore change after independent validation and before publication without full revalidation."
+  ],
+  "disposition": "V18 sealed without an acceptance receipt, acquisition, model effects, or published result. A fresh V19 identity is required for correction."
+}

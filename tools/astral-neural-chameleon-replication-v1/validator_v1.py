@@ -637,19 +637,24 @@ def _revalidate_root(result: dict[str, Any], trusted_root: Path | None) -> list[
     if not isinstance(root_value, str) or not root_value:
         return ["artifact_root_revalidation_invalid"]
     root = Path(root_value)
+    try:
+        root_resolved = root.resolve(strict=False)
+    except (OSError, RuntimeError, ValueError):
+        return errors + ["artifact_root_revalidation_invalid"]
     if trusted_root is None:
         errors.append("artifact_root_revalidation_trusted_input_required")
     else:
         supplied = trusted_root if trusted_root.is_absolute() else Path.cwd() / trusted_root
         try:
             supplied_resolved = supplied.resolve(strict=False)
-            root_resolved = root.resolve(strict=False)
         except (OSError, RuntimeError, ValueError):
             return errors + ["artifact_root_revalidation_invalid"]
         if root_resolved != supplied_resolved:
             errors.append("artifact_root_revalidation_trusted_input_mismatch")
         if supplied.is_symlink() or _symlink_components(supplied.parent):
             errors.append("artifact_root_revalidation_trusted_input_symlink")
+    if root != root_resolved:
+        errors.append("artifact_root_revalidation_noncanonical")
     if not root.is_absolute():
         errors.append("artifact_root_revalidation_not_absolute")
     if root.is_symlink() or not root.is_dir():
@@ -666,7 +671,7 @@ def _revalidate_root(result: dict[str, Any], trusted_root: Path | None) -> list[
         return errors
     if _symlink_components(root.parent):
         errors.append("artifact_root_revalidation_ancestor_symlink")
-    resolved_root = root.resolve(strict=False)
+    resolved_root = root_resolved
     if resolved_root == _repository_root() or _is_within(resolved_root, _repository_root()):
         errors.append("artifact_root_revalidation_inside_repository")
     if any(path.is_symlink() for path in resolved_root.rglob("*")):
@@ -853,8 +858,9 @@ def validate(result: Any, artifact_root: Path | None = None) -> list[str]:
     if not isinstance(result.get("artifact_root"), str) or not result["artifact_root"]:
         errors.append("artifact_root_invalid")
     classification = result.get("classification")
-    if classification not in KNOWN_CLASSIFICATIONS:
+    if not isinstance(classification, str) or classification not in KNOWN_CLASSIFICATIONS:
         errors.append("unknown_classification")
+        classification = None
     if result.get("required_roles") != REQUIRED_ROLES:
         errors.append("required_roles_mismatch")
     if result.get("required_capabilities") != REQUIRED_CAPABILITIES:

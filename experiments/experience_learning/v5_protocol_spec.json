@@ -1,0 +1,269 @@
+{
+  "schema_version": "oaklab.experience-learning.constrained-update-policy-v5.source.v1",
+  "protocol_id": "oaklab.cup.v5",
+  "state_slice": "oaklab-experience-learning-constrained-update-policy-v5",
+  "claim_ceiling": "LocalDevelopmentOakLabConstrainedUpdatePolicyV5ProtocolCompilerOnly",
+  "status": "frozen_pending_independent_review",
+  "implementation_before_review": false,
+  "estimand": {
+    "name": "paired complete-policy cumulative pre-update loss effect",
+    "notation": "tau_f=E_seed[sum_t loss_t(fixed_sgd_b1)-sum_t loss_t(locked_policy)]",
+    "unit": "assessment seed trajectory",
+    "loss": "0.5*(prediction-target)^2 measured before the row action",
+    "scope": "complete-policy trajectory including carryover from every earlier action",
+    "identification": [
+      "candidate and reference start from byte-identical zero model states",
+      "candidate and reference consume identical ordered rows and one row per observe",
+      "assessment actions are deterministic from the locked controller",
+      "assessment seeds are independent experimental units",
+      "candidate controller state never mutates during tune or assessment"
+    ],
+    "primary_transform": "D_seed_f=log((candidate_cumulative_loss+1e-12)/(reference_cumulative_loss+1e-12))",
+    "favorable_direction": "tau_f>0 and mean(D_seed_f)<0"
+  },
+  "hash_prng_transcript": {
+    "canonical_json": "UTF-8 bytes from json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=True,allow_nan=False)",
+    "file_bytes": "UTF-8 without BOM, LF line endings, exactly one final LF; source digest is over these exact bytes",
+    "source_digest": "SHA-256 of the exact UTF-8 bytes of v5_protocol_spec.json; whitespace changes the digest",
+    "digest_encoding": "lowercase hexadecimal with exactly 64 ASCII characters",
+    "frame": "LP32(payload)=u32_be(byte_length(payload))||payload for variable UTF-8 fields; fixed digest/uint32/uint64 fields are raw fixed-width bytes with no length prefix; concatenate fields in declared order",
+    "field_encodings": {
+      "utf8": "UTF-8 payload bytes",
+      "uint32": "unsigned 32-bit big-endian payload",
+      "uint64": "unsigned 64-bit big-endian payload",
+      "hex_digest": "decode exactly 64 lowercase/uppercase hex characters into 32 bytes"
+    },
+    "protocol_seed_frame": ["domain_tag_utf8", "protocol_digest_raw_32", "cohort_id_utf8", "stream_id_utf8", "data_seed_uint64"],
+    "protocol_seed_domain": "oaklab.cup.v5.splitmix64.seed.v1",
+    "splitmix64": {
+      "state_initialization": "uint64_be(SHA256(protocol_seed_frame)[0:8])",
+      "next_uint64": [
+        "state=(state+0x9E3779B97F4A7C15) mod 2^64",
+        "z=state",
+        "z=((z xor (z>>30))*0xBF58476D1CE4E5B9) mod 2^64",
+        "z=((z xor (z>>27))*0x94D049BB133111EB) mod 2^64",
+        "return z xor (z>>31)"
+      ],
+      "uniform53": "(next_uint64()>>11)/9007199254740992",
+      "rademacher": "-1 if uniform53()<0.5 else +1",
+      "normal_approximation": "sum(next_uniform53() for exactly 12 draws)-6",
+      "index": "floor(uniform53()*dimension), with 0<=index<dimension"
+    },
+    "draw_transcript_row": "cohort_id,stream_id,data_seed,row,draw_ordinal,draw_label,raw_uint64,derived_value; every listed draw is consumed even when its value is ignored",
+    "action_hash": {
+      "domain": "oaklab.cup.v5.action.v1",
+      "fields": ["protocol_digest_raw_32", "exploration_master_seed_raw_32", "cohort_id_utf8", "stream_id_utf8", "data_seed_uint64", "local_row_uint32"],
+      "probability_encoding": "rational p_num/p_den; threshold=floor(p_num*2^256/p_den), never binary floating comparison",
+      "decision": "apply iff uint256_be(SHA256(frame)) < threshold; otherwise skip",
+      "ties": "apply"
+    },
+    "exploration_master_seed_hex": "7fefd5e1fbc346fbe8c20dfba40c7c362a0f6935d6d5f4707291ded5ea87cd56",
+    "transcript_test_vector_rule": "compiler emits root initialization state, first 12 raw SplitMix64 outputs, first uniform53, first normal12, and action-hash digest for fit/stream/data_seed/row=(fit,sparse_predictable_v5,4000,0)",
+    "transcript_schema": {
+      "fields": [
+        ["draw_ordinal", "uint32", true],
+        ["draw_label", "utf8", true],
+        ["raw_uint64", "uint64", true],
+        ["derived_value", "float64_or_uint32", true]
+      ],
+      "ordering": "ascending draw_ordinal; no conditional draws"
+    }
+  },
+  "controller_transition_table": {
+    "actions": ["skip", "apply"],
+    "features": ["intercept", "loss_context", "event_density", "previous_apply_cost", "segment_phase", "bias_context"],
+    "feature_formula": {
+      "loss_context": "min(1,max(0,log1p(pre_update_loss)/4))",
+      "event_density": "min(1,active_event_count/dimension)",
+      "segment_phase": "row/(segment_stop-segment_start-1) clipped to [0,1]",
+      "bias_context": "1 if target_sign equals prediction_sign else 0"
+    },
+    "state_fields": [
+      {"name":"theta", "type":"float64[6]", "lifetime":"fit", "initial":"[0,0,0,0,0,0]"},
+      {"name":"trace", "type":"float64[6]", "lifetime":"trajectory", "initial":"[0,0,0,0,0,0]"},
+      {"name":"q_old", "type":"float64", "lifetime":"trajectory", "initial":"0"},
+      {"name":"dual_mu", "type":"float64", "lifetime":"fit", "initial":"0"},
+      {"name":"pending_valid", "type":"uint8", "lifetime":"trajectory", "initial":"0"},
+      {"name":"previous_action", "type":"uint8", "lifetime":"trajectory", "initial":"255 means none"},
+      {"name":"previous_features", "type":"float64[6]", "lifetime":"trajectory", "initial":"zeros"},
+      {"name":"previous_q", "type":"float64", "lifetime":"trajectory", "initial":"0"},
+      {"name":"previous_apply_cost", "type":"float64", "lifetime":"trajectory", "initial":"0"},
+      {"name":"previous_mu_at_action", "type":"float64", "lifetime":"trajectory", "initial":"0"},
+      {"name":"pending_features", "type":"float64[6]", "lifetime":"one transition", "initial":"zeros"},
+      {"name":"pending_prediction", "type":"float64", "lifetime":"one transition", "initial":"0"},
+      {"name":"pending_loss", "type":"float64", "lifetime":"one transition", "initial":"0"},
+      {"name":"pending_event_count", "type":"uint32", "lifetime":"one transition", "initial":"0"},
+      {"name":"pending_action", "type":"uint8", "lifetime":"one transition", "initial":"255 means none"},
+      {"name":"pending_apply_cost", "type":"float64", "lifetime":"one transition", "initial":"0"},
+      {"name":"pending_mu_at_action", "type":"float64", "lifetime":"one transition", "initial":"0"},
+      {"name":"pending_reward", "type":"float64", "lifetime":"one transition", "initial":"0"},
+      {"name":"pending_terminal", "type":"boolean", "lifetime":"one transition", "initial":"false"},
+      {"name":"pending_local_row", "type":"uint32", "lifetime":"one transition", "initial":"0"}
+    ],
+    "constants": {
+      "discount_gamma": 0.9,
+      "eligibility_lambda": 0.8,
+      "controller_alpha": 0.05,
+      "dual_alpha": 0.01,
+      "dual_max": 2.0,
+      "apply_cost": 1.0,
+      "action_rate_budget": "min(0.75,max(0,(3*dimension-8)/(3*dimension+3)))"
+    },
+    "rows": [
+      {"index":0,"event":"trajectory_init","reads":[],"writes":["trace","q_old","pending_valid","previous_action","previous_features","previous_q","previous_apply_cost","previous_mu_at_action","pending_terminal","pending_local_row"],"order":"reset trajectory fields before row 0; theta and dual_mu persist only across fit trajectories"},
+      {"index":1,"event":"observe_pre_action","reads":["Experience.features","Experience.target","Experience.event_indices"],"writes":["pending_prediction","pending_loss","pending_event_count","pending_features"],"order":"predict then compute finite half-squared loss before any write"},
+      {"index":2,"event":"select_action","reads":["pending_features","theta","dual_mu","pending_loss","pending_event_count","hash_transcript"],"writes":["pending_action","pending_apply_cost","pending_mu_at_action"],"order":"compute q_skip and q_apply from pre-update theta; fit uses hash exploration; tune/assessment use locked greedy; ties apply"},
+      {"index":4,"event":"model_action","reads":["pending_action","Experience.features","Experience.target"],"writes":["model_parameters","counter_row"],"order":"execute selected action after prior credit; apply performs exactly one fixed-rate SGD update; skip performs no parameter write"},
+      {"index":3,"event":"credit_previous_fit_only","reads":["pending_valid","pending_reward","pending_features","previous_features","previous_q","q_old","previous_mu_at_action","previous_apply_cost"],"writes":["theta","trace","q_old","dual_mu","previous_action","previous_features","previous_q","previous_apply_cost","previous_mu_at_action"],"order":"if pending_valid, credit prior action before current model action; reward uses previous_mu_at_action snapshot"},
+      {"index":5,"event":"pending_write","reads":["pending_features","pending_prediction","pending_loss","pending_action","pending_apply_cost","pending_mu_at_action","local_row"],"writes":["pending_valid","previous_features","previous_q","previous_action","previous_apply_cost","previous_mu_at_action","pending_local_row"],"order":"publish current action and all fields needed by the next row; no implicit state"},
+      {"index":6,"event":"trajectory_end","reads":["pending_valid","pending_local_row","terminal_loss"],"writes":["pending_reward","pending_terminal","theta","trace","q_old","dual_mu","pending_valid"],"order":"row 251 supplies terminal reward for row 250 with q_current=0 and gamma=0; no row-251 model action"},
+      {"index":7,"event":"counter_finalize","reads":["counter_row"],"writes":["counter_receipt"],"order":"append one canonical counter row after every observe action"}
+    ],
+    "controller_recurrence": [
+      "delta=reward+gamma*q_current-previous_q",
+      "trace=gamma*lambda*trace+previous_features-alpha*gamma*lambda*dot(trace,previous_features)*previous_features",
+      "theta=theta+alpha*(delta+previous_q-q_old)*trace-alpha*(previous_q-q_old)*previous_features",
+      "q_old=q_current",
+      "dual_mu=clip(dual_mu+dual_alpha*(previous_apply_cost-budget),0,dual_max)"
+    ],
+    "pending_rule": "every pending_* field is either consumed and overwritten within the indexed transition sequence or reset at boundary; undeclared state is invalid",
+    "row_251_rule": "for 252 rows, row 251 records pre-update loss and terminal reward for row 250; no model action occurs on row 251"
+  },
+  "generator_roster": {
+    "rows_per_trajectory": 252,
+    "cohort_seeds": {"fit":{"start":4000,"count":16},"tune":{"start":5000,"count":16},"assessment":{"start":6000,"count":48}},
+    "cohort_order": ["fit","tune","assessment"],
+    "stream_order": ["delayed_reward_v5","feature_relevance_v5","piecewise_drift_v5","event_camera_v5","sparse_predictable_v5","noisy_mnist_v5","long_horizon_v5","pure_noise_v5"],
+    "family_map": {
+      "delayed_reward": ["delayed_reward_v5"],
+      "drift": ["feature_relevance_v5","piecewise_drift_v5"],
+      "event": ["event_camera_v5"],
+      "predictable_noise": ["sparse_predictable_v5","noisy_mnist_v5"],
+      "long_horizon": ["long_horizon_v5"],
+      "null": ["pure_noise_v5"]
+    },
+    "source_id_layout": "utf8('cohort:stream_id:data_seed:local_row') with decimal data_seed and local_row, used only for custody and never as controller input",
+    "segment_boundaries": {"default":[0,84,168,252],"stationary":[0,252]},
+    "draw_policy": "each row consumes the exact roster below in listed order; conditional branches select or zero already-drawn values and never draw again",
+    "draw_roster": {
+      "sparse_predictable_v5":[{"ordinal":0,"label":"signal","primitive":"rademacher","repeat":1},{"ordinal":1,"label":"activity","primitive":"uniform53","repeat":15,"index_order":"feature 1 through 15"},{"ordinal":2,"label":"polarity","primitive":"rademacher","repeat":15,"index_order":"feature 1 through 15"},{"ordinal":3,"label":"target_noise","primitive":"normal12","repeat":1}],
+      "noisy_mnist_v5":[{"ordinal":0,"label":"distractor_index","primitive":"uniform53","repeat":40,"index_order":"distractor 0 through 39"},{"ordinal":1,"label":"distractor_polarity","primitive":"rademacher","repeat":40,"index_order":"distractor 0 through 39"},{"ordinal":2,"label":"target_noise","primitive":"normal12","repeat":1}],
+      "feature_relevance_v5":[{"ordinal":0,"label":"feature_uniform","primitive":"uniform53","repeat":8,"index_order":"feature 0 through 7"},{"ordinal":1,"label":"target_noise","primitive":"normal12","repeat":1}],
+      "piecewise_drift_v5":[{"ordinal":0,"label":"feature_uniform","primitive":"uniform53","repeat":6,"index_order":"feature 0 through 5"},{"ordinal":1,"label":"target_noise","primitive":"normal12","repeat":1}],
+      "delayed_reward_v5":[{"ordinal":0,"label":"cue","primitive":"rademacher","repeat":1},{"ordinal":1,"label":"unused_cue","primitive":"rademacher","repeat":1},{"ordinal":2,"label":"target_noise","primitive":"normal12","repeat":1}],
+      "event_camera_v5":[{"ordinal":0,"label":"event_index","primitive":"uniform53","repeat":3,"index_order":"event 0 through 2"},{"ordinal":1,"label":"event_polarity","primitive":"rademacher","repeat":3,"index_order":"event 0 through 2"},{"ordinal":2,"label":"target_noise","primitive":"normal12","repeat":1}],
+      "long_horizon_v5":[{"ordinal":0,"label":"feature_uniform","primitive":"uniform53","repeat":8,"index_order":"feature 0 through 7"},{"ordinal":1,"label":"target_noise","primitive":"normal12","repeat":1}],
+      "pure_noise_v5":[{"ordinal":0,"label":"activity","primitive":"uniform53","repeat":16,"index_order":"feature 0 through 15"},{"ordinal":1,"label":"polarity","primitive":"rademacher","repeat":16,"index_order":"feature 0 through 15"},{"ordinal":2,"label":"target_noise","primitive":"normal12","repeat":1}]
+    },
+    "streams": {
+      "sparse_predictable_v5": {"family":"predictable_noise","dimension":16,"draws":["signal_rademacher","feature1..15 activity_uniform then polarity_rademacher","target_noise_normal"],"equation":"x0=signal; xi=(activity<0.15)*polarity; y=1.5*x0+0.25*z","events":"sorted nonzero indices","oracle_features":[0],"segments":[0,252]},
+      "noisy_mnist_v5": {"family":"predictable_noise","dimension":784,"draws":["target_noise_normal","40 index_uniform then polarity_rademacher pairs"],"equation":"label=row mod 2; if label=1 set indices 377,378,405,406 to 1 else index 377 to -1; add forty drawn signed distractors; y=(2*label-1)+0.2*z","events":"sorted unique nonzero indices","oracle_features":[377,378,405,406],"segments":[0,252]},
+      "feature_relevance_v5": {"family":"drift","dimension":8,"draws":["feature0..7 uniform","target_noise_normal"],"equation":"xi=2*ui-1; y=(2*x0 if row<84 else -2*x1)+0.1*z","events":"all indices","oracle_features":[0,1],"segments":[0,84,168,252]},
+      "piecewise_drift_v5": {"family":"drift","dimension":6,"draws":["feature0..5 uniform","target_noise_normal"],"equation":"xi=2*ui-1; coefficients (1,-0.75),(-1.5,0.5),(0.75,1.25) on segments; y=dot(coef,x)+0.1*z","events":"all indices","oracle_features":[0,1],"segments":[0,84,168,252]},
+      "delayed_reward_v5": {"family":"delayed_reward","dimension":4,"draws":["episode_cue_rademacher","unused_cue_rademacher","target_noise_normal"],"equation":"28 episodes of nine rows; phase=row mod 9; cache cue from phase 0 and consume unused cue every row; x=(cue,phase/8,1[phase=8],1); y=0 for phase<8 else mapping*cue+0.05*z; mapping=+1 for episodes<14 else -1","events":"nonzero feature indices","oracle_features":[0,2,3],"segments":[0,126,252]},
+      "event_camera_v5": {"family":"event","dimension":64,"draws":["3 index_uniform","3 polarity_rademacher","target_noise_normal"],"equation":"deduplicate three indices without redraw; force x0=(-1 if row even else +1) while retaining all draws; y=(1 before row126 else -1)*x0+0.15*z","events":"sorted unique nonzero indices","oracle_features":[0],"segments":[0,126,252]},
+      "long_horizon_v5": {"family":"long_horizon","dimension":8,"draws":["feature0..7 uniform","target_noise_normal"],"equation":"xi=2*ui-1; maintain a 32-row ring of x0; y=ring_x0_32_rows_ago+0.1*z with zero prefill; coefficient sign reverses at rows 84 and 168","events":"all indices","oracle_features":[0],"segments":[0,84,168,252]},
+      "pure_noise_v5": {"family":"null","dimension":16,"draws":["feature0..15 activity_uniform then polarity_rademacher","target_noise_normal"],"equation":"xi=(activity<0.15)*polarity; y=z independent of x","events":"sorted active indices","oracle_features":[],"segments":[0,252]}
+    },
+    "generator_digest_rule": "SHA-256(canonical_json(generator_roster))",
+    "roster_digest_inputs": ["stream_order","family_map","streams","segment_boundaries","draw_policy","cohort_seeds","rows_per_trajectory"]
+  },
+  "operation_and_byte_algebra": {
+    "numeric_type_widths": {"boolean":1,"uint8":1,"uint32":4,"uint64":8,"float64":8,"sha256_digest":32},
+    "operation_units": "one multiply, add, comparison, division, min, max, clip, counter increment, parameter write, hash invocation, or PRNG draw each counts one; no fused-operation credit",
+    "model_formulas": {
+      "forward": "2*d+1",
+      "gradient": "d+1 if apply else 0",
+      "update": "2*(d+1) if apply else 0",
+      "parameter_writes": "d+1 if apply else 0",
+      "active_parameter_writes": "1 per nonzero gradient coordinate including bias if apply"
+    },
+    "formula_ast": {
+      "model_forward_dense": {"inputs":[["dimension","uint64"]],"output":"uint64","ast":{"op":"add","args":[{"op":"mul","args":[2,{"var":"dimension"}]},1]},"primitive_ops":{"multiply":1,"add":1}},
+      "model_gradient": {"inputs":[["dimension","uint64"],["apply","uint8"]],"output":"uint64","ast":{"op":"mul","args":[{"var":"apply"},{"op":"add","args":[{"var":"dimension"},1]}]},"primitive_ops":{"multiply":2,"add":1}},
+      "model_update": {"inputs":[["dimension","uint64"],["apply","uint8"]],"output":"uint64","ast":{"op":"mul","args":[{"var":"apply"},{"op":"mul","args":[2,{"op":"add","args":[{"var":"dimension"},1]}]}]},"primitive_ops":{"multiply":2,"add":1}},
+      "parameter_writes": {"inputs":[["dimension","uint64"],["apply","uint8"]],"output":"uint64","ast":{"op":"mul","args":[{"var":"apply"},{"op":"add","args":[{"var":"dimension"},1]}]},"primitive_ops":{"multiply":2,"add":1}},
+      "controller_dot": {"inputs":[["width","uint64"]],"output":"uint64","ast":{"op":"sub","args":[{"op":"mul","args":[{"var":"width"},2]},1]},"primitive_ops":{"multiply":1,"subtract":1}},
+      "event_count": {"inputs":[["unique_valid_events","uint64"]],"output":"uint64","ast":{"op":"identity","args":[{"var":"unique_valid_events"}]},"primitive_ops":{}}
+    },
+    "controller_formulas": {
+      "action_fit": "6 multiplies+5 adds+1 comparison+1 hash+1 threshold comparison",
+      "action_locked": "3 multiplies+2 adds+1 comparison+6 scalar feature operations",
+      "sarsa_fit": "48 multiplies+31 adds+6 writes+1 dot-product reduction+1 clip",
+      "dual_fit": "2 adds+1 multiply+1 clip",
+      "stream_row_event_count": "len(sorted_unique_valid_event_indices)",
+      "total_row_ops": "model_forward+model_gradient+model_update+controller_action+controller_update+scalar_controls+counter_increments"
+    },
+    "byte_layouts": {
+      "model_state": {"order":["weights[0..d-1]","bias"],"offsets":"weight_i=8*i; bias=8*d","bytes":"8*(d+1)"},
+      "fit_controller_state": {"order":["theta[6]","trace[6]","q_old","dual_mu","previous_action","previous_apply_cost","pending_action","pending_terminal"],"offsets":"packed in listed order with float64 alignment; uint8 fields follow float64 fields","bytes":"6*8+6*8+8+8+1+8+1+1=123 logical bytes; canonical packed layout rounds no field and reports 123"},
+      "pending_row": {"order":["pending_features[6]","pending_prediction","pending_loss","pending_event_count","pending_reward","pending_terminal"],"bytes":"6*8+8+8+4+8+1=77"},
+      "counter_row": {"order":["step","event_count","forward_ops","gradient_ops","update_ops","parameter_writes","controller_ops","scalar_ops","model_bytes","replay_bytes","experience_items"],"bytes":"11*8=88"},
+      "assessment_compiled_controller": {"order":["delta_theta[6]","dual_mu","matched_random_probability"],"bytes":"8*8=64"},
+      "lock_receipt": {"order":["schema_id","state_slice","protocol_digest","compiled_digest","review_digest","fit_lock_digest","tune_lock_digest","absence_digest","validator_digest"],"encoding":"canonical JSON UTF-8; no platform struct packing"}
+    },
+    "resource_invariants": ["replay_bytes=0 unless an explicitly named replay arm is present (none in V5)","hidden_accumulation=false","one Experience item per observe call","joules are separate measured fields and never inferred from operations","peak bytes are max of declared model, controller, pending, counter, and lock layouts"]
+  },
+  "ablation_execution_multiplicity": {
+    "arm_order": ["fixed_sgd_b1","complete_policy","lambda_zero","no_dual","matched_random","reward_shift_37","always_skip","noise_floor","oracle_feature_sgd","twin_oracle"],
+    "arms": {
+      "fixed_sgd_b1": {"role":"reference","fit":"yes","tune":"yes","assessment":"yes","controller":"none","model_action":"always_apply"},
+      "complete_policy": {"role":"candidate","fit":"yes","tune":"yes","assessment":"yes","controller":"locked_complete_policy","model_action":"locked_apply_or_skip"},
+      "lambda_zero": {"role":"mechanism_ablation","fit":"yes","tune":"yes","assessment":"yes","controller":"same_policy_lambda=0","model_action":"locked_apply_or_skip"},
+      "no_dual": {"role":"mechanism_ablation","fit":"yes","tune":"yes","assessment":"yes","controller":"same_policy_dual=0","model_action":"locked_apply_or_skip"},
+      "matched_random": {"role":"mechanism_control","fit":"no","tune":"yes","assessment":"yes","controller":"hash_policy_with_locked_tune_apply_fraction","model_action":"random_apply_skip"},
+      "reward_shift_37": {"role":"negative_control","fit":"yes_shifted_reward","tune":"yes","assessment":"no","controller":"shifted_fit_only","model_action":"locked_apply_or_skip"},
+      "always_skip": {"role":"resource_control","fit":"no","tune":"yes","assessment":"yes","controller":"none","model_action":"always_skip"},
+      "noise_floor": {"role":"unlearnable_control","fit":"no","tune":"yes","assessment":"yes","controller":"running_target_mean","model_action":"none"},
+      "oracle_feature_sgd": {"role":"sanity_control","fit":"no","tune":"yes","assessment":"no","controller":"none","model_action":"SGD_on_oracle_features"},
+      "twin_oracle": {"role":"controller_probe","fit":"no","tune":"yes_probe_only","assessment":"no","controller":"branch_apply_vs_skip_H8","model_action":"does_not_mutate_candidate"}
+    },
+    "execution_table": [
+      {"phase":"fit","arms":["fixed_sgd_b1","complete_policy","lambda_zero","no_dual","reward_shift_37"],"rows":"all fit roster rows in stream/seed/row order","controller_mutation":"complete_policy and ablations only"},
+      {"phase":"tune","arms":["fixed_sgd_b1","complete_policy","lambda_zero","no_dual","matched_random","always_skip","noise_floor","oracle_feature_sgd","twin_oracle"],"rows":"all tune roster rows in stream/seed/row order","controller_mutation":"none"},
+      {"phase":"assessment","arms":["fixed_sgd_b1","complete_policy","lambda_zero","no_dual","matched_random","always_skip","noise_floor"],"rows":"all assessment roster rows in stream/seed/row order","controller_mutation":"none"}
+    ],
+    "paired_test": "mean of per-seed D; sample sd denominator n-1; t=mean/(sd/sqrt(n)); p=erfc(abs(t)/sqrt(2)); zero variance gives p=1 for mean=0 else p=0",
+    "holm_groups": [
+      {"id":"primary_family","order":["delayed_reward","drift","event","predictable_noise","long_horizon"],"tests":"complete_policy minus fixed_sgd_b1 per family","alpha":0.05,"adjustment":"sort raw p then family order; adjusted=max(previous,(m-rank+1)*p) clipped 1"},
+      {"id":"mechanism_family","order":["delayed_reward/lambda_zero","delayed_reward/matched_random","drift/lambda_zero","drift/matched_random","event/lambda_zero","event/matched_random","predictable_noise/lambda_zero","predictable_noise/matched_random","long_horizon/lambda_zero","long_horizon/matched_random"],"tests":"complete_policy versus each named ablation","alpha":0.05,"adjustment":"sort raw p then fixed test order; adjusted=max(previous,(m-rank+1)*raw_p) clipped 1"},
+      {"id":"control_family","order":["predictable_noise/always_skip","predictable_noise/oracle_feature_sgd","pure_noise/complete_policy"],"tests":"predeclared control contrasts","alpha":0.05,"adjustment":"sort raw p then fixed test order; adjusted=max(previous,(m-rank+1)*raw_p) clipped 1"}
+    ],
+    "gate_predicates": ["at least two primary families pass adjusted p<=0.05 and mean D<0 including delayed_reward, drift, or long_horizon","complete_policy beats lambda_zero and matched_random in at least one family with mechanism-family adjusted p<=0.05","always_skip is worse than fixed_sgd_b1 on predictable_noise","complete_policy is not better than noise_floor on pure_noise","all resource and adaptation predicates pass"]
+  },
+  "adaptation_metrics": {
+    "metric_id": "shift_segment_bounded_adaptation_lag_v1",
+    "primary_temporal_endpoint": "per-seed maximum lag over declared shifts, then stream mean, then family mean",
+    "segments": "use each stream's exact segments array; a shift at s starts segment s and ends at the next boundary",
+    "baseline": "median of exactly the 16 pre-shift pre-update losses at rows [shift-16,shift)",
+    "threshold": "1.10*baseline",
+    "recovery_scan": "for candidate k from shift through next_shift-16 inclusive, compute adjacent means on [k,k+8) and [k+8,k+16); require both <=threshold and both windows wholly inside the segment",
+    "lag": "first qualifying k plus 16 minus shift; integer rows until two windows are complete",
+    "censoring": "if no qualifying pair before next_shift, lag=next_shift-shift; for final shift lag=segment_stop-shift",
+    "stationary": "no adaptation lag is defined when segments has one boundary [0,rows]",
+    "aggregation": "never scan across a shift; report per-segment, per-seed, per-stream, and family summaries",
+    "controls": "same boundaries and windows for every arm; baseline is arm-specific pre-shift loss and is computed before the shift"
+  },
+  "lock_counter_control_schemas": {
+    "schema_encoding": "each schema is an ordered list of field objects; validators reject missing, extra, reordered, wrong-type, nonfinite, or duplicate fields",
+    "protocol_compile_receipt": {"schema_id":"oaklab.cup.v5.compile-receipt.v1","fields":[["state_slice","utf8",true],["protocol_digest","hex_digest",true],["source_spec_sha256","hex_digest",true],["compiled_protocol_sha256","hex_digest",true],["compiler_version","utf8",true],["sections","utf8_list_exact_7",true],["assessment_materialization_state","enum(absent)",true]]},
+    "fit_lock": {"schema_id":"oaklab.cup.v5.fit-lock.v1","fields":[["protocol_digest","hex_digest",true],["compiled_protocol_digest","hex_digest",true],["review_digest","hex_digest",true],["implementation_source_digests","hex_digest_map",true],["runtime_digest","hex_digest",true],["generator_roster_digest","hex_digest",true],["fit_panel_manifest_digest","hex_digest",true],["theta_binary64_hex","hex_list_6",true],["dual_mu_binary64_hex","hex_scalar",true],["fit_result_digest","hex_digest",true],["controller_updates_only_fit","boolean_true",true]]},
+    "tune_lock": {"schema_id":"oaklab.cup.v5.tune-lock.v1","fields":[["fit_lock_digest","hex_digest",true],["tune_panel_manifest_digest","hex_digest",true],["matched_random_probability_binary64_hex","hex_scalar",true],["compiled_action_margin_binary64_hex","hex_list_6",true],["tune_gate_table_digest","hex_digest",true],["tune_result_digest","hex_digest",true],["independent_validator_digest","hex_digest",true],["decision","enum(accepted,rejected)",true],["assessment_materialization_state","enum(absent)",true]]},
+    "counter_row": {"schema_id":"oaklab.cup.v5.counter-row.v1","fields":[["cohort","enum(fit,tune,assessment)",true],["stream_id","utf8",true],["data_seed","uint64",true],["local_row","uint32",true],["experience_items","uint64_exactly_1",true],["event_count","uint64",true],["forward_ops","uint64",true],["gradient_ops","uint64",true],["update_ops","uint64",true],["parameter_writes","uint64",true],["controller_ops","uint64",true],["scalar_ops","uint64",true],["replay_bytes","uint64_zero",true],["hidden_accumulation","boolean_false",true]]},
+    "control_result": {"schema_id":"oaklab.cup.v5.control-result.v1","fields":[["control_id","utf8",true],["family","utf8",true],["phase","enum(tune,assessment)",true],["n","uint64",true],["metric","utf8",true],["estimate","finite_float64",true],["threshold","finite_float64",true],["raw_p","finite_float64",true],["holm_group","utf8",true],["holm_adjusted_p","finite_float64",true],["pass","boolean",true],["digest","hex_digest",true]]},
+    "assessment_absence": {"schema_id":"oaklab.cup.v5.assessment-absence.v1","fields":[["state_slice","utf8",true],["materialization_state","enum(absent)",true],["assessment_root","absolute_path",true],["entries","empty_list_exact",true],["directory_listing_sha256","hex_digest",true],["protocol_digest","hex_digest",true],["checked_by_validator","boolean_true",true]],"empty_listing_digest":"SHA-256(canonical_json([]))"},
+    "validator_receipt": {"schema_id":"oaklab.cup.v5.validator-receipt.v1","fields":[["protocol_digest","hex_digest",true],["compiled_digest","hex_digest",true],["source_digest","hex_digest",true],["independent_recomputation","boolean_true",true],["assessment_absence_digest","hex_digest",true],["decision","enum(ACCEPT,REJECT)",true],["reason_codes","utf8_list",true]]},
+    "required_digest_bindings": ["source_spec_sha256","compiled_protocol_sha256","generator_roster_digest","fit_panel_manifest_digest","tune_panel_manifest_digest","runtime_digest","implementation_source_digests","review_digest","independent_validator_digest"],
+    "assessment_materialization_rule": "assessment files, rows, and effects must not exist before an accepted tune lock and independent validator receipt; absence is itself a required digest-bound artifact"
+  },
+  "stop_rules": [
+    "reject compilation if any required field, type, roster, draw, formula, ablation, metric, or schema is missing or extra",
+    "reject review if compiler output is nondeterministic or digest recomputation differs",
+    "do not implement or execute V5 before independent ACCEPT over exact source, compiler, compiled artifact, and current AGENTS bytes",
+    "close V5 on review rejection or any later parity, lock, custody, statistics, resource, energy, or validator failure; do not retune",
+    "never reopen plasticity guard or reuse V1-V4 artifacts as scientific inputs",
+    "keep Astral isolated",
+    "real streams require a separate authorization, fresh campaign manifest, and new privileged energy receipt"
+  ],
+  "boundaries": {"plasticity_guard":"closed_historical_comparator_only","v1_v2_v3_v4":"closed_historical_evidence_only","astral":"isolated_not_run","replay":"not_present_in_any_v5_arm","assessment":"absent_until_accepted_tune_lock"}
+}

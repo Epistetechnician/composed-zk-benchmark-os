@@ -1,0 +1,15 @@
+{
+  "claim_ceiling": "LocalDevelopmentGemma3FineWebEduReplicationV13",
+  "effects_started": false,
+  "error_type": "RuntimeError",
+  "error_message": "Item size 2 for PEP 3118 buffer format string B does not match the dtype B item size 1.",
+  "failure_sha256": "ef3b479e1c6052de83020698a3a435edcb5fc44a6279a9c2e6df91ae60cb9ec4",
+  "model_loaded": true,
+  "phase": "pre-effect-model-parameter-custody-digest",
+  "review_receipt_sha256": "aedc2e8ca7fe757e438c0f678185e2c3113033103c6a314e4682bac0a1300045",
+  "result_root_published": false,
+  "schema": "gemma3-fineweb-edu-replication-v13-execution-failure",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v13",
+  "trace_leaf": "unidentified-before-error",
+  "trace_dtype": "not-captured"
+}

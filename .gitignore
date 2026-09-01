@@ -6,3 +6,8 @@
 /.local-artifact-campaigns/
 /.gateway-demo-runs/
 /formal/hsai-gateway-digest/.lake/
+
+# repo-package-manager-contract-v1: local Python test/runtime caches are not source.
+**/__pycache__/
+*.py[cod]
+.pytest_cache/

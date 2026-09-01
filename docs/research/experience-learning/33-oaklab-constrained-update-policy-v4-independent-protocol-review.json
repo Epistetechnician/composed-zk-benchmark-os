@@ -1,0 +1,98 @@
+{
+  "astral": "isolated_not_run",
+  "blocking_findings": [
+    {
+      "finding": "The action hash does not specify domain-tag framing, raw-versus-hex digest and master-seed encodings, or exact PRNG protocol_id and cohort_id values. Multiple byte transcripts can satisfy the prose while producing different actions and rows.",
+      "id": "B1"
+    },
+    {
+      "finding": "The online state machine does not fix whether action_t and q_current are selected before or after the previous-transition theta update, when the current model action executes, whether reward uses pre-update or post-update mu, or the exact pending x_previous, q_previous, and previous action-cost representation.",
+      "id": "B2"
+    },
+    {
+      "finding": "The fit and tune stream roster is undefined because pure_noise_v4 is required but absent from the family map. Event-camera index and polarity draw order, duplicate-index handling, sampled-index-zero handling, global conditional draw order, and exact source-ID serialization are not frozen.",
+      "id": "B3"
+    },
+    {
+      "finding": "The declared 112-byte fit state omits pending transition state required across batch-one observe calls even though the lock acknowledges pending state. Fit-update operation accounting also lacks a numeric algebra for clips, comparisons, increments, and writes, so the byte and total-operation gates are not reproducible.",
+      "id": "B4"
+    },
+    {
+      "finding": "matched_random is declared assessment-only while the tune gate requires a matched-random comparison. No post-candidate tune pass is defined, and the noise-floor, oracle-feature, row-251, and pure-noise control execution semantics are incomplete.",
+      "id": "B5"
+    },
+    {
+      "finding": "The eight mechanism tests lack an exact paired transform, raw-test formula, and family-by-ablation tie order. The always-skip Holm family and reward-shift failure predicates are undefined, so multiplicity and mechanism qualification can fail open.",
+      "id": "B6"
+    },
+    {
+      "finding": "Adaptation-lag baselines are not explicitly arm-specific and a recovery scan for the first piecewise-drift shift can cross the second shift. Segment end bounds and interrupted-segment censoring are not defined.",
+      "id": "B7"
+    },
+    {
+      "finding": "The lock and validator name high-level digests but do not freeze schemas for pending state, control receipts, ablation statistics, operation rows, or assessment-absence evidence. Independent validation cannot uniquely resolve the other ambiguities after implementation.",
+      "id": "B8"
+    }
+  ],
+  "claim_ceiling": "ProtocolReviewRejectedNoExecution",
+  "decision": "rejected",
+  "digest_canonicalization": "SHA-256 of UTF-8 json.dumps(payload_without_review_digest, sort_keys=True, separators=(comma,colon), ensure_ascii=True)",
+  "fit_tune_assessment_authorization": false,
+  "implementation_authorization": false,
+  "nonblocking_findings": [
+    {
+      "finding": "The complete-policy paired estimand includes all parameter carryover and avoids the unsupported isolated-action causal claim that blocked V3.",
+      "id": "N1"
+    },
+    {
+      "finding": "The displayed true-online Sarsa-lambda recurrence has the established Dutch-trace algebra once action-selection and transition ordering are made exact.",
+      "id": "N2"
+    },
+    {
+      "finding": "The recomputed normal-approximation power at alpha 0.0125, n 48, and standardized effect 0.5 is exactly 0.8330770040094296, and its scope is correctly limited to the primary family statistics.",
+      "id": "N3"
+    },
+    {
+      "finding": "Fit, tune, and assessment seed cohorts are disjoint; zero model resets, pre-update loss, terminal no-update handling, source order, and high-level carryover boundaries are coherent.",
+      "id": "N4"
+    },
+    {
+      "finding": "The guard and V1-V3 remain closed, V2 energy is ineligible, real execution is separately sealed, and Astral remains isolated.",
+      "id": "N5"
+    },
+    {
+      "finding": "All six reusable source digests embedded in the machine protocol matched their current files at review time.",
+      "id": "N6"
+    }
+  ],
+  "real_execution_authorization": false,
+  "required_successor_corrections": [
+    "Freeze one length-framed byte transcript for domain tags, protocol digest, master seed, stream and cohort identifiers, integers, thresholds, and all SplitMix64 initialization values.",
+    "Freeze an indexed controller state machine covering action selection, q evaluation, reward, theta, trace, q-old, dual update, model action, terminal handling, and every pending field.",
+    "Freeze the exact fit and tune stream roster plus every per-stream draw order, collision rule, forced-feature rule, source-ID encoding, and control algorithm.",
+    "Name every persistent and ephemeral field with width and lifetime, and provide closed numeric formulas for operations, writes, events, updates, hashes, clips, comparisons, counters, and family aggregation.",
+    "Resolve the matched-random tune contradiction and freeze all ablation execution order, paired transforms, raw tests, Holm families and tie order, and reward-shift rejection predicates.",
+    "Make adaptation baselines arm-specific or shared by an explicit rule, stop each recovery scan at the next shift, and freeze interrupted-segment censoring.",
+    "Freeze canonical lock, control, ablation, counter, assessment-absence, and validator schemas before another independent review."
+  ],
+  "review_digest": "0e0adfdb7323865b4b2d9d6a393091d5877257253c2dcdf335ea7385e57aee9c",
+  "reviewed_files": {
+    "AGENTS.md": "6d059ab6f5b377679bf09f5577d15b0d703a6d1667757a1fc4788c145399e52d",
+    "docs/research/experience-learning/27-oaklab-plasticity-guard-permanent-historical-closure.md": "eeaa5bfda3fb9039c046dbabc16b2b74d2c65be80b78c7862782feb4bc357859",
+    "docs/research/experience-learning/30-oaklab-selective-credit-v3-terminal-closure.md": "49734d3b99e499cf4f28d62f28db016cbfd10fd3176a009109ade3f939b0fc6f",
+    "docs/research/experience-learning/31-oaklab-constrained-update-policy-v4-protocol.md": "f8cdeaadf5b9f6cfb54adce00bab9e4d2e721b3a41a0a535ac2ac09237fa908b",
+    "docs/research/experience-learning/32-oaklab-constrained-update-policy-v4-review-packet.md": "09d98cf593b94d1fe38c88160b93f97803b2959fc644a8738175efc64f3bff40",
+    "experiments/experience_learning/constrained_update_policy_v4_protocol.json": "60a514f81224927d195bbef9bf8bb533d4636c147fe462eebc4da6b916fbe805"
+  },
+  "reviewed_source_files": {
+    "experiments/experience_learning/backends.py": "cd99c18dd53619f660ec6c2fac9e95061b346bebf5b6cf25a394f8beb38e5957",
+    "experiments/experience_learning/controls.py": "a070a9a7eac633f0be2aa01469f79b8b052a20a79fcaffa81a9bfdcd7a34525d",
+    "experiments/experience_learning/custody.py": "dc5d3361a35bc5f053fafaa1878457f1f610677fb14c254ba4aa27d362c60405",
+    "experiments/experience_learning/energy.py": "54e574d309d625421dd777d93145a47c83e55ae9a3df9e20f20a2062feafbfcb",
+    "experiments/experience_learning/learners.py": "5730acac2173294010521b613c8d1763441d0b5d063815c681f557b93081b593",
+    "experiments/experience_learning/types.py": "0b6757ef950dc807f4a5dc958bca1609318842998818804c35c3b27d1a1cb65d"
+  },
+  "reviewer": "independent-agent-review",
+  "schema_version": "oaklab.experience-learning.constrained-update-policy-v4-independent-protocol-review.v1",
+  "state_slice": "oaklab-experience-learning-constrained-update-policy-v4"
+}
