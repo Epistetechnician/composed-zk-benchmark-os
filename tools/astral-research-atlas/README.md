@@ -1,11 +1,13 @@
 # Astral Research Atlas
 
-State slice: `astral-research-atlas-accessible-tabs-v5`.
+State slice: `astral-status-reconciliation-v2`.
 
 This is a repository-native static long-form research surface inspired by the
 interaction pattern of an interactive mechanistic interpretability essay. It
 uses the current Astral project documents as source links and keeps the claim
-ceiling visible in the interface.
+ceiling visible in the interface. The record distinguishes V25's latest
+privileged-telemetry result from V38's latest executed instrument-feasibility
+result and V82's missing-artifact preflight stop.
 
 The architecture figure supports Report, Telemetry, and Effect inspection
 modes. Phase, evidence, stack, and architecture controls support click, touch,

@@ -1,0 +1,197 @@
+{
+  "schema_version": "oaklab.experience-learning.h100-replication-v4.source.v1",
+  "protocol_id": "oaklab.h100.v4",
+  "state_slice": "oaklab-experience-learning-h100-replication-v4",
+  "claim_ceiling": "LocalDevelopmentOakLabH100ReplicationV4ProtocolCompilerOnly",
+  "status": "frozen_pending_independent_review",
+  "implementation_before_review": false,
+  "estimand": {
+    "name": "paired complete-policy post-washout regret",
+    "unit": "episode pair",
+    "control": "fixed_sgd_b1",
+    "treatment": "lagged_selective_credit",
+    "trajectory": "complete learner and controller state",
+    "primary_endpoint": "mean_e_mean_b(loss_treatment[e,b]-loss_control[e,b])",
+    "washout_blocks": 1,
+    "post_washout_blocks": 32,
+    "items_per_block": 128,
+    "same_stream": true,
+    "same_initial_checkpoint": true,
+    "arm_order_randomized": true,
+    "carryover_control": "controller reads previous block only; episode state resets; no current-block outcome enters action",
+    "loss_timing": "half_squared_error_before_row_action",
+    "favorable_direction": "negative",
+    "assessment_absent_until_lock": true
+  },
+  "hash_prng_transcript": {
+    "canonical_json": "UTF-8 JSON sort_keys=true separators=(',',':') ensure_ascii=true allow_nan=false plus one LF",
+    "source_bytes": "UTF-8 without BOM, exact bytes hashed, no post-hash normalization",
+    "digest": "SHA-256 lowercase hexadecimal; digest fields decode to raw 32 bytes before framing",
+    "frame": "LP32 big-endian length plus payload",
+    "counter": "uint64 little-endian seed and row; SHA256(domain||protocol_digest_raw||cohort||stream||seed||row||ordinal)",
+    "action_assignment": {
+      "probability": {"p_num": 1, "p_den": 4},
+      "threshold": "floor((p_num*2^256)/p_den)",
+      "comparison": "apply iff uint256_be(SHA256(action_frame)) < threshold",
+      "fit_only": true,
+      "tune_assessment": "locked policy argmax; exact tie applies",
+      "action_seed_hex": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+    },
+    "draw_policy": "every declared draw is consumed once per row in ordinal order; no conditional draws, no redraws, no replay, or future-data reads",
+    "test_vector": {"cohort": "fit", "stream": "sparse_signal_v4", "data_seed": 4000, "local_row": 0}
+  },
+  "controller_transition_table": {
+    "name": "lagged selective-credit controller",
+    "actions": ["skip", "apply"],
+    "features": ["intercept", "pre_loss_context", "event_density", "budget_debt"],
+    "action_features": {"skip": [1, "pre_loss_context", "event_density", "budget_debt"], "apply": [0, "pre_loss_context", "event_density", "budget_debt"]},
+    "q_formula": "left_to_right_dot(theta, action_features[action])",
+    "state_fields": [
+      ["theta", "float64[4]", "fit_persistent"], ["eligibility", "float64[4]", "trajectory"],
+      ["q_old", "float64", "trajectory"], ["dual_mu", "float64", "fit_persistent"],
+      ["processed_rows", "uint32", "trajectory"], ["cumulative_apply_cost", "float64", "trajectory"],
+      ["pending_valid", "uint8", "trajectory"], ["previous_action", "uint8", "trajectory"],
+      ["previous_features", "float64[4]", "trajectory"], ["previous_q", "float64", "trajectory"],
+      ["previous_cost", "float64", "trajectory"], ["pending_features", "float64[4]", "pending"],
+      ["pending_prediction", "float64", "pending"], ["pending_loss", "float64", "pending"],
+      ["pending_event_count", "uint32", "pending"], ["pending_action", "uint8", "pending"],
+      ["pending_cost", "float64", "pending"], ["pending_reward", "float64", "pending"],
+      ["pending_local_row", "uint32", "pending"], ["pending_terminal", "uint8", "pending"]
+    ],
+    "rows": [
+      {"index": 0, "event": "trajectory_init", "reads": [], "writes": ["eligibility", "q_old", "pending_valid", "previous_action", "previous_features", "previous_q", "previous_cost", "processed_rows", "cumulative_apply_cost", "pending_features", "pending_prediction", "pending_loss", "pending_event_count", "pending_action", "pending_cost", "pending_reward", "pending_local_row", "pending_terminal"], "rule": "reset all trajectory and pending fields; retain only fit-persistent fields"},
+      {"index": 1, "event": "observe_pre_action", "reads": ["features", "target", "event_indices"], "writes": ["pending_prediction", "pending_loss", "pending_event_count", "pending_features"], "rule": "compute finite prediction and loss before any action or model write"},
+      {"index": 2, "event": "credit_previous", "reads": ["pending_valid", "pending_reward", "previous_features", "previous_q", "q_old", "previous_cost", "dual_mu"], "writes": ["eligibility", "theta", "q_old", "dual_mu"], "rule": "use one pre-transition snapshot; no credit on row zero"},
+      {"index": 3, "event": "select_action", "reads": ["pending_features", "theta", "pending_loss", "pending_event_count", "action_hash"], "writes": ["pending_action", "pending_cost"], "rule": "fit uses sealed rational hash; tune and assessment use locked policy"},
+      {"index": 4, "event": "model_action", "reads": ["pending_action", "features", "target", "processed_rows", "cumulative_apply_cost"], "writes": ["model_parameters", "processed_rows", "cumulative_apply_cost", "counter_row"], "rule": "apply exactly one SGD row update; skip writes no parameter; increment counters once"},
+      {"index": 5, "event": "publish_pending", "reads": ["pending_features", "pending_prediction", "pending_loss", "pending_action", "pending_cost", "dual_mu", "local_row"], "writes": ["pending_valid", "previous_features", "previous_q", "previous_action", "previous_cost", "pending_reward", "pending_local_row"], "rule": "publish every field consumed by the next row; undeclared carryover rejects"},
+      {"index": 6, "event": "terminal_credit", "reads": ["pending_valid", "pending_local_row", "terminal_loss"], "writes": ["pending_reward", "theta", "eligibility", "dual_mu", "pending_valid", "pending_terminal"], "rule": "credit final pending action with gamma zero; perform no model action"},
+      {"index": 7, "event": "counter_finalize", "reads": ["counter_row"], "writes": ["counter_receipt"], "rule": "append exactly one canonical counter row per observed row"}
+    ],
+    "recurrence": [
+      "delta=reward+0.90*q_current-previous_q",
+      "eligibility_new=0.90*0.80*eligibility+previous_features",
+      "theta_new=theta+0.05*delta*eligibility_new",
+      "dual_mu_new=clip(dual_mu+0.01*(previous_cost-0.50),0,2.0)",
+      "q_old_new=q_current"
+    ],
+    "rhs_rule": "all right-hand sides read the pre-transition snapshot and commit simultaneously",
+    "pending_rule": "every pending and previous field must be read, written, or reset by an indexed row; undeclared state is invalid",
+    "terminal_rule": "row 255 records loss and terminal credit only; no model action"
+  },
+  "generator_roster": {
+    "rows_per_trajectory": 256,
+    "cohort_order": ["fit", "tune", "assessment"],
+    "stream_order": ["sparse_signal_v4", "drifting_relevance_v4", "delayed_reward_v4", "event_sensor_v4", "long_horizon_v4", "pure_noise_v4"],
+    "family_map": {"predictable_noise": ["sparse_signal_v4"], "drift": ["drifting_relevance_v4"], "delayed_reward": ["delayed_reward_v4"], "event": ["event_sensor_v4"], "long_horizon": ["long_horizon_v4"], "null": ["pure_noise_v4"]},
+    "cohort_seeds": {"fit": {"start": 4000, "count": 48}, "tune": {"start": 5000, "count": 24}, "assessment": {"start": 6000, "count": 48}},
+    "source_id_frame": ["LP32(cohort_id_utf8)", "LP32(stream_id_utf8)", "uint64_le(data_seed)", "uint32_le(local_row)"],
+    "draw_roster": {
+      "sparse_signal_v4": [[0, "signal", "rademacher", 1], [1, "activity", "uniform53", 15], [2, "polarity", "rademacher", 15], [3, "target_noise", "normal12", 1]],
+      "drifting_relevance_v4": [[0, "feature_uniform", "uniform53", 8], [1, "target_noise", "normal12", 1]],
+      "delayed_reward_v4": [[0, "cue", "rademacher", 1], [1, "unused_cue", "rademacher", 1], [2, "target_noise", "normal12", 1]],
+      "event_sensor_v4": [[0, "event_index", "uniform53", 3], [1, "event_polarity", "rademacher", 3], [2, "target_noise", "normal12", 1]],
+      "long_horizon_v4": [[0, "feature_uniform", "uniform53", 8], [1, "target_noise", "normal12", 1]],
+      "pure_noise_v4": [[0, "activity", "uniform53", 16], [1, "polarity", "rademacher", 16], [2, "target_noise", "normal12", 1]]
+    },
+    "streams": {
+      "sparse_signal_v4": {"family": "predictable_noise", "dimension": 16, "equation": "x0=signal; xi=(activity_i<0.15)*polarity_i; y=1.5*x0+0.25*z", "draw_order": "signal, activity[1..15], polarity[1..15], target_noise", "segments": [0, 256], "events": "sorted nonzero indices", "oracle_features": [0]},
+      "drifting_relevance_v4": {"family": "drift", "dimension": 8, "equation": "xi=2*uniform_i-1; y=(2*x0 if row<128 else -2*x1)+0.1*z", "draw_order": "feature_uniform[0..7], target_noise", "segments": [0, 128, 256], "events": "all indices", "oracle_features": [0, 1]},
+      "delayed_reward_v4": {"family": "delayed_reward", "dimension": 4, "equation": "32 eight-row episodes; cue cached at phase zero; reward appears at phase seven; sign flips at episode 16", "draw_order": "cue, unused_cue, target_noise every row", "segments": [0, 128, 256], "events": "nonzero feature indices", "oracle_features": [0]},
+      "event_sensor_v4": {"family": "event", "dimension": 64, "equation": "three deduplicated signed events; x0 parity anchor; target sign flips at row 128", "draw_order": "event_index[0..2], event_polarity[0..2], target_noise", "segments": [0, 128, 256], "events": "sorted unique nonzero indices", "oracle_features": [0]},
+      "long_horizon_v4": {"family": "long_horizon", "dimension": 8, "equation": "ring_buffer(x0,row-32) with target sign flip at row 128; prefill zero", "draw_order": "feature_uniform[0..7], target_noise", "segments": [0, 128, 256], "events": "all indices", "oracle_features": [0]},
+      "pure_noise_v4": {"family": "null", "dimension": 16, "equation": "xi=(activity_i<0.15)*polarity_i; y=z independent of x", "draw_order": "activity[0..15], polarity[0..15], target_noise", "segments": [0, 256], "events": "sorted active indices", "oracle_features": []}
+    },
+    "draw_rule": "each row consumes every roster entry in ordinal and repeat order; conditional semantics mask already-drawn values; redraw is forbidden"
+  },
+  "operation_and_byte_algebra": {
+    "numeric_type_widths": {"uint8": 1, "uint32": 4, "uint64": 8, "float64": 8, "sha256_digest": 32},
+    "numeric_rules": "IEEE-754 binary64 round-to-nearest-even; no fused multiply-add; left-to-right reductions; overflow, NaN, and infinity are fatal",
+    "operation_units": "each multiply, add, subtract, compare, divide, min, max, clip, counter increment, parameter write, hash invocation, and PRNG draw is separately counted",
+    "formula_ast": {
+      "forward_dense": {"inputs": ["dimension:uint64"], "output": "uint64", "ast": {"op": "add", "args": [{"op": "mul", "args": ["dimension", 2]}, 1]}},
+      "loss_half_squared": {"inputs": ["error:float64"], "output": "float64", "ast": {"op": "mul", "args": [0.5, {"op": "mul", "args": ["error", "error"]}]}},
+      "gradient": {"inputs": ["dimension:uint64", "apply:uint8"], "output": "uint64", "ast": {"op": "mul", "args": ["apply", {"op": "add", "args": ["dimension", 1]}]}},
+      "model_update": {"inputs": ["dimension:uint64", "apply:uint8"], "output": "uint64", "ast": {"op": "mul", "args": ["apply", {"op": "mul", "args": [2, {"op": "add", "args": ["dimension", 1]}]}]}},
+      "controller_dot": {"inputs": ["width:uint64"], "output": "uint64", "ast": {"op": "sub", "args": [{"op": "mul", "args": ["width", 2]}, 1]}},
+      "event_count": {"inputs": ["unique_valid_events:uint64"], "output": "uint64", "ast": {"op": "identity", "args": ["unique_valid_events"]}}
+    },
+    "row_formulas": {"forward_ops": "2*dimension+1", "loss_ops": "3", "controller_ops": "2*4-1", "gradient_ops": "apply*(dimension+1)", "model_update_ops": "apply*2*(dimension+1)", "parameter_writes": "apply*(dimension+1)", "active_synaptic_ops": "apply*count(nonzero gradient coordinates)"},
+    "byte_layouts": {
+      "model_state": {"fields": [["weights", "float64[dimension]", 0, "8*dimension"], ["bias", "float64", "8*dimension", 8]], "bytes": "8*(dimension+1)", "alignment": "none"},
+      "counter_row": {"fields": [["phase", "uint8", 0, 1], ["cohort", "uint8", 1, 1], ["stream_digest", "sha256_digest", 2, 32], ["data_seed", "uint64", 34, 8], ["local_row", "uint32", 42, 4], ["arm_id", "uint8", 46, 1], ["updates", "uint64", 47, 8], ["active_ops", "uint64", 55, 8], ["storage_bytes", "uint64", 63, 8], ["latency_ns", "uint64", 71, 8]], "bytes": 79, "alignment": "none"},
+      "lock_receipt": {"fields": [["protocol_digest", "sha256_digest", 0, 32], ["review_digest", "sha256_digest", 32, 32], ["implementation_digest", "sha256_digest", 64, 32], ["prediction_digest", "sha256_digest", 96, 32], ["decision", "uint8", 128, 1]], "bytes": 129, "alignment": "none"}
+    },
+    "resource_invariants": ["one stream row enters each update", "replay bytes are zero for every declared arm", "measured joules remain absent until privileged raw trace validation", "operation counts, storage bytes, latency, and measured joules are separate fields"]
+  },
+  "ablation_execution_multiplicity": {
+    "arm_order": ["fixed_sgd_b1", "lagged_selective_credit", "lambda_zero", "no_dual", "matched_random", "always_skip", "noise_floor", "oracle_feature_sgd"],
+    "execution_matrix": {
+      "fixed_sgd_b1": {"fit": "fixed", "tune": "locked", "assessment": "locked"},
+      "lagged_selective_credit": {"fit": "controller", "tune": "locked", "assessment": "locked"},
+      "lambda_zero": {"fit": "controller_lambda_0", "tune": "locked", "assessment": "locked"},
+      "no_dual": {"fit": "controller_dual_disabled", "tune": "locked", "assessment": "locked"},
+      "matched_random": {"fit": "fit_locked_probability", "tune": "locked_probability", "assessment": "locked_probability"},
+      "always_skip": {"fit": "skip", "tune": "skip", "assessment": "skip"},
+      "noise_floor": {"fit": "fixed_noise_target", "tune": "fixed_noise_target", "assessment": "fixed_noise_target"},
+      "oracle_feature_sgd": {"fit": "fixed_oracle_features", "tune": "locked", "assessment": "locked"}
+    },
+    "arm_reset": "zero model and controller state per arm and seed; no state crosses arms",
+    "matched_random_rule": "probability is computed from candidate fit rows before tune and then frozen; no tune-derived probability",
+    "holm_groups": [
+      {"name": "primary_loss", "comparisons": "candidate versus fixed SGD across six families", "adjustment": "sort raw p by (p,comparison_key); adjusted=max(previous,min(1,(m-rank+1)*p))"},
+      {"name": "adaptation", "comparisons": "candidate versus fixed SGD across drift, delayed_reward, event, long_horizon", "adjustment": "sort raw p by (p,comparison_key); adjusted=max(previous,min(1,(m-rank+1)*p))"},
+      {"name": "mechanism", "comparisons": "candidate versus lambda_zero, no_dual, matched_random", "adjustment": "sort raw p by (p,comparison_key); adjusted=max(previous,min(1,(m-rank+1)*p))"}
+    ],
+    "statistic": "paired seed difference; two-sided erfc(abs(z)/sqrt(2)); one-sided 0.5*erfc(-z/sqrt(2)); n<2 or nonfinite variance rejects",
+    "confidence_interval": "mean +/- 1.959963984540054*sample_sd/sqrt(n)",
+    "missing_rules": "missing, nonfinite, censored, incomplete, or attrited trajectories fail closed and cannot be imputed",
+    "gate_predicates": ["adjusted primary p<=0.05 in at least two non-null families", "candidate loss no worse in every qualifying family", "candidate adaptation no worse in every shift family and strictly better in one", "active operations, updates, storage, latency, and joules are non-inferior within 5 percent", "pure-noise null shows no candidate advantage"]
+  },
+  "adaptation_metrics": {
+    "primary": "mean per-seed adaptation lag after each declared generator change point",
+    "change_points": "only segment boundaries in the frozen generator roster",
+    "baseline": "median of 16 finite pre-change losses; fewer than 16 is invalid",
+    "threshold": "1.10*baseline",
+    "recovery_scan": "first adjacent pair of eight-row windows [k,k+8) and [k+8,k+16) whose means are <= threshold",
+    "lag": "k+16-change_point",
+    "censoring": "if no pair before next_shift or segment end, lag=segment_end-change_point and censored=true",
+    "aggregation": "aggregate within seed then paired-test seeds; never scan across shifts or attribute later recovery to an earlier shift",
+    "zero_nonfinite": "zero baseline is valid; empty, negative, nonfinite, or missing losses reject",
+    "minimum_effect": "two-row improvement in at least one declared shift family"
+  },
+  "lock_counter_control_schemas": {
+    "schema_policy": "all fields required, canonical JSON bytes, unknown fields reject, self-digest excludes only its digest field",
+    "fit_lock": {"schema": "oaklab.h100.v4.fit-lock.v1", "fields": ["schema", "state_slice", "protocol_sha256", "review_receipt_sha256", "implementation_sha256", "runtime_sha256", "generator_sha256", "fit_data_sha256", "selected_controller_sha256", "theta_hex", "fit_result_sha256", "decision", "lock_sha256"]},
+    "tune_lock": {"schema": "oaklab.h100.v4.tune-lock.v1", "fields": ["schema", "state_slice", "fit_lock_sha256", "tune_data_sha256", "hyperparameters_sha256", "prediction_sha256", "tune_result_sha256", "decision", "lock_sha256"]},
+    "lock_receipt": {"schema": "oaklab.h100.v4.lock-receipt.v1", "fields": ["schema", "state_slice", "tune_lock_sha256", "independent_reviewer", "decision", "receipt_sha256"]},
+    "counter_row": {"schema": "oaklab.h100.v4.counter-row.v1", "fields": ["schema", "phase", "cohort", "stream_digest", "data_seed", "local_row", "arm_id", "updates", "active_ops", "storage_bytes", "latency_ns"]},
+    "campaign_manifest": {"schema": "oaklab.h100.v4.campaign.v1", "fields": ["schema", "state_slice", "compiled_protocol_sha256", "code_sha256", "model_sha256", "data_sha256", "backend_sha256", "guard_sha256", "fit_lock_sha256", "tune_lock_sha256", "tune_lock_receipt_sha256", "provider_allocation_sha256", "provider_cost_sha256", "provider_stop_sha256", "energy_receipt_sha256", "result_root_sha256", "hard_usd_ceiling", "manifest_core_sha256", "manifest_sha256"], "core_digest_scope": ["schema", "state_slice", "compiled_protocol_sha256", "code_sha256", "model_sha256", "data_sha256", "backend_sha256", "guard_sha256", "hard_usd_ceiling"]},
+    "provider_receipts": {"allocation_schema": "oaklab.h100.v4.provider-allocation.v1", "cost_schema": "oaklab.h100.v4.provider-cost.v1", "stop_schema": "oaklab.h100.v4.provider-stop.v1", "signature": "Ed25519 over canonical body excluding signature_hex and receipt_sha256", "cross_binding": "same allocation_id, node_id, launch manifest digest, public key, and bounded UTC interval"},
+    "energy_receipt": {"schema": "oaklab.h100.v4.energy.v1", "formula": "sum(0.5*(w_i+w_i+1)*(t_i+1-t_i)/1e9)", "denominator": "successfully_learned_events", "trace": "CSV utc_ns,watts with >=2 increasing finite nonnegative rows"},
+    "result_root": {"mode": "closed_world", "allowlist": ["campaign_manifest.json", "compiled_protocol.json", "fit/lock.json", "tune/lock.json", "tune/lock_receipt.json", "provider/allocation.json", "provider/cost.json", "provider/stop.json", "energy/raw_trace.csv", "energy/joules.json", "result/aggregate.json", "validation/independent.json"], "reject_extra_paths": true, "reject_symlinks": true, "validate_all_content": true, "validate_all_bindings": true},
+    "independent_validation": {"schema": "oaklab.h100.v4.independent-validation.v1", "manifest_binding": "manifest_core_sha256", "decision": "accepted only when every named check is true and packet-bound"},
+    "assessment_absence": {"materialization_state": "absent", "entry_count": 0, "rule": "assessment rows, effects, and result payloads must not exist before review ACCEPT, tune lock, and separate real-execution authorization"}
+  },
+  "stop_rules": [
+    "stop on any source-byte, digest, schema, canonicalization, or independent-review mismatch",
+    "stop on nonfinite numeric values, overflow, undeclared state, hidden draw, replay, or accumulation",
+    "stop if review is not ACCEPT before implementation",
+    "stop if fit or tune lock is absent, noncanonical, unbound, or independently unaccepted",
+    "stop if synthetic qualification is not candidate",
+    "stop if preflight is not zero-spend, offline, bounded, and independently recorded",
+    "stop if provider allocation, cost, or stop signature fails or charged USD exceeds the hard ceiling",
+    "stop if raw joules cannot be independently recomputed from the trace",
+    "retain no_candidate unless quality, adaptation, resource, statistical, custody, and measured-energy gates pass across two real families"
+  ],
+  "boundaries": {
+    "phase_836": "closed_historical_only",
+    "oaklab_v6": "closed_historical_only",
+    "plasticity_guard": "closed_historical_comparator_only",
+    "astral": "isolated_and_blocked",
+    "implementation": "prohibited_before_independent_ACCEPT",
+    "provider": "prohibited_before_synthetic_candidate_and_separate_execution_authorization",
+    "givemeanode_h100": "one bounded job only after no-spend preflight, positive hard USD ceiling, and operator custody",
+    "publication": "no_candidate_until_strict_multi_family_gate"
+  }
+}

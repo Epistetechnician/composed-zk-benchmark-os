@@ -2,19 +2,197 @@
 
 ## Status and State Slice
 
-State slice: `astral-claim-ledger-synchronization-v1`.
+State slice: `astral-status-reconciliation-v2`.
 
-Status: `ActiveLocalResearch / InformationPresenceReportGapObserved`. The compiled positive
-control completed, V5 returned a valid learned-model `Null`, V7 qualified the
-family-complete actor-training recipe, and V10 completed with
-`ExploratoryNoSelection`. V12 then found no eligible cross-actor continuous
-effect estimator. Stage 1 remains blocked. The evidence ceiling is
-setup-scoped local measurement and attribution-method diagnostics, not a
-mechanistic explanation, benchmark result, proof, or accepted Evidence Ledger
-record. The latest executed Astral result is V25, limited to
-`LocalDevelopmentPrivilegedTelemetryInformationPresence`; later V26-V82
-documents are design, preflight, feasibility, review, or literature records
-and do not change that ceiling. Stage 0C and Stage 1 remain blocked.
+Status: `ActiveLocalResearch / ScientificExecutionClosed / FreshProtocolRequired`.
+The compiled positive control completed, V5 returned a valid learned-model
+`Null`, V7 qualified the family-complete actor-training recipe, and V10 ended
+with `ExploratoryNoSelection`. V12-V25 then produced bounded diagnostics,
+including the V25 privileged-telemetry information-presence/report gap. V26
+stopped at fresh-actor and runtime custody, V27 established only final-
+embedding instrument feasibility, and V28-V29 closed the synthetic channel
+lane after the held-out utility gate failed. V30-V37 added validated
+planted-circuit, scoring, custody, replay, and execution-eligibility controls.
+V38 supplied the layer-instrument boundary, and V39-V48 then tested fresh,
+increasingly explicit causal-target variants under qualification, custody,
+control, locking, and independent-validation gates. V48 remains the latest
+executed result in the Stage 0C causal-target branch and ended as
+`DevelopmentNoCandidate`; its apparatus qualified, but its localization,
+activation-effect prediction, and cross-view recoverability gates failed. V61
+remains docs-only, and V82 remains a fail-closed Neural Chameleon custody
+preflight stopped by missing external artifacts.
+V40 is an authorized fresh state slice that stopped at a validated tune-gate
+failure. Its assessment was never opened, and its final local disposition is
+`DevelopmentNoCandidate`; the pending review packet was not accepted or used.
+V41 is now authorized as a fresh design-only successor: it tests a fixed
+bucket-free signed directional-block projection while retaining V40's target,
+utility thresholds, controls, review ordering, and retention policy. V41
+qualification, fresh corpus custody, panel sealing, and fit/tune preassessment
+passed independent validation. The fixed tune utility gate failed, so V41 is
+now `DevelopmentNoCandidate`; review and assessment remained closed. V41
+cannot consume V40 scientific artifacts.
+
+The trace-completeness Gemma 3 V2 slice is closed as
+`QualificationFailedSAEReconstruction` after its maximum normalized
+reconstruction MSE exceeded the fixed gate. V3 is the separately authorized
+continuation under state slice
+`astral-trace-completeness-gemma3-end-to-end-v3`. V3 first validates a fresh
+pooled-global-centered normalization estimand and one predeclared affine
+Gemma Scope 2 asset against its exact upstream schema before any model-effect
+load. It cannot retune V2, treat the upstream examples file as reconstruction
+targets, or open assessment without a packet-bound independent signed
+`ACCEPT` receipt.
+
+V4 is now executed under the separately authorized state slice
+`astral-trace-completeness-gemma3-end-to-end-v4`. It is a fresh L0-big affine
+hypothesis with a new corpus, source/dependency digests, external custody
+root, exact event replay, and an independent pre-load review. The fixed pooled
+reconstruction gate passed at NMSE `0.04572051752036069` against `<=0.05`; all
+trace qualification guards passed and raw custody was reconciled and expired.
+V4 remains capped at
+`LocalDevelopmentGemma3EndToEndCausalTraceQualificationV4`: no assessment,
+causal graph, held-out causal-effect, introspection, Stage 0C, or Stage 1 claim
+was opened. The protocol and execution record are
+[123-trace-completeness-gemma3-end-to-end-v4-protocol.md](123-trace-completeness-gemma3-end-to-end-v4-protocol.md)
+and [124-v4-execution-record-2026-08-30.md](124-v4-execution-record-2026-08-30.md).
+
+V4 is permanently frozen under its own state slice. The next fresh branch is
+`astral-trace-completeness-gemma3-causal-feature-effects-v1`. Its implementation
+and qualification boundary is authorized, with a new corpus and custody root,
+exact feature-level ablation/replacement, activation and path patching,
+prediction locking, causal scrubbing, and independent aggregate validation.
+GiveMeANode execution and assessment remain closed until the exact node
+allocation, positive hard USD ceiling, and genuinely independent packet-bound
+signed `ACCEPT` are externally bound. The V1 packet, runner, and preflight
+record are [126-trace-completeness-gemma3-causal-feature-effects-v1-protocol.md](126-trace-completeness-gemma3-causal-feature-effects-v1-protocol.md),
+[127-trace-completeness-gemma3-causal-feature-effects-v1-review-packet.md](127-trace-completeness-gemma3-causal-feature-effects-v1-review-packet.md),
+[130-trace-completeness-gemma3-causal-feature-effects-v1-gman-admission-2026-08-31.md](130-trace-completeness-gemma3-causal-feature-effects-v1-gman-admission-2026-08-31.md),
+and [131-trace-completeness-gemma3-causal-feature-effects-v1-independent-acceptance-and-launch-2026-08-31.md](131-trace-completeness-gemma3-causal-feature-effects-v1-independent-acceptance-and-launch-2026-08-31.md).
+The corrected qualification and custody closure are recorded in
+[132-trace-completeness-gemma3-causal-feature-effects-v1-corrected-qualification-2026-08-31.md](132-trace-completeness-gemma3-causal-feature-effects-v1-corrected-qualification-2026-08-31.md).
+V1 is permanently closed as `NoCandidate`; its scientific artifacts are
+historical only and are not V2 inputs. The V1 terminal closure and fresh V2
+protocol are [133-trace-completeness-gemma3-causal-feature-effects-v1-terminal-closure-2026-09-01.md](133-trace-completeness-gemma3-causal-feature-effects-v1-terminal-closure-2026-09-01.md)
+and [134-trace-completeness-gemma3-causal-feature-effects-v2-protocol.md](134-trace-completeness-gemma3-causal-feature-effects-v2-protocol.md).
+
+V2 was authorized for additive implementation and one bounded GiveMeANode
+qualification under state slice
+`astral-trace-completeness-gemma3-causal-feature-effects-v2`. It used a fresh
+96-family cross-half feature-stability corpus, fresh custody root and packet,
+and a locked top-16 intersection/at-least-four selection rule. The exact
+packet received a distinct Luna packet-bound signed `ACCEPT`; the node
+qualification then ran once. Reconstruction, stability, fit effects, power,
+and tune controls passed, but tune sign agreement was `0.75`, below the fixed
+`0.80` gate, and one tune feature failed the Holm effect gate. Assessment and
+held-out causal scrubbing did not open. V2 is terminally `NoCandidate`; no
+retuning or second node run is allowed. The execution record is
+[135-trace-completeness-gemma3-causal-feature-effects-v2-qualification-2026-09-01.md](135-trace-completeness-gemma3-causal-feature-effects-v2-qualification-2026-09-01.md).
+
+V42 is now executed under separately authorized state slice
+`astral-stage0c-qwen36-causal-target-reliability-v42`. It keeps the cached
+Qwen3.6 layer-19 seam fixed and tests direct target reliability across two
+predeclared wrappers on a fresh 18-document/72-family Gutenberg panel. V42
+qualification, corpus custody, panel custody, fit/tune execution, and
+independent aggregate-only validation passed, but the tune wrapper-reliability
+gate failed. V42 is therefore `TargetReliabilityNoCandidate`; assessment did
+not open and the current layer-19 target line remains closed. V42 cannot
+consume V39, V40, or V41 scientific artifacts.
+
+V43 is now executed under separately authorized state slice
+`astral-stage0c-qwen36-causal-target-localization-v43`. It tests a fixed
+three-layer localization set (12, 19, 26) at the final input position with a
+fresh 18-document/72-family Gutenberg panel, two wrappers, direct paired
+effects, and activation-only, text-only, exact-copy, shuffled, constant, and
+matched controls. Qualification, fresh corpus custody, panel custody, fit/tune
+execution, and independent aggregate-only validation passed. All candidate
+layers were non-degenerate and control-valid, but none passed the complete
+tune wrapper-invariance gate. V43 is therefore
+`TargetLocalizationNoCandidate`; assessment and review remained closed. V43
+cannot consume V42 or earlier scientific artifacts.
+
+V44 is now executed under separately authorized state slice
+`astral-stage0c-qwen36-causal-target-measurement-invariance-v44`. It tests the
+same direct paired replacement and unchanged controls across three fixed
+wrappers, layers 12/19/26, and final/penultimate positions on a fresh
+18-document/72-family Gutenberg panel. Qualification, fresh corpus custody,
+panel custody, fit/tune execution, and independent aggregate-only validation
+passed. Exact-copy and repeatability controls were zero after correcting a
+detected batch-size baseline mismatch; no tune cell passed the complete
+wrapper-invariance gate. V44 is therefore
+`MeasurementInvarianceNoCandidate`; review and assessment remained closed.
+V44 cannot consume V43 or earlier scientific artifacts.
+
+V45 is now authorized as a fresh response-anchored canonical-task measurement
+audit under state slice
+`astral-stage0c-qwen36-response-anchored-causal-target-v45`. It addresses the
+specific V44 failure mode by fixing one exact answer task, equal-token target
+and distractor words, and a content anchor eight tokens before the passage/
+suffix boundary; it does not search V44 layers or wrappers for a positive
+outcome. The executed slice used fresh 24-document/96-family Gutenberg
+custody, layers 12/19/26, fixed signed-block ridge prediction, unchanged
+controls, qualification-first execution, prediction locking, review before
+assessment, aggregate-only retention, and independent validation. Qualification
+and all custody gates passed, but every tune predictor failed the fixed
+prediction gates; V45 is therefore `CanonicalTaskNoCandidate`, with assessment
+closed. No positive result was guaranteed, and Stage 0C, Stage 1, and V82
+remain blocked.
+
+V46 is now closed as a fresh answer-aligned causal-target slice under state
+slice `astral-stage0c-qwen36-answer-aligned-causal-target-v46`. It uses a new
+24-document/96-family Gutenberg custody chain and asks whether the frozen
+model's A/B response-unembedding margin of a local activation difference can
+predict directly measured held-out replacement effects. Qualification, corpus
+and panel custody, fit/tune execution, prediction locking, and independent
+aggregate validation passed. The strongest tune correlation was 0.302357, but
+sign agreement and bootstrap lower bounds failed at every layer; V46 is
+`AnswerAlignedNoCandidate`, with assessment closed. Earlier scientific
+artifacts informed rationale only and were not inputs. Stage 0C and Stage 1
+remain blocked, and V82 remains isolated and stopped for missing artifacts.
+
+V46 is permanently closed as `AnswerAlignedNoCandidate`. V48 is permanently
+closed as `DevelopmentNoCandidate`; neither slice may be retuned or reopened.
+The cumulative V1-V48 synthesis and terminal stop decision are recorded in
+[the V48 cumulative evidence synthesis](112-astral-cumulative-evidence-synthesis-stop-v48.md).
+Any future Astral scientific work requires a separately authorized measurement
+audit with a new causal theory, power/reliability analysis, genuinely new
+estimand, fresh data identity, unchanged controls, prediction locking, and
+independent review before assessment. If no stronger theory is available,
+Astral experimentation stops.
+
+The documentation-only six-theory coverage audit is recorded in
+[116-astral-literature-coverage-and-theory-audit-v48.md](116-astral-literature-coverage-and-theory-audit-v48.md).
+It finds partial coverage of causal intervention and introspection-rival
+controls, but no complete Astral test of causal abstraction, J-space,
+circuit-tracing, residual-stream observability, identifiable causal
+representation learning, or the cited introspection studies. It does not
+reopen the experimental branch.
+
+The frozen four-document theory packet is recorded in
+[117-astral-theory-review-packet-v48.md](117-astral-theory-review-packet-v48.md).
+The independent receipt
+[118-astral-theory-independent-review-v48-2026-08-28.md](118-astral-theory-independent-review-v48-2026-08-28.md)
+returned `REJECT`. Stage 0C causal-target experimentation is therefore
+terminated after V48; the terminal closure is recorded in
+[119-astral-theory-review-rejection-terminal-closure-v48.md](119-astral-theory-review-rejection-terminal-closure-v48.md).
+Protocol drafting, implementation authorization, qualification, and
+assessment remain closed.
+
+The latest privileged-telemetry result remains V25, with ceiling
+`LocalDevelopmentPrivilegedTelemetryInformationPresence`. The latest executed
+Astral result is V48 `DevelopmentNoCandidate`, with ceiling
+`LocalDevelopmentV48BoundedCausalStateTransportNoCandidate`. The latest
+executed trace-completeness result is V4
+`QUALIFIED_PREASSESSMENT_OPEN`, with ceiling
+`LocalDevelopmentGemma3EndToEndCausalTraceQualificationV4`; its assessment
+remains closed. The latest V41 preassessment
+ceiling is `LocalDevelopmentV41PreassessmentPredictionLocked`; the final V41
+local disposition is `LocalDevelopmentV41DevelopmentNoCandidate`. The V39
+preassessment ceiling is `LocalDevelopmentV39PreassessmentPredictionLocked`;
+the final V39 ceiling is `LocalDevelopmentV39DevelopmentNoCandidate`. These are separate
+lane-specific ceilings; neither establishes held-out causal-effect validity,
+mechanistic explanation, introspection, self-modeling, benchmark evidence, or
+production readiness. Stage 0C and Stage 1 remain blocked, and no accepted
+Evidence Ledger record was created.
 
 ## Project Thesis
 
@@ -223,14 +401,6 @@ review and experiments rule out equivalent prior work.
 - [Independent review record](60-research-synthesis-trace-replay-v1-review-2026-08-13.md):
   source, experiment, privacy, validator, claim-ceiling, and repository-gate
   review with no open findings.
-- [Full-bandwidth causal-fidelity comparison V1](61-full-bandwidth-causal-fidelity-v1-boundary.md):
-  docs-only boundary for comparing standard and latent-feedback actors on
-  telemetry accessibility, actor reporting, held-out intervention-effect
-  prediction, and locked correction. Execution is not authorized.
-- [Neural Chameleon replication V1 custody preflight](82-neural-chameleon-replication-v1-preflight.md):
-  fail-closed artifact and execution boundary for the monitor-evasion and
-  mechanistic-transplant arms; required external artifacts are missing and
-  scientific execution is not authorized.
 - [OpaqueTraceReplay scientific admission validation](../61-opaque-trace-replay-scientific-admission-validation-v1.md):
   ten-case synthetic comparison of typed fail-closed admission against a
   raw-output passthrough control; local control evidence only.
@@ -266,6 +436,126 @@ review and experiments rule out equivalent prior work.
 - [Astral execution-eligibility gate V37](../75-astral-execution-eligibility-gate-v37.md):
   fail-closed composition of custody, instrument, review, nonclaim, ceiling,
   and disabled-execution controls; no execution authorization.
+- [Qwen3.6 layer-instrument feasibility V38](80-qwen36-layer-instrument-feasibility-v38.md):
+  latest executed result; deterministic local layer capture/replacement
+  feasibility only, with assessment closed.
+- [V38 execution record](81-v38-execution-record-2026-08-25.md):
+  40-layer Qwen3.6 seam, zero repeat/no-op deltas, nonzero layer-19 effect,
+  and no scientific result.
+- [V39 V38-derived Stage 0C layer-effect protocol](83-stage0c-qwen36-layer-effect-protocol-v39.md):
+  fresh Qwen3.6 protocol with exact custody, qualification gates, fresh
+  document-disjoint scientific splits, controls, prediction locking, review,
+  aggregate-only retention, and narrow advancement rules.
+- [V39 qualification record](84-v39-qualification-record-2026-08-26.md):
+  qualification passed independently; native parity and zero/no-op deltas were
+  zero, nonzero layer-19 reach was observed, and assessment remained sealed.
+- [V39 panel sealing and fit/tune preassessment](87-v39-panel-sealing-and-preassessment.md):
+  fresh 48-family Gutenberg panel, fit/tune direct effects, aggregate-only
+  controls, clean assessment predictions, and a locked preassessment.
+- [V39 independent-review packet record](88-v39-independent-review-packet-record.md):
+  eight-item review checklist and accepted user-supplied review receipt that
+  opened assessment.
+- [V39 assessment final result](89-v39-assessment-final-result-2026-08-26.md):
+  independently validated aggregate assessment; activation-only did not beat
+  the constant baseline and no candidate was nominated.
+- [V40 intervention-conditioned target protocol proposal](90-stage0c-intervention-conditioned-target-protocol-v40.md):
+  design-only response to the V39 no-candidate result; introduces a fixed
+  intervention-conditioned activation geometry, stronger fresh-data separation,
+  and a preregistered utility gate without authorizing execution.
+- [V41 directional-block target protocol](92-stage0c-qwen36-directional-block-protocol-v41.md):
+  freshly authorized design-only successor to V40; replaces its collision-prone
+  hash sketch with a fixed non-overlapping signed block projection without
+  reopening V40 or changing the absolute utility gate.
+- [V41 preassessment record](94-v41-preassessment-record-2026-08-27.md):
+  fresh Gutenberg custody and 144-family panel passed validation, but the
+  fixed tune utility gate failed before review and assessment.
+- [V42 causal-target reliability protocol](95-stage0c-qwen36-causal-target-reliability-protocol-v42.md):
+  fresh two-wrapper layer-19 target-reliability protocol with qualification,
+  controls, review ordering, aggregate-only retention, and claim ceiling.
+- [V42 execution record](96-v42-execution-record-2026-08-27.md):
+  fresh corpus/panel and qualification passed independently; tune reliability
+  failed, so review and assessment remained closed.
+- [V43 causal-target localization protocol](97-stage0c-qwen36-causal-target-localization-protocol-v43.md):
+  fresh three-layer final-position localization protocol with fixed wrappers,
+  controls, review ordering, aggregate-only retention, and narrow claim ceiling.
+- [V43 execution record](98-v43-execution-record-2026-08-27.md):
+  qualification, corpus, panel, fit/tune, and independent validation passed;
+  no candidate passed complete tune wrapper-invariance.
+- [V44 causal-target measurement-invariance protocol](99-stage0c-qwen36-causal-target-measurement-invariance-protocol-v44.md):
+  fresh three-wrapper, two-position protocol with unchanged controls,
+  qualification-first execution, prediction locking, review ordering, and
+  independent aggregate-only validation.
+- [V44 execution record](100-v44-execution-record-2026-08-27.md):
+  corrected qualification, corpus, panel, fit/tune, and independent validation
+  passed; all tune cells failed wrapper-invariance and assessment stayed closed.
+- [V45 response-anchored canonical-task protocol](101-stage0c-qwen36-response-anchored-canonical-task-protocol-v45.md):
+  fresh measurement-audit authorization with one exact canonical task, a
+  content anchor, fixed signed-block prediction, unchanged controls, and no
+  guaranteed positive outcome.
+- [V45 execution record](102-v45-execution-record-2026-08-28.md):
+  final-code qualification, fresh corpus and panel custody, fit/tune execution,
+  and independent validation passed; all predictors failed fixed tune gates,
+  so assessment remained closed at `CanonicalTaskNoCandidate`.
+- [V46 answer-aligned causal-target protocol](103-stage0c-qwen36-answer-aligned-causal-target-protocol-v46.md):
+  fresh response-readout hypothesis, new Gutenberg identity, fixed content
+  anchor, unchanged controls, qualification-first execution, prediction lock,
+  and aggregate-only retention.
+- [V46 execution record](104-v46-execution-record-2026-08-28.md):
+  fresh custody, qualification, panel, fit/tune, and independent validation
+  passed; all response-aligned predictors failed complete tune gates and
+  assessment stayed closed at `AnswerAlignedNoCandidate`.
+- [V48 cross-view causal-state-transport audit](107-stage0c-cross-view-causal-state-transport-audit-v48.md):
+  independently reviewed new causal assignment assumptions, transport and
+  localization estimands, exact effect thresholds, power/reliability analysis,
+  fresh Gutenberg identity, unchanged controls, prediction locking, and
+  aggregate-only retention.
+- [V48 independent design review round 2](109-v48-independent-design-review-r2-2026-08-28.md)
+  and [implementation authorization](110-stage0c-cross-view-causal-state-transport-implementation-authorization-v48.md):
+  the repaired V48 null-cell algebra was accepted and implementation was
+  authorized with assessment closed.
+- [V48 execution record](111-v48-execution-record-2026-08-28.md):
+  final-source qualification and corrected independent fit/tune repeats passed
+  custody and aggregate validation, but localization, activation-effect
+  prediction, and cross-view recoverability failed. V48 is closed as
+  `DevelopmentNoCandidate`; no assessment effects were generated.
+- [Cumulative V1-V48 evidence synthesis and terminal stop](112-astral-cumulative-evidence-synthesis-stop-v48.md):
+  documentation-only theory audit; V48 is the terminal Astral result unless a
+  materially stronger, independently reviewed theory produces a fresh sealed
+  protocol.
+- [Astral theory docket](astral-theory-docket-v48-closed.md):
+  unexecuted hypotheses only; entries cannot advance without a new estimand,
+  causal contract, sealed implementation, and independent review.
+- [Evidence-conditioned multiscale plasticity v1 protocol](112-evidence-conditioned-multiscale-plasticity-v1.md):
+  contract-only protocol for risk-conditioned shard admission, bounded
+  high/low-frequency control, shadow-before-commit, and rollback.
+- [Evidence-conditioned multiscale plasticity v1 execution record](113-evidence-conditioned-multiscale-plasticity-v1-execution-record-2026-08-28.md):
+  a separately scoped contract-mechanics slice for risk-conditioned shard
+  admission, bounded high/low-frequency control, shadow-before-commit, and
+  rollback. It does not reopen V48 or authorize model-bearing execution.
+- [Evidence-conditioned multiscale plasticity v2 protocol](114-evidence-conditioned-multiscale-plasticity-v2-protocol.md):
+  the exact synthetic learner and preregistered 4 x 2 x 4 factorial protocol
+  with one primary endpoint, hard guards, prediction locking, and independent
+  aggregate validation.
+- [Evidence-conditioned multiscale plasticity v2 execution record](115-evidence-conditioned-multiscale-plasticity-v2-execution-record-2026-08-28.md):
+  the validated 288-replicate synthetic run; adaptive verification improved
+  the deterministic/oracle endpoint while waves were rejected for this
+  learner. Model-bearing execution remains separately unauthorized.
+- [Evidence-conditioned multiscale plasticity v3 protocol](118-evidence-conditioned-multiscale-plasticity-v3-protocol.md):
+  literature-informed exact-synthetic protocol for fast/slow consolidation,
+  replay, EWC-style protection, plasticity preservation, bounded schedules,
+  measurable taxonomy controls, prediction locking, hard guards, and
+  independent validation.
+- [Evidence-conditioned multiscale plasticity v3 execution record](119-evidence-conditioned-multiscale-plasticity-v3-execution-record-2026-08-28.md):
+  validated 192-cell/1,728-replicate result. Plasticity protection is the
+  strongest synthetic candidate; replay, the integrated combination, dual
+  waves, and taxonomy-unstable stochastic scheduling are not carried forward.
+  No model or Astral execution was performed.
+- [Full-bandwidth causal-fidelity comparison V1](61-full-bandwidth-causal-fidelity-v1-boundary.md):
+  docs-only standard-versus-latent-feedback boundary; execution remains
+  unauthorized.
+- [Neural Chameleon replication V1 custody preflight](82-neural-chameleon-replication-v1-preflight.md):
+  missing required Gemma/oracle/monitor artifacts; no checkpoint loaded and no
+  scientific replication authorized.
 - [Stage 0 measurement-validity preregistration](08-stage0-measurement-validity-preregistration.md):
   documentation-only compiled-circuit study boundary, locked comparisons,
   endpoints, stop rules, artifact contract, and advancement gate.
@@ -306,4 +596,20 @@ outputs require an explicit retention and privacy decision before collection.
 | 2026-08-14 | Validate V36 custody replay manifest as a design-only preflight | The local append-only chain rejects tested tampering, duplicate nonce, wrong predecessor, invalid packet, and unknown-field mutations while retaining only typed quarantine metadata | Durable operator-owned replay state and independently verified real custody are required before execution authorization |
 | 2026-08-15 | Validate V37 Astral execution-eligibility gate as a design-only preflight | The gate grants only eligibility for separate human authorization when synthetic custody, instrument, review, nonclaim, ceiling, and disabled-execution controls pass; all denial mutations fail closed | Independently verified real custody, instrument readiness, and explicit authorization are required before any future run |
 | 2026-08-24 | Register S018 and freeze V61 as a docs-only full-bandwidth causal-fidelity boundary | Latent feedback is an architectural factor for comparing telemetry accessibility, actor reporting, held-out intervention-effect prediction, and locked correction; no fresh actor or execution authorization exists | A separately authorized actor pair passes custody, parity, behavioral-effect, prediction-lock, causal-fidelity, correction, and independent-readback gates |
+| 2026-08-25 | Execute V38 as a local Qwen3.6 layer-instrument feasibility slice | The MLX path passed deterministic repeat, zero replacement, layer-shape, and nonzero layer-19 effect checks; assessment stayed closed and the seam is not a per-head or Q/K/V instrument | A fresh protocol identity, custody packet, concepts, splits, prediction lock, held-out effects, independent validation, and separate authorization are required |
+| 2026-08-26 | Execute only V39 qualification under a fresh V38-derived Stage 0C identity | Native parity, deterministic repeat, zero/no-op replacement, nonzero layer-19 logit reach, shape, and source/runtime/model custody passed; no corpus or assessment was opened | Independent review of fresh concepts, document-disjoint splits, controls, prediction lock, privacy retention, and validator behavior is required before any assessment |
+| 2026-08-26 | Complete V39 review, aggregate assessment, and final disposition | The accepted review receipt preceded assessment effects; activation-only RMSE did not beat the constant baseline on tune or assessment, final validation passed, and no candidate was nominated | Keep V39 at `DevelopmentNoCandidate`; Stage 0C and Stage 1 remain blocked, and any new candidate requires a separately authorized fresh protocol |
+| 2026-08-26 | Draft V40 intervention-conditioned target protocol as proposal-only redesign | V39's aggregate-only failure cannot identify family-level causes; a fixed pair-conditioned activation geometry, larger author/document-disjoint panel, stricter donor matching, and a preregistered utility margin address the testable design gap | Separately authorize the named V40 state slice, then independently review custody, panel, qualification, lock, controls, and thresholds before any execution |
+| 2026-08-27 | Execute authorized V40 qualification and fit/tune preassessment | Fresh Gutenberg custody, 144-family panel, Qwen3.6 seam qualification, exact-320-token donor matching, aggregate-only fit/tune summaries, and estimator-only prediction lock passed independent validation; tune delta RMSE was -0.0055666 against the required <= -0.01 | V40 stopped as `DevelopmentNoCandidate` before assessment; no review acceptance, Stage 0C, or Stage 1 promotion follows |
+| 2026-08-27 | Authorize V41 directional-block target protocol as a fresh design-only successor | V40's aggregate-only result cannot establish that hash collisions caused failure; V41 tests that falsifiable representation hypothesis while holding the target, absolute utility gate, controls, review order, and retention boundary fixed | Fresh V41 custody, qualification, fit/tune lock, independent review, and all fixed gates must pass before assessment; failure stops V41 without adaptive retry |
+| 2026-08-28 | Execute V45 response-anchored canonical-task measurement audit | Final-code qualification, fresh 24-document/96-family custody, fixed content-anchor panel, unchanged controls, prediction locking, and independent aggregate validation passed; every tune predictor failed correlation, sign-agreement, and bootstrap gates | Keep V45 at `CanonicalTaskNoCandidate`; assessment, Stage 0C, and Stage 1 remain blocked, and any future slice requires separate authorization |
+| 2026-08-28 | Execute V46 answer-aligned causal-target hypothesis | Fresh 24-document/96-family custody, qualification, fixed response-unembedding feature, unchanged controls, prediction locking, and independent aggregate validation passed; the best tune correlation was 0.302357 but every layer failed sign-agreement and bootstrap gates | Close V46 as `AnswerAlignedNoCandidate`; do not retune V46, open assessment, or advance Stage 0C/Stage 1 |
+| 2026-08-28 | Execute V48 cross-view causal-state-transport audit | Independent design review accepted the repaired causal/null-cell algebra; final-source qualification, fresh 48-document/192-family Gutenberg custody, corrected independent repeats, prediction locking, and aggregate validation passed, but localization, activation-effect prediction, and cross-view recoverability failed | Close V48 as `DevelopmentNoCandidate`; do not retune V48, open assessment, or advance Stage 0C/Stage 1 |
+| 2026-08-28 | Record cumulative V1-V48 evidence synthesis and terminal Astral stop | Instrument feasibility and governance controls are distinct from repeated causal-target validity; no current theory meets the reopening contract | Do not execute another Astral variation; reopen only through a materially stronger, independently reviewed theory and a fresh sealed protocol |
+| 2026-08-28 | Record six-theory literature coverage and reopening audit | Astral directly tested some intervention and rival-control ingredients, but did not execute complete causal-abstraction, J-space, circuit-tracing, observability, identifiability, or cited-introspection studies | Keep Astral closed; any reopening requires a reviewed causal-abstraction/localization protocol with a new estimand and sealed implementation contract |
+| 2026-08-28 | Freeze the four-document theory review packet | Memo 116, literature index, V48 stop record, and closed theory docket were digest-bound before independent review; execution remains unauthorized | Obtain an independent `ACCEPT` or `REJECT` theory receipt before drafting any protocol |
+| 2026-08-28 | Complete independent theory review and apply terminal stop | The separate reviewer verified packet custody but rejected the rationale because causal/statistical thresholds, power/reliability, custody contract, and systematic novelty review were deferred | Terminate Astral experimentation after V48; do not draft or execute a new protocol |
+| 2026-08-28 | Validate evidence-conditioned multiscale plasticity contract mechanics | A new control-plane theory can be tested without reopening the closed causal-target lane; fixture receipts are explicitly not ZK/PQC evidence | Keep scientific execution unauthorized until a fresh model-bearing protocol freezes equal-compute arms, taxonomy controls, primary endpoint, guards, custody, prediction locking, and independent review |
+| 2026-08-28 | Execute evidence-conditioned multiscale plasticity v2 exact synthetic factorial | The 32-cell, 288-replicate exact learner passed independent aggregate validation and equal-compute/forgetting/calibration/rollback/order/cost guards; adaptive verification beat fixed cadence in deterministic/oracle, while waves reduced the gated result | Keep adaptive verification as a synthetic candidate component; discard waves for this learner; require separate reversible-adapter authorization before any cached-model execution |
+| 2026-08-28 | Execute literature-informed evidence-conditioned multiscale plasticity v3 factorial | The 192-cell, 1,728-replicate exact learner passed independent validation and all guards; plasticity protection was the strongest memory-policy candidate, while replay, the integrated combination, dual waves, and taxonomy-unstable stochastic scheduling failed the carry-forward rules | Keep only plasticity protection as a synthetic candidate; do not generalize to transformers or Astral; require separate reversible-adapter authorization |
 | 2026-08-26 | Register V82 as a Neural Chameleon custody preflight only | The required Gemma checkpoint, precursor, activation-oracle, monitor, corpus, and runtime artifacts are absent; the cached Qwen3.6 seam is not a per-head or Q/K/V transplant instrument | An immutable external artifact manifest and separately authorized runner, validator, retention root, frozen corpus, and claim ceiling are supplied |

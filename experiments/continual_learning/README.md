@@ -1,5 +1,244 @@
 # Continual-learning protocol harness
 
+## Plasticity recovery V1 exact-synthetic factorial
+
+`plasticity_recovery_v1.py` implements the separately authorized
+`continual-learning-plasticity-recovery-v1` slice. It is an exact synthetic
+adapter analogue with mechanically known state transitions, fresh deterministic
+fit/tune/assessment panels, and five equal-compute arms: untouched base,
+fixed adapter, bounded replay, selective low-utility reinitialization, and the
+combined policy. Tune predictions are sealed before assessment effects.
+
+`validate_plasticity_recovery_v1.py` independently validates the result JSON
+without importing or executing the runner. The local artifact is stored at
+`/Users/shaanp/Documents/research-artifacts/continual-learning-plasticity-recovery-v1-20260829`.
+The result failed the fixed forgetting guard for every updating arm, so no
+continual-learning candidate was promoted. Base weights, Astral integration,
+and ZK/PQC custody proofs remain untouched or not run. GiveMeANode submission
+requires a separate hard USD spend ceiling.
+
+Protocol, authorization, and execution record:
+
+- `docs/research/continual-learning/112-plasticity-recovery-v1-protocol.md`
+- `docs/research/continual-learning/113-plasticity-recovery-v1-execution-authorization-2026-08-29.md`
+- `docs/research/continual-learning/114-plasticity-recovery-v1-execution-record-2026-08-29.md`
+
+`diagnose_plasticity_recovery_v1.py` performs the read-only V1 forgetting
+diagnosis. It attributes protected-shard degradation, unit contributions,
+replay targets, reinitialization events, and fit-order sensitivity without
+changing the V1 result. Its independent validator is
+`validate_plasticity_recovery_diagnosis_v1.py`; the diagnosis artifact is
+stored at
+`/Users/shaanp/Documents/research-artifacts/continual-learning-plasticity-recovery-v1-forgetting-diagnosis-20260829`.
+The diagnosis remains `NoCandidate` and does not authorize a new mechanism.
+
+## Plasticity recovery V2 protected replay
+
+`plasticity_recovery_v2.py` tests one preregistered mechanism suggested by the
+V1 diagnosis: an immutable protected replay memory containing the first four
+accepted fit shards. It uses fresh panel seeds and order seeds while retaining
+the V1 endpoint, thresholds, prediction lock, reversible-adapter boundary,
+and hard guards. The 72-case result was independently validated. Protected
+replay had the strongest held-out improvement, `0.03220089`, but failed the
+unchanged per-case forgetting guard. V2 is therefore `NoCandidate`; no
+cached-model, GiveMeANode, Astral, or ZK/PQC continuation is opened.
+
+The independent validator is `validate_plasticity_recovery_v2.py`. Protocol,
+authorization, and execution record:
+
+- `docs/research/continual-learning/117-plasticity-recovery-v2-protocol.md`
+- `docs/research/continual-learning/118-plasticity-recovery-v2-execution-authorization-2026-08-29.md`
+- `docs/research/continual-learning/119-plasticity-recovery-v2-execution-record-2026-08-29.md`
+
+The plasticity-recovery mechanism family is now terminally closed as
+`NoCandidate`. Any continuation requires a materially new theory and estimand
+addressing adaptation versus forgetting, a fresh protocol and guards, and
+separate authorization. See
+`docs/research/continual-learning/120-plasticity-recovery-family-terminal-closure-2026-08-29.md`.
+
+## Information-budget frontier V1
+
+The separately authorized
+`continual-learning-information-budget-frontier-v1` slice tests a materially
+new counterfactual protected-subspace projection theory. Its primary endpoint
+is adaptation-forgetting frontier utility (AFFU), with untouched, fixed,
+random-projection, and CPSP arms, locked fit/tune selection, and an
+independent aggregate-only validator. The five-candidate synthetic run
+classified as `NoCandidate`: the locked CPSP arm beat fixed cadence but did
+not beat the untouched base. No model, provider, GiveMeANode, Astral, or
+ZK/PQC work ran. Protocol, review receipt, and execution record:
+
+- `docs/research/continual-learning/124-information-budget-frontier-v1-protocol.md`
+- `docs/research/continual-learning/132-information-budget-frontier-v1-independent-review-receipt-2026-08-29.json`
+- `docs/research/continual-learning/133-information-budget-frontier-v1-execution-record-2026-08-29.md`
+
+## Recursive update-policy V1 protocol package
+
+The newly authorized state slice `continual-learning-recursive-update-policy-v1`
+defines a bounded test of generational update-policy improvement. The exact
+synthetic learner separates adaptation, protected retention, and
+post-adaptation plasticity; evaluates untouched-base, fixed-policy,
+recursive-policy, and deterministic-random controls; and uses fresh
+fit/tune/assessment/probe tasks for four generations. External episodic and
+procedural memory is governed by freshness, contradiction, poisoning, deletion,
+and promotion rules. Policy proposals are sandboxed, checkpoints are
+immutable and rollback-tested, compute is fixed, and prediction locks precede
+assessment.
+
+The runner and independent aggregate-only validator are additive:
+
+- `recursive_update_policy_v1.py`
+- `validate_recursive_update_policy_v1.py`
+- `tests/test_recursive_update_policy_v1.py`
+
+The protocol is pending independent review. Its pure in-memory synthetic
+contract computation currently evaluates to `NoCandidate`; this is a
+qualification signal, not a retained scientific result, model result, or RSI
+claim. Model-bearing execution, reversible adapters,
+GiveMeANode, Astral integration, and ZK/PQC custody work remain separately
+authorized boundaries. See
+`docs/research/continual-learning/137-recursive-update-policy-v1-protocol.md`
+and
+`.autoresearch/continual-learning-recursive-update-policy-v1/contract.md`.
+
+## Recursive update-policy V1 review and V2 result
+
+The independent V1 review rejected the original package before execution for
+non-operative rollback, incomplete custody enforcement, bypassable receipt
+requirements, disconnected reserve semantics, an under-specified order guard,
+and incomplete result freezing. The V1 protocol and source remain unchanged;
+the review record is
+`docs/research/continual-learning/138-recursive-update-policy-v1-independent-review-2026-08-29.json`.
+
+The separate
+`continual-learning-recursive-update-policy-v2` revision repaired those defects
+with a causal reserve equation, stable procedural-memory prototypes, real
+checkpoint restoration, exact custody-root enforcement, canonical review
+receipts, an explicit base-state digest, and mechanically recomputed
+classification. Its approved bounded synthetic campaign was independently
+validated and classified `NoCandidate`: recursive selection lost to random
+selection (`U=-0.0011354145513036448`) and compounding stayed below the locked
+threshold (`G=0.004179722339390019`). All hard guards passed, but the protocol
+identity is closed under its preregistered rules.
+
+Protocol, review receipt, runner, validator, and execution record:
+
+- `docs/research/continual-learning/139-recursive-update-policy-v2-protocol.md`
+- `/Users/shaanp/Documents/research-artifacts/continual-learning-recursive-update-policy-v2-review-receipt-20260829.json`
+- `recursive_update_policy_v2.py`
+- `validate_recursive_update_policy_v2.py`
+- `tests/test_recursive_update_policy_v2.py`
+- `docs/research/continual-learning/140-recursive-update-policy-v2-execution-record-2026-08-29.md`
+
+No cached model, reversible adapter, GiveMeANode/provider, Astral, or ZK/PQC
+execution is authorized by this result. Astral remains limited to causal-effect
+prediction, calibration, or instrumental correction.
+
+## Plasticity guard with reversible adapters V1
+
+The separately authorized state slice
+`continual-learning-plasticity-guard-reversible-adapter-v1` tests only the
+surviving synthetic `plasticity_guard` mechanism against the already-cached
+Gemma3 1B PT checkpoint. It uses a new document-disjoint NEWSROOM cohort,
+fixed forward/reverse orders and seeds, equal LoRA update budgets, per-update
+candidate adapters, and rollback by active-adapter pointer. The base model is
+never updated or merged. The primary endpoint is paired held-out adaptation
+improvement of the guarded arm over fixed cadence; forgetting, calibration,
+repeatability, adapter restore fidelity, custody, and independent validation
+are hard guards. Astral integration is not run and remains limited to future
+causal-effect prediction, calibration, or instrumental correction. Protocol,
+authorization, and execution status are recorded in
+`docs/research/continual-learning/89-plasticity-guard-reversible-adapter-v1-protocol.md`,
+`90-plasticity-guard-reversible-adapter-v1-execution-authorization-2026-08-28.md`,
+and `91-plasticity-guard-reversible-adapter-v1-execution-record-2026-08-28.md`.
+The completed bounded run classified as `DevelopmentCandidate` with a
+`0.064052287` NLL/token paired endpoint; both independent artifact-root
+validations passed and the base model manifest was unchanged.
+
+## Plasticity guard replication V1
+
+The separately authorized state slice
+`continual-learning-plasticity-guard-replication-v1` freezes the V1 result and
+runs a fresh, document-disjoint NEWSROOM cohort with new seeds and permutation
+orders. It adds an untouched-base/no-update arm that spends the same disposable
+LoRA training budget without applying an adapter, alongside fixed cadence and
+the unchanged `plasticity_guard`. Absolute held-out improvement versus the
+untouched base is primary; guarded-minus-fixed improvement is secondary. The
+base model remains byte-identical, adapters remain reversible, and Astral
+integration is not run. Protocol, authorization, and execution status are
+recorded in
+`docs/research/continual-learning/105-plasticity-guard-replication-v1-protocol.md`,
+`106-plasticity-guard-replication-v1-execution-authorization-2026-08-28.md`,
+and `107-plasticity-guard-replication-v1-execution-record-2026-08-28.md`.
+The replication classified as `RollbackInfrastructureOnly`: the guard's
+absolute improvement versus the untouched base was `-0.041830065` NLL/token,
+while its secondary improvement over fixed cadence was `0.117647059`.
+
+## Gemma3 paper recirculation acquisition
+
+### Gemma3 local mechanics pilot
+
+`gemma3_local_pilot_v1.py` runs the separately scoped
+`continual-learning-gemma3-local-pilot-v1` slice against the cached Gemma3 1B
+BF16 MLX conversion. It uses four document-disjoint 256-token windows from
+the registered NEWSROOM test file, stores the active immutable artifact on
+PrimaryED, mirrors it to DAed, and invokes the independent
+`validate_gemma3_local_pilot_v1.py` readback validator on both roots. This is a
+mechanics-only local pilot, not a C4/Gemma paper replication or a general
+recirculation claim. The frozen protocol and claim ceiling are documented in
+`docs/research/continual-learning/78-gemma3-local-pilot-v1.md`; the completed
+execution record is documented in
+`docs/research/continual-learning/79-gemma3-local-pilot-execution-20260827.md`.
+
+`gemma3_local_pilot_v2.py` is the independent fresh-cohort continuation. It
+uses the next four eligible NEWSROOM test documents after V1 under the new
+`continual-learning-gemma3-local-pilot-v2` slice, with new immutable roots on
+PrimaryED and DAed. Its result must remain separate from V1 and below the
+paper-replication claim ceiling. The completed execution record is documented
+in `docs/research/continual-learning/81-gemma3-local-pilot-v2-execution-20260827.md`.
+
+The acquisition checkpoint staged the documented OpenWebText URL lists and
+the exact `OpenWebText.zip` manual input on PrimaryED with a byte-identical
+DAed mirror. It did not produce the required C4 `train.jsonl` or
+`validation.jsonl`; the paper-aligned acquisition gate remains blocked on the
+Common Crawl WET preparation step. See
+`docs/research/continual-learning/82-gemma3-c4-openwebtext-staging-20260827.md`.
+
+The separately named bounded follow-up
+`continual-learning-gemma3-paper-recirculation-c4-bounded-v1` is implemented
+by `acquire_gemma3_bounded_webtextlike_wet_v1.py`. It downloads a fixed bounded
+set of WET
+objects from each pinned Common Crawl collection, filters locally against the
+staged OpenWebText URLs, and writes only to the external PrimaryED root. It
+produces a bounded WebText-like panel, not the exact TFDS `c4/webtextlike`
+dataset. Its default guard is 2,000 records and 4 GiB, and its independent
+readback gate is `validate_gemma3_bounded_webtextlike_wet_v1.py`. The earlier
+CDX range utility remains available for small targeted probes. The protocol,
+usage, and claim ceiling are documented in
+`docs/research/continual-learning/83-gemma3-bounded-webtextlike-acquisition-v1.md`.
+
+`gemma3_bounded_webtextlike_recirculation_v1.py` is the bounded execution
+adapter for that validated bundle. It converts the acquired records into
+256-token windows, runs the cached Gemma3 1B checkpoint offline with frozen
+weights, evaluates the fixed four-pair pilot grid, locks evaluation at
+`alpha=0.15` and `beta=0.85`, and writes an external result bundle. Its
+independent validator is
+`validate_gemma3_bounded_webtextlike_recirculation_v1.py`. This remains a
+bounded local mechanics pilot and cannot be passed to the exact paper runner.
+
+`acquire_gemma3_paper_recirculation_v1.py` is the separately authorized,
+network-enabled acquisition slice for the paper-aligned Gemma3 recirculation
+lane. It downloads only pinned upstream sources, requires external manual
+inputs for TFDS C4 WebText-like and registered NEWSROOM data, computes raw and
+normalized checksums, and publishes only an independently validated external
+`gemma3-source-v1` bundle. It does not train, run the model, or mutate the
+Evidence Ledger. The protocol and exact source map are documented in
+`docs/research/continual-learning/77-gemma3-paper-recirculation-acquisition-v1.md`.
+
+`validate_gemma3_paper_recirculation_acquisition_v1.py` is an independent
+readback gate. The existing `stage_and_run_gemma3_paper_recirculation_v1.py`
+remains offline and must not be run until this acquisition validator passes.
+
 `benchmark.py` is a deterministic, leakage-controlled setup benchmark. It
 separates:
 
@@ -414,3 +653,95 @@ sequences without searching the V5 corpus. The independent validator is
 is the `...qwen-inference-recirculation-v5-20260826-r1` root. The transfer
 result is valid but negative and remains local evidence only. The protocol
 record is `docs/research/continual-learning/75-qwen-inference-recirculation-v5.md`.
+
+## Gemma3 paper-aligned recirculation V1
+
+The activated state slice
+`continual-learning-gemma3-paper-recirculation-v1` includes an offline Gemma3
+1B PT runner, an independent validator, and
+`stage_and_run_gemma3_paper_recirculation_v1.py`, an operator-facing
+orchestrator. The orchestrator consumes locally acquired normalized JSONL and
+an acquisition manifest, materializes the immutable external corpus with the
+paper's fit counts, runs the campaign, and invokes the independent validator.
+It never downloads data, overwrites existing roots, or writes experiment
+artifacts into the repository. The runner uses the already-cached checkpoint
+and BF16 MLX conversion, paper-shaped fit and evaluation panels, locked
+configuration, parity and control gates, and external result retention. No
+Gemma3 execution or result artifact exists yet. The authorization and claim
+boundary are documented in
+`docs/research/continual-learning/76-gemma3-paper-recirculation-authorization-proposal-v1.md`.
+
+Prepare an external source root with `acquisition-manifest.json` and one
+normalized JSONL file per protocol dataset. Each JSONL record must contain
+only a stable `document_id` and raw UTF-8 `text`; the source manifest must
+record each dataset source, revision, and split. The operator orchestrator
+then tokenizes and windows those records with the cached Gemma tokenizer,
+materializes the paper-shaped corpus, runs the campaign, and invokes the
+independent validator. Existing corpus and result roots are rejected rather
+than overwritten.
+
+Example source-root shape:
+
+```text
+/external/gemma3-source-v1/
+  acquisition-manifest.json
+  fit/arxiv.jsonl
+  fit/c4.jsonl
+  fit/pg19.jsonl
+  assessment/arxiv.jsonl
+  assessment/big_patent.jsonl
+  assessment/billsum.jsonl
+  assessment/booksum-book.jsonl
+  assessment/c4-webtextlike.jsonl
+  assessment/gov_report.jsonl
+  assessment/lambada.jsonl
+  assessment/newsroom.jsonl
+  assessment/pg19.jsonl
+  assessment/pubmed.jsonl
+```
+
+The acquisition manifest schema is
+`gemma3-paper-recirculation-acquisition-v1` and its dataset keys are
+`fit/arxiv`, `fit/c4`, `fit/pg19`, plus `assessment/` followed by each exact
+assessment dataset name. A dataset entry has `source`, `revision`, and
+`split` strings. Run the end-to-end orchestrator with:
+
+```text
+python experiments/continual_learning/stage_and_run_gemma3_paper_recirculation_v1.py \
+  --source-root /external/gemma3-source-v1 \
+  --corpus-root /external/gemma3-paper-corpus-v1 \
+  --model /Users/shaanp/.lmstudio/models/mlx-community/gemma-3-1b-pt-bf16 \
+  --output /Users/shaanp/.codex/research-artifacts/composed-zk-benchmark-os/gemma3-paper-recirculation-v1-r1
+```
+
+Use `--pack-only` first to validate the external source and corpus without
+loading the model. Acquisition itself remains operator-controlled and is not
+performed by this script.
+
+## Gemma3 OpenWebText substitute pilot
+
+The named state slice
+`continual-learning-gemma3-paper-recirculation-openwebtext-substitute-v1`
+provides a bounded local substitute for the blocked TFDS `c4/webtextlike`
+input. It pins `Skylion007/openwebtext`, stores 80 raw Parquet shards and
+normalized source records outside the repository, mirrors them to the
+dedicated GiveMeANode bucket `gemma3-openwebtext-substitute-v1`, and runs
+frozen Gemma3 inference offline. The completed run used disjoint 1024-token
+fit/assessment windows, fixed controls, and an independent validator; it
+selected `(source=11, destination=4)` and measured a selected-minus-baseline
+assessment mean-NLL delta of `-0.071975952`. The claim ceiling is
+`LocalDevelopmentGemma3OpenWebTextSubstitutePilot`; this is not exact C4,
+full-paper replication, general recirculation evidence, benchmark evidence,
+or production readiness. See the [protocol](../../docs/research/continual-learning/84-gemma3-openwebtext-substitute-v1.md)
+and [execution record](../../docs/research/continual-learning/85-gemma3-openwebtext-substitute-execution-20260828.md).
+
+## Gemma3 FineWeb-Edu H100 replication V1
+
+The state slice continual-learning-gemma3-fineweb-edu-replication-h100-v1 is
+terminally closed as `ProtocolReviewRejectedNoExecution`. Independent review
+rejected the exact packet for an invalid implementation-manifest self-digest,
+missing provider cost/stop-receipt binding, and incomplete result-root
+closure. No provider job, H100, model execution, or result exists. Do not
+patch or retune this identity. See the [rejection receipt](../../docs/research/continual-learning/255-gemma3-fineweb-edu-replication-h100-v1-independent-review-rejection.json),
+[review record](../../docs/research/continual-learning/256-gemma3-fineweb-edu-replication-h100-v1-independent-review.md),
+and [terminal closure](../../docs/research/continual-learning/257-gemma3-fineweb-edu-replication-h100-v1-terminal-closure-2026-08-31.md).

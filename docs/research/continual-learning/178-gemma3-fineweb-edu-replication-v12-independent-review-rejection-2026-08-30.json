@@ -1,0 +1,36 @@
+{
+  "schema": "gemma3-fineweb-edu-replication-v12-independent-review-rejection",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v12",
+  "reviewer": "independent-static-reviewer-v12",
+  "reviewed_at_utc": "2026-08-30T16:38:51Z",
+  "effects_run": false,
+  "protocol_sha256": "08050a2d4b50749a29697d4828bd18907c7f59f9bcf542281e20851dd5327f80",
+  "review_packet_sha256": "6c8fa21d91f9e43e0f43453ef3e5284e06f5c40322459965a18b1beab4925e47",
+  "implementation_manifest_sha256": "34e514027150ebae1cf10ac1a400c6463fe42db651b01540393f8ffda522a67b",
+  "reviewed_files": [
+    "docs/research/continual-learning/176-gemma3-fineweb-edu-replication-v12-protocol.md",
+    "docs/research/continual-learning/177-gemma3-fineweb-edu-replication-v12-review-packet.md",
+    "experiments/continual_learning/gemma3_fineweb_edu_replication_v12_contract.py",
+    "experiments/continual_learning/prepare_gemma3_fineweb_edu_replication_v12.py",
+    "experiments/continual_learning/validate_gemma3_fineweb_edu_replication_v12.py",
+    "experiments/continual_learning/stage_and_run_gemma3_fineweb_edu_replication_v12.py",
+    "experiments/continual_learning/tests/test_gemma3_fineweb_edu_replication_v12.py"
+  ],
+  "findings": {
+    "custody_exact_pinned_data_identity": true,
+    "fit_assessment_prior_pilot_disjointness": true,
+    "locked_configuration_and_paper_target_treatment": true,
+    "controls_and_frozen_weight_behavior": true,
+    "exact_bootstrap_and_uncertainty_rule": true,
+    "aggregate_per_document_retention_and_validator_behavior": true,
+    "v1_v2_v3_v4_rejections_preserved_and_prohibited_actions_enforced": false
+  },
+  "material_findings": [
+    "The pinned PRIOR_HISTORY is incomplete relative to the protocol requirement to preserve V1-through-V11 protocol and review history: it pins the V1 rejection but omits the V1 protocol and review packet, and it pins only protocol/review-packet files for V2 through V6 while omitting their rejection receipts. validate_prior_history therefore cannot detect mutation or replacement of those omitted history records. The explicit V10 rejection and V11 acceptance plus pre-effect execution failure are pinned, and the V10 source-prefix/path and canonical metric/bootstrap-order defects are closed, but the broader required history gate remains open."
+  ],
+  "rejection_reasons": [
+    "Complete the pinned V1-through-V11 historical record set before requesting another review; do not create undocumented historical receipts."
+  ],
+  "review_decision": "REJECT",
+  "receipt_sha256": "bf79fb7ef0f81eb46e311b224cc2bf4b3a6270eaa27b7515e4fa61a18b28c2c3"
+}

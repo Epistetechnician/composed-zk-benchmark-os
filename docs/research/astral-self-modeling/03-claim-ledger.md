@@ -61,6 +61,23 @@ Accepted-as-design-choice.
 | C043 | Cached Llama 1B qualifies on a fresh-concept replication of V22 perturbation-location discrimination | V23 manifest `7d2a0185d409e4ac2c6cd1b80ffeb83a8cdc8ab9da2fcd0ebc0028461e5411c6`; tune macro balanced accuracy `0.3125`, activation-versus-none accuracy `0.2813`; assessment unopened | Refuted | High / exposed V23 fit/tune feasibility setup only |
 | C044 | On the cached `nemotron_h` 4B checkpoint, a closed-form residual probe decodes activation-versus-none on identical V25 assessment trials more accurately than the model's own report | V25 external manifest `cf22b02d5b4b3ff4fc09c8a24405c09895e8329d871bf2cf9437f6a5c9472e87`; probe accuracy `1.0`, model-report accuracy `0.34375`, observed margin `0.65625`, bootstrap lower bound `0.5` | Not refuted | High / one cached checkpoint, one runtime, fixed wrapper, and local development claim ceiling only |
 
+## Status Synchronization Update — 2026-08-26
+
+State slice: `astral-status-reconciliation-v2`.
+
+These append-only rows record the post-V25 execution and infrastructure
+dispositions without changing the earlier claim rows or raising the Astral
+claim ceiling.
+
+| ID | Exact claim or update | Evidence artifact | Status | Confidence / ceiling |
+|---|---|---|---|---|
+| C045 | The V27 public llama.cpp ABI and one local Qwen3.5 GGUF actor expose deterministic final-embedding capture and a directly measurable controlled-vector output effect | `54-v27-execution-record-2026-08-13.md`; 4096-dimensional embedding, 32 layers, zero repeat/no-op error, direct logit-margin effect `0.0415115356` | Not refuted | High / local final-embedding instrument feasibility only |
+| C046 | The V28/V29 rich final-embedding and opaque channels provide useful held-out intervention-effect prediction | `56-v28-execution-authorization-and-record-2026-08-13.md`, `59-v29-execution-record-2026-08-13.md`; V29 shuffled relative MSE `1.0046` beat rich `5.9990` and opaque `5.0911`, and the utility gate failed | Refuted | High / V28-V29 local synthetic channel lane only |
+| C047 | A measured mechanism object on the V30 planted circuit predicts held-out intervention effects better than a plausible narrative or shuffled mechanism | `../63-v30-execution-record-2026-08-14.md`; mechanism MSE `0.0`, narrative MSE `0.5`, shuffled mechanism MSE `12.0` | Not refuted | High / synthetic planted-circuit validation only |
+| C048 | The cached Qwen3.6 MLX path exposes a deterministic layer-wrapping seam for bounded capture and replacement | `80-qwen36-layer-instrument-feasibility-v38.md`, `81-v38-execution-record-2026-08-25.md`; 40 layers, zero repeat/no-op deltas, nonzero layer-19 logit delta `0.53125`, assessment closed | Not refuted | High / `LocalDevelopmentInstrumentFeasibilityOnly` |
+| C049 | A fresh V38-derived qualification revalidates the exact cached Qwen3.6 layer-19 capture/replacement seam under independent custody and source/runtime digest checks | `84-v39-qualification-record-2026-08-26.md`; native parity `0.0`, repeat `0.0`, zero/no-op `0.0`, nonzero layer-19 logit delta `0.421875`, 40 layers, hidden width `2048`, independent validator `valid=true` | Not refuted | High / `LocalDevelopmentInstrumentFeasibilityOnly`; no held-out causal-target evidence |
+| C050 | A fixed cross-view causal-state-transport carrier yields a reliable held-out causal target beyond its state-shuffled null | `111-v48-execution-record-2026-08-28.md`; qualification and custody passed, but corrected independent repeats failed localization, activation-effect prediction, and cross-view recoverability; assessment unopened | Refuted | High / named V48 actor, operator, corpus, and local development ceiling only |
+
 C003-C007 and C013-C014 retain the historical status `Proposed`; their current
 execution disposition is `BlockedByStage0C`. No observer, correction,
 prospective-prediction, or actor-observer optimization evidence exists. C008

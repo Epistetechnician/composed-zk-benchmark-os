@@ -1,0 +1,30 @@
+{
+  "fixture_manifest_sha256": "ae12f6efcd77ef3fc85b4f4da07f27fc459023ef3c0264b998e8ba96cbdbedb6",
+  "model": {
+    "architecture": "Qwen3_5MoeForConditionalGeneration",
+    "id": "Qwen3.6-35B-A3B-MLX-4bit",
+    "manifest_sha256": "a95dc0f89c98c82331865ef0f51fc52ee832e41d6a97bd9b76351d37cec1e9e4",
+    "root": "/Users/shaanp/.lmstudio/models/lmstudio-community/Qwen3.6-35B-A3B-MLX-4bit"
+  },
+  "protocol": "astral-trace-completeness-native-instrument-v1",
+  "runtime": {
+    "mlx": "0.31.2",
+    "mlx_core_source_sha256": "f169b209241a82a29ff46788221c4ceb329abc1a34dccdafdae4e49fd81442ea",
+    "mlx_lm": "0.31.3",
+    "mlx_lm_generate_source_sha256": "270778ad53eaca55a8533d82e6752660fe5d2605c4aa0879b48a50a91f69345f",
+    "python": "3.14.5",
+    "qwen3_5_moe_source_sha256": "ef9e8e1f6a5c097b29587c8330e8eb9c9cbdc52fbb4597fbc2362606c1996619",
+    "qwen3_5_source_sha256": "f0daa30bba5cb521c8bdfa7093101a544c6a37bbba09bca582288219cb04ae3a"
+  },
+  "source_digests": {
+    "custody_v1.py": "b30784f404ca33d71ec87446b1486df38e4f9afd5cd570dc25abdf6208600669",
+    "fixture_corpus_v1.py": "be3f8d9d008fd8c84d70d0e7e1832fd610616e9f3a21506db524e916c0dcaffe",
+    "mlx_adapter_v1.py": "407ba05ab81390769ecbf6685dce1ed98e27f5a59be65d5e9e081dbac57f9f4e",
+    "native_adapter.py": "cf520d05a649948bab90ed18f6bddc91621195df67126b1a922cf24172b11258",
+    "protocol.py": "52bbb712ce4e306f4570a3e3cb40e53903a1dd8d2cf3948ddcb3acbc697405da",
+    "review_packet_v1.py": "0100685b3d7768eb4f70f91f486bcc03229ff5975af49bb317c857a37cea698e",
+    "review_receipt_v1.py": "f33710e133ab8b5005255aca16d1712d9d56bd25c0e56e0db0c5ea5a5a298437",
+    "validate_trace_bundle_v1.py": "138b9ef62a8292a6287f42a04028f0f52c2b4fc04d8915ce6e661259383de1a7"
+  },
+  "state_slice": "astral-trace-completeness-native-instrument-v1"
+}

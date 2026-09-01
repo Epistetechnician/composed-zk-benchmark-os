@@ -1,0 +1,29 @@
+{
+  "schema": "gemma3-fineweb-edu-replication-v22-independent-review-rejection",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v22",
+  "protocol_sha256": "d52a99e412a95b2e8c88fd118fab75ff4262db1db1cef274ccb8c1402e52c0e3",
+  "review_packet_sha256": "ec8f8c264b7cc2e056ed8ec27de38a271b6d5007917ccd441454f0e1c34e95b6",
+  "implementation_manifest_sha256": "7da1b2188e45092cd7ee86507aae38f4872bba85f77116f8a90607d6369ad3fa",
+  "reviewer": "OpenAI Codex independent static reviewer",
+  "reviewed_at_utc": "2026-08-31T05:25:58Z",
+  "effects_run": false,
+  "review_decision": "REJECT",
+  "findings": {
+    "custody_exact_pinned_data_identity": false,
+    "fit_assessment_prior_pilot_disjointness": true,
+    "locked_configuration_and_paper_target_treatment": false,
+    "controls_and_frozen_weight_behavior": true,
+    "exact_bootstrap_and_uncertainty_rule": true,
+    "aggregate_per_document_retention_and_validator_behavior": false,
+    "v1_v2_v3_v4_rejections_preserved_and_prohibited_actions_enforced": false
+  },
+  "material_findings": [
+    "validate_gemma3_fineweb_edu_replication_v22.py:358-385 audit_source leaves the datasets mapping and each dataset metadata object open-world; extra dataset entries and extra per-entry fields are accepted after recomputing the manifest self-digest.",
+    "validate_gemma3_fineweb_edu_replication_v22.py:919-946,1425-1469 validate_result declares but does not enforce config evidence_ledger_mutation, model_name, protocol, mechanism_source, window counts, normalization, or selection_policy. evidence_ledger_mutation may be true or non-boolean and the other locked fields may be arbitrary.",
+    "gemma3_fineweb_edu_replication_v22_contract.py:787-849, validate_gemma3_fineweb_edu_replication_v22.py:864-896,1346-1350, and prepare_gemma3_fineweb_edu_replication_v22.py:93-95,152 validate, hash, and snapshot receipt and reviewed-code paths through separate reads. A concurrent swap can bind later artifacts to bytes different from those originally validated.",
+    "stage_and_run_gemma3_fineweb_edu_replication_v22.py:897-930 and gemma3_fineweb_edu_replication_v22_contract.py:904-925 capture the publication snapshot only after the final validator returns. The validator returns no exact file snapshot, so modification before publication becomes the accepted snapshot and can publish without semantic revalidation.",
+    "gemma3_fineweb_edu_replication_v22_contract.py:919-935 does not recheck the final tree after post_publish_check. An unexpected entry introduced during that callback can publish; if detected earlier, rollback moves only recorded entries and may leave a nonempty canonical final root.",
+    "docs/research/continual-learning/213-gemma3-fineweb-edu-replication-v22-protocol.md:12-20,45-47 and docs/research/continual-learning/214-gemma3-fineweb-edu-replication-v22-review-packet.md:37-40 describe verification only through V19, omitting V20 and V21 despite their protocol, packet, and rejection pins at experiments/continual_learning/gemma3_fineweb_edu_replication_v22_contract.py:337-358."
+  ],
+  "disposition": "V22 sealed without an acceptance receipt, acquisition, model effects, or published result. A fresh V23 identity is required for correction."
+}

@@ -1,0 +1,17 @@
+{
+  "schema": "oaklab-h100-replication-v3-protocol",
+  "state_slice": "oaklab-experience-learning-h100-replication-v3",
+  "protocol_version": "3.0.0",
+  "pairing": {"unit": "episode", "checkpoint": "immutable_initial_state", "stream": "identical_ordered_bytes", "arm_order_propensity_num": 1, "arm_order_propensity_den": 2, "post_washout_blocks": 32, "items_per_block": 128},
+  "controller": {"name": "lagged_selective_credit", "inputs": ["previous_block_residual", "previous_block_uncertainty", "previous_block_resource_counters"], "current_block_outcome_access": false, "replay": false, "reshuffle": false, "threshold": 0.25},
+  "streams": {"synthetic": ["predictable_noise", "delayed_reward", "feature_relevance_drift", "event_sparsity"], "real": ["noisy_mnist", "event_camera_or_sensor"], "split": "fit_tune_assessment_disjoint"},
+  "statistics": {"estimand": "mean_paired_post_washout_regret_difference", "test": "paired_sha256_counter_randomization", "multiplicity": "holm", "alpha": 0.05, "power": 0.8, "minimum_effect": 0.05, "bootstrap_resamples": 10000},
+  "resource": {"noninferiority_margin": 0.05, "metrics": ["active_operations", "parameter_updates", "storage_bytes", "wall_clock_latency", "joules_per_learned_event"], "joule_integral": "trapezoid_over_monotone_utc_ns", "event_denominator": "successfully_learned_events"},
+  "manifest": {"serialization": "canonical_utf8_json_sorted_compact_trailing_newline", "self_digest": "sha256_body_without_manifest_sha256", "binds": ["compiled_protocol", "code", "model", "data", "backend", "guard", "tune_lock", "provider_receipts", "energy_receipts", "result_files"]},
+  "provider": {"name": "givemeanode", "node_type": "h100-1", "job_mode": "batch", "hard_usd_ceiling_required": true, "receipt_signature": "ed25519", "network_during_effects": false},
+  "provider_receipt": {"fields": ["allocation_id", "node_id", "start_utc", "stop_utc", "charged_usd", "hard_usd_ceiling", "launch_manifest_sha256", "raw_trace_sha256", "public_key_hex", "signature_hex", "receipt_sha256"], "timestamp_grammar": "YYYY-MM-DDTHH:MM:SSZ", "charged_leq_ceiling": true, "signature_verification": "independent_ed25519_verification"},
+  "tune_lock": {"fields": ["schema", "state_slice", "selected_controller_sha256", "hyperparameters_sha256", "seed_roster_sha256", "prediction_sha256", "assessment_forbidden_before_validation"], "assessment_forbidden_before_validation": true},
+  "result_root": {"mode": "closed_world", "allowlist": ["campaign_manifest.json", "compiled_protocol.json", "tune/lock.json", "tune/lock_receipt.json", "provider/allocation.json", "provider/cost.json", "provider/stop.json", "energy/raw_trace.csv", "energy/joules.json", "result/aggregate.json", "validation/independent.json"], "reject_symlinks": true, "reject_extra_paths": true, "validate_content_and_digests": true},
+  "execution": {"effects_run": false, "implementation_before_review": false, "real_before_synthetic_candidate": false, "assessment_before_independent_lock": false},
+  "manifest_sha256": "TO_BE_COMPILED"
+}

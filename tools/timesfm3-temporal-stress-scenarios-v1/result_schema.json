@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TimesFM3 temporal stress-scenario result V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "state_slice", "request_id", "status", "input_digest", "model_digest", "config_digest", "runtime_digest", "output_digest", "point_forecast_artifact", "quantile_forecast_artifact", "repeatability", "provenance", "claim_boundary", "non_claims"],
+  "properties": {
+    "schema_version": {"const": "timesfm3-temporal-stress-scenarios-result-v1"},
+    "state_slice": {"const": "timesfm3-temporal-stress-scenarios-v1"},
+    "request_id": {"type": "string"},
+    "status": {"enum": ["completed", "inconclusive", "invalid", "resource_limited"]},
+    "input_digest": {"$ref": "#/$defs/sha256"},
+    "model_digest": {"$ref": "#/$defs/sha256"},
+    "config_digest": {"$ref": "#/$defs/sha256"},
+    "runtime_digest": {"$ref": "#/$defs/sha256"},
+    "output_digest": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+    "point_forecast_artifact": {"anyOf": [{"$ref": "#/$defs/point_artifact"}, {"type": "null"}]},
+    "quantile_forecast_artifact": {"anyOf": [{"$ref": "#/$defs/quantile_artifact"}, {"type": "null"}]},
+    "repeatability": {"$ref": "#/$defs/repeatability"},
+    "provenance": {"type": "object", "additionalProperties": false},
+    "claim_boundary": {"const": "LocalDevelopmentTimesFM3TemporalStressScenarioQualificationV1"},
+    "non_claims": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "digest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "hex_digest", "byte_len"],
+      "properties": {
+        "algorithm": {"const": "sha256"},
+        "hex_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "byte_len": {"type": "integer", "minimum": 0, "maximum": 4194304}
+      }
+    },
+    "point_artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_ref", "artifact_digest", "shape", "values"],
+      "properties": {
+        "artifact_ref": {"type": "string"},
+        "artifact_digest": {"$ref": "#/$defs/digest"},
+        "shape": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "integer", "minimum": 1}},
+        "values": {"type": "array"}
+      }
+    },
+    "quantile_artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_ref", "artifact_digest", "shape", "quantile_levels", "values"],
+      "properties": {
+        "artifact_ref": {"type": "string"},
+        "artifact_digest": {"$ref": "#/$defs/digest"},
+        "shape": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "integer"}},
+        "quantile_levels": {"const": [0.1, 0.5, 0.9]},
+        "values": {"type": "array"}
+      }
+    },
+    "repeatability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "device", "first_output_digest", "repeat_output_digest", "same_device"],
+      "properties": {
+        "status": {"enum": ["same_device_match", "not_run"]},
+        "device": {"type": ["string", "null"]},
+        "first_output_digest": {"type": ["string", "null"]},
+        "repeat_output_digest": {"type": ["string", "null"]},
+        "same_device": {"type": "boolean"}
+      }
+    }
+  }
+}

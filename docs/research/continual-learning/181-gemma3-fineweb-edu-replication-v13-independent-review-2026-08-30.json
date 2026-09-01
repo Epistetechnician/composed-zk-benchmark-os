@@ -1,0 +1,31 @@
+{
+  "schema": "gemma3-fineweb-edu-replication-v13-independent-review",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v13",
+  "reviewer": "Codex independent static reviewer",
+  "reviewed_at_utc": "2026-08-30T16:48:16Z",
+  "effects_run": false,
+  "protocol_sha256": "a8c98f0bf550d0e3cfddf8cd669643f30c74ef0698246cae3d19624e92d159c4",
+  "review_packet_sha256": "68da8936831ff5f252f92f7538d6b441b9466710725733e873cc897f88943db0",
+  "implementation_manifest_sha256": "3ac8556f3aecb0161469382c9a6a3205bd13b952ecfb974cb301090e811afce8",
+  "reviewed_files": [
+    "docs/research/continual-learning/179-gemma3-fineweb-edu-replication-v13-protocol.md",
+    "docs/research/continual-learning/180-gemma3-fineweb-edu-replication-v13-review-packet.md",
+    "experiments/continual_learning/gemma3_fineweb_edu_replication_v13_contract.py",
+    "experiments/continual_learning/prepare_gemma3_fineweb_edu_replication_v13.py",
+    "experiments/continual_learning/validate_gemma3_fineweb_edu_replication_v13.py",
+    "experiments/continual_learning/stage_and_run_gemma3_fineweb_edu_replication_v13.py",
+    "experiments/continual_learning/tests/test_gemma3_fineweb_edu_replication_v13.py"
+  ],
+  "findings": {
+    "custody_exact_pinned_data_identity": true,
+    "fit_assessment_prior_pilot_disjointness": true,
+    "locked_configuration_and_paper_target_treatment": true,
+    "controls_and_frozen_weight_behavior": true,
+    "exact_bootstrap_and_uncertainty_rule": true,
+    "aggregate_per_document_retention_and_validator_behavior": true,
+    "v1_v2_v3_v4_rejections_preserved_and_prohibited_actions_enforced": true
+  },
+  "material_findings": [],
+  "review_decision": "ACCEPT",
+  "receipt_sha256": "da841842319246757f190bd2a1fe576dd3616429f98189bd92242a4ebf25e853"
+}

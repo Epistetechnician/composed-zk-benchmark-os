@@ -1,0 +1,107 @@
+{
+  "state_slice": "continual-learning-recursive-update-policy-v1",
+  "review_packet": {
+    "protocol_path": "/Users/shaanp/Documents/GitHub/composed-zk-benchmark-os/docs/research/continual-learning/137-recursive-update-policy-v1-protocol.md",
+    "protocol_sha256": "b5878abade10e82fa3e630d39bf928cc6c3d3f70f4313c16a6e05bdfb436d4dc",
+    "contract_path": "/Users/shaanp/Documents/GitHub/composed-zk-benchmark-os/.autoresearch/continual-learning-recursive-update-policy-v1/contract.md",
+    "contract_sha256": "ba5a733038e80f074047a41e12eea2131b178faa9504f149f313a1d0bd276017",
+    "runner_path": "/Users/shaanp/Documents/GitHub/composed-zk-benchmark-os/experiments/continual_learning/recursive_update_policy_v1.py",
+    "runner_sha256": "628fd59437194fc961638cd1933b022b48d4be74931f6443e28e765d4a4c8902",
+    "validator_path": "/Users/shaanp/Documents/GitHub/composed-zk-benchmark-os/experiments/continual_learning/validate_recursive_update_policy_v1.py",
+    "validator_sha256": "4e3f1838ec3bc3c5342bc7e3dce089d849cc81e0f8670c6c6914671345dafcea",
+    "test_path": "/Users/shaanp/Documents/GitHub/composed-zk-benchmark-os/experiments/continual_learning/tests/test_recursive_update_policy_v1.py",
+    "test_sha256": "56bb551309f805c57534f7611673d6d0bcf257986f829dc6112eee456dca21ae"
+  },
+  "reviewer_role": "independent-recursive-update-policy-reviewer-v1",
+  "verdict": "REJECT",
+  "execution_authorized": false,
+  "checks": {
+    "theory_distinct": "PASS",
+    "estimands_fixed": "PASS_WITH_SPECIFICATION_DEFECT",
+    "state_machine_executable": "PASS",
+    "memory_contract_executable": "FAIL",
+    "sandbox_closed": "PASS_WITH_CUSTODY_DEFECT",
+    "compute_fixed": "PASS",
+    "fresh_splits_fixed": "PASS",
+    "prediction_lock_ordered": "PASS",
+    "validator_independent": "PASS_WITH_SCHEMA_DEFECT",
+    "claim_ceiling_bounded": "PASS"
+  },
+  "blocking_defects": [
+    {
+      "id": "RUP-V1-ROLLBACK-001",
+      "severity": "BLOCKING",
+      "path": "experiments/continual_learning/recursive_update_policy_v1.py:370-375",
+      "finding": "rollback_max_abs_error is hard-coded to zero and rollback_guard_pass is hard-coded true; the implementation compares no post-update state with a saved checkpoint and performs no restore operation.",
+      "required_revision": "save an immutable pre-update checkpoint, restore it through a distinct routine, compute the actual coordinate error, and validate the restoration result.",
+      "execution_effect": "rollback guard is not evidence and synthetic execution is unauthorized."
+    },
+    {
+      "id": "RUP-V1-CUSTODY-001",
+      "severity": "BLOCKING",
+      "path": "experiments/continual_learning/recursive_update_policy_v1.py:946-953; .autoresearch/continual-learning-recursive-update-policy-v1/contract.md:30-38",
+      "finding": "write_result accepts any existing or newly created directory outside the repository, rather than requiring the declared external custody root, rejecting a pre-existing root or symlink, and binding the output to the approved run identity.",
+      "required_revision": "enforce one exact external root, require a fresh regular directory, reject symlink and pre-existing-root ambiguity, and bind output/custody identity into the run contract.",
+      "execution_effect": "artifact custody cannot be independently established."
+    },
+    {
+      "id": "RUP-V1-RECEIPT-001",
+      "severity": "BLOCKING",
+      "path": "experiments/continual_learning/recursive_update_policy_v1.py:946-953",
+      "finding": "the public write_result API validates only the result and output path; it does not require or validate an accepted independent review receipt. The CLI check is bypassable by direct invocation.",
+      "required_revision": "make receipt validation a required argument and invariant of every artifact-writing entry point, including direct API calls.",
+      "execution_effect": "the stated review-before-artifact boundary is not enforced."
+    },
+    {
+      "id": "RUP-V1-MEMORY-001",
+      "severity": "BLOCKING",
+      "path": "docs/research/continual-learning/137-recursive-update-policy-v1-protocol.md:134-148; experiments/continual_learning/recursive_update_policy_v1.py:409-430",
+      "finding": "plasticity_reserve is declared as a learner state and estimand guard but does not control the update step or probe capacity; it is only updated and then ignored by both learning paths.",
+      "required_revision": "make reserve causally affect the declared update/probe rule, or remove it from the state and claims. The revision must test the resulting behavior mechanically.",
+      "execution_effect": "the exact learner does not implement its stated plasticity mechanism."
+    },
+    {
+      "id": "RUP-V1-ORDER-001",
+      "severity": "BLOCKING",
+      "path": "docs/research/continual-learning/137-recursive-update-policy-v1-protocol.md:300-313; experiments/continual_learning/recursive_update_policy_v1.py:473-489",
+      "finding": "the protocol names an order-stability delta but does not specify the component set or max operation used by the implementation, leaving the hard guard under-specified before execution.",
+      "required_revision": "declare the exact adaptation, retention, and plasticity component deltas and max aggregation in the protocol and contract before review.",
+      "execution_effect": "the order guard is not fully preregistered."
+    },
+    {
+      "id": "RUP-V1-RESULT-001",
+      "severity": "BLOCKING",
+      "path": "experiments/continual_learning/recursive_update_policy_v1.py:492-554; .autoresearch/continual-learning-recursive-update-policy-v1/contract.md:113-141",
+      "finding": "the retained result has no explicit exact classification field and no explicit immutable base-state digest, so the closure disposition and base immutability are reconstructed informally rather than frozen in the validated artifact.",
+      "required_revision": "add mechanically recomputed classification and base-state digest fields with exact schema validation and closure-rule mapping.",
+      "execution_effect": "a result cannot be frozen as a complete decision record."
+    }
+  ],
+  "non_blocking_findings": [
+    {
+      "id": "RUP-V1-MEMORY-002",
+      "path": "experiments/continual_learning/recursive_update_policy_v1.py:338-400",
+      "finding": "the production case stream uses generation-dependent targets for repeated concept keys, so procedural promotion is exercised by the isolated probe but is not meaningfully exercised in the learner campaign.",
+      "required_revision": "use stable concept prototypes with fresh task instances, or state that promotion is safety-contract-only and exclude it from the mechanism theory."
+    },
+    {
+      "id": "RUP-V1-RECEIPT-002",
+      "path": "experiments/continual_learning/recursive_update_policy_v1.py:248-274",
+      "finding": "receipt validation does not enforce the documented canonical JSON, final-LF, exact type, and lowercase-hex invariants.",
+      "required_revision": "validate the complete documented receipt encoding and value types."
+    }
+  ],
+  "authorization_boundary": {
+    "artifact_root_created": false,
+    "synthetic_campaign_run": false,
+    "model_bearing_execution": false,
+    "givemeanode_or_provider": false,
+    "astral_integration": "not_run",
+    "zk_pqc": "not_run",
+    "reason": "V1 rejected before custody or execution because rollback, custody, receipt enforcement, plasticity semantics, order-guard specification, and result-freezing defects are blocking."
+  },
+  "next_revision": {
+    "state_slice": "continual-learning-recursive-update-policy-v2",
+    "rule": "create additive V2 protocol, contract, runner, validator, and tests; preserve V1 files and this review record unchanged; require a new independent review receipt before any artifact root or synthetic campaign."
+  }
+}

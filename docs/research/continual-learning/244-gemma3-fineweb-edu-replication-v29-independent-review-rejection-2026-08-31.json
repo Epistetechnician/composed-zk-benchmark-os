@@ -1,0 +1,24 @@
+{
+  "schema": "gemma3-fineweb-edu-replication-v29-independent-review-rejection",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v29",
+  "protocol_sha256": "cdf88630165496c98d9d97aad17509c0d1b92d174135adbe17827b67971bc283",
+  "review_packet_sha256": "5c7351268114c9b211f6087746ab23394f6e7de3ad6fa7fbd502a7edc5486ee0",
+  "implementation_manifest_sha256": "4905ce4641821b92b098f1b3bda7f39050810cf7412f08a8070a4cf919e5b73a",
+  "reviewer": "OpenAI Codex independent reviewer",
+  "reviewed_at_utc": "2026-08-31T06:57:03Z",
+  "effects_run": false,
+  "review_decision": "REJECT",
+  "findings": {
+    "custody_exact_pinned_data_identity": false,
+    "fit_assessment_prior_pilot_disjointness": false,
+    "locked_configuration_and_paper_target_treatment": false,
+    "controls_and_frozen_weight_behavior": false,
+    "exact_bootstrap_and_uncertainty_rule": false,
+    "aggregate_per_document_retention_and_validator_behavior": false,
+    "v1_v2_v3_v4_rejections_preserved_and_prohibited_actions_enforced": false
+  },
+  "material_findings": [
+    "The independent review response was not syntactically valid JSON: effects_run had no value and each required finding key had no boolean value. The reported ACCEPT token is therefore unusable and no V29 acceptance receipt may be created."
+  ],
+  "disposition": "V29 sealed without an acceptance receipt, acquisition, model effects, or published result. The recirculation replication branch remains closed pending a materially new reviewed protocol identity."
+}

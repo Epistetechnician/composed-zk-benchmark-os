@@ -1,0 +1,25 @@
+{
+  "schema": "gemma3-fineweb-edu-replication-v23-independent-review-rejection",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v23",
+  "protocol_sha256": "71a71706fe0be7c7f099b2b5fc84ed8c5269164cee3306dadd234ff1e86caaff",
+  "review_packet_sha256": "e52f606e88f2c8626e2e9a4c681838ea63c341584bee4188bb3221694b630344",
+  "implementation_manifest_sha256": "b37323811c41c0d08b1238e7412067708cf67381a6784df5323a7239e367d6a8",
+  "reviewer": "OpenAI Codex independent static reviewer",
+  "reviewed_at_utc": "2026-08-31T05:43:29Z",
+  "effects_run": false,
+  "review_decision": "REJECT",
+  "findings": {
+    "custody_exact_pinned_data_identity": false,
+    "fit_assessment_prior_pilot_disjointness": true,
+    "locked_configuration_and_paper_target_treatment": true,
+    "controls_and_frozen_weight_behavior": true,
+    "exact_bootstrap_and_uncertainty_rule": true,
+    "aggregate_per_document_retention_and_validator_behavior": false,
+    "v1_v2_v3_v4_rejections_preserved_and_prohibited_actions_enforced": true
+  },
+  "material_findings": [
+    "The independent report was not syntactically valid JSON and therefore cannot authorize execution.",
+    "The review identified a TOCTOU gap: JSON, JSONL, corpus-window, staged-review-receipt, and corpus-manifest parses were not all bound to stable reads, so parsed values could differ from later custody snapshots."
+  ],
+  "disposition": "V23 sealed without an acceptance receipt, acquisition, model effects, or published result. A fresh V24 identity is required for correction."
+}

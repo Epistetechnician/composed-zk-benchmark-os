@@ -227,3 +227,77 @@ Methods," 2022.
   can miss soundness.
 - Protocol consequence: report necessity and sufficiency under multiple
   operators rather than treating ablation ranking as ground truth.
+
+## S019 — Verbalizable Representations and Global Workspace
+
+Wes Gurnee et al., "Verbalizable Representations Form a Global Workspace in
+Language Models," arXiv:2607.15495, 2026.
+
+- URL: https://arxiv.org/abs/2607.15495
+- Evidence class: primary empirical preprint.
+- Supports: a Jacobian-lens analysis of representations reported to be
+  verbalizable, summonable, retainable, and broadcast in the tested models.
+- Does not establish: a general workspace mechanism, causal self-modeling,
+  consciousness, or validity in the Astral actors.
+- Protocol consequence: any Astral use requires a fixed accessibility or
+  broadcast intervention, held-out causal endpoint, and input/text rival
+  controls. Decodability alone is insufficient.
+
+## S020 — Transformer Dynamics
+
+Jesseba Fernando and Grigori Guitchounts, "Transformer Dynamics: A
+neuroscientific approach to interpretability of large language models," arXiv:
+2502.12131, 2025.
+
+- URL: https://arxiv.org/abs/2502.12131
+- Evidence class: primary technical preprint.
+- Supports: viewing residual-stream activations as trajectories across layers;
+  the authors report continuity and attractor-like structure in reduced spaces.
+- Does not establish: causal observability, controllability, state persistence,
+  or a self-model in any Astral actor.
+- Protocol consequence: separate descriptive trajectory statistics from a
+  prespecified observability, intervention, and transport estimand.
+
+## S021 — Identifiable Causal Representation Learning
+
+Julius von Kügelgen, "Identifiable Causal Representation Learning:
+Unsupervised, Multi-View, and Multi-Environment," arXiv:2406.13371, 2024.
+
+- URL: https://arxiv.org/abs/2406.13371
+- Evidence class: PhD thesis and theoretical source.
+- Supports: identifiability as a conditional property requiring assumptions on
+  model class, views, environments, or data richness.
+- Does not establish: identifiability of transformer residual states, arbitrary
+  activation dictionaries, or Astral's V48 cross-view target.
+- Protocol consequence: state the assumptions and allowed equivalence class
+  before measuring cross-view representation recovery.
+
+## S022 — Differential Introspection Disturbance Detection
+
+Ely Hahami et al., "Detecting the Disturbance: A Nuanced View of Introspective
+Abilities in LLMs," arXiv:2512.12411, 2026 revision.
+
+- URL: https://arxiv.org/abs/2512.12411
+- Evidence class: primary empirical preprint.
+- Supports: in Meta-Llama-3.1-8B-Instruct, binary detection can be confounded
+  by global affirmative-logit shifts, while differential sentence and strength
+  localization showed partial layer-dependent performance in the tested setup.
+- Does not establish: general introspection, the same effect in Astral actors,
+  or a privileged self-model.
+- Protocol consequence: use differential sensitivity, affirmative-logit
+  controls, layer precommitment, and exact intervention/no-intervention pairs.
+
+## S023 — Self-Access Reality Check
+
+Siyuan Song, Jennifer Hu, and Kyle Mahowald, "Language Models Fail to
+Introspect About Their Knowledge of Language," arXiv:2503.07513, COLM 2025.
+
+- URL: https://arxiv.org/abs/2503.07513
+- Evidence class: primary empirical study.
+- Supports: across 21 open-source LLMs and theoretically grounded string-
+  probability tasks, prompted responses did not provide evidence of privileged
+  self-access beyond a similar model in the tested setting.
+- Does not establish: that every activation-report paradigm fails or that no
+  model can detect a controlled internal disturbance.
+- Protocol consequence: require a matched external-model rival, a direct
+  internal target, and a claim ceiling narrower than general introspection.

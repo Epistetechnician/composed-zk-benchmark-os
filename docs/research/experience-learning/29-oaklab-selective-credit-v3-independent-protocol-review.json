@@ -1,0 +1,95 @@
+{
+  "astral": "isolated_not_run",
+  "blocking_findings": [
+    {
+      "finding": "The SHA-256 assignment is not an executable randomization contract and is not demonstrably independent of stream generation. The same undifferentiated seed names both the stream cohort and assignment; tuple framing, byte encoding, digest-to-uniform conversion, threshold, and assignment-domain separation are unspecified. Sequential exchangeability cannot be mechanically established.",
+      "id": "B1"
+    },
+    {
+      "finding": "The stated conditional causal excursion estimand is not identified by the stated working regression without an exact linear effect-model assumption. The centered regression coefficient represents the treatment-minus-skip contrast, while the declared estimand is skip-minus-treatment; the assessment rule is sign-consistent but the protocol does not bind tau_H(c)=-(beta_0+beta_1*c). Outcome loss timing and the exact online weighted/ridge SGD recurrence are also unspecified.",
+      "id": "B2"
+    },
+    {
+      "finding": "The 256-item fit, tune, and assessment thirds are not divisible by the nine-item anchor stride. The protocol does not define per-split anchor origins, incomplete-window disposal, whether any H-step outcome crosses a split, reset behavior, or the exact tune-snapshot state. This permits fit updates from tune outcomes or tune eligibility from assessment outcomes.",
+      "id": "B3"
+    },
+    {
+      "finding": "The synthetic stream names do not bind generator equations, versioned source digests, shift points, delayed-reward construction, feature dimensions, loss definitions, oracle features, or event semantics. Implementers could select scientifically material fixtures after review.",
+      "id": "B4"
+    },
+    {
+      "finding": "The primary analysis is not executable. Family-level seed aggregation, loss scaling across multi-stream families, paired test statistic, sidedness, variance-zero behavior, Holm ordering and ties, adjusted-p computation, and qualifying-family decision order are not specified. The verified 0.833077 power number is only a normal-approximation calculation and is not bound to a declared analysis procedure.",
+      "id": "B5"
+    },
+    {
+      "finding": "Adaptation lag has no operational definition. Shift or reward-onset anchors, recovery target, baseline window, censoring, nonrecovering runs, aggregation, and statistical or deterministic noninferiority rules are absent, so the adaptation gate can fail open.",
+      "id": "B6"
+    },
+    {
+      "finding": "Resource accounting is not reproducible. The protocol does not define an operation-count algebra for forward prediction, gradients, sparse features, model updates, estimator predictions and updates; the exact eight state scalars and their lifecycle are unnamed; event-count semantics are undefined; and family resource aggregation is unspecified.",
+      "id": "B7"
+    },
+    {
+      "finding": "Noise-floor, oracle-feature, and no-moderation controls are mandatory but have no preregistered pass or falsification criteria. The mechanism gate omits no_moderation and requires only untested mean differences against two ablations, so the claimed selective-credit mechanism can qualify without demonstrating learnable-versus-unlearnable discrimination or context moderation.",
+      "id": "B8"
+    },
+    {
+      "finding": "Tune eligibility and lock ordering are underspecified. No tune pass/fail quantities or thresholds are declared, no canonical snapshot payload/digest is defined, and no independent validator contract prevents assessment construction or reading before the lock is accepted.",
+      "id": "B9"
+    }
+  ],
+  "claim_ceiling": "ProtocolReviewRejectedNoExecution",
+  "decision": "rejected",
+  "digest_canonicalization": "SHA-256 of UTF-8 json.dumps(payload_without_review_digest, sort_keys=True, separators=(comma,colon), ensure_ascii=True)",
+  "implementation_authorization": false,
+  "nonblocking_findings": [
+    {
+      "finding": "The fixed H=8, gamma=0.9, stride=9, p=0.5 design is coherent in principle and can prevent overlapping proximal windows once split-local anchoring is specified.",
+      "id": "N1"
+    },
+    {
+      "finding": "The assessment action beta_0+beta_1*c<0 is directionally consistent with the declared skip-minus-treatment benefit, but that sign identity must be explicit and validator-enforced.",
+      "id": "N2"
+    },
+    {
+      "finding": "The recomputed two-sided normal-approximation power at alpha=0.0125, n=48, and standardized effect 0.5 is 0.8330770040094296. This arithmetic is correct but does not repair the missing test and composite-gate power contract.",
+      "id": "N3"
+    },
+    {
+      "finding": "The guard closure, batch-one/no-replay boundary, V2 receipt exclusion, real-execution seal, claim ceiling, and Astral isolation are explicit and internally consistent.",
+      "id": "N4"
+    },
+    {
+      "finding": "Micro-randomization and weighted-centered regression are correctly treated as established methods rather than novel inventions. The cited doubly robust and expected-trace work is not implemented by the frozen estimator and must not be used to imply those properties.",
+      "id": "N5"
+    }
+  ],
+  "real_execution_authorization": false,
+  "required_validator_checks": [
+    "Reject unless protocol, review, implementation source, lock, result, and closure digests match exact allowlisted bytes.",
+    "Recompute every assignment from independently custodied data_seed and assignment_seed values using a specified domain tag, length-delimited UTF-8 encoding, unsigned digest interpretation, and exact p=0.5 threshold; reject seed overlap or assignment imbalance outside a preregistered hard bound.",
+    "Reject any anchor or proximal outcome window that crosses fit, tune, or assessment boundaries; recompute split-local anchor indices and require empty pending state at every boundary.",
+    "Recompute pre-update H-step discounted outcomes, centered design rows, coefficient recurrences, ridge terms, and tau sign mapping from immutable event rows.",
+    "Require fit-only estimator mutation, frozen tune coefficients, a canonical tune snapshot and lock digest, no assessment materialization before lock acceptance, and byte-identical snapshot restoration.",
+    "Require exactly one Experience per observe call, no replay, no hidden accumulation, no minibatch normalization, causal preprocessing only, and zero future-field access.",
+    "Recompute per-seed stream endpoints, predeclared family aggregation, paired statistics, Holm adjusted p-values, adaptation lag, ablation comparisons, and all gate predicates with fixed tie and nonfinite-value handling.",
+    "Recompute every model update, skipped update, forward operation, gradient operation, estimator operation, active synaptic operation, state byte, replay byte, event count, and family resource aggregate under a frozen counting algebra.",
+    "Require noise-floor and oracle-feature falsification gates and the declared no-moderation, horizon-one, and random-policy ablations; reject missing arms or post-review changes.",
+    "Reject real-stream execution unless a synthetic candidate receipt independently validates and a separate exact execution review binds fresh custody, matrices, backends, campaign manifest, statistics, and a new privileged energy protocol.",
+    "Reject any plasticity-guard execution or retuning, V2 energy reuse, Astral input or output, benchmark promotion, SOTA claim, publication claim, model-bearing execution, or production traffic."
+  ],
+  "review_digest": "330b043c47cdefbc2424d843f9ab0ba4979daa039dfc531506d7b995e7595cdd",
+  "reviewed_files": {
+    "AGENTS.md": "406c7eca279d03c4c784cee654f827879ebd684b8c4546b17215762527d1e844",
+    "docs/research/experience-learning/13-oaklab-selective-credit-theory-v1.md": "cfcbe7a925e06d63cf5f999991f75af88a6e9cade7fbee5a5e4dd7846f6e7fa2",
+    "docs/research/experience-learning/15-oaklab-selective-credit-theory-v2.md": "4e781a5892cbc10bba8a9a98bbdaaf36eb2d0e84563be6cd12c3ca6e53a3fec7",
+    "docs/research/experience-learning/18-oaklab-selective-credit-v2-terminal-closure.md": "f9d7880057b0d3f6e279d093934a12939bba640af37f7cdcc98900daa0d3f7bd",
+    "docs/research/experience-learning/26-oaklab-publication-gate-v2-r6-independent-review-closure.md": "efab31be0564829deb1de6cde594ca1d09b3e17d7372cf2d6520e231f9a19f2f",
+    "docs/research/experience-learning/27-oaklab-plasticity-guard-permanent-historical-closure.md": "eeaa5bfda3fb9039c046dbabc16b2b74d2c65be80b78c7862782feb4bc357859",
+    "docs/research/experience-learning/28-oaklab-selective-credit-v3-protocol.md": "8bbd7863f83942ec5d5e2ba444259237d9412fe27fd9a78cfd15da87e98c6a30",
+    "experiments/experience_learning/selective_credit_v3_protocol.json": "2701174e4f3d18e82839f2800ac597e6b752f7adce64806719e9a06ec54111a7"
+  },
+  "reviewer": "independent-agent-review",
+  "schema_version": "oaklab.experience-learning.selective-credit-v3-independent-protocol-review.v1",
+  "state_slice": "oaklab-experience-learning-selective-credit-v3"
+}

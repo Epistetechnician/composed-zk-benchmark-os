@@ -1,0 +1,71 @@
+{
+  "schema_version": "oaklab.experience-learning.constrained-update-policy-v6-independent-protocol-review.v1",
+  "state_slice": "oaklab-experience-learning-constrained-update-policy-v6",
+  "reviewer": "independent-agent-review",
+  "decision": "REJECT",
+  "implementation_authorized": false,
+  "fit_tune_assessment_authorization": false,
+  "real_execution_authorization": false,
+  "provider_execution_authorization": false,
+  "h100_execution_authorization": false,
+  "energy_authorization": false,
+  "claim_ceiling": "ProtocolReviewRejectedNoExecution",
+  "astral": "isolated_not_run",
+  "plasticity_guard": "closed_historical_comparator_only",
+  "assessment_materialization_state": "absent",
+  "packet_sha256": "1b8f676e9cc3a516c25cd4c0232d34c4929fa57a6d6d8d346eac994d2046cea2",
+  "source_spec_sha256": "999793806303d3fccaa8ff157c3fcc14cb17b89d70d7e1d466ee12f8e600f788",
+  "compiled_protocol_sha256": "abf2d178520207fb157f5d5c32ec00d618019f96ccbe1107c6e8ad26970515f4",
+  "freeze_manifest_sha256": "ac6ce73891c6f8c94c4029c2b83053ce8058633ce630a3482b737e5834cd4677",
+  "reviewed_files": {
+    "AGENTS.md": "f80ac0cde545dc27ce4cbb88ce8ab1f4bed02724b2eb7b6618f4ccefd976cdc3",
+    "experiments/experience_learning/v6_protocol_spec.json": "999793806303d3fccaa8ff157c3fcc14cb17b89d70d7e1d466ee12f8e600f788",
+    "experiments/experience_learning/v6_compiled_protocol.json": "0fe519e537bd00d70619c913d2251541a1eae5df794b14fde189da7d01e14932",
+    "experiments/experience_learning/compile_v6_protocol.py": "1fc84644db9e6a283afcd5c8a65a77ac623a9d82dd208c21e031380f7831b17e",
+    "experiments/experience_learning/validate_v6_protocol_compilation.py": "e49fafcc828e7e80a55ccc8b6013ea4979415e264111ee82604f7a2f86af04c9",
+    "experiments/experience_learning/tests/test_v6_protocol_compiler.py": "fba5f0f94380913865b5b8aab4c567521f0c8ee7d38352c7dfcf1ea2b8a86921",
+    "docs/research/experience-learning/39-oaklab-v6-protocol-compiler.md": "74bf07c4a0ec6959442f28fa5cbbff6bfbb60957a9100077066a69be381980a9",
+    "experiments/experience_learning/v6_freeze_manifest.json": "ac6ce73891c6f8c94c4029c2b83053ce8058633ce630a3482b737e5834cd4677"
+  },
+  "recomputed": {
+    "frozen_input_hashes_match": true,
+    "source_digest_matches": true,
+    "compiled_file_digest_matches_packet": true,
+    "compiled_digest_matches_field": true,
+    "section_digests_match": true,
+    "compiled_sections_equal_source": true,
+    "prng_action_vector_matches": true,
+    "compiler": "compiled",
+    "independent_validator": "valid",
+    "compiler_tests": "5 passed",
+    "lint_fast": "passed",
+    "assessment_materialization_state": "absent"
+  },
+  "section_digests": {
+    "hash_prng_transcript": "c350e7f7e50470eb2d8991bc47ba355926e18312a2ede5a42d9ba04597c5f057",
+    "controller_transition_table": "f9ca7ddb3183c4b883769a2db5d3765c758e2bed46f973a8afe50760aff4f001",
+    "generator_roster": "a34839a7aa54f744b2240bf36dc7ac90470b4a480e09794a643c7b147dc985b6",
+    "operation_and_byte_algebra": "265777db11a0336ca1df55790983828b2641c957bcd78102dc77b401ea0f2039",
+    "ablation_execution_multiplicity": "7d3c29891b35a3961a100016936e6e6c10bc94631099b9d8572fc13ea294eef6",
+    "adaptation_metrics": "b71baf860faf398b8012ec2c74847caa34dc3fe7ea8b85b3e15d5af5c5e86cee",
+    "lock_counter_control_schemas": "21b1ee264789ca4d182a93500aab9e3bd264f6e6d25df078d2a662d7f7bf4652"
+  },
+  "transcript_test_vector": {
+    "action_hash_sha256_hex": "d16a0722a941ff26161dc34ceb08dbe8bf704aa22d1910f7433509f64b184cb1",
+    "first_normal12_after_first_draw": -0.31937007329085887,
+    "first_uniform53": 0.7999582424309138,
+    "initial_state_uint64_le": 4995785472395330620,
+    "root_sha256_hex": "3c442e186b985445894079247b32b1644ef619d1a18c3df3142d998e5737b042",
+    "seed_frame_hex": "0000001a6f616b6c61622e6375702e76362e70726e672e736565642e7631999793806303d3fccaa8ff157c3fcc14cb17b89d70d7e1d466ee12f8e600f78800000003666974000000107370617273655f7369676e616c5f7636a00f000000000000"
+  },
+  "blocking_findings": [
+    {"id": "V6-CTRL-001", "finding": "Indexed controller rows omit RHS reads: row 2 uses eligibility and theta without declaring them, and terminal row 6 claims final recurrence credit while omitting pending reward, eligibility, theta, q-old, previous features, previous q, previous cost, and dual state. The closed-world state machine is not executable."},
+    {"id": "V6-STAT-002", "finding": "With X=-D, candidate benefit is positive X and the favorable one-sided tail is 0.5*erfc(z/sqrt(2)); the frozen p_one=0.5*erfc(-z/sqrt(2)) reverses the gate direction."},
+    {"id": "V6-ALG-003", "finding": "counter_row fixes energy_joules as float64 in a 143-byte layout but its schema says float64_or_absent and the resource invariant requires absence before a privileged receipt; no absent encoding is specified."},
+    {"id": "V6-ALG-004", "finding": "phase, cohort, arm_id, and lock decision uint8 enum mappings are absent; logical_state_bytes, replay_bytes, and latency_ns lack exact formulas and capture boundaries, so receipts and resource claims are not unique."},
+    {"id": "V6-GEN-005", "finding": "event_sensor_v6 does not map row parity to a sign, and delayed_reward_v6 does not declare the initial sign before its episode-16 flip; both permit distinct stream values."},
+    {"id": "V6-MET-006", "finding": "Adaptation recovery_scan omits k start/domain/increment, while explicit censored lag values conflict with missing_rules that fail every censored trajectory; adaptation endpoints and gates are not uniquely computable."},
+    {"id": "V6-SCHEMA-007", "finding": "fit_lock theta_binary64_hex and dual_mu_binary64_hex types do not freeze hex element widths or byte order, leaving multiple lock encodings for the same state."}
+  ],
+  "required_successor_action": "Close V6 as ProtocolReviewRejectedNoExecution. A continuation requires a fresh protocol identity, corrected executable contract, fresh byte freeze, and independent review; do not run learner, synthetic, real, provider, H100, energy, or Astral execution."
+}

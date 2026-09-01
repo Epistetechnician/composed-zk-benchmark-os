@@ -29,6 +29,11 @@ The bridge is local-only and serves the latest native forward pass over
 `127.0.0.1:4174/sample`. It does not access the network, train, or write
 research artifacts.
 
+The bridge remains an implementation surface for the V25 local observatory,
+not the latest overall Astral status. The canonical status slice is
+`astral-status-reconciliation-v2`: V38 is the latest executed instrument-
+feasibility result, while V25 remains the latest privileged-telemetry result.
+
 Views:
 
 - `?variant=telemetry` — live per-layer residual field, 36-tick layer-by-time salience field, a 32-layer nodal graph with pulsing representative channels, stage history, node focus, ranked channel focus, stream chart, events, and adapter status

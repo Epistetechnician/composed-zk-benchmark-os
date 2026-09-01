@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TimesFM3 temporal stress-scenario request V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "state_slice",
+    "request_id",
+    "telemetry",
+    "forecast",
+    "model",
+    "runtime",
+    "network_policy",
+    "benchmark_binding",
+    "claim_boundary",
+    "claims",
+    "non_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "timesfm3-temporal-stress-scenarios-request-v1"},
+    "state_slice": {"const": "timesfm3-temporal-stress-scenarios-v1"},
+    "request_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"},
+    "telemetry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_ref", "artifact_digest", "series", "covariates"],
+      "properties": {
+        "artifact_ref": {"type": "string"},
+        "artifact_digest": {"$ref": "#/$defs/digest"},
+        "series": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "items": {"$ref": "#/$defs/series"}
+        },
+        "covariates": {
+          "type": "array",
+          "maxItems": 31,
+          "items": {"$ref": "#/$defs/covariate"}
+        }
+      }
+    },
+    "forecast": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["context_length", "horizon", "quantiles", "required_covariate_ids", "return_quantiles"],
+      "properties": {
+        "context_length": {"type": "integer", "minimum": 1, "maximum": 15360},
+        "horizon": {"type": "integer", "minimum": 1, "maximum": 1024},
+        "quantiles": {"const": [0.1, 0.5, 0.9]},
+        "required_covariate_ids": {"type": "array", "maxItems": 31, "items": {"type": "string"}},
+        "return_quantiles": {"const": true}
+      }
+    },
+    "model": {"$ref": "#/$defs/model"},
+    "runtime": {"$ref": "#/$defs/runtime"},
+    "network_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["acquisition_separate", "execution_network_enabled", "local_files_only"],
+      "properties": {
+        "acquisition_separate": {"const": true},
+        "execution_network_enabled": {"const": false},
+        "local_files_only": {"const": true}
+      }
+    },
+    "benchmark_binding": {"$ref": "#/$defs/benchmark_binding"},
+    "claim_boundary": {"const": "LocalDevelopmentTimesFM3TemporalStressScenarioQualificationV1"},
+    "claims": {"type": "array", "maxItems": 64, "items": {"type": "string"}},
+    "non_claims": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  },
+  "$defs": {
+    "digest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "hex_digest", "byte_len"],
+      "properties": {
+        "algorithm": {"const": "sha256"},
+        "hex_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "byte_len": {"type": "integer", "minimum": 0, "maximum": 4194304}
+      }
+    },
+    "series": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["series_id", "timestamps_ms", "values"],
+      "properties": {
+        "series_id": {"type": "string"},
+        "timestamps_ms": {"type": "array", "minItems": 1, "items": {"type": "integer"}},
+        "values": {"type": "array", "minItems": 1, "items": {"type": "number"}}
+      }
+    },
+    "covariate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["covariate_id", "kind", "artifact_ref", "artifact_digest", "timestamps_ms", "values"],
+      "properties": {
+        "covariate_id": {"type": "string"},
+        "kind": {"enum": ["past_only", "past_future"]},
+        "artifact_ref": {"type": "string"},
+        "artifact_digest": {"$ref": "#/$defs/digest"},
+        "timestamps_ms": {"type": "array", "minItems": 1, "items": {"type": "integer"}},
+        "values": {"type": "array", "minItems": 1, "items": {"type": "number"}}
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model_id", "implementation", "source_repository", "source_revision", "checkpoint_reference", "checkpoint_revision", "weight_digest", "config", "config_digest"],
+      "properties": {
+        "model_id": {"enum": ["fake-timesfm3-v1", "google/timesfm-3.0-pytorch"]},
+        "implementation": {"enum": ["fake_fixture", "timesfm3_external"]},
+        "source_repository": {"type": "string"},
+        "source_revision": {"type": "string"},
+        "checkpoint_reference": {"type": "string"},
+        "checkpoint_revision": {"type": "string"},
+        "weight_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "config": {"type": "object", "additionalProperties": false},
+        "config_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["runtime_kind", "python", "pytorch", "numpy", "device", "same_device_repeat_required"],
+      "properties": {
+        "runtime_kind": {"enum": ["fake", "pytorch"]},
+        "python": {"type": "string"},
+        "pytorch": {"type": "string"},
+        "numpy": {"type": "string"},
+        "device": {"enum": ["cpu", "mps", "cuda"]},
+        "same_device_repeat_required": {"const": true}
+      }
+    },
+    "benchmark_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["benchmark_pack_id", "instance_ids", "semantic_ir_digest", "oracle_digest", "mutation_digest", "scenario_requested"],
+      "properties": {
+        "benchmark_pack_id": {"type": "string"},
+        "instance_ids": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "semantic_ir_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "oracle_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "mutation_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "scenario_requested": {"const": true}
+      }
+    }
+  }
+}

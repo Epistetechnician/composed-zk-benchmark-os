@@ -1,0 +1,27 @@
+{
+  "schema": "gemma3-fineweb-edu-replication-v20-independent-review-rejection",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v20",
+  "protocol_sha256": "f42080f8ac660c175941f92cc18ecfd9d736e0afc77f7cc9b40cd4926538a0f2",
+  "review_packet_sha256": "bb5438bb22468c58ddfad471ef9a9f422b6d0cdb95e8aa06f922857e26cea6e5",
+  "implementation_manifest_sha256": "3153537e68f28459bd9b2f2699643d41087f0ee136c59d638dbce194960bfca6",
+  "reviewer": "OpenAI Codex independent implementation reviewer",
+  "reviewed_at_utc": "2026-08-31T05:02:35Z",
+  "effects_run": false,
+  "review_decision": "REJECT",
+  "findings": {
+    "custody_exact_pinned_data_identity": false,
+    "fit_assessment_prior_pilot_disjointness": false,
+    "locked_configuration_and_paper_target_treatment": true,
+    "controls_and_frozen_weight_behavior": true,
+    "exact_bootstrap_and_uncertainty_rule": true,
+    "aggregate_per_document_retention_and_validator_behavior": false,
+    "v1_v2_v3_v4_rejections_preserved_and_prohibited_actions_enforced": true
+  },
+  "material_findings": [
+    "validate_gemma3_fineweb_edu_replication_v20.py:213-281,284-394 audit_prior/audit_source rederive prior IDs only from rows [0,2048); they never rederive or exclude document IDs from discarded V14 rows [2048,18432), so a V20 row can reuse a V14 document ID despite the protocol's prior-document exclusion requirement.",
+    "stage_and_run_gemma3_fineweb_edu_replication_v20.py:897-927 run_campaign does not bind or revalidate staged result bytes after the final full validator returns. A mutation between final_validation comparison and publish_no_replace is accepted because exact_file_set checks only names and publish_no_replace snapshots the potentially changed bytes, while the post-publication callback checks only review/code/input custody.",
+    "gemma3_fineweb_edu_replication_v20_contract.py:763-798 validate_review_receipt never requires material_findings to exist, be a list, or be empty. It therefore accepts an ACCEPT receipt carrying material blockers or omitting the packet-required field."
+  ],
+  "disposition": "V20 sealed without an acceptance receipt, acquisition, model effects, or published result. A fresh V21 identity is required for correction.",
+  "receipt_sha256": "e9996867a32c3aebbc92afb8b3a28bef86424ff4eca910edf33650178a921910"
+}

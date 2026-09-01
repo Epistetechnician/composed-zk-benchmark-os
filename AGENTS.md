@@ -1,5 +1,574 @@
 # Agent Rules
 
+Explicit Astral Gemma 3 causal-feature-effects V2 is now terminally closed as
+`NoCandidate` under named state slice
+`astral-trace-completeness-gemma3-causal-feature-effects-v2`. The one bounded
+GiveMeANode qualification executed under the independently accepted packet and
+was independently aggregate- and custody-validated. Reconstruction,
+cross-half feature stability, fit effects, power, and tune controls passed, but
+the locked tune prediction gate failed at sign agreement `0.75 < 0.80` and one
+tune feature failed the Holm effect gate. Assessment and held-out causal
+scrubbing did not open. The final claim ceiling is
+`LocalDevelopmentGemma3CausalFeatureEffectsQualificationV2`; no V2 rerun,
+retuning, assessment, held-out causal-effect claim, or breakthrough claim is
+authorized. The raw custody root is empty after deletion, and only aggregate
+and digest artifacts remain. Every mutation in this closure names state slice
+`astral-trace-completeness-gemma3-causal-feature-effects-v2`.
+
+Explicit Astral Gemma 3 causal-feature-effects V2 is authorized for additive
+implementation and one bounded qualification only under named state slice
+`astral-trace-completeness-gemma3-causal-feature-effects-v2`. V1 is immutable
+`NoCandidate` and none of its scientific corpus, activation, effect,
+prediction, or result artifacts are V2 inputs. V2 binds the exact
+`google/gemma-3-1b-pt` model, Gemma Scope 2 16k/L0-big affine asset, fresh
+96-family cross-half stability corpus, new external owner-only `0700`
+ephemeral custody root, source/runtime/model/asset/corpus digests, operator,
+runner, validator, and a fresh GiveMeANode allocation receipt with node ID and
+positive hard USD 50 ceiling. Feature selection is locked before causal
+effects: intersect the top 16 final-position feature ranks from two disjoint
+16-family fit halves, require at least four shared features, then select
+exactly four by pooled score or close `NoCandidate`. The paired ablation
+logit-margin estimand, exact replacement/activation/path operators, controls,
+Holm correction, 0.80 power at ICC 0.50, three repeats, zero attrition,
+fail-closed missingness, prediction lock, fresh held-out causal scrubbing, and
+aggregate-only publication are fixed. Model execution remains offline and
+assessment remains closed until the exact packet receives a genuinely
+independent signed Ed25519 `ACCEPT`; the operator cannot self-sign it. Raw
+traces may exist only below the external root for at most 72 hours and must be
+deleted before final validation. Qualification is capped at
+`LocalDevelopmentGemma3CausalFeatureEffectsQualificationV2`; only a passing
+held-out result may claim
+`LocalDevelopmentGemma3HeldOutCausalFeatureEffectsAssessmentV2`. This slice
+does not reopen V1/V4/V48, promote Stage 0C or Stage 1, mutate the accepted
+Evidence Ledger, or establish kernel-complete observability, introspection,
+causal self-modeling, benchmark evidence, production readiness, or provider
+evidence. Every mutation in this phase names state slice
+`astral-trace-completeness-gemma3-causal-feature-effects-v2`.
+
+Explicit Astral Gemma 3 causal-feature-effects V1 is authorized for additive
+implementation and qualification only under named state slice
+`astral-trace-completeness-gemma3-causal-feature-effects-v1`: source and
+hermetic tests under
+`tools/astral-trace-completeness-gemma3-causal-feature-effects-v1/`, the exact
+cached `google/gemma-3-1b-pt` model identity, the model-matched Gemma Scope 2
+16k/L0-big affine asset, a fresh 96-family fit/tune/assessment corpus, and a
+new repository-external owner-only ephemeral custody root. The slice freezes
+V4 permanently and excludes V4 scientific artifacts as inputs. It defines the
+paired feature-ablation logit-margin estimand, feature replacement, exact
+activation patching, exact one-edge path patching, output-distribution effects,
+Holm multiplicity, 0.80 power with ICC 0.50, three repeats, zero attrition,
+fail-closed missingness, fixed falsifiers, prediction locking, causal
+scrubbing, and aggregate-only publication. The runner must remain offline
+during model execution and retain raw data only below the external `0700`
+custody root for at most 72 hours. GiveMeANode is the only permitted remote
+provider, but execution requires an exact provider allocation receipt, node
+ID, and positive hard USD spend ceiling. Assessment requires a genuinely
+independent packet-bound signed Ed25519 `ACCEPT`; the operator cannot
+self-sign it. The current workspace has none of those external receipts, so
+the implementation/qualification boundary is open while node execution and
+assessment remain closed. The qualification ceiling is
+`LocalDevelopmentGemma3CausalFeatureEffectsQualificationV1`; an accepted
+held-out result may claim no more than
+`LocalDevelopmentGemma3HeldOutCausalFeatureEffectsAssessmentV1`. This slice
+does not reopen V4/V48, promote Stage 0C or Stage 1, mutate the accepted
+Evidence Ledger, or establish kernel-complete observability, introspection,
+causal self-modeling, benchmark evidence, production readiness, or provider
+evidence. Every mutation in this phase names state slice
+`astral-trace-completeness-gemma3-causal-feature-effects-v1`.
+
+Explicit Astral trace-completeness Gemma 3 end-to-end V2 qualification and
+gated assessment are now allowed under named state slice
+`astral-trace-completeness-gemma3-end-to-end-v2`: additive source and hermetic
+tests under `tools/astral-trace-completeness-v2/`, the exact cached
+`gemma-3-1b-pt-bf16` checkpoint, separately digest-bound PyTorch/Transformers
+and MLX runtime identities, model-matched Gemma Scope 2 SAEs/transcoders,
+NNsight/circuit-tracer acquisition from frozen upstream revisions, a fresh
+deterministic prompt-family corpus, and a repository-external owner-only
+ephemeral custody root. This slice permits network access only for frozen
+open-source package and model-matched feature-asset acquisition; all model
+execution must be offline. It permits native and instrumented model loading,
+generation-time token/module/cache/state capture, parity and repeatability
+qualification, no-op and exact interchange interventions, SAE/transcoder
+reconstruction and feature-effect qualification, preassessment causal graph
+construction, held-out causal scrubbing, aggregate-only publication, and
+independent validation. Raw prompts, tokens, activations, logits, cache/state
+payloads, and per-trial outcomes may exist only below the external `0700` raw
+custody root and must be deleted within 72 hours after validation. Scientific
+assessment effects remain prohibited until the exact source, model, runtime,
+asset, corpus, module registry, custody manifest, controls, estimand,
+thresholds, uncertainty, multiplicity, power, repeats, attrition,
+prediction-lock, and independent-validator identities are frozen and a
+genuinely independent reviewer returns a packet-bound signed `ACCEPT` receipt.
+Qualification or preassessment does not authorize the operator to self-sign
+that receipt. The qualification ceiling is
+`LocalDevelopmentGemma3EndToEndCausalTraceQualification`; an accepted held-out
+assessment may claim no more than
+`LocalDevelopmentGemma3HeldOutCausalTraceAssessment`. This slice does not
+reopen or reinterpret V48, promote Stage 0C or Stage 1, mutate the accepted
+Evidence Ledger, establish complete kernel observability, introspection,
+self-modeling, consciousness, benchmark evidence, production readiness, or
+provider evidence. Every mutation in this phase names state slice
+`astral-trace-completeness-gemma3-end-to-end-v2`.
+
+The V2 qualification executed once under its frozen source and external
+custody identity. Native/instrumented parity, deterministic repeatability,
+no-op identity, nonzero intervention reach, exact event replay, and feature
+repeat stability passed. The model-matched Gemma Scope 2 layer-12 transcoder
+failed the preregistered normalized reconstruction MSE gate, with maximum
+observed NMSE `0.3353789150714874` against `<=0.05`. V2 is therefore closed as
+`QualificationFailedSAEReconstruction`; causal-graph preassessment, prediction
+locking, independent `ACCEPT`, held-out scrubbing, and assessment did not run.
+The threshold, normalization, layer, asset, or prompt may not be changed under
+V2 after this effect. A continuation requires a fresh slice with an
+independently reviewed normalization estimand and asset-quality gate before
+loading effects.
+
+Explicit Astral trace-completeness Gemma 3 end-to-end V3 continuation is now
+allowed under named state slice `astral-trace-completeness-gemma3-end-to-end-v3`:
+additive source and hermetic tests under `tools/astral-trace-completeness-v3/`,
+the exact cached `gemma-3-1b-pt-bf16` checkpoint, the separately identified
+external V3 custody root, one predeclared Gemma Scope 2 16k/L0-small affine
+transcoder, and its upstream examples and parameter files. V3 must freeze and
+independently validate the pooled-global-centered reconstruction estimand and
+asset schema before loading model activation effects. The unchanged
+reconstruction ceiling is pooled NMSE `<=0.05` over every finite fresh-fit
+row and hidden coordinate; no per-row maximum, selected-position exclusion,
+normalization denominator change, or post-effect asset shopping is allowed.
+The examples file is metadata-only and cannot be treated as a reconstruction
+target. Model execution, if the pre-load receipt passes, must remain offline,
+use a fresh V3 corpus identity, preserve the V2 end-to-end event/custody
+requirements, retain raw traces only in the external `0700` root for at most
+72 hours, and stop before assessment unless a genuinely independent reviewer
+returns a packet-bound signed `ACCEPT`. This slice does not reopen V2, import
+V2 scientific data, promote Stage 0C or Stage 1, mutate accepted evidence,
+establish kernel-complete observability, introspection, self-modeling,
+consciousness, benchmark evidence, production readiness, or provider
+evidence. Every mutation in this phase names state slice
+`astral-trace-completeness-gemma3-end-to-end-v3`.
+
+Explicit Astral trace-completeness Gemma 3 end-to-end V4 hypothesis-2
+qualification is now allowed under named state slice
+`astral-trace-completeness-gemma3-end-to-end-v4`: additive source and hermetic
+tests under `tools/astral-trace-completeness-v4/`, the exact cached
+`gemma-3-1b-pt-bf16` checkpoint, the separately identified external V4 custody
+root, and one predeclared Gemma Scope 2 16k/L0-big affine transcoder at the
+same official revision as V3. V4 is a fresh hypothesis and may not alter or
+reuse V3 scientific corpus, activation, effect, prediction, or result bytes.
+It must freeze and independently validate the same pooled-global-centered
+reconstruction estimand, unchanged `<=0.05` gate, exact asset schema, and
+model/runtime/source digests before loading model activation effects. The
+official examples file remains metadata-only; fresh model-derived fit rows are
+the only reconstruction targets. Model execution, if the pre-load receipt
+passes, must remain offline, use a fresh V4 corpus identity, preserve the
+end-to-end event/custody, parity, repeatability, no-op, intervention-reach,
+event-replay, and feature-stability gates, retain raw traces only in the
+external `0700` root for at most 72 hours, and stop before assessment unless a
+genuinely independent reviewer returns a packet-bound signed `ACCEPT`.
+Qualification is capped at
+`LocalDevelopmentGemma3EndToEndCausalTraceQualificationV4`; a passing
+qualification is not an assessment or a self-signed `ACCEPT`. V4 does not
+reopen V2/V3, promote Stage 0C or Stage 1, mutate accepted evidence, establish
+kernel-complete observability, introspection, self-modeling, consciousness,
+benchmark evidence, production readiness, or provider evidence. Every
+mutation in this phase names state slice
+`astral-trace-completeness-gemma3-end-to-end-v4`.
+
+Explicit Oak Lab plasticity-guard terminal closure is now recorded under named
+state slice `oaklab-experience-learning-plasticity-guard-terminal-closure-v1`.
+The existing guard implementation and negative receipts are preserved only as
+historical context. No guard threshold, optimizer, seed, split, endpoint,
+power assumption, alias, synthetic run, real run, campaign binding, or energy
+claim may be reopened or retuned. Fixed SGD batch one is the active future
+reference. This closure does not affect Astral, which remains isolated.
+
+Explicit Oak Lab selective-credit V3 protocol and gated execution are now
+allowed under named state slice `oaklab-experience-learning-selective-credit-v3`:
+the frozen human and machine-readable protocol, an independent review before
+implementation, additive Python source and hermetic tests under
+`experiments/experience_learning/`, repository-external aggregate artifacts,
+independent validators, and protocol/execution records under
+`docs/research/experience-learning/`. V3 is limited to the preregistered
+micro-randomized horizon-credit estimand, fixed treatment propensity, horizon,
+carryover controls, 48 fresh seeds, locked hyperparameters, Holm-controlled
+family tests, fixed ablations, batch-one accounting, and strict synthetic
+quality/adaptation/resource gate. Implementation is prohibited until an
+independent review accepts the exact protocol bytes. Assessment is prohibited
+until the fit/tune lock independently validates. Real-stream execution is
+prohibited unless the synthetic result is `candidate` and a separate
+independent execution review authorizes the exact fresh campaign. A real
+campaign requires fresh custody identity, exact matrix/backend/campaign
+digests, and a new privileged energy receipt; no V2 receipt may be reused.
+Any failed review, tune, synthetic, real, resource, multiplicity, custody,
+energy, or validator gate closes V3 without retuning. This slice does not
+permit plasticity-guard reopening, replay, hidden accumulation, Astral
+integration, model-bearing execution, benchmark promotion, SOTA claims,
+production traffic, or publication before the strict multi-family gate.
+
+Oak Lab V3 is terminally closed as `ProtocolReviewRejectedNoExecution`. A
+materially new policy-level theory is now allowed for protocol design and
+independent review only under named state slice
+`oaklab-experience-learning-constrained-update-policy-v4`: additive frozen
+protocol and review artifacts under `experiments/experience_learning/` and
+`docs/research/experience-learning/`. V4 treats the complete constrained
+update-policy trajectory as the treatment and compares it directly with fixed
+batch-one SGD on identical ordered streams. It may specify a small true-online
+eligibility-trace controller, exact synthetic generators, disjoint fit/tune/
+assessment cohorts, complete resource accounting, controls, power, locking,
+and fail-closed validation. No implementation is permitted until an
+independent review accepts the exact protocol bytes. No assessment artifact
+may exist before an independently accepted tune lock. Real execution requires
+a validated synthetic `candidate`, separate authorization, fresh custody and
+campaign manifests, and a new privileged energy receipt. Any rejected review
+or failed implementation, tune, synthetic, real, resource, statistics,
+energy, or validator gate closes V4 without retuning. V1-V3 and the plasticity
+guard remain closed historical evidence; V2 energy is ineligible; Astral
+remains isolated. Every mutation in this phase names state slice
+`oaklab-experience-learning-constrained-update-policy-v4`.
+
+V4 independent protocol review is now terminally `rejected` with claim ceiling
+`ProtocolReviewRejectedNoExecution`. No V4 implementation, fit, tune,
+assessment, real panel, energy run, or correction under the V4 identity is
+permitted. Any continuation requires a new theory protocol identity and a
+fresh independent review. Every mutation in this closure names state slice
+`oaklab-experience-learning-constrained-update-policy-v4`.
+
+Explicit Oak Lab V5 executable protocol-compiler boundary is now allowed under
+named state slice `oaklab-experience-learning-constrained-update-policy-v5`:
+additive source spec, deterministic compiler, compiled manifest, independent
+validator, hermetic compiler tests, and review/closure records under
+`experiments/experience_learning/` and `docs/research/experience-learning/`.
+The compiler must emit exactly seven closed-world sections: byte-exact
+hash/PRNG transcript, indexed controller transitions with complete pending
+state, generator rosters and unconditional draw order, typed numeric operation
+ASTs and byte layouts, ablation/multiplicity tables, segment-bounded adaptation
+metrics, and canonical lock/counter/control/assessment-absence schemas. The
+complete-policy estimand survives as the scientific object, but the V4
+specification and artifacts remain historical and cannot be imported as V5
+scientific inputs. No learner, stream runner, fit, tune, assessment, real
+campaign, energy capture, or model-bearing execution is permitted before an
+independent review accepts the exact source, compiler, compiled manifest, and
+current AGENTS bytes. A rejected review or compiler/validator failure closes V5
+without retuning. Plasticity guard and Astral remain isolated. Every mutation
+in this phase names state slice
+`oaklab-experience-learning-constrained-update-policy-v5`.
+
+Oak Lab V5 independent protocol review is terminally `rejected` with claim
+ceiling `ProtocolReviewRejectedNoExecution`. No V5 learner, stream runner,
+fit, tune, assessment, real campaign, privileged energy capture, or correction
+under the V5 identity is permitted. The rejection packet found stale frozen
+input bytes plus unresolved action-probability, controller, generator,
+operation, ablation/statistics, adaptation, schema, and entrypoint blockers.
+The complete-policy estimand survives only as historical theory. Any
+continuation requires a new protocol identity, corrected executable contract,
+fresh byte freeze, and independent review; do not retune the plasticity guard
+or connect Astral. Every mutation in this closure names state slice
+`oaklab-experience-learning-constrained-update-policy-v5`.
+
+Explicit Astral V38-derived Stage 0C Qwen3.6 layer-effect protocol V39 is now
+allowed under named state slice `astral-stage0c-qwen36-layer-effect-v39`:
+additive Python source and hermetic tests under
+`tools/astral-stage0c-qwen36-v39/`, a repository-external immutable Qwen3.6
+qualification/output root, an independent aggregate-only validator, the
+protocol and qualification record under
+`docs/research/astral-self-modeling/`, and navigation/status updates under
+`README.md`, `docs/12-task-list.md`, and `AGENTS.md`. This phase permits only
+offline qualification against the already-cached
+`Qwen3.6-35B-A3B-MLX-4bit` checkpoint through the locked MLX `0.31.2` and
+MLX-LM `0.31.3` runtime, rechecking native parity, deterministic repeatability,
+zero/no-op replacement, nonzero layer-19 reach to logits, 40-layer/2048-width
+shapes, and model/runtime/source digests. A future assessment, if separately
+opened, requires fresh concepts, document-disjoint fit/tune/assessment splits,
+directly measured held-out intervention effects, activation-only/text-only/
+shuffled/constant/matched controls, prediction locking before assessment
+effects, independent review, aggregate-only retention, and independent
+validation. It does not permit model or corpus downloads, network access,
+training, V25/V28/V29 artifact reuse, V61 or V82 evidence sharing, assessment
+opening before review and configuration sealing, accepted Evidence Ledger
+mutation, benchmark evidence, Stage 0C or Stage 1 promotion, production
+traffic, introspection or causal-self-modeling claims, or claims above
+`LocalDevelopmentInstrumentFeasibilityOnly` during qualification. Every
+mutation in this phase names state slice
+`astral-stage0c-qwen36-layer-effect-v39`.
+
+Explicit Astral V40 intervention-conditioned target protocol design and
+qualification are now allowed under named state slice
+`astral-stage0c-qwen36-intervention-conditioned-target-v40`: additive Python
+source and hermetic tests under `tools/astral-stage0c-qwen36-v40/`, a
+repository-external immutable Qwen3.6 custody/corpus/output root, Project
+Gutenberg intake and custody records, an independent aggregate-only validator,
+the V40 proposal and execution records under
+`docs/research/astral-self-modeling/`, and proposal/status navigation under
+`README.md`, `docs/12-task-list.md`, and the Astral research README. This phase
+permits only the fresh V40 proposal, explicit 18-document/144-family corpus
+acquisition, re-custodied offline Qwen3.6 qualification, fixed
+intervention-conditioned activation geometry, fit/tune prediction locking,
+review-packet preparation, and assessment only after a recorded review receipt
+and explicit assessment authorization. It requires author- and
+document-disjoint splits, contained-work exclusion, exact-length cross-document
+matched donors, fixed feature maps and ridge candidates, preregistered utility
+and bootstrap gates, aggregate-only retention, and independent validation. It
+does not permit reuse of V39 or prior scientific artifacts as inputs, network
+access during model execution, training, adapter or weight updates, adaptive
+assessment tuning, Stage 0C or Stage 1 promotion, accepted Evidence Ledger
+mutation, benchmark evidence, provider calls, production traffic, or claims
+above the V40 named local ceilings. Any failed qualification, custody, lock,
+review, retention, utility, or validator gate stops the phase without adaptive
+retry. Every mutation in this phase names state slice
+`astral-stage0c-qwen36-intervention-conditioned-target-v40`.
+
+Explicit Astral V40-derived directional-block target protocol V41 is now
+authorized under named state slice
+`astral-stage0c-qwen36-directional-block-target-v41`: additive Python source
+and hermetic tests under `tools/astral-stage0c-qwen36-v41/`, a
+repository-external immutable Qwen3.6 model/corpus/output custody chain, an
+independent aggregate-only validator, and the protocol and execution records
+under `docs/research/astral-self-modeling/`. This authorization permits only
+the fresh V41 protocol boundary, external fresh-data custody, qualification,
+fit/tune preassessment, prediction-lock preparation, and assessment only after
+all fixed prerequisites and a pre-assessment independent review receipt pass.
+The V41 scientific change is limited to a fixed non-overlapping signed
+directional-block projection over paired layer-19 activations; it does not
+relax the V40 utility threshold, target, controls, review ordering, retention
+policy, or claim ceiling. It does not permit V40 or prior scientific-artifact
+reuse, network access during model execution, model or adapter training,
+adaptive assessment tuning, Stage 0C or Stage 1 promotion, accepted Evidence
+Ledger mutation, benchmark evidence, provider calls, production traffic,
+introspection or causal-self-modeling claims, or claims above the V41 named
+local ceilings. V40 remains closed as `DevelopmentNoCandidate`; V41
+qualification passed as `InstrumentFeasibility`, while scientific execution
+remains sealed pending a fresh corpus/panel custody chain. Every mutation in
+this phase names state slice
+`astral-stage0c-qwen36-directional-block-target-v41`.
+
+Explicit Astral V42 causal-target reliability protocol is now authorized under
+named state slice `astral-stage0c-qwen36-causal-target-reliability-v42`:
+additive Python source and hermetic tests under
+`tools/astral-stage0c-qwen36-v42/`, a repository-external immutable Qwen3.6
+model/corpus/output custody chain, an independent aggregate-only validator,
+and protocol/execution records under
+`docs/research/astral-self-modeling/`. This authorization permits only a fresh
+18-document/72-family Project Gutenberg panel, re-custodied offline
+qualification against the already-cached `Qwen3.6-35B-A3B-MLX-4bit` checkpoint
+through MLX `0.31.2` and MLX-LM `0.31.3`, and direct layer-19 target-reliability
+measurement under two fixed wrappers with exact-copy/no-op, shuffled,
+constant, matched, and text-only controls. Qualification must pass native
+parity, deterministic repeat, zero replacement, nonzero intervention reach,
+40-layer/2048-width shapes, and model/runtime/source custody before scientific
+measurement. Fit/tune must pass the sealed reliability gates before any
+assessment effect; assessment additionally requires an independent review
+receipt and configuration lock before effects. It forbids V39, V40, and V41
+scientific-artifact reuse, adaptive threshold/wrapper/panel tuning, model or
+adapter training, network during model execution, Stage 0C or Stage 1
+promotion, accepted Evidence Ledger mutation, benchmark evidence, V82 or
+Neural Chameleon evidence sharing, introspection/self-modeling claims, and
+production readiness. V42's validated disposition is
+`TargetReliabilityNoCandidate`; its ceiling is
+`LocalDevelopmentV42TargetReliabilityNoCandidate`. Every mutation in this
+phase names state slice
+`astral-stage0c-qwen36-causal-target-reliability-v42`.
+
+Explicit Astral V42-derived causal-target localization protocol V43 is now
+authorized under named state slice
+`astral-stage0c-qwen36-causal-target-localization-v43`: additive Python source
+and hermetic tests under `tools/astral-stage0c-qwen36-v43/`, a
+repository-external immutable Qwen3.6 model/corpus/output custody chain, an
+independent aggregate-only validator, and protocol/execution records under
+`docs/research/astral-self-modeling/`. This authorization permits only a fresh
+18-document/72-family Project Gutenberg panel, re-custodied offline
+qualification against the already-cached `Qwen3.6-35B-A3B-MLX-4bit` checkpoint
+through MLX `0.31.2` and MLX-LM `0.31.3`, and direct final-position paired
+replacement measurement at predeclared layers 12, 19, and 26 under two fixed
+wrappers. Qualification must pass native parity, deterministic repeat,
+no-op/zero replacement, nonzero intervention reach, 40-layer/2048-width
+shapes, and model/runtime/source custody before scientific measurement. Fit and
+tune must apply fixed wrapper-reliability, control, and repeatability gates;
+the lowest passing layer is locked before any assessment effect. Assessment
+requires independent review of custody, fresh data, controls, prediction lock,
+privacy retention, claim ceiling, and validator behavior, plus a sealed
+configuration lock. It forbids V39, V40, V41, V42, and earlier scientific-
+artifact reuse, adaptive threshold/layer/position/wrapper/panel tuning, model
+or adapter training, network during model execution, Stage 0C or Stage 1
+promotion, accepted Evidence Ledger mutation, benchmark evidence, V82 or
+Neural Chameleon evidence sharing, introspection/self-modeling claims, and
+production readiness. V43's validated disposition is
+`TargetLocalizationNoCandidate`; its ceiling is
+`LocalDevelopmentV43TargetLocalizationNoCandidate`. Every mutation in this
+phase names state slice
+`astral-stage0c-qwen36-causal-target-localization-v43`.
+
+Explicit Astral V43-derived causal-target measurement-invariance protocol V44
+is now authorized under named state slice
+`astral-stage0c-qwen36-causal-target-measurement-invariance-v44`: additive
+Python source and hermetic tests under `tools/astral-stage0c-qwen36-v44/`, a
+repository-external immutable Qwen3.6 model/corpus/output custody chain, an
+independent aggregate-only validator, and protocol/execution records under
+`docs/research/astral-self-modeling/`. This authorization permits only a
+fresh 18-document/72-family Project Gutenberg panel, three predeclared
+wrappers, candidate layers 12/19/26, final and penultimate input positions,
+re-custodied offline qualification against the already-cached
+`Qwen3.6-35B-A3B-MLX-4bit` checkpoint through MLX `0.31.2` and MLX-LM `0.31.3`,
+fit/tune measurement, prediction locking, review-before-assessment ordering,
+and independent validation. The activation-only, text-only, exact-copy,
+shuffled, constant, and matched controls, thresholds, aggregate-only
+retention, and claim ceiling are fixed before effects. Qualification must pass
+native parity, deterministic repeat, no-op/zero replacement, nonzero
+intervention reach at every layer-position cell, 40-layer/2048-width shapes,
+and model/runtime/source custody before measurement. Assessment remains closed
+unless a tune target passes and an independent review verifies custody, fresh
+data identity, wrappers/layers/positions, controls, prediction lock, privacy
+retention, claim ceiling, and validator behavior against a sealed configuration
+lock. The corrected V44 result is
+`MeasurementInvarianceNoCandidate` with ceiling
+`LocalDevelopmentV44MeasurementInvarianceNoCandidate`.
+
+V44 forbids reopening V28/V29, reusing V25, treating V30–V37 as scientific
+evidence, consuming V61 documentation as evidence, consuming V82 or Neural
+Chameleon artifacts, reusing V39–V43 scientific artifacts, adaptive
+layer/position/wrapper/panel/threshold tuning, network during model execution,
+model or adapter training, assessment before review, Stage 0C or Stage 1
+promotion, accepted Evidence Ledger mutation, benchmark evidence,
+introspection or causal-self-modeling claims, and production readiness. A
+batch-size mismatch discovered in the first V44 measurement implementation
+invalidated that output before interpretation; the corrected rerun is the only
+V44 measurement result. Every mutation in this phase names state slice
+`astral-stage0c-qwen36-causal-target-measurement-invariance-v44`.
+
+Explicit Astral V45 response-anchored canonical-task causal-target protocol
+is now authorized under named state slice
+`astral-stage0c-qwen36-response-anchored-causal-target-v45`: additive Python
+source and hermetic tests under `tools/astral-stage0c-qwen36-v45/`, a
+repository-external fresh 24-document Project Gutenberg corpus and Qwen3.6
+custody/output chain, qualification-first execution, a fixed single canonical
+task with tokenized content-anchor semantics, fixed layers 12/19/26, the
+unchanged activation-only/text-only/exact-copy/shuffled/constant/matched
+controls, fit-only signed-block ridge prediction, prediction locking,
+independent review before assessment, aggregate-only retention, an independent
+validator, and protocol/execution records under
+`docs/research/astral-self-modeling/`. This is a new measurement-audit
+rationale following V44's wrapper/end-position invariance failure; it does not
+promise a positive result and may classify as `CanonicalTaskNoCandidate`.
+Qualification must pass native parity, deterministic repeat, no-op/zero
+replacement, nonzero reach at all candidate layers, anchor equality,
+40-layer/2048-width shapes, and model/runtime/source custody before fit/tune.
+Assessment requires a sealed predictor and independent review of custody, fresh
+data, anchor semantics, feature map, controls, prediction lock, privacy
+retention, claim ceiling, and validator behavior. This slice does not reopen
+V28/V29, reinterpret V25, treat V30–V37 as scientific evidence, consume V61
+documentation or V82 artifacts, reuse V39–V44 scientific artifacts, adapt
+layers/wrappers/positions/thresholds/controls after effects, train a model,
+promote Stage 0C or Stage 1, mutate the accepted Evidence Ledger, create
+benchmark evidence, make introspection/self-modeling claims, or claim
+production readiness. V82 remains isolated and blocked for missing artifacts.
+Every mutation in this phase names state slice
+`astral-stage0c-qwen36-response-anchored-causal-target-v45`.
+
+V45 has now executed under the final protocol source: fresh corpus and panel
+custody, qualification, fit/tune measurement, and independent aggregate-only
+validation all passed. Every layer/alpha predictor failed the fixed tune
+prediction gates, so V45 is `CanonicalTaskNoCandidate`; review and assessment
+remained closed. The accepted execution root is the V45 `r2` result only. The
+slice does not establish introspection, causal self-modeling, Stage 0C, Stage 1,
+benchmark evidence, or production readiness. Every mutation in this phase
+continues to name state slice
+`astral-stage0c-qwen36-response-anchored-causal-target-v45`.
+
+Explicit Astral V46 answer-aligned causal-target protocol is authorized and
+executed under named state slice
+`astral-stage0c-qwen36-answer-aligned-causal-target-v46`: additive Python
+source and hermetic tests under `tools/astral-stage0c-qwen36-v46/`, a fresh
+repository-external 24-document Gutenberg custody chain, re-custodied cached
+Qwen3.6 qualification, fixed layers 12/19/26 and content anchor, unchanged
+activation-only/text-only/exact-copy/shuffled/constant/matched controls, a
+model-fixed A/B response-unembedding margin feature, fit/tune prediction
+locking, independent aggregate-only validation, and protocol/execution records
+under `docs/research/astral-self-modeling/`. The V45 local execution kernel is
+used only as source-level capture/replacement infrastructure; V45 and earlier
+scientific corpus, panel, activation, effect, prediction, and result artifacts
+are not inputs. Qualification, custody, panel, fit/tune, and independent
+validation passed, but the fixed response-aligned predictor failed tune
+sign-agreement and bootstrap gates at every layer, so V46 is permanently closed
+as `AnswerAlignedNoCandidate`; review and assessment stayed closed. This slice
+does not promote Stage 0C or Stage 1, establish introspection or causal
+self-modeling, mutate accepted evidence, create benchmark evidence, or claim
+production readiness. V82 remains isolated and blocked for missing artifacts.
+Every mutation in this phase names state slice
+`astral-stage0c-qwen36-answer-aligned-causal-target-v46`.
+
+Explicit Astral V48 cross-view causal-state-transport audit is authorized and
+executed under named state slice
+`astral-stage0c-cross-view-causal-state-transport-v48`: additive Python source
+and hermetic tests under `tools/astral-stage0c-qwen36-v48/`, a fresh external
+48-document/192-family Project Gutenberg corpus and panel, re-custodied cached
+Qwen3.6 qualification, fixed source layer 26 to destination layer 12
+state-anchor transport with alpha 0.10 and L2 norm matching, reciprocal
+directions, a state-shuffled null, activation-only/text-only/input-only/
+exact-copy/shuffled/constant/matched controls, fixed prediction gates,
+document-cluster localization, cross-view recoverability, power and
+reliability checks, prediction locking, aggregate-only retention, and
+independent validation. V48 qualification passed, but corrected independent
+fit/tune repeats failed localization, activation-effect prediction, and
+cross-view recoverability, so V48 is closed as `DevelopmentNoCandidate` and
+assessment never opened. The first pre-correction measurement pair is
+superseded and is not evidence. V48 does not promote Stage 0C or Stage 1,
+establish introspection or causal self-modeling, mutate accepted evidence,
+create benchmark evidence, or claim production readiness. V82 remains
+isolated and blocked for missing artifacts. Every mutation in this phase names
+state slice
+`astral-stage0c-cross-view-causal-state-transport-v48`.
+
+Explicit Astral cumulative evidence synthesis and terminal stop is now recorded
+under named state slice `astral-cumulative-evidence-synthesis-stop-v48`: this
+documentation-only slice separates instrument feasibility, governance controls,
+bounded information/development results, and scientific target-validity tests;
+records V48 as the terminal executed Astral result; preserves its validated
+aggregate custody boundary; excludes the superseded measurement pair; keeps
+Stage 0C, Stage 1, and V82 blocked; and audits recirculation, circuit tracing,
+workspace/J-space, Neural Chameleon, and cross-model generalization as
+unexecuted hypotheses or separate branches. It does not authorize model or
+corpus acquisition, GiveMeANode work, model loading, scientific execution,
+assessment, parameter variation, accepted Evidence Ledger mutation, benchmark
+evidence, introspection or causal-self-modeling claims, Stage 0C or Stage 1
+promotion, or production readiness. Reopening requires a materially stronger
+causal theory, genuinely new estimand, explicit assignment assumptions, exact
+effect/uncertainty/multiplicity rules, power/reliability analysis, fresh data
+identity, unchanged controls, prediction locking, a sealed implementation
+contract, and independent review before effects. Without that package Astral
+experimentation remains stopped. The maintained unexecuted hypothesis register
+is `docs/research/astral-self-modeling/astral-theory-docket-v48-closed.md`.
+Every mutation in this phase names state slice
+`astral-cumulative-evidence-synthesis-stop-v48`.
+
+Explicit Phase 815 continual-learning Gemma3 paper-aligned recirculation execution is now allowed under named state slice `continual-learning-gemma3-paper-recirculation-v1`: additive Python source and hermetic tests under `experiments/continual_learning/`, a repository-external immutable Gemma3 model/corpus campaign root, an independent validator, a phase record under `docs/research/continual-learning/`, and navigation/status updates under `README.md`, `docs/12-task-list.md`, `experiments/continual_learning/README.md`, and `AGENTS.md`. This phase permits only offline execution against the already-cached pretrained `google/gemma-3-1b-pt` checkpoint through the cached BF16 MLX conversion, the one-additional-iteration recurrence from [Recirculation, arXiv:2608.17981](https://arxiv.org/html/2608.17981v1), paper-shaped 1024-token fit/evaluation panels supplied in an immutable external artifact root, fit-only source/destination and alpha qualification, the reported Gemma3 1B PT target pair `(source=11, destination=4)` as an expected replication target rather than a forced outcome, locked evaluation with `alpha=0.15` and `beta=0.85`, source-to-destination norm adjustment, native/MLX parity, zero-alpha identity, deterministic repeat, temperature and looping controls, digest-bound artifacts, and independent validation. It does not permit model or corpus downloads, network access during execution, training, adapter updates, Qwen V5 configuration reuse, adaptive assessment tuning, Astral self-modeling claims, Astral claim-ledger mutation, Stage 0C or Stage 1 promotion, accepted Evidence Ledger mutation, benchmark evidence, provider calls, production traffic, or claims above `LocalDevelopmentGemma3PaperAlignedRecirculationReplication`. Every mutation in this phase names state slice `continual-learning-gemma3-paper-recirculation-v1`.
+
+Phase 836 Gemma3 FineWeb-Edu H100 replication V1 is terminally closed as
+`ProtocolReviewRejectedNoExecution` under named state slice
+`continual-learning-gemma3-fineweb-edu-replication-h100-v1`. The exact
+14-file packet was independently rejected because its implementation-manifest
+self-digest does not recompute and its validator does not bind provider
+cost/stop receipts or close the result root against extra directories. The
+rejection receipt and closure are
+`docs/research/continual-learning/255-gemma3-fineweb-edu-replication-h100-v1-independent-review-rejection.json`,
+`docs/research/continual-learning/256-gemma3-fineweb-edu-replication-h100-v1-independent-review.md`,
+and `docs/research/continual-learning/257-gemma3-fineweb-edu-replication-h100-v1-terminal-closure-2026-08-31.md`.
+No model, corpus, provider, H100, paid execution, or scientific result exists.
+No patch, retune, launch, breakthrough claim, benchmark claim, production
+claim, Evidence Ledger mutation, or Astral coupling is permitted under this
+identity. Any continuation requires a fresh protocol, corrected receipt
+contract, new freeze, and independent review. Every mutation in this phase
+names state slice `continual-learning-gemma3-fineweb-edu-replication-h100-v1`.
+
+Explicit Phase 831 cached-model plasticity-guard execution is now allowed under named state slice `continual-learning-plasticity-guard-reversible-adapter-v1`: additive Python source and hermetic tests under `experiments/continual_learning/`, a repository-external immutable Gemma3 model/corpus/output root under PrimaryED with a DAed mirror, an independent aggregate-only validator, and protocol/execution records under `docs/research/continual-learning/`. This phase permits only offline execution against the already-cached `google/gemma-3-1b-pt` BF16 MLX conversion through MLX `0.31.2` and MLX-LM `0.31.3`; the new digest-bound NEWSROOM cohort after the prior eight eligible local-pilot documents; fixed forward/reverse fit orders and seeds; fixed-cadence and predeclared `plasticity_guard` arms; equal-budget reversible LoRA adapters; candidate commit or active-pointer rollback; prediction locking before assessment; and independent validation. The base checkpoint must remain byte-identical and no adapter may be merged. Astral integration is `not_run` and remains limited to causal-effect prediction, calibration, or instrumental correction. This phase does not permit model or corpus downloads, network access during model execution, adaptive assessment tuning, model shopping, waves, stochastic scheduling, provider/H100 calls, ZK/PQC backend evidence, accepted Evidence Ledger mutation, V48 or prior Astral artifact reuse, Stage 0C or Stage 1 promotion, introspection or causal-self-modeling claims, benchmark evidence, production traffic, or claims above `LocalDevelopmentPlasticityGuardReversibleAdapterFeasibility`. Any qualification, lock, custody, mirror, validator, or hard-guard failure closes execution without retry. Every mutation in this phase names state slice `continual-learning-plasticity-guard-reversible-adapter-v1`.
+
+Explicit Phase 832 fresh-cohort plasticity-guard replication is now allowed under named state slice `continual-learning-plasticity-guard-replication-v1`: additive Python source and hermetic tests under `experiments/continual_learning/`, a repository-external immutable Gemma3 model/corpus/output root under PrimaryED with a DAed mirror, an independent aggregate-only validator, and protocol/execution records under `docs/research/continual-learning/`. This phase permits only offline execution against the already-cached `google/gemma-3-1b-pt` BF16 MLX conversion through MLX `0.31.2` and MLX-LM `0.31.3`; a fresh NEWSROOM cohort after the frozen Phase 831 cohort; new seeds and permutation orders; the untouched-base/no-update, fixed-cadence, and unchanged `plasticity_guard` arms; equal-budget disposable-shadow and reversible LoRA adapters; prediction locking before assessment; and independent validation. The Phase 831 guard thresholds, optimizer, adapter budget, and custody rules are frozen before execution. Absolute held-out improvement versus the untouched base is primary, and guarded-versus-fixed improvement is secondary. The base checkpoint must remain byte-identical and no adapter may be merged. Astral integration is `not_run` and remains limited to causal-effect prediction, calibration, or instrumental correction. This phase does not permit model or corpus downloads, network access during model execution, adaptive threshold/seed/order/split/endpoint tuning, waves, stochastic scheduling, provider/H100 calls, ZK/PQC backend evidence, accepted Evidence Ledger mutation, V48 or prior Astral artifact reuse as scientific inputs, Stage 0C or Stage 1 promotion, introspection or causal-self-modeling claims, benchmark evidence, production traffic, or claims above `LocalDevelopmentPlasticityGuardReplication`. Any qualification, lock, custody, mirror, validator, or hard-guard failure closes execution without adaptive retry; a failed replication closes the mechanism for this lane. Every mutation in this phase names state slice `continual-learning-plasticity-guard-replication-v1`.
+
+Explicit Phase 833 continual-learning plasticity-recovery execution is now allowed under named state slice `continual-learning-plasticity-recovery-v1`: additive exact-synthetic Python source and hermetic tests under `experiments/continual_learning/`, an external aggregate artifact root, an independent aggregate-only validator, and protocol/execution records under `docs/research/continual-learning/`. This phase permits only a fresh deterministic 5-arm synthetic learner with untouched-base, fixed-adapter, replay, selective low-utility reinitialization, and combined replay/reinitialization arms; equal gradient and shadow budgets; sealed tune prediction before assessment; reversible adapter state; unchanged base weights; and fixed held-out improvement, forgetting, calibration, rollback, and order-stability gates. It does not permit model or corpus downloads, model-bearing execution, base-weight updates, adapter merging, Astral execution or ledger mutation, V48 or Phase 832 scientific-artifact reuse, provider/H100 execution without a recorded hard USD ceiling, ZK/PQC evidence, Stage 0C or Stage 1 promotion, introspection or causal-self-modeling claims, benchmark evidence, or production traffic. The local V1 result is `LocalDevelopmentPlasticityRecoverySyntheticOnly`; GiveMeANode is `not_submitted` pending spend authorization, Astral is `not_run`, and ZK/PQC is `not_run`. A later model-bearing or custody-proof slice requires separate authorization and independent validation. Every mutation in this phase names state slice `continual-learning-plasticity-recovery-v1`.
+
+The Phase 833 read-only diagnosis is implemented by `diagnose_plasticity_recovery_v1.py` and `validate_plasticity_recovery_diagnosis_v1.py` under the same named state slice. It may only reconstruct and attribute the frozen V1 result. It may not change V1 thresholds, seeds, orders, splits, endpoint, or classification, and it does not authorize a new recovery mechanism, model-bearing execution, GiveMeANode, Astral, or ZK/PQC work. Every mutation in this diagnosis phase names state slice `continual-learning-plasticity-recovery-v1`.
+
+Explicit Phase 834 continual-learning plasticity-recovery V2 is now allowed under named state slice `continual-learning-plasticity-recovery-v2`: additive exact-synthetic Python source and hermetic tests under `experiments/continual_learning/`, an external aggregate artifact root, an independent aggregate-only validator, and protocol/execution records under `docs/research/continual-learning/`. This phase permits only one preregistered protected-replay mechanism with fresh data and order seeds, unchanged V1 endpoint/thresholds/hard guards, sealed prediction locking, reversible adapter state, and untouched base weights. It does not permit model or corpus downloads, model-bearing execution, base-weight updates, adapter merging, GiveMeANode, Astral execution or ledger mutation, V1 scientific-artifact reuse as data, ZK/PQC evidence, Stage 0C or Stage 1 promotion, introspection or causal-self-modeling claims, benchmark evidence, or production traffic. The V2 result is `NoCandidate`; no cached-model continuation is opened. Every mutation in this phase names state slice `continual-learning-plasticity-recovery-v2`.
+
+The plasticity-recovery mechanism family is terminally closed as `NoCandidate` under named state slices `continual-learning-plasticity-recovery-v1` and `continual-learning-plasticity-recovery-v2`. Any continuation requires a materially new theory and estimand addressing the adaptation-forgetting tradeoff, a new protocol with fresh data and guards, prediction locking, unchanged-base reversible adapters, independent validation, and separate authorization. No model-bearing execution, GiveMeANode, Astral integration, or ZK/PQC custody-proof work may be opened from this family until that package exists. Closure record: `docs/research/continual-learning/120-plasticity-recovery-family-terminal-closure-2026-08-29.md`.
+
 Explicit Astral privileged-telemetry information-presence probe V25 now
 allowed: additive Python source and hermetic tests under
 `tools/astral-telemetry-probe-v25/`, phase notes under
@@ -2665,3 +3234,121 @@ Explicit Phase 812 continual-learning Qwen inference-time recirculation alpha-sw
 Explicit Phase 813 continual-learning Qwen inference-time recirculation fresh-corpus implementation now allowed and completed under named state slice `continual-learning-qwen-inference-recirculation-v4`: additive Python source and hermetic tests under `experiments/continual_learning/`, a repository-external immutable Qwen campaign root, an independent validator, a phase record under `docs/research/continual-learning/`, and navigation/status updates under `docs/12-task-list.md`, `README.md`, `experiments/continual_learning/README.md`, and `AGENTS.md`. This phase permits only the V3 frozen Qwen mechanism, model, layer grid, alpha grid, fit/assessment procedure, and no-training boundary, with eight fresh source-disjoint repository Markdown files yielding 16 fit and 16 assessment sequences. It requires recomputed source-byte and text-unit custody, complete manual/native zero-alpha parity, fit-only selection, a deterministic locked assessment repeat, digest-bound artifacts, and independent validation. It does not permit model downloads, network access, training, adapter updates, adaptive assessment tuning, paper replication claims, accepted Evidence Ledger mutation, benchmark evidence, provider calls, production traffic, or claims above `LocalDevelopmentQwenInferenceRecirculationFreshCorpusFeasibility`. Every mutation in this phase names state slice `continual-learning-qwen-inference-recirculation-v4`.
 
 Explicit Phase 814 continual-learning Qwen inference-time recirculation fixed-transfer implementation now allowed and completed under named state slice `continual-learning-qwen-inference-recirculation-v5`: additive Python source and hermetic tests under `experiments/continual_learning/`, a repository-external immutable Qwen campaign root, an independent validator, a phase record under `docs/research/continual-learning/`, and navigation/status updates under `docs/12-task-list.md`, `README.md`, `experiments/continual_learning/README.md`, and `AGENTS.md`. This phase permits only the V4 fit-selected `(source=12, destination=5, alpha=0.07)` configuration bound to the V4 config and receipt digests, transferred to eight new source-disjoint repository Markdown files with 16 fit and 16 assessment sequences. It requires no V5 configuration search, recomputed corpus custody, complete manual/native zero-alpha parity, a deterministic locked assessment repeat, digest-bound artifacts, and independent validation. It does not permit model downloads, network access, training, adapter updates, adaptive assessment tuning, paper replication claims, accepted Evidence Ledger mutation, benchmark evidence, provider calls, production traffic, or claims above `LocalDevelopmentQwenInferenceRecirculationFixedTransferFeasibility`. Every mutation in this phase names state slice `continual-learning-qwen-inference-recirculation-v5`.
+
+Explicit Phase 835 continual-learning recursive update-policy protocol package is now allowed under named state slice `continual-learning-recursive-update-policy-v1`: additive exact-synthetic Python source and hermetic tests under `experiments/continual_learning/`, the protocol and autoresearch contract under `docs/research/continual-learning/` and `.autoresearch/`, an independent aggregate-only validator, and navigation/status updates under `README.md`, `docs/12-task-list.md`, `experiments/continual_learning/README.md`, and `AGENTS.md`. This phase permits only protocol implementation and pure contract validation for a bounded theory of generational update-policy improvement, with separate adaptation, retention, and post-adaptation-plasticity estimands; untouched-base, fixed-policy, recursive-policy, and deterministic-random arms; fresh synthetic generations; external episodic/procedural memory integrity probes; a controller sandbox; immutable checkpoint/rollback digests; fixed compute; and prediction locking. The package remains pending independent review; its synthetic runner requires an accepted review receipt before writing an external result. It does not permit model or corpus downloads, model-bearing execution, adapter or base-weight mutation, provider calls, GiveMeANode, Astral execution or ledger mutation, ZK/PQC evidence, accepted Evidence Ledger mutation, benchmark evidence, production traffic, or claims above `LocalDevelopmentRecursiveUpdatePolicySyntheticProtocol`. Any failed synthetic result closes this protocol identity without adaptive repair. Every mutation in this phase names state slice `continual-learning-recursive-update-policy-v1`.
+
+The V1 review for `continual-learning-recursive-update-policy-v1` rejected the
+package before execution for incomplete rollback, custody, receipt,
+plasticity-reserve, order-guard, and result-freezing invariants. The additive V2
+revision under named state slice `continual-learning-recursive-update-policy-v2`
+was independently reviewed and accepted for one bounded synthetic campaign.
+V2 repaired those defects, ran the fixed 64-case campaign, and passed its
+independent aggregate-only validator, but classified `NoCandidate` because
+recursive selection lost to random selection and failed the preregistered
+compounding threshold. The protocol identity is closed. No model-bearing,
+GiveMeANode, Astral, or ZK/PQC execution is authorized by this result; Astral
+remains limited to causal-effect prediction, calibration, or instrumental
+correction. Every mutation in this phase names state slice
+`continual-learning-recursive-update-policy-v2`.
+
+Explicit Oak Lab constrained update-policy V6 compiler-only identity is now
+allowed under named state slice `oaklab-experience-learning-constrained-update-policy-v6`:
+additive source specification, deterministic compiler, compiled manifest,
+independent validator, hermetic compiler tests, and protocol/review records
+under `experiments/experience_learning/` and
+`docs/research/experience-learning/`. V6 is a fresh protocol identity and may
+not patch or import V5 scientific artifacts. It preserves the complete-policy
+trajectory estimand while requiring exact rational treatment assignment,
+indexed controller transitions with all pending state, unconditional generator
+draw bytes, typed numeric operation ASTs and byte layouts, fixed ablation and
+multiplicity tables, shift-bounded adaptation metrics, and canonical
+lock/counter/control/assessment-absence receipts. No learner, stream runner,
+fit, tune, assessment, real campaign, provider call, GiveMeANode/H100
+provisioning, energy capture, or Astral coupling is permitted before an
+independent reviewer accepts the exact frozen source, compiler, compiled
+artifact, validator, tests, `AGENTS.md`, and digest packet. A rejected review
+or compiler/validator failure closes V6 without retuning. An accepted packet
+authorizes only the separately reviewed synthetic implementation slice; real
+execution requires a fresh synthetic candidate, separate execution review,
+fresh custody, and a workload-specific privileged energy receipt. Publication
+remains `no_candidate` unless the strict multi-family quality, adaptation,
+resource, statistical, custody, and measured-energy gate passes. Every
+mutation in this phase names state slice
+`oaklab-experience-learning-constrained-update-policy-v6`.
+
+Oak Lab V6 independent protocol review is terminally `rejected` with claim
+ceiling `ProtocolReviewRejectedNoExecution`. The packet-bound review verified
+all declared hashes and local checks but found unresolved controller reads and
+terminal credit, one-sided statistical direction, energy absence encoding,
+enum/resource counter encodings, generator signs, adaptation censoring, and
+binary lock encoding. No V6 learner, synthetic qualification, fit, tune,
+assessment, real campaign, provider call, GiveMeANode/H100 provisioning,
+privileged energy capture, or correction under the V6 identity is permitted.
+The complete-policy estimand remains historical theory only. Any continuation
+requires a new protocol identity, corrected executable contract, fresh byte
+freeze, and independent review. Plasticity guard and Astral remain isolated.
+Every mutation in this closure names state slice
+`oaklab-experience-learning-constrained-update-policy-v6`.
+
+Explicit TimesFM3 temporal stress-scenario sidecar V1 is now authorized under
+named state slice `timesfm3-temporal-stress-scenarios-v1`: additive sidecar
+source, canonical schemas, canonicalization, validators, fake-model fixtures,
+and hermetic tests under
+`tools/timesfm3-temporal-stress-scenarios-v1/`; protocol, claim-boundary, and
+validation records under `docs/research/timesfm3-temporal-stress-scenarios/`;
+and no mutation to `zkbench-core`, Rust sources, package manifests, accepted
+Evidence Ledger data, score reports, provider authority, or Astral and
+continual-learning mechanisms. TimesFM remains an independent model
+implementation and dependency source at
+`/Users/shaanp/Documents/GitHub/timesfm`; the sidecar must reference its
+public `timesfm3` API through an explicit process or dependency boundary and
+must not copy its implementation into this repository. The bound model
+identity is `google/timesfm-3.0-pytorch` at observed checkpoint revision
+`900fcab43d1bfe71733a33b3fec61a41fce28a27`; the exact local weight digest,
+model configuration digest, runtime/dependency versions, host/device identity,
+and source commit `331c6d33cb1ac2611de3056d0ac7164aab6301eb` must be recorded
+and verified before model-bearing qualification. Model acquisition is separate
+from execution; execution must use a pre-materialized local checkpoint with
+`local_files_only=true` or an equivalent offline guard, and no network-enabled
+execution is permitted.
+
+This slice permits only the bounded temporal sidecar contract and later gated
+local qualification: canonical request, result, and scenario schemas;
+digest-bound provenance; bounded finite telemetry and covariate validation;
+deterministic q10/q50/q90 scenario derivation; explicit statuses;
+repeatability checks; claim-text rejection; and fake-model hermetic coverage.
+Every derived scenario must be labeled `model_derived_synthetic_input`, never
+an observed trace. Scenario generation is downstream of fixed benchmark-pack,
+Semantic IR, Oracle, and mutation identities. It must preserve the exact fixed
+cases across scenario arms and may not generate or alter Semantic IR, choose
+Oracle verdicts, choose mutations adaptively after prediction locking, replace
+the Oracle, populate `BackendOutcome::Accepted` or
+`BackendOutcome::Rejected`, populate ZK backend performance score axes,
+produce proof/soundness/formal/ZKML evidence, mutate the accepted Evidence
+Ledger automatically, control provider calls, spend, production traffic, or
+assessment scheduling, or couple into Astral or continual learning. A forecast
+may produce an advisory deterministic local shard, batch, or bounded-resource
+plan only; it grants no authority and does not change hard budgets.
+
+Raw telemetry and full per-series forecast outputs must remain outside the
+repository in a fresh owner-only external custody root when large or
+sensitive; repository artifacts are limited to bounded fixtures, manifests,
+digests, and aggregate reports unless a later reviewed retention decision says
+otherwise. Validators must fail closed on duplicate or unknown fields, invalid
+canonical bytes, absolute or traversal paths, missing or mismatched input,
+model, configuration, or output digests, nonfinite values, overlarge artifacts,
+invalid time ordering or covariate spans, unrecognized runtime/device/model
+identities, network-enabled execution, claim elevation, invalid statuses,
+quantile shape or ordering, missing covariates, and insufficient future
+covariate span. Qualification must prove same-device repeatability, exact
+provenance, output shape and finiteness, deterministic scenario-manifest
+binding, unchanged Semantic IR/Oracle/mutation digests, and exclusion of
+forecast artifacts from Backend Outcomes and score axes. No real-checkpoint
+execution, generated scenario, benchmark run, or evidence import occurs until
+the frozen contract has passed independent review; any failed contract,
+validator, custody, digest, repeatability, or offline gate stops the slice
+without adaptive repair. This phase is local development/model qualification
+only and claims no forecasting quality, official benchmark status, ZK
+performance, proof, soundness, formal validity, or production readiness.
+Every mutation in this phase names state slice
+`timesfm3-temporal-stress-scenarios-v1`.

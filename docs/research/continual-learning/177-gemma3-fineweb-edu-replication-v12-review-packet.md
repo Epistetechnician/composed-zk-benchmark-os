@@ -1,0 +1,41 @@
+# Gemma3 FineWeb-Edu replication V12 independent-review packet
+
+State slice: `continual-learning-gemma3-fineweb-edu-replication-v12`.
+
+Read exactly these seven files and no others:
+
+1. `docs/research/continual-learning/176-gemma3-fineweb-edu-replication-v12-protocol.md`
+2. `docs/research/continual-learning/177-gemma3-fineweb-edu-replication-v12-review-packet.md`
+3. `experiments/continual_learning/gemma3_fineweb_edu_replication_v12_contract.py`
+4. `experiments/continual_learning/prepare_gemma3_fineweb_edu_replication_v12.py`
+5. `experiments/continual_learning/validate_gemma3_fineweb_edu_replication_v12.py`
+6. `experiments/continual_learning/stage_and_run_gemma3_fineweb_edu_replication_v12.py`
+7. `experiments/continual_learning/tests/test_gemma3_fineweb_edu_replication_v12.py`
+
+Do not edit, create, delete, stage, format, or mutate any file. Do not access
+external `/Volumes/PrimaryED` artifacts or model contents. Do not load a
+model/tokenizer, acquire data, use network, run effects, or mutate any ledger.
+
+Recompute the protocol SHA-256, packet SHA-256, and exact implementation
+manifest SHA-256. Return one valid JSON object with reviewer identity,
+canonical UTC `reviewed_at_utc`, `effects_run:false`, the three hashes, exactly
+these seven finding keys each explicitly set to `true` or `false`,
+`material_findings`, and `review_decision` exactly `ACCEPT` only if every gate
+is closed:
+
+- `custody_exact_pinned_data_identity`
+- `fit_assessment_prior_pilot_disjointness`
+- `locked_configuration_and_paper_target_treatment`
+- `controls_and_frozen_weight_behavior`
+- `exact_bootstrap_and_uncertainty_rule`
+- `aggregate_per_document_retention_and_validator_behavior`
+- `v1_v2_v3_v4_rejections_preserved_and_prohibited_actions_enforced`
+
+The V12 reviewer must verify that V10's rejection and V11's pre-effect
+execution failure are included in the contract's pinned history, that the two
+V10 findings are closed by the source-prefix/path checks and canonical
+metric/bootstrap order checks, and that the BF16 digest conversion is
+representation-only with no model update or scientific-artifact reuse.
+
+The parent creates the V12 receipt only after a valid `ACCEPT`. A rejection or
+missing report is not acceptance. Do not create a V12 receipt.

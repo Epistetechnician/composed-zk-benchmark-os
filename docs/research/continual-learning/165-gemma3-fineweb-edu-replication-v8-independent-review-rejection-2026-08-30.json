@@ -1,0 +1,38 @@
+{
+  "effects_run": false,
+  "findings": {
+    "aggregate_per_document_retention_and_validator_behavior": true,
+    "controls_and_frozen_weight_behavior": true,
+    "custody_exact_pinned_data_identity": true,
+    "exact_bootstrap_and_uncertainty_rule": true,
+    "fit_assessment_prior_pilot_disjointness": true,
+    "locked_configuration_and_paper_target_treatment": true,
+    "v1_v2_v3_v4_rejections_preserved_and_prohibited_actions_enforced": false
+  },
+  "implementation_manifest_sha256": "cd98f57500324b042cdd98c0bb8fbc9a61f45e40e971bcd24d5c413464574b26",
+  "material_findings": [
+    {
+      "evidence": "V8 network_block denies only a partial os.exec*/os.spawn* allowlist; available variants including spawnlp, spawnlpe, spawnvp, spawnvpe, execl, execle, execlp, and execvp remain callable while the native sandbox permits process execution.",
+      "finding_key": "v1_v2_v3_v4_rejections_preserved_and_prohibited_actions_enforced",
+      "minimal_remedy": "Block every available os.exec* and os.spawn* variant through a complete centralized process-launch denial, then refreeze and independently review the new bytes."
+    }
+  ],
+  "protocol_sha256": "bb700fec755b53cf0470ccefb3dea6fb70f3b9b40c1db9d7a04d0733a2c534ab",
+  "record_sha256": "1d44c67a34573466cb440dafaea5531be417ba455bc2e2bda95312e8604a9c6e",
+  "review_decision": "REJECT",
+  "review_packet_sha256": "efe9322e74657c39298f136687b79c56c4d470d47c48e8ac18c5f03d43373ecc",
+  "reviewed_at_utc": "2026-08-30T15:43:03Z",
+  "reviewed_files": [
+    "docs/research/continual-learning/163-gemma3-fineweb-edu-replication-v8-protocol.md",
+    "docs/research/continual-learning/164-gemma3-fineweb-edu-replication-v8-review-packet.md",
+    "experiments/continual_learning/gemma3_fineweb_edu_replication_v8_contract.py",
+    "experiments/continual_learning/prepare_gemma3_fineweb_edu_replication_v8.py",
+    "experiments/continual_learning/validate_gemma3_fineweb_edu_replication_v8.py",
+    "experiments/continual_learning/stage_and_run_gemma3_fineweb_edu_replication_v8.py",
+    "experiments/continual_learning/tests/test_gemma3_fineweb_edu_replication_v8.py"
+  ],
+  "reviewer": "codex-independent-static-reviewer",
+  "schema": "gemma3-fineweb-edu-replication-v8-independent-review-rejection",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-v8"
+}
+
