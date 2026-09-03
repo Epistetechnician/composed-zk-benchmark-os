@@ -126,6 +126,53 @@ Protocol, review packet, implementation manifest, and execution record:
 - `docs/research/continual-learning/275-minimind-domain-specific-v1-implementation-manifest.json`
 - `docs/research/continual-learning/276-minimind-domain-specific-v1-execution-record-2026-09-02.md`
 
+## MiniMind three-lane SOTA comparison V1
+
+The fresh state slice `continual-learning-minimind-three-lane-sota-v1`
+combines the audited task-incremental, domain-incremental, and
+experience-incremental designs. It freezes the requested controls and
+frontier-method roster, but the model pilot executes only faithfully declared
+MiniMind arms. The synthetic fixture is not a published benchmark, uses no
+real local corpus, and has no SOTA claim. The upstream checkout has no base
+checkpoint in this slice, so any model result is random-initialization
+integration qualification only.
+
+The synthetic campaign and independent validator pass with 540 aggregate
+rows. Model execution is gated by a fresh packet-bound independent Ed25519
+`ACCEPT`; the execution record must be updated only after the receipt and
+model validator pass.
+
+Run the synthetic campaign and independent validator with:
+
+```text
+PYTHONDONTWRITEBYTECODE=1 python -B -m experiments.continual_learning.minimind_three_lane_sota_v1 \
+  --synthetic-output /Users/shaanp/Documents/research-artifacts/continual-learning-minimind-three-lane-sota-v1-synthetic-20260902
+
+PYTHONDONTWRITEBYTECODE=1 python -B experiments/continual_learning/validate_minimind_three_lane_sota_v1.py \
+  synthetic /Users/shaanp/Documents/research-artifacts/continual-learning-minimind-three-lane-sota-v1-synthetic-20260902
+```
+
+After the independently verified receipt, run the bounded offline CPU pilot:
+
+```text
+PYTHONDONTWRITEBYTECODE=1 python -B -m experiments.continual_learning.minimind_three_lane_sota_v1 \
+  --model-output /Users/shaanp/Documents/research-artifacts/continual-learning-minimind-three-lane-sota-v1-model-20260902 \
+  --source /Users/shaanp/Documents/research-artifacts/continual-learning-minimind-three-lane-sota-v1-source-20260902 \
+  --execution-receipt /Users/shaanp/Documents/research-artifacts/continual-learning-minimind-three-lane-sota-v1-execution-receipt-20260902.json \
+  --corpus-manifest /Users/shaanp/Documents/research-artifacts/continual-learning-minimind-three-lane-sota-v1-corpus-20260902/corpus-manifest.json \
+  --device cpu --steps-per-stage 1
+
+PYTHONDONTWRITEBYTECODE=1 python -B experiments/continual_learning/validate_minimind_three_lane_sota_v1.py \
+  model /Users/shaanp/Documents/research-artifacts/continual-learning-minimind-three-lane-sota-v1-model-20260902
+```
+
+Protocol, review packet, implementation manifest, and execution record:
+
+- `docs/research/continual-learning/288-minimind-three-lane-sota-v1-protocol.md`
+- `docs/research/continual-learning/289-minimind-three-lane-sota-v1-review-packet.md`
+- `docs/research/continual-learning/290-minimind-three-lane-sota-v1-implementation-manifest.json`
+- `docs/research/continual-learning/291-minimind-three-lane-sota-v1-execution-record-2026-09-02.md`
+
 ## Plasticity recovery V1 exact-synthetic factorial
 
 `plasticity_recovery_v1.py` implements the separately authorized
@@ -871,3 +918,36 @@ closure. No provider job, H100, model execution, or result exists. Do not
 patch or retune this identity. See the [rejection receipt](../../docs/research/continual-learning/255-gemma3-fineweb-edu-replication-h100-v1-independent-review-rejection.json),
 [review record](../../docs/research/continual-learning/256-gemma3-fineweb-edu-replication-h100-v1-independent-review.md),
 and [terminal closure](../../docs/research/continual-learning/257-gemma3-fineweb-edu-replication-h100-v1-terminal-closure-2026-08-31.md).
+
+## MiniMind three-lane SOTA comparison V2
+
+V2 is a fresh continuation after the V1 packet rejection. It preserves V1 as
+terminal history, corrects the model-trial manifest to the executable count of
+42, and uses fresh V2 source/corpus/synthetic identities. The synthetic lane
+still exercises all declared methods and controls; the bounded MiniMind pilot
+executes only the four faithful parameter arms plus the six explicit
+experience-state arms. The MiniMind checkout is random initialization only, so
+any accepted model output remains integration qualification rather than
+benchmark or SOTA evidence.
+
+Run the V2 fixture and validator with:
+
+```text
+PYTHONDONTWRITEBYTECODE=1 python -B -m experiments.continual_learning.minimind_three_lane_sota_v2 \
+  --prepare-fixture
+
+PYTHONDONTWRITEBYTECODE=1 python -B -m experiments.continual_learning.minimind_three_lane_sota_v2 \
+  --synthetic-output /Users/shaanp/Documents/research-artifacts/continual-learning-minimind-three-lane-sota-v2-synthetic-20260903
+
+PYTHONDONTWRITEBYTECODE=1 python -B experiments/continual_learning/validate_minimind_three_lane_sota_v2.py \
+  synthetic /Users/shaanp/Documents/research-artifacts/continual-learning-minimind-three-lane-sota-v2-synthetic-20260903
+```
+
+Model execution remains closed until a new external packet-bound Ed25519
+`ACCEPT` is independently verified. Protocol, packet, manifest, and execution
+record:
+
+- `docs/research/continual-learning/292-minimind-three-lane-sota-v2-protocol.md`
+- `docs/research/continual-learning/293-minimind-three-lane-sota-v2-review-packet.md`
+- `docs/research/continual-learning/294-minimind-three-lane-sota-v2-implementation-manifest.json`
+- `docs/research/continual-learning/295-minimind-three-lane-sota-v2-execution-record-2026-09-03.md`

@@ -1,0 +1,49 @@
+{
+  "state_slice": "continual-learning-minimind-three-lane-sota-v1",
+  "schema_version": "minimind-three-lane-sota-v1-implementation-manifest",
+  "protocol": "minimind-three-lane-sota-v1",
+  "claim_ceiling": "LocalDevelopmentMiniMindThreeLanePilotQualification",
+  "upstream": {
+    "url": "https://github.com/jingyaogong/minimind",
+    "commit": "7a6fddd63a30c06b2fdd5fac4089922b29bc841b"
+  },
+  "lanes": {
+    "task": ["ag_news", "amazon_reviews", "yelp", "dbpedia", "yahoo_answers"],
+    "domain": ["materials", "clinical", "finance"],
+    "experience": ["software", "forecasting", "database"]
+  },
+  "published_benchmark_reproduced": false,
+  "real_local_corpus": false,
+  "model_checkpoint": "none-in-slice-random-initialization-only",
+  "synthetic_trial_count": 540,
+  "model_trial_count": 54,
+  "parameter_arms": [
+    "untouched_base", "joint_oracle", "sequential_full", "shared_lora", "replay",
+    "ewc_lwf", "independent_adapters", "task_routed_bank", "o_lora", "n_lora",
+    "oplora", "osft"
+  ],
+  "experience_arms": [
+    "stateless", "naive_icl", "retrieval_memory", "skill_library",
+    "parametric_experience_update", "hybrid_experience_update"
+  ],
+  "frontier_exclusions_are_explicit": true,
+  "frozen_review_files": [
+    "AGENTS.md",
+    "docs/research/continual-learning/288-minimind-three-lane-sota-v1-protocol.md",
+    "docs/research/continual-learning/289-minimind-three-lane-sota-v1-review-packet.md",
+    "docs/research/continual-learning/290-minimind-three-lane-sota-v1-implementation-manifest.json",
+    "experiments/continual_learning/minimind_three_lane_sota_v1.py",
+    "experiments/continual_learning/validate_minimind_three_lane_sota_v1.py",
+    "experiments/continual_learning/tests/test_minimind_three_lane_sota_v1.py"
+  ],
+  "external_artifacts": {
+    "trust_bundle_sha256": "5156f70af0af2e214e6621c12222d1191fe64cd54b0be6ac451f3066cadbb0ce",
+    "source_manifest_path": "/Users/shaanp/Documents/research-artifacts/continual-learning-minimind-three-lane-sota-v1-source-manifest-20260902.json",
+    "source_manifest_sha256": "e7f052999671e00b180b9d1f457b99272da59828f496b4f2d0f70177c52df852",
+    "corpus_manifest_path": "/Users/shaanp/Documents/research-artifacts/continual-learning-minimind-three-lane-sota-v1-corpus-20260902/corpus-manifest.json",
+    "corpus_manifest_sha256": "371f3043c08e9857792540eb75b4018bcbf1a6255436898cc5436a4a29cc1e7d",
+    "synthetic_root": "/Users/shaanp/Documents/research-artifacts/continual-learning-minimind-three-lane-sota-v1-synthetic-20260902",
+    "synthetic_result_sha256": "ebf6f195e3bb402a6ee38c69418ab901868455c91556e1bd13354df9e278fd2e",
+    "model_root": "/Users/shaanp/Documents/research-artifacts/continual-learning-minimind-three-lane-sota-v1-model-20260902"
+  }
+}
