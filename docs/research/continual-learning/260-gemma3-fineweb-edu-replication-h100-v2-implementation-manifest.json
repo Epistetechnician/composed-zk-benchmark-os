@@ -10,18 +10,18 @@
     },
     {
       "path": "experiments/continual_learning/gemma3_fineweb_edu_replication_h100_v2_contract.py",
-      "sha256": "03ffc8274702f6c99829e1ccacdb4c6cbc9d358281ec9c051b8169b2f9d36f21"
+      "sha256": "bc856c22e3c17343b82c91e67cd1fe80e4291957509adc3957ab0d2d1b8b424c"
     },
     {
       "path": "experiments/continual_learning/tests/test_gemma3_fineweb_edu_replication_h100_v2_contract.py",
-      "sha256": "bf7d327feec7b820194629b5d3a2931003da514a9b04e7492e0be4da24e49a61"
+      "sha256": "315de8e34b537e9f1b29814be54027b386b231334f449c36c55d17753a463ae8"
     },
     {
       "path": "AGENTS.md",
-      "sha256": "43b7553003e34793ac60b37411b4cbed1b1af3b3605af907fe683f29b9d57a70"
+      "sha256": "3ca4f128dc0ce64aecbbf719d33f958465d24a5d210a7f8807dc927bb003db80"
     }
   ],
-  "manifest_sha256": "83d22d88aaf0b336d13bdeb02b81e68700629635ec99afdc0187069424fdfcdb",
+  "manifest_sha256": "3380c209b20f8ec95ff73da2faa9ec66161cc98db8ee727a0e47b86361a3604a",
   "schema": "gemma3-fineweb-edu-replication-h100-v2-implementation",
   "state_slice": "continual-learning-gemma3-fineweb-edu-replication-h100-v2"
 }

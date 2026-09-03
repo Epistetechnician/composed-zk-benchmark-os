@@ -155,6 +155,23 @@ def test_result_root_rejects_extra_directory_and_publish_before_validation(tmp_p
         contract.publish_no_replace(staging, final, snapshot)
 
 
+def test_publish_reserves_destination_without_rename_race(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    staging = tmp_path / "staging"
+    staging.mkdir()
+    for name in ("provider-receipt.json", "result.json", "result-receipt.json"):
+        (staging / name).write_text("{}\n", encoding="utf-8")
+    snapshot = contract.validate_result_root(staging)
+
+    def unexpected_rename(*_args: object, **_kwargs: object) -> None:
+        raise AssertionError("publication must not use replace-capable rename")
+
+    monkeypatch.setattr(contract.os, "rename", unexpected_rename)
+    final = contract.publish_no_replace(staging, tmp_path / "published", snapshot)
+    assert contract.validate_result_root(final) == snapshot
+
+
 def test_result_root_seal_detects_post_validation_mutation(tmp_path: Path) -> None:
     root = tmp_path / "staging"
     root.mkdir()

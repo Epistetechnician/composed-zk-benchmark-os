@@ -1,0 +1,49 @@
+{
+  "state_slice": "continual-learning-minimind-domain-specific-v3",
+  "protocol": "minimind-domain-specific-sequence-v3",
+  "protocol_path": "docs/research/continual-learning/283-minimind-domain-specific-v3-protocol.md",
+  "review_packet_path": "docs/research/continual-learning/284-minimind-domain-specific-v3-review-packet.md",
+  "review_status": "PENDING_INDEPENDENT_REVIEW",
+  "claim_ceiling": "LocalDevelopmentMiniMindDomainSequenceSyntheticOnly",
+  "source": {
+    "url": "https://github.com/jingyaogong/minimind",
+    "commit": "7a6fddd63a30c06b2fdd5fac4089922b29bc841b",
+    "external_checkout": "/Users/shaanp/Documents/research-artifacts/continual-learning-minimind-domain-specific-v3-source-20260902",
+    "manifest_sha256": "db01cc092f7accde8bd5dd442aea4c0f28739155fe76de04bbab634298b44252"
+  },
+  "corpus": {
+    "identity": "continual-learning-minimind-domain-specific-v3-fresh-corpus-20260902",
+    "manifest": "/Users/shaanp/Documents/research-artifacts/continual-learning-minimind-domain-specific-v3-corpus-20260902/corpus-manifest.json",
+    "manifest_sha256": "b26fc1e62e8cd759911a577bf57dd84b9319fc6e0ec890a0af83c32e7fa984ba"
+  },
+  "trust_bundle": {
+    "path": "/Users/shaanp/Documents/research-artifacts/continual-learning-minimind-domain-specific-v3-trust-bundle-20260902.json",
+    "file_sha256": "6263ffeb3ca674f41b58f62f8f4b90f3a7f2903563677a0e4f8d9a4521d9ac27"
+  },
+  "operator_binding": {
+    "path": "/Users/shaanp/Documents/research-artifacts/continual-learning-minimind-domain-specific-v3-operator-binding-20260902.json",
+    "required": true
+  },
+  "synthetic_artifact": {
+    "root": "/Users/shaanp/Documents/research-artifacts/continual-learning-minimind-domain-specific-v3-synthetic-20260902",
+    "disposition": "SyntheticCandidate",
+    "trial_count": 108,
+    "contract_file_sha256": "87c3a560009efdc02aa5f3435a85a641d927ea48a8feb3007820d49db4495f72",
+    "result_file_sha256": "856037b04076d60040ae47fa166853d1858817746f35282968e11191699b5bfd",
+    "source_manifest_file_sha256": "c0f9a16c209373e242e127651dddf142a6884d6c978b2eb1a35ccb3b5c436e46"
+  },
+  "execution": {
+    "training_executed": false,
+    "model_loaded": false,
+    "inference_executed": false,
+    "network_access": false,
+    "provider_called": false,
+    "model_execution_authorized": false
+  },
+  "implementation_paths": [
+    "experiments/continual_learning/minimind_domain_specific_v3.py",
+    "experiments/continual_learning/validate_minimind_domain_specific_v3.py",
+    "experiments/continual_learning/tests/test_minimind_domain_specific_v3.py"
+  ],
+  "state_slice_rule": "Every mutation in this phase names state slice continual-learning-minimind-domain-specific-v3."
+}

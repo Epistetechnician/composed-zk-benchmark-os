@@ -16,6 +16,7 @@ import json
 import math
 import os
 import re
+import stat
 from pathlib import Path
 from typing import Any, Callable, Mapping, Sequence
 
@@ -299,11 +300,62 @@ def assert_unchanged(root: Path, before: Mapping[str, str]) -> None:
 def publish_no_replace(
     staging: Path, final: Path, validated_snapshot: Mapping[str, str]
 ) -> Path:
-    """Publish a validated sibling staging directory without overwriting final."""
+    """Publish a validated sibling staging directory without overwriting final.
+
+    The final directory is reserved with an exclusive mkdir before any bytes
+    are copied. Source files are opened with no-follow semantics and copied
+    from those descriptors, so replacing the staging path after validation
+    cannot substitute different content. A partial final root is retained on
+    failure, making the failed publication fail closed on retry.
+    """
     if final.exists() or final.is_symlink():
         raise FileExistsError("final result root already exists")
     if staging.parent != final.parent:
         raise ValueError("staging and final roots must share a parent")
+    if staging.is_symlink() or not staging.is_dir():
+        raise ValueError("staging root must be a real directory")
+    if final.parent.is_symlink() or not final.parent.is_dir():
+        raise ValueError("final parent must be a real directory")
+    if set(validated_snapshot) != set(RESULT_FILES):
+        raise ValueError("validated result snapshot is not the exact file set")
     assert_unchanged(staging, validated_snapshot)
-    os.rename(staging, final)
+    try:
+        final.mkdir(mode=0o700)
+    except FileExistsError as error:
+        raise FileExistsError("final result root already exists") from error
+
+    for relative in sorted(RESULT_FILES):
+        source = staging / relative
+        destination = final / relative
+        source_fd = os.open(source, os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0))
+        try:
+            if not stat.S_ISREG(os.fstat(source_fd).st_mode):
+                raise ValueError(f"staging entry is not a regular file: {relative}")
+            destination_fd = os.open(
+                destination,
+                os.O_WRONLY | os.O_CREAT | os.O_EXCL,
+                0o444,
+            )
+            try:
+                hasher = hashlib.sha256()
+                while True:
+                    chunk = os.read(source_fd, 1024 * 1024)
+                    if not chunk:
+                        break
+                    hasher.update(chunk)
+                    view = memoryview(chunk)
+                    while view:
+                        written = os.write(destination_fd, view)
+                        view = view[written:]
+                os.fsync(destination_fd)
+            finally:
+                os.close(destination_fd)
+        finally:
+            os.close(source_fd)
+        if hasher.hexdigest() != validated_snapshot[relative]:
+            raise ValueError(f"staging entry changed during publication: {relative}")
+        os.chmod(destination, 0o444)
+
+    assert_unchanged(final, validated_snapshot)
+    final.chmod(0o555)
     return final

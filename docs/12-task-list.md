@@ -2,6 +2,23 @@
 
 Each phase names goal, deliverables, dependencies, validation gate, anti-goals, and exit criteria.
 
+## Astral Gemma 3 Causal Feature-Bundle Effects V3
+
+Status: V2 is terminal `NoCandidate`; V3 is a fresh jointly causal bundle
+protocol and implementation slice pending a positive hard USD ceiling, fresh
+packet freeze, independent signed `ACCEPT`, and one bounded GiveMeANode
+qualification.
+
+State slice: `astral-trace-completeness-gemma3-causal-feature-bundle-effects-v3`.
+
+The V3 treatment is simultaneous ablation/replacement of one predata-selected
+three-feature SAE bundle. Family-level joint and singleton effects define
+`tau_B` and `kappa_B`; fit/tune locks precede fresh assessment scrubbing. V2
+scientific artifacts are excluded as inputs. Raw custody is external,
+owner-only, ephemeral, and aggregate-only publication is required. No node
+allocation or assessment is authorized until the exact packet receives a
+genuinely independent Ed25519 `ACCEPT`.
+
 ## Goal 1: Oak Lab Experience-Learning Baselines V1
 
 Status: local executable baseline kernel complete; real-dataset, hardware, and
