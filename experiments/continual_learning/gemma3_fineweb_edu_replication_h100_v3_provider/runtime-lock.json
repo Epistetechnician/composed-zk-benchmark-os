@@ -1,0 +1,16 @@
+{
+  "schema": "gemma3-fineweb-edu-replication-h100-v3-runtime-lock",
+  "state_slice": "continual-learning-gemma3-fineweb-edu-replication-h100-v3",
+  "python": "3.11",
+  "accelerate": "1.6.0",
+  "pytorch": "2.6.0",
+  "transformers": "4.51.3",
+  "safetensors": "0.5.3",
+  "tokenizers": "0.21.1",
+  "pyarrow": "24.0.0",
+  "cuda_runtime": "12.4",
+  "dtype": "bfloat16",
+  "gpu_required": "NVIDIA H100",
+  "network_policy": "network-none-v3",
+  "package_install_at_runtime": false
+}

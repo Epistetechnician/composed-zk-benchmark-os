@@ -1,0 +1,36 @@
+{
+  "state_slice": "continual-learning-minimind-domain-specific-v1",
+  "protocol": "minimind-domain-specific-sequence-v1",
+  "protocol_path": "docs/research/continual-learning/273-minimind-domain-specific-v1-protocol.md",
+  "review_packet_path": "docs/research/continual-learning/274-minimind-domain-specific-v1-review-packet.md",
+  "review_status": "PENDING_INDEPENDENT_REVIEW",
+  "claim_ceiling": "LocalDevelopmentMiniMindDomainSequenceSyntheticOnly",
+  "source": {
+    "url": "https://github.com/jingyaogong/minimind.git",
+    "commit": "7a6fddd63a30c06b2fdd5fac4089922b29bc841b",
+    "external_checkout": "/Users/shaanp/Documents/research-artifacts/continual-learning-minimind-domain-specific-v1-source-20260902",
+    "manifest_sha256": "0289a66fa4076c917aa9cf76a0df64a0900d5c805f76ee395d95e75ec5139e21"
+  },
+  "synthetic_artifact": {
+    "root": "/Users/shaanp/Documents/research-artifacts/continual-learning-minimind-domain-specific-v1-synthetic-20260902-r2",
+    "contract_sha256": "d4671e119eca4205dde1fca832f74024a289d9891409809fd71cfe6a3359a401",
+    "result_sha256": "0aeaa0339f8364d92da805380cb9d808f7e5829c7b77d61b9c1f8856300b41ee",
+    "independent_validation": "valid",
+    "disposition": "SyntheticCandidate",
+    "locked_arm": "domain_adapters",
+    "trial_count": 108
+  },
+  "execution": {
+    "training_executed": false,
+    "model_loaded": false,
+    "inference_executed": false,
+    "network_access": false,
+    "provider_called": false,
+    "model_execution_authorized": false
+  },
+  "implementation_paths": [
+    "experiments/continual_learning/minimind_domain_specific_v1.py",
+    "experiments/continual_learning/validate_minimind_domain_specific_v1.py",
+    "experiments/continual_learning/tests/test_minimind_domain_specific_v1.py"
+  ]
+}

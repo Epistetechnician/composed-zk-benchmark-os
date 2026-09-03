@@ -1,5 +1,29 @@
 # Agent Rules
 
+Explicit Astral Gemma 3 causal-feature-bundle-effects V3 is authorized for
+additive implementation and one bounded qualification only under named state
+slice `astral-trace-completeness-gemma3-causal-feature-bundle-effects-v3`.
+V2 remains permanently terminal `NoCandidate`; its scientific corpus,
+activations, effects, predictions, and results are not V3 inputs. V3 tests a
+new jointly causal, non-additive three-feature SAE-bundle theory with a fresh
+144-family corpus (`48/48/48` fit/tune/assessment), fresh external owner-only
+`0700` custody root, family-level repeat collapse, fixed fit-half coactivation
+selection, exact joint/singleton/replacement/activation/path interchange, a
+fixed seven-term ridge abstraction, fixed controls, Holm correction, `0.80`
+power at ICC `0.50`, three repeats, zero attrition, fail-closed missingness,
+prediction locking, and fresh held-out causal scrubbing. The claim ceilings
+are `LocalDevelopmentGemma3JointBundleCausalQualificationV3` and, only if
+all held-out gates pass, `LocalDevelopmentGemma3HeldOutJointBundleCausalAssessmentV3`.
+Implementation is allowed; model execution requires a fresh packet, exact
+provider/node identity, a positive user-authorized hard USD ceiling, and a
+genuinely independent packet-bound signed Ed25519 `ACCEPT`. The operator may
+not self-sign. Raw traces may exist only below the V3 external custody root
+for at most 72 hours and must be deleted before final validation. No V2
+rerun, retuning, V2 scientific-artifact reuse, Stage 0C/Stage 1 promotion,
+Evidence Ledger mutation, introspection/self-modeling claim, benchmark claim,
+or production-readiness claim is authorized. Every mutation in this phase
+names state slice `astral-trace-completeness-gemma3-causal-feature-bundle-effects-v3`.
+
 Explicit Astral Gemma 3 causal-feature-effects V2 is now terminally closed as
 `NoCandidate` under named state slice
 `astral-trace-completeness-gemma3-causal-feature-effects-v2`. The one bounded

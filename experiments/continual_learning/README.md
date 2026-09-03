@@ -1,5 +1,131 @@
 # Continual-learning protocol harness
 
+## MiniMind domain-specific continual-learning V1
+
+The separately named state slice
+`continual-learning-minimind-domain-specific-v1` integrates a pinned external
+MiniMind source checkout with an exact-synthetic domain-sequence harness. It
+compares untouched, joint-oracle, sequential full-update, cumulative LoRA,
+fixed replay, and per-domain adapter controls over three ordered domains.
+
+The canonical synthetic artifact is independently validated and classified
+`SyntheticCandidate`, with `domain_adapters` selected on tune data. This is a
+contract qualification only: the real MiniMind runner is sealed until a fresh
+packet-bound independent Ed25519 `ACCEPT` exists.
+
+Run the fixture and independent readback validator with:
+
+```text
+PYTHONDONTWRITEBYTECODE=1 python -B -m experiments.continual_learning.minimind_domain_specific_v1 \
+  --synthetic-output /Users/shaanp/Documents/research-artifacts/continual-learning-minimind-domain-specific-v1-synthetic-20260902-r2
+
+PYTHONDONTWRITEBYTECODE=1 python -B -m experiments.continual_learning.validate_minimind_domain_specific_v1 \
+  /Users/shaanp/Documents/research-artifacts/continual-learning-minimind-domain-specific-v1-synthetic-20260902-r2
+```
+
+After a fresh independent receipt and external corpus manifest open the real
+path with:
+
+```text
+PYTHONDONTWRITEBYTECODE=1 python -B -m experiments.continual_learning.minimind_domain_specific_v1 \
+  --model-output /Users/shaanp/Documents/research-artifacts/continual-learning-minimind-domain-specific-v1-model-YYYYMMDD \
+  --source /Users/shaanp/Documents/research-artifacts/continual-learning-minimind-domain-specific-v1-source-20260902 \
+  --execution-receipt /external/review/minimind-domain-specific-v1-execution-receipt.json \
+  --corpus-manifest /external/corpus/minimind-domain-specific-v1-corpus.json \
+  --device cpu \
+  --steps-per-stage 1
+```
+
+The corpus manifest is a JSON object with exactly `domain_a`, `domain_b`, and
+`domain_c`; each domain contains exactly `fit`, `tune`, and `assessment` file
+paths to external JSONL files with non-empty `text` fields.
+
+## MiniMind domain-specific continual-learning V2
+
+V2 is a fresh continuation after V1's independent rejection. It uses new
+`materials`, `clinical`, and `finance` synthetic domains and does not import
+V1 scientific artifacts. Its real path fixes the V1 review findings with
+explicit pre-assessment locking, complete receipt digest binding, exact roster
+checks, tokenization attrition rejection, serialized checkpoint round trips,
+repeatability checks, equal token budgets, and `0700` aggregate output roots.
+
+The V2 synthetic artifact is independently valid as
+`SyntheticCandidate`; the fresh independent review returned `REJECT`, so model
+execution remains sealed. The rejection is recorded in
+`docs/research/continual-learning/282-minimind-domain-specific-v2-independent-review-rejection-2026-09-02.md`.
+
+Run the V2 fixture and validator with:
+
+```text
+PYTHONDONTWRITEBYTECODE=1 python -B -m experiments.continual_learning.minimind_domain_specific_v2 \
+  --synthetic-output /Users/shaanp/Documents/research-artifacts/continual-learning-minimind-domain-specific-v2-synthetic-20260902-r2 \
+  --source /Users/shaanp/Documents/research-artifacts/continual-learning-minimind-domain-specific-v2-source-20260902
+
+PYTHONDONTWRITEBYTECODE=1 python -B -m experiments.continual_learning.validate_minimind_domain_specific_v2 \
+  /Users/shaanp/Documents/research-artifacts/continual-learning-minimind-domain-specific-v2-synthetic-20260902-r2
+```
+
+V2 protocol, review packet, manifest, and execution record:
+
+- `docs/research/continual-learning/278-minimind-domain-specific-v2-protocol.md`
+- `docs/research/continual-learning/279-minimind-domain-specific-v2-review-packet.md`
+- `docs/research/continual-learning/280-minimind-domain-specific-v2-implementation-manifest.json`
+- `docs/research/continual-learning/281-minimind-domain-specific-v2-execution-record-2026-09-02.md`
+
+## MiniMind domain-specific continual-learning V3
+
+V3 is a fresh continuation after V2's independent `REJECT`. It adds an
+external trust-bundle and root-signed reviewer registry, aggregate-only
+synthetic/model output schemas, fresh corpus identity with global document and
+author disjointness, explicit V1/V2 prior-root exclusion, strict typed guards,
+and receipt binding for the current source and corpus manifests. The fresh
+synthetic factorial has 108 aggregate trials and independently validates as
+`SyntheticCandidate`. A new independent certificate-backed packet-bound
+Ed25519 `ACCEPT` was obtained and revalidated before the bounded offline
+MiniMind run. The model contract independently validates as
+`ModelContractValid` with 78 aggregate trials. This remains qualification
+evidence only; no checkpoint was retained and no general continual-learning
+or SOTA claim is supported.
+
+Run the V3 fixture and independent validator with:
+
+```text
+PYTHONDONTWRITEBYTECODE=1 python -B -m experiments.continual_learning.minimind_domain_specific_v3 \
+  --synthetic-output /Users/shaanp/Documents/research-artifacts/continual-learning-minimind-domain-specific-v3-synthetic-20260902 \
+  --source /Users/shaanp/Documents/research-artifacts/continual-learning-minimind-domain-specific-v3-source-20260902
+
+PYTHONDONTWRITEBYTECODE=1 python -B -m experiments.continual_learning.validate_minimind_domain_specific_v3 \
+  /Users/shaanp/Documents/research-artifacts/continual-learning-minimind-domain-specific-v3-synthetic-20260902
+```
+
+The fresh corpus manifest is external and must be revalidated before model
+import. A valid receipt is required before the tiny offline fit/tune/lock/
+assessment campaign.
+
+V3 protocol, review packet, implementation manifest, and execution record:
+
+- `docs/research/continual-learning/283-minimind-domain-specific-v3-protocol.md`
+- `docs/research/continual-learning/284-minimind-domain-specific-v3-review-packet.md`
+- `docs/research/continual-learning/285-minimind-domain-specific-v3-implementation-manifest.json`
+- `docs/research/continual-learning/286-minimind-domain-specific-v3-execution-record-2026-09-02.md`
+
+## MiniMind state-of-the-art comparison audit V1
+
+The fresh audit slice
+`continual-learning-minimind-state-of-the-art-comparison-audit-v1` defines
+the published task-incremental, domain-incremental, and experience-incremental
+lanes, required controls and frontier method roster, local-evidence map,
+fair-budget metrics, state-channel accounting, data requirements, and claim
+ladder. It does not authorize a larger model campaign. See
+`docs/research/continual-learning/287-minimind-state-of-the-art-comparison-audit-v1.md`.
+
+Protocol, review packet, implementation manifest, and execution record:
+
+- `docs/research/continual-learning/273-minimind-domain-specific-v1-protocol.md`
+- `docs/research/continual-learning/274-minimind-domain-specific-v1-review-packet.md`
+- `docs/research/continual-learning/275-minimind-domain-specific-v1-implementation-manifest.json`
+- `docs/research/continual-learning/276-minimind-domain-specific-v1-execution-record-2026-09-02.md`
+
 ## Plasticity recovery V1 exact-synthetic factorial
 
 `plasticity_recovery_v1.py` implements the separately authorized

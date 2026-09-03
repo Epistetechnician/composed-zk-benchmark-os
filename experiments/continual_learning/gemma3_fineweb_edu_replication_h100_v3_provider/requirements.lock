@@ -1,0 +1,8 @@
+# State slice: continual-learning-gemma3-fineweb-edu-replication-h100-v3.
+# These exact requirements are installed during image build. Runtime installation is forbidden.
+accelerate==1.6.0
+torch==2.6.0
+pyarrow==24.0.0
+safetensors==0.5.3
+tokenizers==0.21.1
+transformers==4.51.3
