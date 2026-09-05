@@ -81,6 +81,635 @@ Surface DSL
   -> scored report
 ```
 
+Statebook publication status: the named slice
+`statebook-whitepaper-prd-and-publication-media-boundary` is
+`DocumentationOnly` at `Level0DesignNote`. The whitepaper, PRD, source index,
+original media, and two publication PDFs create no execution, margin, custody,
+pause, signing, oracle, settlement, evidence-promotion, or production authority.
+The 20 July 2026 visual refresh provides thirteen original, source-captioned
+illustrations and page-by-page reviewed PDF publications; it remains explanatory
+media only and creates no financial, security, incident, or settlement evidence.
+The synchronized PRD is published as
+[GitHub issue #17](https://github.com/Epistetechnician/composed-zk-benchmark-os/issues/17)
+with `ready-for-agent`; that label means the specification is bounded enough for
+a future separately authorized phase, not that the phase is authorized now.
+
+Statebook P1 authorization status: the named docs-first slice
+`statebook-p1-core-semantic-fixtures-boundary` authorizes a separately committed
+`statebook-p1-core-semantic-fixtures` implementation limited to an isolated
+`statebook-core` crate, synthetic JSON fixtures, deterministic exact-arithmetic
+normalization, semantic-completeness reports, source-lineage receipts, and a
+canonical `StateKeyV1`. It grants no payoff evaluation, residual, execution,
+capital, settlement, assurance, recovery, HSAI, network, filesystem-write, or
+external authority.
+
+Statebook P1 implementation status: `statebook-core` is implemented locally and
+fixture-backed. Only complete closed-schema terminal indicator inputs can lower
+to an opaque validated contract. The frozen 701-byte V1 preimage hashes to
+`f1662f3fb5a10c074680c0baf76ba488b7230337456358be92f3127d8a632c08` in
+both production and implementation-diverse test encoders. This is deterministic
+regression evidence only, not economic equivalence, execution, settlement,
+proof, independent verification, or production readiness.
+
+Phase 797 status: the named docs-first slice
+`hsai-native-transcript-source-scan-correction-boundary` freezes one exact
+future correction to the HSAI claim-boundary scanner. It permits no Rust change
+in this commit and no exception outside the two named Phase 792/794 integration
+test files, exact source lines, and exact enclosing test functions.
+
+Phase 798 status: the named implementation slice
+`hsai-native-transcript-source-scan-authorized-test-exceptions` corrects the
+inherited HSAI gate without broadening runtime authority. Exact and near-miss
+tests bind every exception to the committed Phase 792/794 security-test surface.
+
+Statebook P2 authorization status: the named docs-first slice
+`statebook-p2-payoff-residual-engine-boundary` freezes one future exact
+finite-domain indicator payoff and asset-vector residual engine. It does not
+authorize implementation in this commit, alter P1 identity, or grant execution,
+capital, settlement, external-I/O, or evidence authority.
+
+Statebook P2 implementation status: the named slice
+`statebook-p2-payoff-residual-engine` is implemented inside `statebook-core`.
+It evaluates only P1-validated indicator contracts over at most 256 declared
+states and 64 candidate legs, applies exact unit scaling and contract-level
+rounding, aggregates duplicate StateKeys deterministically, and reports
+non-netted per-asset residuals as `ExactOnDeclaredDomain`,
+`ApproximateOnDeclaredDomain`, or `Incomplete`. Coordinate or arithmetic
+failure invalidates the whole numeric report. The frozen P1 StateKey remains
+unchanged. This is local regression evidence only and creates no execution,
+capital, settlement, external-I/O, or evidence authority.
+
+Statebook P3 authorization status: the named docs-first slice
+`statebook-p3-seven-completeness-reports-boundary` freezes a future isolated
+`statebook-settlement` crate. The future implementation may compose the
+unchanged P1 semantic and P2 payoff reports with bounded hermetic execution,
+capital, settlement, assurance, and versioned-path recovery reports. Every new
+status remains fixture-qualified; current roots are disclosed without P4
+assurance resolution; no aggregate boolean, score, action, P5 adapter, live
+source, external I/O, or authority exists. This commit adds no Rust or Cargo
+change. The follow-on documentation-only state slice
+`statebook-p3-closed-identity-bound-correction` aligns the exact assurance and
+recovery limits with their closed identities: nine unique properties and
+fourteen implementation-owned paths.
+
+The documentation-only state slice
+`statebook-p3-capital-context-binding-correction` also requires every synthetic
+capital receipt to bind the full fixture authority/account/model/rule/context
+digest. Mismatch rejects composition; coherent rebinding remains a different
+hermetic fixture and creates no clearing or margin authority.
+
+Statebook publication status: the named slice
+`statebook-whitepaper-prd-and-publication-media-boundary` is
+`DocumentationOnly` at `Level0DesignNote`. The whitepaper, PRD, source index,
+original media, and two publication PDFs create no execution, margin, custody,
+pause, signing, oracle, settlement, evidence-promotion, or production authority.
+The synchronized PRD is published as
+[GitHub issue #17](https://github.com/Epistetechnician/composed-zk-benchmark-os/issues/17)
+with `ready-for-agent`; that label means the specification is bounded enough for
+a future separately authorized phase, not that the phase is authorized now.
+
+Statebook P1 authorization status: the named docs-first slice
+`statebook-p1-core-semantic-fixtures-boundary` authorizes a separately committed
+`statebook-p1-core-semantic-fixtures` implementation limited to an isolated
+`statebook-core` crate, synthetic JSON fixtures, deterministic exact-arithmetic
+normalization, semantic-completeness reports, source-lineage receipts, and a
+canonical `StateKeyV1`. It grants no payoff evaluation, residual, execution,
+capital, settlement, assurance, recovery, HSAI, network, filesystem-write, or
+external authority.
+
+Statebook P1 implementation status: `statebook-core` is implemented locally and
+fixture-backed. Only complete closed-schema terminal indicator inputs can lower
+to an opaque validated contract. The frozen 701-byte V1 preimage hashes to
+`f1662f3fb5a10c074680c0baf76ba488b7230337456358be92f3127d8a632c08` in
+both production and implementation-diverse test encoders. This is deterministic
+regression evidence only, not economic equivalence, execution, settlement,
+proof, independent verification, or production readiness.
+
+
+Statebook P2 authorization status: the named docs-first slice
+`statebook-p2-payoff-residual-engine-boundary` freezes one future exact
+finite-domain indicator payoff and asset-vector residual engine. It does not
+authorize implementation in this commit, alter P1 identity, or grant execution,
+capital, settlement, external-I/O, or evidence authority.
+
+Statebook P2 implementation status: the named slice
+`statebook-p2-payoff-residual-engine` is implemented inside `statebook-core`.
+It evaluates only P1-validated indicator contracts over at most 256 declared
+states and 64 candidate legs, applies exact unit scaling and contract-level
+rounding, aggregates duplicate StateKeys deterministically, and reports
+non-netted per-asset residuals as `ExactOnDeclaredDomain`,
+`ApproximateOnDeclaredDomain`, or `Incomplete`. Coordinate or arithmetic
+failure invalidates the whole numeric report. The frozen P1 StateKey remains
+unchanged. This is local regression evidence only and creates no execution,
+capital, settlement, external-I/O, or evidence authority.
+
+Statebook P3 authorization status: the named docs-first slice
+`statebook-p3-seven-completeness-reports-boundary` freezes a future isolated
+`statebook-settlement` crate. The future implementation may compose the
+unchanged P1 semantic and P2 payoff reports with bounded hermetic execution,
+capital, settlement, assurance, and versioned-path recovery reports. Every new
+status remains fixture-qualified; current roots are disclosed without P4
+assurance resolution; no aggregate boolean, score, action, P5 adapter, live
+source, external I/O, or authority exists. This commit adds no Rust or Cargo
+change. The follow-on documentation-only state slice
+`statebook-p3-closed-identity-bound-correction` aligns the exact assurance and
+recovery limits with their closed identities: nine unique properties and
+fourteen implementation-owned paths.
+
+The documentation-only state slice
+`statebook-p3-capital-context-binding-correction` also requires every synthetic
+capital receipt to bind the full fixture authority/account/model/rule/context
+digest. Mismatch rejects composition; coherent rebinding remains a different
+hermetic fixture and creates no clearing or margin authority.
+
+Statebook P4 authorization status: the named docs-first slice
+`statebook-p4-settlement-simulator-boundary` freezes a future pure deterministic settlement
+transition kernel inside the existing `statebook-settlement` crate. The future implementation
+may evaluate synthetic externalization requests through hard gates, assurance resolution,
+conservative valuation, linked-plan and obligation validation, multi-axis exactly-once
+budgets, queue and challenge transitions, circuit breakers, hysteresis, and recovery
+transitions under an injected clock. Outputs remain non-authoritative decision records.
+All P1/P2/P3 identities stay unchanged. No new crate, value movement, P5 adapter, P6 source,
+P7 authority, live I/O, or runtime action is authorized. This commit adds no Rust or Cargo
+change.
+
+## Statebook P4 Settlement Simulator Implementation
+
+The named state slice `statebook-p4-settlement-simulator` is implemented as an additive
+extension of `statebook-settlement`. It exposes `decide_and_transition` and
+`parse_settlement_scenario_v1`, a serialize-only non-authoritative `DecisionRecordV1`,
+fail-closed hard gates with zero instant release on fail or unknown, conservative
+valuation, assurance tier selection, linked-plan and obligation validation, budget
+ledger CAS reservations, queue and breaker interaction, and domain-separated P4 TLV
+digests with an independent `ring` golden check.
+
+Focused P4 format, test, and warning-denied Clippy gates pass, as do unchanged
+`statebook-core` tests and unchanged P3 completeness regressions. See
+[docs/statebook-p4-settlement-simulator-implementation-notes.md](docs/statebook-p4-settlement-simulator-implementation-notes.md).
+
+This is local hermetic fixture regression evidence only. No value moves.
+
+Statebook P5 authorization status: the named docs-first slice
+`statebook-p5-evidence-adapters-and-report-bundles-boundary` freezes a future portable
+digest-bound audit-bundle and narrow HSAI/fixture adapter surface in at most
+`statebook-report`. All P1-P4 identities and the P4 kernel stay unchanged. No P6
+external source, P7 authority, network, credential, value movement, or runtime action is
+authorized.
+
+## Statebook P5 Evidence Adapters And Report Bundles Implementation
+
+The named state slice `statebook-p5-evidence-adapters-and-report-bundles` is implemented as
+a new `statebook-report` crate with:
+
+- closed manifest and record file sets with domain-separated P5 TLV digests;
+- materialization plus independent fail-closed readback validation;
+- hermetic fixture adapters and ClaimEnvelope-shaped fixture doubles without `hsai-*`
+  production dependencies;
+- proposal-only decision handoffs that always preserve `grants_authority=false`;
+- an independent `ring` golden encoder for every new public digest family.
+
+Focused P5 format, test, and warning-denied Clippy gates pass, as do unchanged
+`statebook-core` and unchanged P3/P4 `statebook-settlement` regressions. See
+[docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md](docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md).
+
+This is local hermetic fixture regression and readback evidence only. No value moves.
+
+Statebook P6 authorization status: the named docs-first slice
+`statebook-p6-read-only-external-sources-boundary` freezes a captured-first
+read-only external import surface in `statebook-source`. The separately committed
+implementation slice `statebook-p6-read-only-external-sources` adds isolated
+`crates/statebook-source` with the frozen `synthetic-clearing-terms-v1` profile,
+provenance registry, fail-closed import receipts, and domain-separated P6 digests
+with an independent `ring` golden check. Live network clients remain deferred.
+All P1-P5 identities stay unchanged. No P7 authority, trading, signing, custody,
+or value movement is authorized. See
+[docs/statebook-p6-read-only-external-sources-implementation-notes.md](docs/statebook-p6-read-only-external-sources-implementation-notes.md).
+
+This is local hermetic captured-source import regression evidence only. No value moves.
+
+Statebook P7 authorization status: the named docs-first slice
+`statebook-p7-authority-integration-preflight-boundary` freezes a fail-closed
+authority-integration preflight surface in `statebook-authority`. The separately
+committed implementation slice `statebook-p7-authority-integration-preflight` adds
+isolated `crates/statebook-authority` with Stage 6 package validation, mandatory
+`grants_authority=false` handoff binding, rejection of `production_gate=authorized`,
+and domain-separated P7 digests with an independent `ring` golden check. Outcomes are
+limited to `Incomplete` and `Denied`. No controller is invoked. All P1-P6 identities
+stay unchanged. See
+[docs/statebook-p7-authority-integration-preflight-implementation-notes.md](docs/statebook-p7-authority-integration-preflight-implementation-notes.md).
+
+This is local hermetic authority-preflight regression evidence only. No value moves.
+
+## Current Implementation Status
+
+- `zkbench-core` exists as a Rust core crate.
+- v0 DSL structs exist for Surface DSL, Parsed AST, Semantic IR, Oracle, Expected Verdict, Backend Outcome, Evidence Record, Claim Boundary, Benchmark Family, Benchmark Instance, Mutation Variant metadata, Replay Manifest metadata, and Score Report primitives.
+- YAML fixtures parse.
+- Semantic IR lowering exists.
+- The local oracle evaluates executable traces for a small v0 subset.
+- Deterministic generation exists for BaselineFsm, BranchingFsm, BoundedCounterLoop, NestedLoop, GuardHeavyMachine, RecursiveEnvelope, MemoryHeavyStateMachine, PublicPrivateBoundaryStress, and ZkMlControlFlowMixed.
+- Concrete generated Benchmark Instances carry config, provenance, Surface DSL, Semantic IR, traces, expected verdicts, and Level1LocalReplay claim boundaries.
+- Mutation engine v0 exists for all 14 declared `MutationClass` variants.
+- Mutation distinguishability scoring composes each mutation's `ExpectedVerdict` with each `BackendOutcome` via the existing `classify_result` into a deterministic matrix (`Level1LocalReplay`).
+- Oracle completeness audit reports which generated constructs the shipped v0 oracle can evaluate locally (`Level0DesignNote`).
+- Formal lane interface stub provides the `FormalVerifier`/`NoopFormalVerifier`/`FormalLane` seam for the "formal hooks" half of the SOTA wedge; the shipped verifier is declared-only and capped at `Level0DesignNote`.
+- Mutation × formal cross-product mapping maps each of the 14 declared `MutationClass` variants to the `FormalPropertyScope` it most directly stress-tests (`Level0DesignNote`).
+- Mutation provenance records affected machine, transitions, guards/actions, fields when available, expected verdict, safety class, claim boundary, and notes.
+- Local JSON adapter exists for local oracle replay only.
+- Replay manifest serialization exists.
+- Local replay result serialization exists.
+- Evidence ledger persistence exists with a deterministic local digest chain.
+- Deterministic artifact digesting exists for local JSON and pack files.
+- Benchmark pack skeleton exists for local generated instances, mutation variants, replay manifests, replay results, ledgers, and conservative score reports.
+- zk-Harness dry-run adapter preparation exists.
+- zk-Harness adapter manifest serialization exists.
+- zk-Harness dry-run plan serialization exists.
+- Local benchmark packs can map into inert zk-Harness dry-run plans.
+- External-runner boundary exists.
+- Manual handoff bundle schema exists.
+- Artifact capture contract exists.
+- Provenance contract exists.
+- Result import validation schema exists.
+- Quarantine schema exists for future external result candidates.
+- zk-Harness dry-run plans can map into inert manual handoff bundles.
+- Synthetic result candidate JSON import exists for local fixtures only.
+- Artifact digest validation checks synthetic candidate references against caller-provided local bytes.
+- Provenance validation checks synthetic candidates against the local provenance contract.
+- Metric candidate validation rejects unsupported units, missing source refs, negative numeric values, and overclaiming notes.
+- Invalid synthetic result candidates are quarantined.
+- Valid synthetic result candidates normalize into pending-review drafts only.
+- Evidence append proposal primitives exist.
+- Manual review decision primitives exist.
+- Evidence acceptance policy primitives exist.
+- Evidence-record candidate primitives exist.
+- Evidence append preview primitives exist and do not mutate `EvidenceLedger`.
+- Level2 eligibility checker primitives exist for future-review readiness only.
+- Evidence review ledger persistence exists and remains separate from the accepted `EvidenceLedger`.
+- Proposal ledger persistence exists and is separate from the accepted `EvidenceLedger`.
+- Local soak runner exists for deterministic, sharded, resumable local-only stress studies.
+- Local soak run configuration, deterministic shard planning, shard manifests, checkpointing, report bundles, and artifact layout types exist.
+- An operator-facing `operator_soak_campaign` example exists under `crates/zkbench-core/examples/` for running an approved, repo-external local soak campaign through the shipped library surface without writing Rust. It reads a fixed authorized set of environment variables, requires an explicit acknowledgement, and emits a non-secret `Level0DesignNote` summary JSON.
+- Internal benchmark OS telemetry exists for generation, mutation, local oracle, local replay, pack read/write, proposal-preview counters, and local runner duration.
+- Local health report models exist and warn that local soak telemetry is not official benchmark evidence.
+- Failure corpus extraction exists with reproduction manifests and minimization metadata only.
+- Inert local audit-index metadata exists for summarizing existing local
+  report-bundle metadata without writing files, executing replay commands,
+  mutating source packs/reports/bundles, or creating accepted evidence.
+- Adjacent local audit-index output plumbing exists for exactly
+  `audit-index/audit-index-manifest.json` and
+  `audit-index/digests/audit-index-manifest.sha256`. The output remains a
+  `Level0DesignNote` local integrity summary and is not accepted evidence,
+  official benchmark evidence, ZK backend performance, or Level2+ evidence.
+- A versioned `ExperimentBundle` contract composes task configuration, data
+  identity, model/runtime identity, a sparse explicit `MechanismLedger`,
+  metrics, report, and digest-bound artifact references. Static plugin seams
+  exist for `ExperimentTask`, `ExperimentModel`, `MechanismCollector`, and
+  `Evaluator`, with one local JSON end-to-end plugin, factory-catalog dispatch, and
+  deterministic bundle validation. The slice remains capped at
+  `Level1LocalReplay` and does not
+  establish official benchmark evidence, interpretability, causal validity,
+  production readiness, or runtime authority.
+- `LocalJsonExperimentRunner` composes that concrete local plugin into the
+  adaptive nine-slot observability manifest, records one scheduler decision,
+  retains a digest-chained mechanism ledger, and stores a canonical typed
+  inner-to-outer artifact projection with fail-closed source and target digest
+  validation plus deterministic config transport/readback validation. Tier0
+  mechanism absence is explicit. A complete three-artifact transport readback
+  path validates inner bundle, config, and outer bundle bytes together. The
+  typed `ExperimentPacket` seam now materializes and strictly reads back that
+  packet under a caller-owned declared-file root with payload/manifest digest
+  sidecars, overwrite matching, symlink rejection, and protected-path checks.
+  The executable factory-catalog path validates descriptor-to-bundle output
+  binding for schema, plugin, model, collector, evaluator, and claim ceilings
+  before returning a bundle. The typed metadata registry is descriptor-only;
+  an explicit typed factory catalog owns plugin
+  construction while metadata serialization remains descriptor-only; the
+  catalog now proves a second pure-data metacognitive plugin through the same
+  output-binding path. `PluginCompositionRunner` now composes both the
+  metacognitive and Local JSON bundles through explicit nine-slot source-kind
+  bindings with digest and identity validation, and the
+  composition runner uses the same validated path. The durable packet seam now
+  accepts both the historical Local JSON config and the generic plugin config
+  through one typed transport interface, preserving canonical manifests,
+  payload digests, sidecars, symlink-aware writes, protected-root checks,
+  overwrite matching, and strict readback. Packet materialization also
+  preflights every existing path component so dangling and intermediate
+  symlinks cannot be followed during writes, and readback requires exact
+  canonical digest-sidecar bytes.
+  `ExperimentPacketJob` now owns the one-shot catalog-to-composition-to-write-
+  and-readback choreography for both registered plugins, rejecting unknown
+  plugins before output creation and returning only after typed packet and
+  manifest equality. `ExperimentPacketJobConfig` provides one validated typed
+  request value for those identities, provenance, output, and protected-path
+  invariants. `ExperimentPacketJobRequest` is the storage-independent identity
+  and provenance request, and `new_with_request_and_store` lets non-filesystem
+  adapters use the same choreography without a fake output root. The existing
+  config constructor remains the filesystem compatibility path.
+  `PluginCompositionPacketStore` keeps persistence behind
+  filesystem and non-durable in-memory adapters while allowing hermetic
+  choreography adapters for tests. Both production adapters share the
+  canonical packet-output builder; this adds no atomic-write guarantee,
+  external execution, evidence mutation, or runtime authority.
+  `KeyedPluginCompositionPacketStore` now binds materialization to a typed
+  plugin/experiment/run key and returns a manifest-digest receipt required for
+  readback. The filesystem and in-memory adapters reject stale or cross-run
+  receipt use; the historical unkeyed job constructor is routed through an
+  explicit `experiment_packet_store_compat` compatibility module while root
+  re-exports remain source-compatible. This is receipt-bound local metadata plumbing, not
+  publication, execution, evidence mutation, or runtime authority.
+  `ExperimentPacketJob::run_once_with_receipt` now exposes the validated packet
+  and its receipt together for caller-owned handoff or keyed follow-up;
+  existing `run_once` callers retain the output-only return type.
+  The additive `PluginCompositionIdentity` value centralizes the plugin,
+  experiment, and run tuple across requests, composition configs, runners, and
+  keyed stores without changing packet wire fields.
+  `ValidatedExperimentPluginOutput` now carries the descriptor-bound validated
+  bundle across catalog dispatch and both composition runners, while the
+  output-only validated method remains source-compatible.
+  outer composition remains
+  `Level0DesignNote`; it does not add external execution, model downloads,
+  privileged telemetry, accepted evidence, or runtime authority.
+- Phase S in-memory audit-index ergonomics now exists for one valid
+  `LocalAuditIndexManifest`: exact filters over manifest fields, deterministic
+  grouping and sorting, selected input ids, warning summaries, required
+  limitation labels, and deterministic Markdown rendering. It writes no files,
+  adds no CLI/UI/package runtime, constructs no cross-bundle index, performs no
+  external replay, populates no score axes, and creates no accepted, official,
+  backend-performance, or Level2+ evidence.
+- `docs/88-phase-s-audit-index-ergonomics-output-plumbing-spec.md` records the
+  docs-first boundary for future materialized ergonomics output: one selected
+  view JSON, one rendered Markdown file, two digest sidecars, output-root safety,
+  overwrite-drift rejection, source immutability, and required limitation-label
+  preservation. It authorizes no Rust implementation, generated ergonomics files,
+  CLI, UI, package runtime files, external replay, score-axis population, or
+  Level2+ evidence.
+- Phase S audit-index ergonomics output plumbing now materializes exactly
+  `audit-index-ergonomics/ergonomics-view.json`,
+  `audit-index-ergonomics/rendered/ergonomics-view.md`, and two digest sidecars
+  under a caller-owned local root. It rederives the view from the supplied
+  manifest/request, rejects protected path overlap, stale digests, symlinks,
+  unexpected files, partial bundles, and drift, and remains `Level0DesignNote`
+  local presentation metadata only.
+- `docs/90-whole-codebase-validation-report.md` records the full local
+  validation suite run after Phase S hardening, maps the suite to implemented
+  subsystems, and states the remaining coverage and live-execution gaps. It does
+  not claim per-function proof, line coverage, production readiness, official
+  benchmark evidence, ZK backend performance, Level2+ evidence, or accepted
+  Evidence Ledger mutation.
+- `docs/91-phase-t-cross-bundle-audit-index-boundary-spec.md` records the
+  docs-first boundary for future cross-bundle audit-index planning over
+  multiple existing local audit-index manifests. It authorizes no Rust
+  implementation, generated cross-bundle files, CLI, UI, package runtime files,
+  external replay, score-axis population, accepted Evidence Ledger mutation, or
+  Level2+ evidence.
+- Phase T in-memory cross-bundle audit-index planning now exists for two or
+  more valid `LocalAuditIndexManifest` values. It computes deterministic source
+  summaries, groups, duplicate/conflict signals, warning summaries, required
+  limitation labels, and Markdown while writing no files, adding no CLI/UI, and
+  creating no accepted, official, backend-performance, or Level2+ evidence.
+- `docs/93-phase-t-cross-bundle-audit-index-output-plumbing-spec.md` records
+  the docs-first boundary for future materialized Phase T output-root plumbing.
+  It centers protected-path overlap rejection and corrupted-output-root
+  non-repair before any writer/reader API, generated cross-bundle file,
+  command-line surface, UI dashboard, package runtime, external replay, official
+  benchmark evidence, ZK backend performance claim, score-axis population, or
+  Level2+ evidence promotion.
+- Phase T cross-bundle audit-index output plumbing now materializes exactly
+  `cross-bundle-audit-index/cross-bundle-view.json`,
+  `cross-bundle-audit-index/rendered/cross-bundle-view.md`, and two digest
+  sidecars under a caller-owned local root. It rederives the view from the
+  supplied request, rejects protected path overlap, stale digests, symlinks,
+  unexpected files, partial bundles, and drift, and remains `Level0DesignNote`
+  local presentation metadata only.
+- `docs/95-phase-u-local-benchmark-artifact-boundary-spec.md` records the
+  docs-first boundary for future generated local benchmark artifact bundles.
+  It permits no Rust implementation, generated artifact files, external replay,
+  official benchmark submission, accepted Evidence Ledger mutation, package
+  runtime, CLI/UI, ZK backend performance claim, score-axis population, or
+  Level2+ promotion in this slice.
+- Phase U local benchmark artifact packaging now exists as a Rust API. It
+  validates local artifact manifests, renders deterministic Markdown, writes
+  exactly one manifest JSON file, one rendered Markdown file, and two digest
+  sidecars under a caller-owned output root, rejects protected-path overlap,
+  symlink-resolved protected overlap, stale digests, symlinks, unexpected
+  files, partial bundles, and repair overwrites, and remains local
+  reproducibility packaging only.
+- `docs/98-phase-v-local-artifact-campaign-boundary-spec.md` records the
+  docs-first boundary for a future user-approved durable local artifact
+  campaign under an ignored output root. It authorizes no Rust implementation,
+  generated campaign files, external replay, official submission, accepted
+  Evidence Ledger mutation, score-axis population, ZK backend performance
+  claim, or Level2+ promotion in this slice.
+- Phase V local artifact campaign output plumbing now exists as a Rust API. It
+  validates campaign manifests, validates Phase U output roots before building
+  campaign inputs, renders deterministic Markdown, writes one manifest JSON
+  file, one validation JSON file, one rendered Markdown file, and three digest
+  sidecars under a caller-owned output root, rejects protected-path overlap,
+  stale digests, symlinks, unexpected files, partial campaigns, and repair
+  overwrites, and remains local durability metadata only. `.local-artifact-campaigns/`
+  is ignored for operator-owned durable local outputs.
+- `docs/99-phase-w-reviewed-evidence-promotion-boundary-spec.md` records the
+  docs-first boundary for future reviewed accepted-evidence mutation and
+  official benchmark submission. It authorizes no accepted Evidence Ledger
+  mutation, official submission package, external replay, live backend
+  execution, score-axis population, or Level2+ evidence creation in this slice.
+- Phase L bounded local soak acceptance exists for
+  `phase_l_qwable_local_soak_2026_06_17_extended_256`: 768 completed local
+  cases, zero failures, zero failure-corpus entries, a valid report bundle, no
+  ZK backend performance claims, and `Level0DesignNote` claim boundary.
+- Phase M inert local recursion-envelope contract implementation exists.
+  It defines local input contracts, metric labels, validation rules, negative
+  tests, serialization helpers, and claim-boundary non-escalation checks, while
+  live gnark execution and Level2+ evidence remain blocked.
+- Result classification exists.
+- Evidence and scoring primitives exist.
+- HSAI Level 1 local crates exist for claim envelopes, agent cases,
+  PCSM-governed local admission, distinct-agent registration, economy,
+  membrane conversion, economy simulation, managed-attestation verification,
+  pure-data e2e harnessing, and Phala/dstack fixture/captured-artifact
+  validation.
+- Managed-attestation Phase 57 defines the real-artifact promotion
+  requirements for an HSAI-owned fresh challenge. A first real HSAI-owned
+  Phala/dstack artifact has been captured and accepted under this spec
+  (2026-06-16); see
+  [docs/57-managed-attestation-real-artifact-promotion-spec.md](docs/57-managed-attestation-real-artifact-promotion-spec.md).
+  The acceptance is managed-verifier local regression evidence only. It
+  authorizes only the bounded Phase 4 anchor-registry crate and no stronger
+  attestation or uniqueness claim.
+- `hsai-agent-anchor-registry` implements the Phase 4 local Proof of Agent
+  anchor registry. It records one active HSAI identity per accepted,
+  non-reused registered anchor set; it does not prove global software-agent
+  uniqueness.
+- `hsai-e2e-harness` now composes the Phase 4 anchor registry over the pure-data
+  managed-attestation harness path. This is local regression evidence only, not
+  backend verification, external attestation evidence, proof, or benchmark
+  output.
+- `docs/66-managed-signature-verification-boundary-spec.md` records the
+  managed-attestation boundary as source attribution for managed-service
+  signature/JWKS/JWT or quote verification.
+- `docs/77-managed-jwt-signature-verification-notes.md` records the first
+  bounded implementation of that boundary: an offline ES256 managed-JWT verifier
+  over local in-memory public keys. It performs no JWKS fetch, no live service
+  call, no DCAP quote verification, no network access, and no claim above
+  `Attested`.
+- `docs/78-phala-live-managed-verifier-boundary-spec.md` opens the next
+  docs-first managed-attestation boundary: Phala/dstack live managed-verifier
+  planning only. It permits no Rust implementation, network access, live Phala
+  calls, secrets, local DCAP, backend execution, benchmark output, Phase 4
+  semantic changes, or claims above `Attested`.
+- `docs/79-phala-hermetic-live-verifier-implementation-spec.md` records the
+  code-phase authorization spec for a future hermetic Phala/dstack verifier
+  surface: provider trait, offline test double, response normalization, failure
+  taxonomy, trust-root mapping, replay/freshness checks, and `Attested`-only
+  output. This spec itself adds no Rust code and still forbids live calls in
+  normal tests.
+- `docs/80-phala-hermetic-live-verifier-implementation-notes.md` records the
+  implementation of that hermetic surface in `hsai-attestation-phala`: injected
+  provider-client trait, deterministic in-memory fake client, normalized
+  response validation, replay/freshness guard, trust-root mapping, and
+  `Attested`-only output. It still performs no live calls, network access,
+  local DCAP, credential handling, or benchmark work.
+- `docs/81-phala-operator-live-path-boundary-spec.md` records the docs-first
+  operator-only live-path boundary: secret handling outside git, explicit
+  operator acknowledgement, timeout and retry limits, redaction, audit output,
+  ignored/feature-gated live behavior, and `Attested`-only claim limits. It
+  authorizes no Rust implementation, examples, credentials, generated
+  artifacts, or live Phala calls in this slice.
+- `docs/82-phala-operator-live-artifact-plumbing-spec.md` records the
+  docs-first operator-live artifact plumbing boundary: local output-bundle file
+  roles, digest and schema rules, redaction-report validation, deterministic
+  validation requirements, future code touch surface, hermetic test
+  requirements, and `Attested`-only claim limits. It authorizes no Rust
+  implementation, examples, scripts, credentials, generated artifacts, operator
+  live tests, network access, or live Phala calls in this slice.
+- `docs/83-phala-operator-live-artifact-plumbing-implementation-notes.md`
+  records the local in-memory implementation of that artifact-plumbing surface
+  in `hsai-attestation-phala`: declared logical file parsing, portable path
+  checks, schema and SHA-256 digest validation, redaction-report validation,
+  provider/trust-root consistency checks, existing hermetic response validation,
+  and `Attested`-only output metadata. It performs no filesystem writes, network
+  access, credential loading, live Phala calls, operator live tests, local DCAP,
+  or benchmark work.
+- `docs/84-phala-operator-live-artifact-output-plumbing-boundary-spec.md`
+  records the docs-first boundary for future materialized output plumbing:
+  caller-selected output-root rules, write/read policy, overwrite policy,
+  symlink and path-traversal rejection, raw-response retention limits, future
+  tests, and `Attested`-only claim limits. It authorizes no Rust
+  implementation, filesystem writes, examples, scripts, credentials, generated
+  operator artifacts, operator live tests, network access, or live Phala calls
+  in this slice.
+- `docs/85-phala-operator-live-artifact-output-plumbing-implementation-notes.md`
+  records the local output-root implementation of that materialized artifact
+  surface in `hsai-attestation-phala`: explicit output-root validation,
+  symlink rejection, explicit overwrite mode, staged writes, declared-file-only
+  reads, stale digest rejection, raw-response body retention rejection, and
+  Phase 83 in-memory validation reuse. It performs no network access, credential
+  loading, live Phala calls, operator live tests, local DCAP, managed-service
+  signature verification, generated operator artifact acceptance, or benchmark
+  work.
+- `docs/97-phala-operator-live-invocation-boundary-spec.md` records the
+  docs-first boundary for a future operator-owned live Phala/dstack invocation
+  path. It authorizes no Rust implementation, examples, scripts, credentials,
+  generated operator artifacts, operator live tests, network access, live Phala
+  calls, local DCAP, PCCS, JWKS fetching, TLS channel binding, accepted Evidence
+  Ledger mutation, benchmark output, or claims above `Attested` in this slice.
+- `docs/100-phala-operator-live-invocation-implementation-notes.md` records the
+  local operator-live invocation plumbing implementation. The
+  `hsai-attestation-phala` crate now has an explicit invocation input, opaque
+  credential-provider boundary, credential-aware injected client boundary,
+  bounded retry handling, replay rejection, redacted artifact-bundle assembly,
+  and Phase 85 output-root reuse. It still ships no HTTP client, performs no
+  live Phala call, loads no process environment credentials, runs no operator
+  live tests, implements no local DCAP/PCCS/JWKS/TLS path, creates no benchmark
+  output, mutates no accepted Evidence Ledger, and claims nothing above
+  `Attested`.
+- `docs/101-phala-operator-live-provider-client-boundary-spec.md` records the
+  docs-first boundary for a future concrete Phala/dstack provider client behind
+  the existing Phase 100 injected-client seam. It authorizes no Rust
+  implementation, Cargo metadata, examples, scripts, package runtime files,
+  network access, live Phala calls, operator live tests, real credentials,
+  generated operator artifacts, local DCAP, PCCS, JWKS fetching, TLS channel
+  binding, benchmark output, accepted Evidence Ledger mutation, or claims above
+  `Attested` in this slice.
+- `docs/102-phala-operator-live-provider-client-implementation-notes.md`
+  records the opt-in Phala/dstack provider-client implementation behind the
+  existing Phase 100 seam. The `operator-live-provider` feature adds explicit
+  configuration, an allowlisted environment credential provider, a transport
+  seam, a ureq-backed HTTP transport, normalized response parsing, and
+  raw-response digest replacement. It is disabled by default, has hermetic fake
+  transport tests, commits no credentials or generated operator artifacts, runs
+  no operator live test, performs no live Phala call in normal gates, implements
+  no DCAP/PCCS/TLS or token-verification path, creates no benchmark output,
+  mutates no accepted Evidence Ledger, and claims nothing above `Attested`.
+- `docs/104-phala-operator-live-runner-boundary-spec.md` records the
+  docs-first boundary for a future operator-only live runner over the existing
+  provider-client and invocation plumbing. It keeps live calls explicit,
+  feature-gated, credential-free in git, excluded from normal tests, and capped
+  at `Attested`.
+- `docs/105-phala-operator-live-runner-implementation-notes.md` records the
+  operator-only `operator_live_run` example. It requires explicit
+  acknowledgement, a non-secret invocation JSON path, a matching credential
+  source declaration, and `--features operator-live-provider`; it writes only
+  the existing redacted `operator-live/*` bundle. No operator live artifact is
+  generated unless a real operator supplies endpoint, credential, and input JSON
+  outside git.
+- `docs/106-phala-cloud-api-live-artifact-implementation-notes.md` records the
+  operator-only Phala Cloud `/attestations/verify` response materialization
+  path. The live API call is performed outside normal tests by the authorized
+  operator CLI, and the example maps the saved raw response into the existing
+  redacted `operator-live/*` bundle without retaining the raw response body or
+  committing generated artifacts.
+- `docs/107-phala-dcap-pccs-collateral-implementation-notes.md` records the
+  operator-only Phala Cloud collateral materialization path. The live
+  `/attestations/collateral/<checksum>` call is performed outside normal tests,
+  and the example writes digest-only `dcap-pccs/*` metadata outside git. It does
+  not implement local Intel QVL/DCAP quote-signature verification or operate a
+  local PCCS.
+- `docs/108-phala-local-dcap-qvl-verification-notes.md` records the
+  operator-only local DCAP/QVL verification artifact path. The raw quote is
+  downloaded outside normal tests, verified by the operator-installed
+  `dcap-qvl` CLI, and the example writes digest-only `dcap-qvl/*` metadata
+  outside git. It does not add a repo-native DCAP verifier or operate a local
+  PCCS service.
+- `docs/109-managed-jwks-fetch-artifact-notes.md` records the operator-only
+  managed JWKS fetch artifact path. Intel Trust Authority OpenID metadata and
+  JWKS are fetched outside normal tests, and the example writes digest-only
+  `managed-jwks/*` metadata outside git. It does not accept tokens, verify a
+  live managed JWT, or add network access to normal tests.
+- `docs/110-phala-local-pccs-service-artifact-notes.md` records the
+  operator-only localhost PCCS-compatible replay service artifact path. The
+  raw quote and Phala collateral are fetched outside normal tests, `dcap-qvl`
+  is run with `PCCS_URL` pointed at `127.0.0.1`, and the example writes
+  digest-only `local-pccs/*` metadata outside git. It does not operate Intel
+  PCS or a production PCCS.
+- `docs/111-phala-intel-pcs-direct-artifact-notes.md` records the
+  operator-only direct Intel PCS QVL artifact path. The raw quote is verified
+  by `dcap-qvl` with `PCCS_URL=https://api.trustedservices.intel.com`, and the
+  example writes digest-only `intel-pcs/*` metadata outside git. It does not
+  add a repo-native DCAP verifier.
+- Managed-attestation challenge packet tooling exists for local, non-secret
+  capture preflight. It creates capture inputs only, not real attestation
+  evidence. The operator-facing preflight example
+  (`crates/hsai-attestation-phala/examples/operator_capture_preflight.rs`)
+  emits a JSON challenge packet and capture manifest from fixed sample inputs,
+  and `docs/59-operator-capture-runbook.md` documents the repo-external
+  capture steps an operator must run to produce a real artifact.
+- No external adapters exist.
+- No live zk-Harness execution exists.
+- No live external execution exists beyond the operator-only Phala and managed
+  JWKS artifact paths recorded above.
+- No real external result import exists.
+- No local soak telemetry is used as ZK backend performance.
+- No failure corpus entry is accepted evidence.
+- No evidence append proposal is accepted evidence.
+- No evidence-record candidate is accepted evidence.
+- No append preview is accepted evidence.
+- No Level2 eligibility report is Level2 evidence.
+- No review ledger entry is accepted evidence.
+- No external adapter evidence exists.
+- No official benchmark evidence exists.
+- No formal evidence exists.
+
 ## Documentation Navigation
 
 | File | Purpose |
@@ -1043,635 +1672,6 @@ Surface DSL
 | [docs/research/catalyst-strategy/module-sensitivity-matrix.md](docs/research/catalyst-strategy/module-sensitivity-matrix.md) | Targeting system mapping modules to catalysts and pre-declared exercise actions. |
 | [docs/research/catalyst-strategy/claim-packet-forge.md](docs/research/catalyst-strategy/claim-packet-forge.md) | Repeatable recipe to stamp a verifiable claim packet and reproduction checker for a module. |
 | [docs/research/catalyst-strategy/competitive-moat.md](docs/research/catalyst-strategy/competitive-moat.md) | Differentiation thesis vs. tracked competitors and the honest attack surface. |
-
-Statebook publication status: the named slice
-`statebook-whitepaper-prd-and-publication-media-boundary` is
-`DocumentationOnly` at `Level0DesignNote`. The whitepaper, PRD, source index,
-original media, and two publication PDFs create no execution, margin, custody,
-pause, signing, oracle, settlement, evidence-promotion, or production authority.
-The 20 July 2026 visual refresh provides thirteen original, source-captioned
-illustrations and page-by-page reviewed PDF publications; it remains explanatory
-media only and creates no financial, security, incident, or settlement evidence.
-The synchronized PRD is published as
-[GitHub issue #17](https://github.com/Epistetechnician/composed-zk-benchmark-os/issues/17)
-with `ready-for-agent`; that label means the specification is bounded enough for
-a future separately authorized phase, not that the phase is authorized now.
-
-Statebook P1 authorization status: the named docs-first slice
-`statebook-p1-core-semantic-fixtures-boundary` authorizes a separately committed
-`statebook-p1-core-semantic-fixtures` implementation limited to an isolated
-`statebook-core` crate, synthetic JSON fixtures, deterministic exact-arithmetic
-normalization, semantic-completeness reports, source-lineage receipts, and a
-canonical `StateKeyV1`. It grants no payoff evaluation, residual, execution,
-capital, settlement, assurance, recovery, HSAI, network, filesystem-write, or
-external authority.
-
-Statebook P1 implementation status: `statebook-core` is implemented locally and
-fixture-backed. Only complete closed-schema terminal indicator inputs can lower
-to an opaque validated contract. The frozen 701-byte V1 preimage hashes to
-`f1662f3fb5a10c074680c0baf76ba488b7230337456358be92f3127d8a632c08` in
-both production and implementation-diverse test encoders. This is deterministic
-regression evidence only, not economic equivalence, execution, settlement,
-proof, independent verification, or production readiness.
-
-Phase 797 status: the named docs-first slice
-`hsai-native-transcript-source-scan-correction-boundary` freezes one exact
-future correction to the HSAI claim-boundary scanner. It permits no Rust change
-in this commit and no exception outside the two named Phase 792/794 integration
-test files, exact source lines, and exact enclosing test functions.
-
-Phase 798 status: the named implementation slice
-`hsai-native-transcript-source-scan-authorized-test-exceptions` corrects the
-inherited HSAI gate without broadening runtime authority. Exact and near-miss
-tests bind every exception to the committed Phase 792/794 security-test surface.
-
-Statebook P2 authorization status: the named docs-first slice
-`statebook-p2-payoff-residual-engine-boundary` freezes one future exact
-finite-domain indicator payoff and asset-vector residual engine. It does not
-authorize implementation in this commit, alter P1 identity, or grant execution,
-capital, settlement, external-I/O, or evidence authority.
-
-Statebook P2 implementation status: the named slice
-`statebook-p2-payoff-residual-engine` is implemented inside `statebook-core`.
-It evaluates only P1-validated indicator contracts over at most 256 declared
-states and 64 candidate legs, applies exact unit scaling and contract-level
-rounding, aggregates duplicate StateKeys deterministically, and reports
-non-netted per-asset residuals as `ExactOnDeclaredDomain`,
-`ApproximateOnDeclaredDomain`, or `Incomplete`. Coordinate or arithmetic
-failure invalidates the whole numeric report. The frozen P1 StateKey remains
-unchanged. This is local regression evidence only and creates no execution,
-capital, settlement, external-I/O, or evidence authority.
-
-Statebook P3 authorization status: the named docs-first slice
-`statebook-p3-seven-completeness-reports-boundary` freezes a future isolated
-`statebook-settlement` crate. The future implementation may compose the
-unchanged P1 semantic and P2 payoff reports with bounded hermetic execution,
-capital, settlement, assurance, and versioned-path recovery reports. Every new
-status remains fixture-qualified; current roots are disclosed without P4
-assurance resolution; no aggregate boolean, score, action, P5 adapter, live
-source, external I/O, or authority exists. This commit adds no Rust or Cargo
-change. The follow-on documentation-only state slice
-`statebook-p3-closed-identity-bound-correction` aligns the exact assurance and
-recovery limits with their closed identities: nine unique properties and
-fourteen implementation-owned paths.
-
-The documentation-only state slice
-`statebook-p3-capital-context-binding-correction` also requires every synthetic
-capital receipt to bind the full fixture authority/account/model/rule/context
-digest. Mismatch rejects composition; coherent rebinding remains a different
-hermetic fixture and creates no clearing or margin authority.
-
-Statebook publication status: the named slice
-`statebook-whitepaper-prd-and-publication-media-boundary` is
-`DocumentationOnly` at `Level0DesignNote`. The whitepaper, PRD, source index,
-original media, and two publication PDFs create no execution, margin, custody,
-pause, signing, oracle, settlement, evidence-promotion, or production authority.
-The synchronized PRD is published as
-[GitHub issue #17](https://github.com/Epistetechnician/composed-zk-benchmark-os/issues/17)
-with `ready-for-agent`; that label means the specification is bounded enough for
-a future separately authorized phase, not that the phase is authorized now.
-
-Statebook P1 authorization status: the named docs-first slice
-`statebook-p1-core-semantic-fixtures-boundary` authorizes a separately committed
-`statebook-p1-core-semantic-fixtures` implementation limited to an isolated
-`statebook-core` crate, synthetic JSON fixtures, deterministic exact-arithmetic
-normalization, semantic-completeness reports, source-lineage receipts, and a
-canonical `StateKeyV1`. It grants no payoff evaluation, residual, execution,
-capital, settlement, assurance, recovery, HSAI, network, filesystem-write, or
-external authority.
-
-Statebook P1 implementation status: `statebook-core` is implemented locally and
-fixture-backed. Only complete closed-schema terminal indicator inputs can lower
-to an opaque validated contract. The frozen 701-byte V1 preimage hashes to
-`f1662f3fb5a10c074680c0baf76ba488b7230337456358be92f3127d8a632c08` in
-both production and implementation-diverse test encoders. This is deterministic
-regression evidence only, not economic equivalence, execution, settlement,
-proof, independent verification, or production readiness.
-
-
-Statebook P2 authorization status: the named docs-first slice
-`statebook-p2-payoff-residual-engine-boundary` freezes one future exact
-finite-domain indicator payoff and asset-vector residual engine. It does not
-authorize implementation in this commit, alter P1 identity, or grant execution,
-capital, settlement, external-I/O, or evidence authority.
-
-Statebook P2 implementation status: the named slice
-`statebook-p2-payoff-residual-engine` is implemented inside `statebook-core`.
-It evaluates only P1-validated indicator contracts over at most 256 declared
-states and 64 candidate legs, applies exact unit scaling and contract-level
-rounding, aggregates duplicate StateKeys deterministically, and reports
-non-netted per-asset residuals as `ExactOnDeclaredDomain`,
-`ApproximateOnDeclaredDomain`, or `Incomplete`. Coordinate or arithmetic
-failure invalidates the whole numeric report. The frozen P1 StateKey remains
-unchanged. This is local regression evidence only and creates no execution,
-capital, settlement, external-I/O, or evidence authority.
-
-Statebook P3 authorization status: the named docs-first slice
-`statebook-p3-seven-completeness-reports-boundary` freezes a future isolated
-`statebook-settlement` crate. The future implementation may compose the
-unchanged P1 semantic and P2 payoff reports with bounded hermetic execution,
-capital, settlement, assurance, and versioned-path recovery reports. Every new
-status remains fixture-qualified; current roots are disclosed without P4
-assurance resolution; no aggregate boolean, score, action, P5 adapter, live
-source, external I/O, or authority exists. This commit adds no Rust or Cargo
-change. The follow-on documentation-only state slice
-`statebook-p3-closed-identity-bound-correction` aligns the exact assurance and
-recovery limits with their closed identities: nine unique properties and
-fourteen implementation-owned paths.
-
-The documentation-only state slice
-`statebook-p3-capital-context-binding-correction` also requires every synthetic
-capital receipt to bind the full fixture authority/account/model/rule/context
-digest. Mismatch rejects composition; coherent rebinding remains a different
-hermetic fixture and creates no clearing or margin authority.
-
-Statebook P4 authorization status: the named docs-first slice
-`statebook-p4-settlement-simulator-boundary` freezes a future pure deterministic settlement
-transition kernel inside the existing `statebook-settlement` crate. The future implementation
-may evaluate synthetic externalization requests through hard gates, assurance resolution,
-conservative valuation, linked-plan and obligation validation, multi-axis exactly-once
-budgets, queue and challenge transitions, circuit breakers, hysteresis, and recovery
-transitions under an injected clock. Outputs remain non-authoritative decision records.
-All P1/P2/P3 identities stay unchanged. No new crate, value movement, P5 adapter, P6 source,
-P7 authority, live I/O, or runtime action is authorized. This commit adds no Rust or Cargo
-change.
-
-## Statebook P4 Settlement Simulator Implementation
-
-The named state slice `statebook-p4-settlement-simulator` is implemented as an additive
-extension of `statebook-settlement`. It exposes `decide_and_transition` and
-`parse_settlement_scenario_v1`, a serialize-only non-authoritative `DecisionRecordV1`,
-fail-closed hard gates with zero instant release on fail or unknown, conservative
-valuation, assurance tier selection, linked-plan and obligation validation, budget
-ledger CAS reservations, queue and breaker interaction, and domain-separated P4 TLV
-digests with an independent `ring` golden check.
-
-Focused P4 format, test, and warning-denied Clippy gates pass, as do unchanged
-`statebook-core` tests and unchanged P3 completeness regressions. See
-[docs/statebook-p4-settlement-simulator-implementation-notes.md](docs/statebook-p4-settlement-simulator-implementation-notes.md).
-
-This is local hermetic fixture regression evidence only. No value moves.
-
-Statebook P5 authorization status: the named docs-first slice
-`statebook-p5-evidence-adapters-and-report-bundles-boundary` freezes a future portable
-digest-bound audit-bundle and narrow HSAI/fixture adapter surface in at most
-`statebook-report`. All P1-P4 identities and the P4 kernel stay unchanged. No P6
-external source, P7 authority, network, credential, value movement, or runtime action is
-authorized.
-
-## Statebook P5 Evidence Adapters And Report Bundles Implementation
-
-The named state slice `statebook-p5-evidence-adapters-and-report-bundles` is implemented as
-a new `statebook-report` crate with:
-
-- closed manifest and record file sets with domain-separated P5 TLV digests;
-- materialization plus independent fail-closed readback validation;
-- hermetic fixture adapters and ClaimEnvelope-shaped fixture doubles without `hsai-*`
-  production dependencies;
-- proposal-only decision handoffs that always preserve `grants_authority=false`;
-- an independent `ring` golden encoder for every new public digest family.
-
-Focused P5 format, test, and warning-denied Clippy gates pass, as do unchanged
-`statebook-core` and unchanged P3/P4 `statebook-settlement` regressions. See
-[docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md](docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md).
-
-This is local hermetic fixture regression and readback evidence only. No value moves.
-
-Statebook P6 authorization status: the named docs-first slice
-`statebook-p6-read-only-external-sources-boundary` freezes a captured-first
-read-only external import surface in `statebook-source`. The separately committed
-implementation slice `statebook-p6-read-only-external-sources` adds isolated
-`crates/statebook-source` with the frozen `synthetic-clearing-terms-v1` profile,
-provenance registry, fail-closed import receipts, and domain-separated P6 digests
-with an independent `ring` golden check. Live network clients remain deferred.
-All P1-P5 identities stay unchanged. No P7 authority, trading, signing, custody,
-or value movement is authorized. See
-[docs/statebook-p6-read-only-external-sources-implementation-notes.md](docs/statebook-p6-read-only-external-sources-implementation-notes.md).
-
-This is local hermetic captured-source import regression evidence only. No value moves.
-
-Statebook P7 authorization status: the named docs-first slice
-`statebook-p7-authority-integration-preflight-boundary` freezes a fail-closed
-authority-integration preflight surface in `statebook-authority`. The separately
-committed implementation slice `statebook-p7-authority-integration-preflight` adds
-isolated `crates/statebook-authority` with Stage 6 package validation, mandatory
-`grants_authority=false` handoff binding, rejection of `production_gate=authorized`,
-and domain-separated P7 digests with an independent `ring` golden check. Outcomes are
-limited to `Incomplete` and `Denied`. No controller is invoked. All P1-P6 identities
-stay unchanged. See
-[docs/statebook-p7-authority-integration-preflight-implementation-notes.md](docs/statebook-p7-authority-integration-preflight-implementation-notes.md).
-
-This is local hermetic authority-preflight regression evidence only. No value moves.
-
-## Current Implementation Status
-
-- `zkbench-core` exists as a Rust core crate.
-- v0 DSL structs exist for Surface DSL, Parsed AST, Semantic IR, Oracle, Expected Verdict, Backend Outcome, Evidence Record, Claim Boundary, Benchmark Family, Benchmark Instance, Mutation Variant metadata, Replay Manifest metadata, and Score Report primitives.
-- YAML fixtures parse.
-- Semantic IR lowering exists.
-- The local oracle evaluates executable traces for a small v0 subset.
-- Deterministic generation exists for BaselineFsm, BranchingFsm, BoundedCounterLoop, NestedLoop, GuardHeavyMachine, RecursiveEnvelope, MemoryHeavyStateMachine, PublicPrivateBoundaryStress, and ZkMlControlFlowMixed.
-- Concrete generated Benchmark Instances carry config, provenance, Surface DSL, Semantic IR, traces, expected verdicts, and Level1LocalReplay claim boundaries.
-- Mutation engine v0 exists for all 14 declared `MutationClass` variants.
-- Mutation distinguishability scoring composes each mutation's `ExpectedVerdict` with each `BackendOutcome` via the existing `classify_result` into a deterministic matrix (`Level1LocalReplay`).
-- Oracle completeness audit reports which generated constructs the shipped v0 oracle can evaluate locally (`Level0DesignNote`).
-- Formal lane interface stub provides the `FormalVerifier`/`NoopFormalVerifier`/`FormalLane` seam for the "formal hooks" half of the SOTA wedge; the shipped verifier is declared-only and capped at `Level0DesignNote`.
-- Mutation × formal cross-product mapping maps each of the 14 declared `MutationClass` variants to the `FormalPropertyScope` it most directly stress-tests (`Level0DesignNote`).
-- Mutation provenance records affected machine, transitions, guards/actions, fields when available, expected verdict, safety class, claim boundary, and notes.
-- Local JSON adapter exists for local oracle replay only.
-- Replay manifest serialization exists.
-- Local replay result serialization exists.
-- Evidence ledger persistence exists with a deterministic local digest chain.
-- Deterministic artifact digesting exists for local JSON and pack files.
-- Benchmark pack skeleton exists for local generated instances, mutation variants, replay manifests, replay results, ledgers, and conservative score reports.
-- zk-Harness dry-run adapter preparation exists.
-- zk-Harness adapter manifest serialization exists.
-- zk-Harness dry-run plan serialization exists.
-- Local benchmark packs can map into inert zk-Harness dry-run plans.
-- External-runner boundary exists.
-- Manual handoff bundle schema exists.
-- Artifact capture contract exists.
-- Provenance contract exists.
-- Result import validation schema exists.
-- Quarantine schema exists for future external result candidates.
-- zk-Harness dry-run plans can map into inert manual handoff bundles.
-- Synthetic result candidate JSON import exists for local fixtures only.
-- Artifact digest validation checks synthetic candidate references against caller-provided local bytes.
-- Provenance validation checks synthetic candidates against the local provenance contract.
-- Metric candidate validation rejects unsupported units, missing source refs, negative numeric values, and overclaiming notes.
-- Invalid synthetic result candidates are quarantined.
-- Valid synthetic result candidates normalize into pending-review drafts only.
-- Evidence append proposal primitives exist.
-- Manual review decision primitives exist.
-- Evidence acceptance policy primitives exist.
-- Evidence-record candidate primitives exist.
-- Evidence append preview primitives exist and do not mutate `EvidenceLedger`.
-- Level2 eligibility checker primitives exist for future-review readiness only.
-- Evidence review ledger persistence exists and remains separate from the accepted `EvidenceLedger`.
-- Proposal ledger persistence exists and is separate from the accepted `EvidenceLedger`.
-- Local soak runner exists for deterministic, sharded, resumable local-only stress studies.
-- Local soak run configuration, deterministic shard planning, shard manifests, checkpointing, report bundles, and artifact layout types exist.
-- An operator-facing `operator_soak_campaign` example exists under `crates/zkbench-core/examples/` for running an approved, repo-external local soak campaign through the shipped library surface without writing Rust. It reads a fixed authorized set of environment variables, requires an explicit acknowledgement, and emits a non-secret `Level0DesignNote` summary JSON.
-- Internal benchmark OS telemetry exists for generation, mutation, local oracle, local replay, pack read/write, proposal-preview counters, and local runner duration.
-- Local health report models exist and warn that local soak telemetry is not official benchmark evidence.
-- Failure corpus extraction exists with reproduction manifests and minimization metadata only.
-- Inert local audit-index metadata exists for summarizing existing local
-  report-bundle metadata without writing files, executing replay commands,
-  mutating source packs/reports/bundles, or creating accepted evidence.
-- Adjacent local audit-index output plumbing exists for exactly
-  `audit-index/audit-index-manifest.json` and
-  `audit-index/digests/audit-index-manifest.sha256`. The output remains a
-  `Level0DesignNote` local integrity summary and is not accepted evidence,
-  official benchmark evidence, ZK backend performance, or Level2+ evidence.
-- A versioned `ExperimentBundle` contract composes task configuration, data
-  identity, model/runtime identity, a sparse explicit `MechanismLedger`,
-  metrics, report, and digest-bound artifact references. Static plugin seams
-  exist for `ExperimentTask`, `ExperimentModel`, `MechanismCollector`, and
-  `Evaluator`, with one local JSON end-to-end plugin, factory-catalog dispatch, and
-  deterministic bundle validation. The slice remains capped at
-  `Level1LocalReplay` and does not
-  establish official benchmark evidence, interpretability, causal validity,
-  production readiness, or runtime authority.
-- `LocalJsonExperimentRunner` composes that concrete local plugin into the
-  adaptive nine-slot observability manifest, records one scheduler decision,
-  retains a digest-chained mechanism ledger, and stores a canonical typed
-  inner-to-outer artifact projection with fail-closed source and target digest
-  validation plus deterministic config transport/readback validation. Tier0
-  mechanism absence is explicit. A complete three-artifact transport readback
-  path validates inner bundle, config, and outer bundle bytes together. The
-  typed `ExperimentPacket` seam now materializes and strictly reads back that
-  packet under a caller-owned declared-file root with payload/manifest digest
-  sidecars, overwrite matching, symlink rejection, and protected-path checks.
-  The executable factory-catalog path validates descriptor-to-bundle output
-  binding for schema, plugin, model, collector, evaluator, and claim ceilings
-  before returning a bundle. The typed metadata registry is descriptor-only;
-  an explicit typed factory catalog owns plugin
-  construction while metadata serialization remains descriptor-only; the
-  catalog now proves a second pure-data metacognitive plugin through the same
-  output-binding path. `PluginCompositionRunner` now composes both the
-  metacognitive and Local JSON bundles through explicit nine-slot source-kind
-  bindings with digest and identity validation, and the
-  composition runner uses the same validated path. The durable packet seam now
-  accepts both the historical Local JSON config and the generic plugin config
-  through one typed transport interface, preserving canonical manifests,
-  payload digests, sidecars, symlink-aware writes, protected-root checks,
-  overwrite matching, and strict readback. Packet materialization also
-  preflights every existing path component so dangling and intermediate
-  symlinks cannot be followed during writes, and readback requires exact
-  canonical digest-sidecar bytes.
-  `ExperimentPacketJob` now owns the one-shot catalog-to-composition-to-write-
-  and-readback choreography for both registered plugins, rejecting unknown
-  plugins before output creation and returning only after typed packet and
-  manifest equality. `ExperimentPacketJobConfig` provides one validated typed
-  request value for those identities, provenance, output, and protected-path
-  invariants. `ExperimentPacketJobRequest` is the storage-independent identity
-  and provenance request, and `new_with_request_and_store` lets non-filesystem
-  adapters use the same choreography without a fake output root. The existing
-  config constructor remains the filesystem compatibility path.
-  `PluginCompositionPacketStore` keeps persistence behind
-  filesystem and non-durable in-memory adapters while allowing hermetic
-  choreography adapters for tests. Both production adapters share the
-  canonical packet-output builder; this adds no atomic-write guarantee,
-  external execution, evidence mutation, or runtime authority.
-  `KeyedPluginCompositionPacketStore` now binds materialization to a typed
-  plugin/experiment/run key and returns a manifest-digest receipt required for
-  readback. The filesystem and in-memory adapters reject stale or cross-run
-  receipt use; the historical unkeyed job constructor is routed through an
-  explicit `experiment_packet_store_compat` compatibility module while root
-  re-exports remain source-compatible. This is receipt-bound local metadata plumbing, not
-  publication, execution, evidence mutation, or runtime authority.
-  `ExperimentPacketJob::run_once_with_receipt` now exposes the validated packet
-  and its receipt together for caller-owned handoff or keyed follow-up;
-  existing `run_once` callers retain the output-only return type.
-  The additive `PluginCompositionIdentity` value centralizes the plugin,
-  experiment, and run tuple across requests, composition configs, runners, and
-  keyed stores without changing packet wire fields.
-  `ValidatedExperimentPluginOutput` now carries the descriptor-bound validated
-  bundle across catalog dispatch and both composition runners, while the
-  output-only validated method remains source-compatible.
-  outer composition remains
-  `Level0DesignNote`; it does not add external execution, model downloads,
-  privileged telemetry, accepted evidence, or runtime authority.
-- Phase S in-memory audit-index ergonomics now exists for one valid
-  `LocalAuditIndexManifest`: exact filters over manifest fields, deterministic
-  grouping and sorting, selected input ids, warning summaries, required
-  limitation labels, and deterministic Markdown rendering. It writes no files,
-  adds no CLI/UI/package runtime, constructs no cross-bundle index, performs no
-  external replay, populates no score axes, and creates no accepted, official,
-  backend-performance, or Level2+ evidence.
-- `docs/88-phase-s-audit-index-ergonomics-output-plumbing-spec.md` records the
-  docs-first boundary for future materialized ergonomics output: one selected
-  view JSON, one rendered Markdown file, two digest sidecars, output-root safety,
-  overwrite-drift rejection, source immutability, and required limitation-label
-  preservation. It authorizes no Rust implementation, generated ergonomics files,
-  CLI, UI, package runtime files, external replay, score-axis population, or
-  Level2+ evidence.
-- Phase S audit-index ergonomics output plumbing now materializes exactly
-  `audit-index-ergonomics/ergonomics-view.json`,
-  `audit-index-ergonomics/rendered/ergonomics-view.md`, and two digest sidecars
-  under a caller-owned local root. It rederives the view from the supplied
-  manifest/request, rejects protected path overlap, stale digests, symlinks,
-  unexpected files, partial bundles, and drift, and remains `Level0DesignNote`
-  local presentation metadata only.
-- `docs/90-whole-codebase-validation-report.md` records the full local
-  validation suite run after Phase S hardening, maps the suite to implemented
-  subsystems, and states the remaining coverage and live-execution gaps. It does
-  not claim per-function proof, line coverage, production readiness, official
-  benchmark evidence, ZK backend performance, Level2+ evidence, or accepted
-  Evidence Ledger mutation.
-- `docs/91-phase-t-cross-bundle-audit-index-boundary-spec.md` records the
-  docs-first boundary for future cross-bundle audit-index planning over
-  multiple existing local audit-index manifests. It authorizes no Rust
-  implementation, generated cross-bundle files, CLI, UI, package runtime files,
-  external replay, score-axis population, accepted Evidence Ledger mutation, or
-  Level2+ evidence.
-- Phase T in-memory cross-bundle audit-index planning now exists for two or
-  more valid `LocalAuditIndexManifest` values. It computes deterministic source
-  summaries, groups, duplicate/conflict signals, warning summaries, required
-  limitation labels, and Markdown while writing no files, adding no CLI/UI, and
-  creating no accepted, official, backend-performance, or Level2+ evidence.
-- `docs/93-phase-t-cross-bundle-audit-index-output-plumbing-spec.md` records
-  the docs-first boundary for future materialized Phase T output-root plumbing.
-  It centers protected-path overlap rejection and corrupted-output-root
-  non-repair before any writer/reader API, generated cross-bundle file,
-  command-line surface, UI dashboard, package runtime, external replay, official
-  benchmark evidence, ZK backend performance claim, score-axis population, or
-  Level2+ evidence promotion.
-- Phase T cross-bundle audit-index output plumbing now materializes exactly
-  `cross-bundle-audit-index/cross-bundle-view.json`,
-  `cross-bundle-audit-index/rendered/cross-bundle-view.md`, and two digest
-  sidecars under a caller-owned local root. It rederives the view from the
-  supplied request, rejects protected path overlap, stale digests, symlinks,
-  unexpected files, partial bundles, and drift, and remains `Level0DesignNote`
-  local presentation metadata only.
-- `docs/95-phase-u-local-benchmark-artifact-boundary-spec.md` records the
-  docs-first boundary for future generated local benchmark artifact bundles.
-  It permits no Rust implementation, generated artifact files, external replay,
-  official benchmark submission, accepted Evidence Ledger mutation, package
-  runtime, CLI/UI, ZK backend performance claim, score-axis population, or
-  Level2+ promotion in this slice.
-- Phase U local benchmark artifact packaging now exists as a Rust API. It
-  validates local artifact manifests, renders deterministic Markdown, writes
-  exactly one manifest JSON file, one rendered Markdown file, and two digest
-  sidecars under a caller-owned output root, rejects protected-path overlap,
-  symlink-resolved protected overlap, stale digests, symlinks, unexpected
-  files, partial bundles, and repair overwrites, and remains local
-  reproducibility packaging only.
-- `docs/98-phase-v-local-artifact-campaign-boundary-spec.md` records the
-  docs-first boundary for a future user-approved durable local artifact
-  campaign under an ignored output root. It authorizes no Rust implementation,
-  generated campaign files, external replay, official submission, accepted
-  Evidence Ledger mutation, score-axis population, ZK backend performance
-  claim, or Level2+ promotion in this slice.
-- Phase V local artifact campaign output plumbing now exists as a Rust API. It
-  validates campaign manifests, validates Phase U output roots before building
-  campaign inputs, renders deterministic Markdown, writes one manifest JSON
-  file, one validation JSON file, one rendered Markdown file, and three digest
-  sidecars under a caller-owned output root, rejects protected-path overlap,
-  stale digests, symlinks, unexpected files, partial campaigns, and repair
-  overwrites, and remains local durability metadata only. `.local-artifact-campaigns/`
-  is ignored for operator-owned durable local outputs.
-- `docs/99-phase-w-reviewed-evidence-promotion-boundary-spec.md` records the
-  docs-first boundary for future reviewed accepted-evidence mutation and
-  official benchmark submission. It authorizes no accepted Evidence Ledger
-  mutation, official submission package, external replay, live backend
-  execution, score-axis population, or Level2+ evidence creation in this slice.
-- Phase L bounded local soak acceptance exists for
-  `phase_l_qwable_local_soak_2026_06_17_extended_256`: 768 completed local
-  cases, zero failures, zero failure-corpus entries, a valid report bundle, no
-  ZK backend performance claims, and `Level0DesignNote` claim boundary.
-- Phase M inert local recursion-envelope contract implementation exists.
-  It defines local input contracts, metric labels, validation rules, negative
-  tests, serialization helpers, and claim-boundary non-escalation checks, while
-  live gnark execution and Level2+ evidence remain blocked.
-- Result classification exists.
-- Evidence and scoring primitives exist.
-- HSAI Level 1 local crates exist for claim envelopes, agent cases,
-  PCSM-governed local admission, distinct-agent registration, economy,
-  membrane conversion, economy simulation, managed-attestation verification,
-  pure-data e2e harnessing, and Phala/dstack fixture/captured-artifact
-  validation.
-- Managed-attestation Phase 57 defines the real-artifact promotion
-  requirements for an HSAI-owned fresh challenge. A first real HSAI-owned
-  Phala/dstack artifact has been captured and accepted under this spec
-  (2026-06-16); see
-  [docs/57-managed-attestation-real-artifact-promotion-spec.md](docs/57-managed-attestation-real-artifact-promotion-spec.md).
-  The acceptance is managed-verifier local regression evidence only. It
-  authorizes only the bounded Phase 4 anchor-registry crate and no stronger
-  attestation or uniqueness claim.
-- `hsai-agent-anchor-registry` implements the Phase 4 local Proof of Agent
-  anchor registry. It records one active HSAI identity per accepted,
-  non-reused registered anchor set; it does not prove global software-agent
-  uniqueness.
-- `hsai-e2e-harness` now composes the Phase 4 anchor registry over the pure-data
-  managed-attestation harness path. This is local regression evidence only, not
-  backend verification, external attestation evidence, proof, or benchmark
-  output.
-- `docs/66-managed-signature-verification-boundary-spec.md` records the
-  managed-attestation boundary as source attribution for managed-service
-  signature/JWKS/JWT or quote verification.
-- `docs/77-managed-jwt-signature-verification-notes.md` records the first
-  bounded implementation of that boundary: an offline ES256 managed-JWT verifier
-  over local in-memory public keys. It performs no JWKS fetch, no live service
-  call, no DCAP quote verification, no network access, and no claim above
-  `Attested`.
-- `docs/78-phala-live-managed-verifier-boundary-spec.md` opens the next
-  docs-first managed-attestation boundary: Phala/dstack live managed-verifier
-  planning only. It permits no Rust implementation, network access, live Phala
-  calls, secrets, local DCAP, backend execution, benchmark output, Phase 4
-  semantic changes, or claims above `Attested`.
-- `docs/79-phala-hermetic-live-verifier-implementation-spec.md` records the
-  code-phase authorization spec for a future hermetic Phala/dstack verifier
-  surface: provider trait, offline test double, response normalization, failure
-  taxonomy, trust-root mapping, replay/freshness checks, and `Attested`-only
-  output. This spec itself adds no Rust code and still forbids live calls in
-  normal tests.
-- `docs/80-phala-hermetic-live-verifier-implementation-notes.md` records the
-  implementation of that hermetic surface in `hsai-attestation-phala`: injected
-  provider-client trait, deterministic in-memory fake client, normalized
-  response validation, replay/freshness guard, trust-root mapping, and
-  `Attested`-only output. It still performs no live calls, network access,
-  local DCAP, credential handling, or benchmark work.
-- `docs/81-phala-operator-live-path-boundary-spec.md` records the docs-first
-  operator-only live-path boundary: secret handling outside git, explicit
-  operator acknowledgement, timeout and retry limits, redaction, audit output,
-  ignored/feature-gated live behavior, and `Attested`-only claim limits. It
-  authorizes no Rust implementation, examples, credentials, generated
-  artifacts, or live Phala calls in this slice.
-- `docs/82-phala-operator-live-artifact-plumbing-spec.md` records the
-  docs-first operator-live artifact plumbing boundary: local output-bundle file
-  roles, digest and schema rules, redaction-report validation, deterministic
-  validation requirements, future code touch surface, hermetic test
-  requirements, and `Attested`-only claim limits. It authorizes no Rust
-  implementation, examples, scripts, credentials, generated artifacts, operator
-  live tests, network access, or live Phala calls in this slice.
-- `docs/83-phala-operator-live-artifact-plumbing-implementation-notes.md`
-  records the local in-memory implementation of that artifact-plumbing surface
-  in `hsai-attestation-phala`: declared logical file parsing, portable path
-  checks, schema and SHA-256 digest validation, redaction-report validation,
-  provider/trust-root consistency checks, existing hermetic response validation,
-  and `Attested`-only output metadata. It performs no filesystem writes, network
-  access, credential loading, live Phala calls, operator live tests, local DCAP,
-  or benchmark work.
-- `docs/84-phala-operator-live-artifact-output-plumbing-boundary-spec.md`
-  records the docs-first boundary for future materialized output plumbing:
-  caller-selected output-root rules, write/read policy, overwrite policy,
-  symlink and path-traversal rejection, raw-response retention limits, future
-  tests, and `Attested`-only claim limits. It authorizes no Rust
-  implementation, filesystem writes, examples, scripts, credentials, generated
-  operator artifacts, operator live tests, network access, or live Phala calls
-  in this slice.
-- `docs/85-phala-operator-live-artifact-output-plumbing-implementation-notes.md`
-  records the local output-root implementation of that materialized artifact
-  surface in `hsai-attestation-phala`: explicit output-root validation,
-  symlink rejection, explicit overwrite mode, staged writes, declared-file-only
-  reads, stale digest rejection, raw-response body retention rejection, and
-  Phase 83 in-memory validation reuse. It performs no network access, credential
-  loading, live Phala calls, operator live tests, local DCAP, managed-service
-  signature verification, generated operator artifact acceptance, or benchmark
-  work.
-- `docs/97-phala-operator-live-invocation-boundary-spec.md` records the
-  docs-first boundary for a future operator-owned live Phala/dstack invocation
-  path. It authorizes no Rust implementation, examples, scripts, credentials,
-  generated operator artifacts, operator live tests, network access, live Phala
-  calls, local DCAP, PCCS, JWKS fetching, TLS channel binding, accepted Evidence
-  Ledger mutation, benchmark output, or claims above `Attested` in this slice.
-- `docs/100-phala-operator-live-invocation-implementation-notes.md` records the
-  local operator-live invocation plumbing implementation. The
-  `hsai-attestation-phala` crate now has an explicit invocation input, opaque
-  credential-provider boundary, credential-aware injected client boundary,
-  bounded retry handling, replay rejection, redacted artifact-bundle assembly,
-  and Phase 85 output-root reuse. It still ships no HTTP client, performs no
-  live Phala call, loads no process environment credentials, runs no operator
-  live tests, implements no local DCAP/PCCS/JWKS/TLS path, creates no benchmark
-  output, mutates no accepted Evidence Ledger, and claims nothing above
-  `Attested`.
-- `docs/101-phala-operator-live-provider-client-boundary-spec.md` records the
-  docs-first boundary for a future concrete Phala/dstack provider client behind
-  the existing Phase 100 injected-client seam. It authorizes no Rust
-  implementation, Cargo metadata, examples, scripts, package runtime files,
-  network access, live Phala calls, operator live tests, real credentials,
-  generated operator artifacts, local DCAP, PCCS, JWKS fetching, TLS channel
-  binding, benchmark output, accepted Evidence Ledger mutation, or claims above
-  `Attested` in this slice.
-- `docs/102-phala-operator-live-provider-client-implementation-notes.md`
-  records the opt-in Phala/dstack provider-client implementation behind the
-  existing Phase 100 seam. The `operator-live-provider` feature adds explicit
-  configuration, an allowlisted environment credential provider, a transport
-  seam, a ureq-backed HTTP transport, normalized response parsing, and
-  raw-response digest replacement. It is disabled by default, has hermetic fake
-  transport tests, commits no credentials or generated operator artifacts, runs
-  no operator live test, performs no live Phala call in normal gates, implements
-  no DCAP/PCCS/TLS or token-verification path, creates no benchmark output,
-  mutates no accepted Evidence Ledger, and claims nothing above `Attested`.
-- `docs/104-phala-operator-live-runner-boundary-spec.md` records the
-  docs-first boundary for a future operator-only live runner over the existing
-  provider-client and invocation plumbing. It keeps live calls explicit,
-  feature-gated, credential-free in git, excluded from normal tests, and capped
-  at `Attested`.
-- `docs/105-phala-operator-live-runner-implementation-notes.md` records the
-  operator-only `operator_live_run` example. It requires explicit
-  acknowledgement, a non-secret invocation JSON path, a matching credential
-  source declaration, and `--features operator-live-provider`; it writes only
-  the existing redacted `operator-live/*` bundle. No operator live artifact is
-  generated unless a real operator supplies endpoint, credential, and input JSON
-  outside git.
-- `docs/106-phala-cloud-api-live-artifact-implementation-notes.md` records the
-  operator-only Phala Cloud `/attestations/verify` response materialization
-  path. The live API call is performed outside normal tests by the authorized
-  operator CLI, and the example maps the saved raw response into the existing
-  redacted `operator-live/*` bundle without retaining the raw response body or
-  committing generated artifacts.
-- `docs/107-phala-dcap-pccs-collateral-implementation-notes.md` records the
-  operator-only Phala Cloud collateral materialization path. The live
-  `/attestations/collateral/<checksum>` call is performed outside normal tests,
-  and the example writes digest-only `dcap-pccs/*` metadata outside git. It does
-  not implement local Intel QVL/DCAP quote-signature verification or operate a
-  local PCCS.
-- `docs/108-phala-local-dcap-qvl-verification-notes.md` records the
-  operator-only local DCAP/QVL verification artifact path. The raw quote is
-  downloaded outside normal tests, verified by the operator-installed
-  `dcap-qvl` CLI, and the example writes digest-only `dcap-qvl/*` metadata
-  outside git. It does not add a repo-native DCAP verifier or operate a local
-  PCCS service.
-- `docs/109-managed-jwks-fetch-artifact-notes.md` records the operator-only
-  managed JWKS fetch artifact path. Intel Trust Authority OpenID metadata and
-  JWKS are fetched outside normal tests, and the example writes digest-only
-  `managed-jwks/*` metadata outside git. It does not accept tokens, verify a
-  live managed JWT, or add network access to normal tests.
-- `docs/110-phala-local-pccs-service-artifact-notes.md` records the
-  operator-only localhost PCCS-compatible replay service artifact path. The
-  raw quote and Phala collateral are fetched outside normal tests, `dcap-qvl`
-  is run with `PCCS_URL` pointed at `127.0.0.1`, and the example writes
-  digest-only `local-pccs/*` metadata outside git. It does not operate Intel
-  PCS or a production PCCS.
-- `docs/111-phala-intel-pcs-direct-artifact-notes.md` records the
-  operator-only direct Intel PCS QVL artifact path. The raw quote is verified
-  by `dcap-qvl` with `PCCS_URL=https://api.trustedservices.intel.com`, and the
-  example writes digest-only `intel-pcs/*` metadata outside git. It does not
-  add a repo-native DCAP verifier.
-- Managed-attestation challenge packet tooling exists for local, non-secret
-  capture preflight. It creates capture inputs only, not real attestation
-  evidence. The operator-facing preflight example
-  (`crates/hsai-attestation-phala/examples/operator_capture_preflight.rs`)
-  emits a JSON challenge packet and capture manifest from fixed sample inputs,
-  and `docs/59-operator-capture-runbook.md` documents the repo-external
-  capture steps an operator must run to produce a real artifact.
-- No external adapters exist.
-- No live zk-Harness execution exists.
-- No live external execution exists beyond the operator-only Phala and managed
-  JWKS artifact paths recorded above.
-- No real external result import exists.
-- No local soak telemetry is used as ZK backend performance.
-- No failure corpus entry is accepted evidence.
-- No evidence append proposal is accepted evidence.
-- No evidence-record candidate is accepted evidence.
-- No append preview is accepted evidence.
-- No Level2 eligibility report is Level2 evidence.
-- No review ledger entry is accepted evidence.
-- No external adapter evidence exists.
-- No official benchmark evidence exists.
-- No formal evidence exists.
 
 ## Next Implementation Slice
 
