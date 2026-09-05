@@ -1,9 +1,12 @@
 //! Captured Phala/dstack Trust Center artifact validation.
 //!
-//! This module validates a public captured artifact in managed verifier mode.
-//! It does not perform local Intel DCAP quote verification, managed-service
-//! signature verification, JWKS/JWT validation, or network calls.
+//! State slice: `agent-identity-end-to-end-verification-hardening-v1`.
+//!
+//! This module validates a public captured artifact only after an explicit
+//! quote verifier authenticates the complete quote. The default entry point is
+//! fail-closed and does not perform network calls or invent provider trust.
 
+use crate::challenge::agent_case_hash;
 use hsai_agent_case::{AgentCase, EvidenceLane};
 use hsai_attestation::report_data_binding;
 use hsai_claim_envelope::{ClaimEnvelope, LaneId, Maturity, TimeWindow, TrustRoot, VendorId};
@@ -72,6 +75,48 @@ pub struct ManagedVerifierMode {
     pub tcb_status: Option<String>,
 }
 
+/// The authenticated quote backend used by the artifact lane.
+///
+/// Implementations must parse and authenticate the complete quote against the
+/// configured TDX/DCAP trust roots and verify that its report-data field equals
+/// `expected_report_data`. A substring check is intentionally not a valid
+/// implementation of this trait.
+pub trait PhalaQuoteVerifier {
+    fn verify_quote(
+        &self,
+        quote: &[u8],
+        expected_report_data: &[u8],
+    ) -> Result<VerifiedPhalaQuote, PhalaQuoteVerificationError>;
+}
+
+/// Authenticated output from a [`PhalaQuoteVerifier`].
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct VerifiedPhalaQuote {
+    /// Report-data bytes extracted from the authenticated quote body.
+    pub report_data: Vec<u8>,
+    /// Provider and/or hardware roots used to authenticate the quote.
+    pub trust_roots: BTreeSet<TrustRoot>,
+}
+
+/// Why a quote backend refused to authenticate a quote.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum PhalaQuoteVerificationError {
+    Unavailable,
+    Invalid,
+}
+
+struct RejectingPhalaQuoteVerifier;
+
+impl PhalaQuoteVerifier for RejectingPhalaQuoteVerifier {
+    fn verify_quote(
+        &self,
+        _quote: &[u8],
+        _expected_report_data: &[u8],
+    ) -> Result<VerifiedPhalaQuote, PhalaQuoteVerificationError> {
+        Err(PhalaQuoteVerificationError::Unavailable)
+    }
+}
+
 /// Local validation policy for a captured Phala artifact.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct PhalaValidationPolicy {
@@ -134,6 +179,12 @@ pub enum PhalaValidationError {
         expected: String,
     },
     ReportDataBindingMismatch,
+    CaseHashMismatch {
+        actual: String,
+        expected: String,
+    },
+    /// The quote was not parsed and authenticated by an explicit verifier.
+    QuoteUnverified,
     QuoteReportDataMissing,
     ComposeHashMismatch {
         actual: String,
@@ -175,14 +226,29 @@ pub fn parse_phala_artifact(json: &str) -> Result<PhalaArtifactBundle, PhalaVali
     serde_json::from_str(json).map_err(|err| PhalaValidationError::InvalidJson(err.to_string()))
 }
 
-/// Validate a captured Phala/dstack artifact in managed verifier mode.
+/// Validate a captured Phala/dstack artifact without a quote backend.
 ///
-/// This validates only local bindings and explicitly records managed verifier
-/// dependencies as trust roots.
+/// This entry point intentionally fails closed with [`PhalaValidationError::QuoteUnverified`].
+/// Call [`validate_phala_artifact_with_quote_verifier`] only after wiring an
+/// implementation that authenticates the provider quote and trust chain.
 pub fn validate_phala_artifact(
     bundle: &PhalaArtifactBundle,
     policy: &PhalaValidationPolicy,
     now: u64,
+) -> Result<ValidatedPhalaAttestation, PhalaValidationError> {
+    validate_phala_artifact_with_quote_verifier(bundle, policy, now, &RejectingPhalaQuoteVerifier)
+}
+
+/// Validate an artifact with an explicit authenticated quote backend.
+///
+/// Structural checks run before the quote backend so malformed artifacts keep
+/// precise failure causes. A successful result is possible only after the
+/// backend has authenticated the complete quote and its report-data field.
+pub fn validate_phala_artifact_with_quote_verifier<V: PhalaQuoteVerifier>(
+    bundle: &PhalaArtifactBundle,
+    policy: &PhalaValidationPolicy,
+    now: u64,
+    quote_verifier: &V,
 ) -> Result<ValidatedPhalaAttestation, PhalaValidationError> {
     let expected_anchor_id = policy.expected_anchor_id.clone();
     if bundle.anchor_id != expected_anchor_id {
@@ -226,10 +292,6 @@ pub fn validate_phala_artifact(
         &case_hash,
         &agent_pubkey_hex,
     )?;
-    if !quote_hex.contains(&expected_report_data) {
-        return Err(PhalaValidationError::QuoteReportDataMissing);
-    }
-
     let compose_hash = normalize_hex("compose_hash", &bundle.compose_hash, Some(HASH256_HEX_LEN))?;
     let expected_compose_hash = normalize_hex(
         "expected_compose_hash",
@@ -254,6 +316,19 @@ pub fn validate_phala_artifact(
     validate_rtmrs(bundle)?;
     validate_required_docker_digests(bundle, policy)?;
 
+    let quote = decode_hex("quote_hex", &quote_hex, None)?;
+    let expected_report_data_bytes = decode_hex("report_data_hex", &expected_report_data, None)?;
+    let verified_quote = quote_verifier
+        .verify_quote(&quote, &expected_report_data_bytes)
+        .map_err(|_| PhalaValidationError::QuoteUnverified)?;
+    if verified_quote.report_data != expected_report_data_bytes
+        || verified_quote.trust_roots.is_empty()
+    {
+        return Err(PhalaValidationError::QuoteUnverified);
+    }
+    let mut trust_roots = managed_trust_roots(bundle, &compose_hash);
+    trust_roots.extend(verified_quote.trust_roots);
+
     Ok(ValidatedPhalaAttestation {
         anchor_id: bundle.anchor_id.clone(),
         report_data_hex: expected_report_data,
@@ -264,8 +339,42 @@ pub fn validate_phala_artifact(
                 .observed_timestamp
                 .saturating_add(policy.max_age_seconds),
         },
-        trust_roots: managed_trust_roots(bundle, &compose_hash),
+        trust_roots,
     })
+}
+
+/// Validate an authenticated artifact against the exact current agent case.
+///
+/// The case hash is recomputed from `case`; it is never taken from the
+/// artifact or copied into policy by the caller.
+pub fn validate_phala_artifact_for_case_with_quote_verifier<V: PhalaQuoteVerifier>(
+    bundle: &PhalaArtifactBundle,
+    policy: &PhalaValidationPolicy,
+    case: &AgentCase,
+    quote_verifier: &V,
+) -> Result<ValidatedPhalaAttestation, PhalaValidationError> {
+    let validated = validate_phala_artifact_with_quote_verifier(
+        bundle,
+        policy,
+        case.observed_at,
+        quote_verifier,
+    )?;
+    let actual = normalize_hex(
+        "case_hash_hex",
+        &bundle.case_hash_hex,
+        Some(HASH256_HEX_LEN),
+    )?;
+    let expected =
+        encode_hex(
+            &agent_case_hash(case).map_err(|_| PhalaValidationError::CaseHashMismatch {
+                actual: actual.clone(),
+                expected: "serializable-agent-case".to_owned(),
+            })?,
+        );
+    if actual != expected {
+        return Err(PhalaValidationError::CaseHashMismatch { actual, expected });
+    }
+    Ok(validated)
 }
 
 /// Artifact-specific lane for captured Phala/dstack evidence.
@@ -288,19 +397,19 @@ impl PhalaArtifactAttestationLane {
             policy,
         }
     }
-}
 
-impl EvidenceLane for PhalaArtifactAttestationLane {
-    fn id(&self) -> LaneId {
-        LaneId::Named("attestation-phala-artifact".to_owned())
-    }
-
-    fn ceiling(&self) -> Maturity {
-        Maturity::Attested
-    }
-
-    fn evaluate(&self, case: &AgentCase) -> ClaimEnvelope {
-        match validate_phala_artifact(&self.artifact, &self.policy, case.observed_at) {
+    /// Evaluate using an explicit quote parser/authenticator.
+    pub fn evaluate_with_quote_verifier<V: PhalaQuoteVerifier>(
+        &self,
+        case: &AgentCase,
+        quote_verifier: &V,
+    ) -> ClaimEnvelope {
+        match validate_phala_artifact_for_case_with_quote_verifier(
+            &self.artifact,
+            &self.policy,
+            case,
+            quote_verifier,
+        ) {
             Ok(validated) if validated.anchor_id == self.anchor.anchor_id() => {
                 let mut trust_roots = validated.trust_roots;
                 trust_roots.insert(self.anchor.trust_root());
@@ -315,17 +424,35 @@ impl EvidenceLane for PhalaArtifactAttestationLane {
                     self.id(),
                 )
             }
-            _ => ClaimEnvelope::new(
-                BTreeSet::new(),
-                BTreeSet::new(),
-                case.oracle.excluded.clone(),
-                Maturity::Stub,
-                BTreeSet::new(),
-                TimeWindow::all(),
-                self.id(),
-            ),
+            _ => stub_envelope(case, self.id()),
         }
     }
+}
+
+impl EvidenceLane for PhalaArtifactAttestationLane {
+    fn id(&self) -> LaneId {
+        LaneId::Named("attestation-phala-artifact".to_owned())
+    }
+
+    fn ceiling(&self) -> Maturity {
+        Maturity::Attested
+    }
+
+    fn evaluate(&self, case: &AgentCase) -> ClaimEnvelope {
+        self.evaluate_with_quote_verifier(case, &RejectingPhalaQuoteVerifier)
+    }
+}
+
+fn stub_envelope(case: &AgentCase, lane: LaneId) -> ClaimEnvelope {
+    ClaimEnvelope::new(
+        BTreeSet::new(),
+        BTreeSet::new(),
+        case.oracle.excluded.clone(),
+        Maturity::Stub,
+        BTreeSet::new(),
+        TimeWindow::all(),
+        lane,
+    )
 }
 
 fn validate_managed_verifier(mode: &ManagedVerifierMode) -> Result<(), PhalaValidationError> {

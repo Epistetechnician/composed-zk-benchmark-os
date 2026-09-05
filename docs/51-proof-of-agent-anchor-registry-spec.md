@@ -1,12 +1,15 @@
 # Proof Of Agent Anchor Registry - Phase 4 Spec
 
+State slice: `agent-identity-end-to-end-verification-hardening-v1`.
+
 ## Status And Claim Boundary
 
 This is the implementation spec for Phase 4 of the managed-attestation track. It
 could not start until Phase 3 demonstrated at least one real hardware-backed
 attestation backend that can close an existing distinct-agent assumption. The
-2026-06-16 HSAI-owned Phala/dstack artifact acceptance satisfies that start
-condition for this bounded local crate.
+2026-06-16 HSAI-owned Phala/dstack artifact is retained as a captured
+fixture, but it does not satisfy that start condition until an external quote
+backend authenticates the TDX quote and managed-service trust chain.
 
 This phase does not claim global uniqueness of software agents. Software is
 copyable. The strongest honest claim is:
@@ -89,6 +92,7 @@ struct AgentAnchorSet {
   sponsor_anchors:     BTreeSet<SponsorAnchor>,
   bond_anchors:        BTreeSet<BondAnchor>,
   reputation_anchor:   Option<ReputationAnchor>,
+  anchor_receipts:     BTreeSet<AnchorReceipt>,
 }
 
 enum SponsorAnchor {
@@ -109,6 +113,17 @@ struct ReputationAnchor {
   min_observations: u64,
 }
 
+struct AnchorReceipt {
+  kind: AnchorReceiptKind,
+  anchor_id: String,
+  anchor_digest: Hash,
+  lane: LaneId,
+  issued_at: u64,
+  expires_at: u64,
+  signer_key_id: String,
+  signature: Vec<u8>,
+}
+
 enum SponsorshipPolicy {
   OneAgentPerSponsor,
   LimitedAgentsPerSponsor { max: u64 },
@@ -123,6 +138,12 @@ struct RegisteredAgentAnchor {
   revoked_at: Option<u64>,
 }
 ```
+
+`ClaimEnvelope` is caller-constructible data and is not registration
+authorization. Registration requires signed evidence from a configured,
+operator-authenticated lane, an exact `anchor_set_id` binding, and one signed
+receipt for each sponsor, bond, and reputation anchor. Each receipt binds the
+complete canonical anchor payload, not only its identifier.
 
 The exact Rust field names may adjust to fit existing crate style, but the
 semantics must stay intact.
@@ -139,6 +160,8 @@ semantics must stay intact.
    necessarily revoke a hardware-backed identity.
 7. Reputation continuity accrues only to active `anchor_set_id`.
 8. Anchor set hashes are canonical and deterministic.
+9. Sponsor, bond, and reputation bookkeeping has no effect without a valid
+   signed receipt bound to the complete anchor payload.
 
 ## Claim Envelope Interaction
 

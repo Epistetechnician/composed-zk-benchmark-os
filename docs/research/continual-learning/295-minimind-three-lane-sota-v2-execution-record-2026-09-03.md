@@ -16,6 +16,12 @@ The external trust bundle is independently verified at the pinned file SHA-256
 The model preflight was exercised with a missing receipt and rejected before
 model import and before creating the model output root.
 
+GiveMeANode support ticket `tkt-xr697` was filed to the external operator for
+the required V2 authority-side reissuance. The request is limited to offline
+CPU qualification, asks for `review_receipt_issuance_permitted=true` and
+`model_execution_permitted=true`, keeps provider execution disabled, and
+explicitly does not treat the ticket as an `ACCEPT`.
+
 The model boundary remains closed until the exact review packet has a fresh,
 external, packet-bound Ed25519 `ACCEPT`. The previous V1 review was rejected
 for a 54-versus-42 model-trial manifest inconsistency; its reviewer created no
