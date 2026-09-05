@@ -3,7 +3,7 @@ name = "hsai-attestation"
 version = "0.1.0"
 edition.workspace = true
 rust-version.workspace = true
-description = "Interface-level attestation-verification lane: turns a managed attestation token into a ClaimEnvelope guaranteeing anchor validity (Attested, never Proven). The reference verifier does NOT check the managed service signature."
+description = "Fail-closed attestation-verification lane: turns an authenticated managed attestation token into a ClaimEnvelope guaranteeing anchor validity (Attested, never Proven)."
 
 [dependencies]
 hsai-claim-envelope = { path = "../hsai-claim-envelope" }

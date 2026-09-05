@@ -18,4 +18,5 @@ hsai-gateway-digest-checker = { path = "../hsai-gateway-digest-checker" }
 hsai-membrane = { path = "../hsai-membrane" }
 
 [dev-dependencies]
+p256 = { version = "0.13", features = ["ecdsa"] }
 proptest = { version = "=1.5.0", default-features = false, features = ["std"] }

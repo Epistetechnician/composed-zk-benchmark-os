@@ -329,6 +329,7 @@ dependencies = [
  "hsai-attestation-phala",
  "hsai-claim-envelope",
  "hsai-distinct-agent",
+ "p256",
  "proptest",
  "serde",
  "serde_json",
@@ -411,6 +412,7 @@ dependencies = [
  "hsai-economy-sim",
  "hsai-gateway-digest-checker",
  "hsai-membrane",
+ "p256",
  "proptest",
 ]
 

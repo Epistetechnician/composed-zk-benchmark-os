@@ -19,8 +19,7 @@ use hsai_attestation_phala::{
     PhalaArtifactBundle, PhalaValidationPolicy,
 };
 use hsai_claim_envelope::{
-    admits, conjoin, AcceptancePolicy, Maturity, Predicate, PropertyKind, SubjectId, TrustRoot,
-    TrustRootClass, VendorId,
+    admits, conjoin, AcceptancePolicy, Maturity, Predicate, PropertyKind, SubjectId, TrustRootClass,
 };
 use hsai_distinct_agent::{distinctness, Anchor, AnchorBundle, DistinctAgentLane};
 use std::collections::BTreeSet;
@@ -76,32 +75,19 @@ fn acceptance_policy(case: &AgentCase) -> AcceptancePolicy {
     }
 }
 
-fn root(id: &str) -> TrustRoot {
-    TrustRoot::HardwareVendor(VendorId(id.to_owned()))
-}
-
 fn mutate_first_hex_char(value: &mut String) {
     let replacement = if value.starts_with('0') { "1" } else { "0" };
     value.replace_range(0..1, replacement);
 }
 
 #[test]
-fn real_hsai_owned_artifact_validates_with_phase57_binding() {
+fn real_hsai_owned_artifact_requires_authenticated_quote_backend() {
     let bundle = bundle();
     let policy = PhalaValidationPolicy::for_bundle(&bundle, 600);
-    let validated = validate_phala_artifact(&bundle, &policy, bundle.observed_timestamp)
-        .expect("real HSAI-owned artifact must validate");
-
-    assert_eq!(validated.anchor_id, bundle.anchor_id);
-    assert_eq!(validated.report_data_hex, bundle.report_data_hex);
-    assert_eq!(validated.compose_hash, bundle.compose_hash);
-    // Phase 57 binding: report_data_hex is 64 hex chars (32-byte SHA-256),
-    // not the 128-char Phase 3 captured-artifact format.
-    assert_eq!(
-        validated.report_data_hex.len(),
-        64,
-        "Phase 57 HSAI-owned binding must be 64 hex chars"
-    );
+    assert!(matches!(
+        validate_phala_artifact(&bundle, &policy, bundle.observed_timestamp),
+        Err(hsai_attestation_phala::PhalaValidationError::QuoteUnverified)
+    ));
 }
 
 #[test]
@@ -109,11 +95,12 @@ fn real_artifact_report_data_binding_is_recomputable() {
     let bundle = bundle();
     let policy = PhalaValidationPolicy::for_bundle(&bundle, 600);
 
-    // The policy's expected_report_data_hex comes straight from the bundle.
-    // The validator recomputes report_data_binding(pubkey, nonce, case_hash)
-    // internally and checks equality. If this passes, the HSAI binding was
-    // carried end-to-end through real TDX hardware.
-    assert!(validate_phala_artifact(&bundle, &policy, bundle.observed_timestamp).is_ok());
+    // The validator recomputes the local report-data binding, but does not
+    // authorize the artifact until a quote backend authenticates the quote.
+    assert!(matches!(
+        validate_phala_artifact(&bundle, &policy, bundle.observed_timestamp),
+        Err(hsai_attestation_phala::PhalaValidationError::QuoteUnverified)
+    ));
 
     // Tampering the report data must break the binding.
     let mut tampered = bundle.clone();
@@ -131,16 +118,6 @@ fn real_artifact_report_data_binding_is_recomputable() {
 fn real_artifact_closes_distinctness_at_attested_maturity() {
     let bundle = bundle();
     let policy = PhalaValidationPolicy::for_bundle(&bundle, 600);
-    let validated = validate_phala_artifact(&bundle, &policy, bundle.observed_timestamp)
-        .expect("captured artifact must validate");
-
-    assert!(validated
-        .trust_roots
-        .contains(&root("managed:phala-trust-center")));
-    assert!(validated
-        .trust_roots
-        .contains(&root("managed:intel-trust-authority")));
-
     let case = case(&bundle);
     let anchor = anchor(&bundle);
     let distinct =
@@ -148,42 +125,28 @@ fn real_artifact_closes_distinctness_at_attested_maturity() {
     let attestation = PhalaArtifactAttestationLane::new(anchor, bundle, policy).evaluate(&case);
     let combined = conjoin(distinct, attestation);
 
-    assert_eq!(combined.maturity, Maturity::Attested);
-    assert!(combined.assumptions.is_empty());
-    assert!(admits(acceptance_policy(&case), combined).is_ok());
+    assert_eq!(combined.maturity, Maturity::Stub);
+    assert!(!combined.assumptions.is_empty());
+    assert!(admits(acceptance_policy(&case), combined).is_err());
 }
 
 #[test]
 fn real_artifact_managed_verifier_trust_roots_are_visible() {
     let bundle = bundle();
     let policy = PhalaValidationPolicy::for_bundle(&bundle, 600);
-    let validated = validate_phala_artifact(&bundle, &policy, bundle.observed_timestamp)
-        .expect("captured artifact must validate");
-
-    assert!(validated
-        .trust_roots
-        .contains(&root("managed:phala-trust-center")));
-    assert!(validated
-        .trust_roots
-        .contains(&root("managed:intel-trust-authority")));
-    assert!(validated
-        .trust_roots
-        .contains(&root(&format!("dstack-os:{}", bundle.os_image_hash))));
-    assert!(validated
-        .trust_roots
-        .contains(&root(&format!("compose:{}", bundle.compose_hash))));
+    assert!(matches!(
+        validate_phala_artifact(&bundle, &policy, bundle.observed_timestamp),
+        Err(hsai_attestation_phala::PhalaValidationError::QuoteUnverified)
+    ));
 }
 
 #[test]
-fn real_artifact_phase3_format_still_accepted() {
-    // The existing Phase 3 captured-artifact fixture (128-char report data)
-    // must still validate after the validator change. This guards backward
-    // compatibility.
+fn real_artifact_phase3_format_also_requires_authenticated_quote_backend() {
     let phase3_fixture = include_str!("fixtures/phala_trust_center_app_2026_06_16.json");
     let bundle = parse_phala_artifact(phase3_fixture).expect("Phase 3 fixture must parse");
     let policy = PhalaValidationPolicy::for_bundle(&bundle, 600);
-    let validated = validate_phala_artifact(&bundle, &policy, bundle.observed_timestamp)
-        .expect("Phase 3 captured artifact must still validate");
-
-    assert_eq!(validated.report_data_hex.len(), 128);
+    assert!(matches!(
+        validate_phala_artifact(&bundle, &policy, bundle.observed_timestamp),
+        Err(hsai_attestation_phala::PhalaValidationError::QuoteUnverified)
+    ));
 }

@@ -22,9 +22,12 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 pub mod artifact;
 pub use artifact::{
-    parse_phala_artifact, validate_phala_artifact, DstackEvent, ManagedVerifierMode,
-    PhalaArtifactAttestationLane, PhalaArtifactBundle, PhalaValidationError, PhalaValidationPolicy,
-    RtmrSet, ValidatedPhalaAttestation,
+    parse_phala_artifact, validate_phala_artifact,
+    validate_phala_artifact_for_case_with_quote_verifier,
+    validate_phala_artifact_with_quote_verifier, DstackEvent, ManagedVerifierMode,
+    PhalaArtifactAttestationLane, PhalaArtifactBundle, PhalaQuoteVerificationError,
+    PhalaQuoteVerifier, PhalaValidationError, PhalaValidationPolicy, RtmrSet,
+    ValidatedPhalaAttestation, VerifiedPhalaQuote,
 };
 pub mod challenge;
 pub use challenge::{

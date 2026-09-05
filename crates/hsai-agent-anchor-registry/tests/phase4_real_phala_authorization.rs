@@ -1,15 +1,12 @@
 use hsai_agent_anchor_registry::{
-    anchor_acceptance_policy, anchor_tier_predicate, AgentAnchorRegistry, AgentAnchorSet,
-    AnchorTier, PHASE_4_CLAIM_BOUNDARY,
+    anchor_acceptance_policy, AgentAnchorError, AgentAnchorRegistry, AgentAnchorSet,
 };
 use hsai_agent_case::EvidenceLane;
 use hsai_agent_case::{ActionId, AgentCase, MemoryRoot, ModelId, OracleContract, Verdict};
 use hsai_attestation_phala::{
     parse_phala_artifact, PhalaArtifactAttestationLane, PhalaArtifactBundle, PhalaValidationPolicy,
 };
-use hsai_claim_envelope::{
-    admits, conjoin, Maturity, Predicate, PropertyKind, SubjectId, TrustRoot, VendorId,
-};
+use hsai_claim_envelope::{admits, conjoin, Maturity, Predicate, PropertyKind, SubjectId};
 use hsai_distinct_agent::{distinctness, Anchor, AnchorBundle, DistinctAgentLane};
 use std::collections::BTreeSet;
 
@@ -56,12 +53,8 @@ fn phala_anchor(bundle: &PhalaArtifactBundle) -> Anchor {
     }
 }
 
-fn root(id: &str) -> TrustRoot {
-    TrustRoot::HardwareVendor(VendorId(id.to_owned()))
-}
-
 #[test]
-fn accepted_real_phala_artifact_authorizes_phase4_registry_start() {
+fn real_phala_artifact_cannot_authorize_phase4_without_quote_authentication() {
     let bundle = bundle();
     let case = case(&bundle);
     let anchor = phala_anchor(&bundle);
@@ -75,18 +68,12 @@ fn accepted_real_phala_artifact_authorizes_phase4_registry_start() {
     let phase4_policy =
         anchor_acceptance_policy(&case.subject, case.observed_at, Maturity::Attested);
 
-    assert!(admits(phase4_policy.clone(), admitted.clone()).is_ok());
-    assert_eq!(admitted.maturity, Maturity::Attested);
-    assert!(admitted.assumptions.is_empty());
-    assert!(admitted
-        .trust_roots
-        .contains(&root("managed:phala-trust-center")));
-    assert!(admitted
-        .trust_roots
-        .contains(&root("managed:intel-trust-authority")));
+    assert!(admits(phase4_policy.clone(), admitted.clone()).is_err());
+    assert_eq!(admitted.maturity, Maturity::Stub);
+    assert!(!admitted.assumptions.is_empty());
 
     let mut registry = AgentAnchorRegistry::new();
-    let registered = registry
+    let error = registry
         .register(
             AgentAnchorSet {
                 subject: case.subject.clone(),
@@ -96,25 +83,10 @@ fn accepted_real_phala_artifact_authorizes_phase4_registry_start() {
             admitted,
             phase4_policy,
         )
-        .expect("accepted real HSAI-owned Phala artifact should authorize Phase 4 registry registration");
+        .expect_err("raw caller-provided evidence must not authorize registration");
 
-    assert_eq!(registered.tier, AnchorTier::HardwareAnchoredAgent);
-    assert_eq!(registered.envelope.maturity, Maturity::Attested);
-    assert!(registered
-        .envelope
-        .guarantees
-        .contains(&anchor_tier_predicate(
-            &case.subject,
-            &AnchorTier::HardwareAnchoredAgent
-        )));
-    assert!(registered.envelope.excludes.contains(&Predicate {
-        subject: case.subject.clone(),
-        property: PropertyKind::Custom(
-            "does-not-prove:global-software-agent-uniqueness".to_owned(),
-        ),
-    }));
-    assert!(PHASE_4_CLAIM_BOUNDARY.contains("not global software-agent uniqueness"));
-    assert_eq!(registry.active_count(), 1);
-    assert_eq!(registry.registered_count(), 1);
+    assert_eq!(error, AgentAnchorError::UnverifiedEvidence);
+    assert_eq!(registry.active_count(), 0);
+    assert_eq!(registry.registered_count(), 0);
     assert!(registry.validate_internal_state().is_ok());
 }

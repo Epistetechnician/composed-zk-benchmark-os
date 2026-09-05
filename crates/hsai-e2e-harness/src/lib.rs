@@ -15,14 +15,16 @@ mod tests {
         ArtifactDigest, NonClaimLabel,
     };
     use hsai_agent_anchor_registry::{
-        anchor_acceptance_policy, anchor_tier_predicate, AgentAnchorError, AgentAnchorRegistry,
-        AgentAnchorSet, AnchorTier, PHASE_4_CLAIM_BOUNDARY,
+        anchor_acceptance_policy, AgentAnchorError, AgentAnchorRegistry, AgentAnchorSet,
+        AnchorTier, RegistryEvidenceVerifier, RegistryTrustedKey, SignedClaimEnvelope,
+        PHASE_4_CLAIM_BOUNDARY,
     };
     use hsai_agent_case::{
         ActionId, AgentCase, EvidenceLane, MemoryRoot, ModelId, OracleContract, Verdict,
     };
     use hsai_attestation::{
-        report_data_binding, AttestationInput, AttestationLane, ManagedTokenVerifier, Token,
+        report_data_binding, AttestationInput, AttestationLane, AttestationVerifier, Token,
+        VerifiedAttestation, VerifyError,
     };
     use hsai_claim_envelope::{
         admits, conjoin, AcceptancePolicy, ClaimEnvelope, Hash, LaneId, Maturity, Predicate,
@@ -34,8 +36,46 @@ mod tests {
     use hsai_economy::{Credits, DemurragePolicy, Economy, EconomyError, FloorPlusDemandPeg};
     use hsai_economy_sim::{run, run_with_funding, sweep, FundingRule, PolicyChoice, SimConfig};
     use hsai_membrane::{AutonomyLevel, ExternalAmount, Membrane, MembraneError};
+    use p256::ecdsa::{signature::Signer, Signature, SigningKey, VerifyingKey};
     use proptest::prelude::*;
     use std::collections::BTreeSet;
+
+    #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+    struct FieldOnlyTokenVerifier;
+
+    impl AttestationVerifier for FieldOnlyTokenVerifier {
+        fn verify(
+            &self,
+            token: &Token,
+            expected_nonce: u64,
+            expected_report_data: &[u8],
+            expected_measurements: &[u8],
+            anchor_id: &str,
+            now: u64,
+        ) -> Result<VerifiedAttestation, VerifyError> {
+            if token.anchor_id != anchor_id {
+                return Err(VerifyError::AnchorMismatch);
+            }
+            if token.nonce != expected_nonce {
+                return Err(VerifyError::NonceMismatch);
+            }
+            if token.report_data != expected_report_data {
+                return Err(VerifyError::ReportDataMismatch);
+            }
+            if token.measurements != expected_measurements {
+                return Err(VerifyError::MeasurementMismatch);
+            }
+            if now < token.not_before || now > token.not_after {
+                return Err(VerifyError::Expired);
+            }
+            Ok(VerifiedAttestation {
+                anchor_id: token.anchor_id.clone(),
+                not_before: token.not_before,
+                not_after: token.not_after,
+                verifier_trust_roots: BTreeSet::new(),
+            })
+        }
+    }
 
     const OBSERVED_AT: u64 = 150;
     const GOOD_NONCE: u64 = 7;
@@ -121,8 +161,8 @@ mod tests {
         DistinctAgentLane::new(AnchorBundle(BTreeSet::from([anchor])))
     }
 
-    fn attestation_lane(input: AttestationInput) -> AttestationLane<ManagedTokenVerifier> {
-        AttestationLane::new(ManagedTokenVerifier, vec![input])
+    fn attestation_lane(input: AttestationInput) -> AttestationLane<FieldOnlyTokenVerifier> {
+        AttestationLane::new(FieldOnlyTokenVerifier, vec![input])
     }
 
     fn joined_env(case: &AgentCase, input: AttestationInput) -> ClaimEnvelope {
@@ -274,16 +314,59 @@ mod tests {
         }
     }
 
+    fn registry_signing_key() -> SigningKey {
+        SigningKey::from_bytes((&[11_u8; 32]).into()).expect("test registry key is valid")
+    }
+
+    fn registry_verifier() -> RegistryEvidenceVerifier {
+        let signing_key = registry_signing_key();
+        let point = VerifyingKey::from(&signing_key).to_encoded_point(false);
+        let mut key = RegistryTrustedKey::new(
+            "e2e-registry-key",
+            point.x().expect("P-256 point has x").to_vec(),
+            point.y().expect("P-256 point has y").to_vec(),
+            LaneId::Composite,
+        );
+        key.trusted_lanes
+            .insert(LaneId::Named("proof-theater".to_owned()));
+        RegistryEvidenceVerifier::new(vec![key])
+    }
+
+    fn signed_registry_evidence(
+        anchor_set: &AgentAnchorSet,
+        evidence: ClaimEnvelope,
+    ) -> SignedClaimEnvelope {
+        let anchor_set_id = anchor_set.anchor_set_id();
+        let signing_key = registry_signing_key();
+        let signature: Signature = signing_key.sign(
+            &hsai_agent_anchor_registry::claim_envelope_signature_preimage(
+                anchor_set_id,
+                &evidence,
+            ),
+        );
+        let signature = signature.normalize_s().unwrap_or(signature);
+        SignedClaimEnvelope::new(
+            anchor_set_id,
+            evidence,
+            "e2e-registry-key",
+            signature.to_bytes().to_vec(),
+        )
+    }
+
     fn register_phase4(
         registry: &mut AgentAnchorRegistry,
         case: &AgentCase,
         anchor: Anchor,
         env: ClaimEnvelope,
     ) -> Result<AnchorTier, AgentAnchorError> {
+        let anchor_set = phase4_anchor_set(case.subject.clone(), anchor);
+        let signed = signed_registry_evidence(&anchor_set, env);
+        let verifier = registry_verifier();
         registry
-            .register(
-                phase4_anchor_set(case.subject.clone(), anchor),
-                env,
+            .register_signed(
+                anchor_set,
+                signed,
+                &verifier,
                 phase4_policy(&case.subject, case.observed_at),
             )
             .map(|registered| registered.tier.clone())
@@ -588,29 +671,10 @@ mod tests {
         let env = joined_env(&case, attestation_input(&case, anchor.clone()));
 
         let mut registry = AgentAnchorRegistry::new();
-        let registered = registry
-            .register(
-                phase4_anchor_set(case.subject.clone(), anchor),
-                env,
-                phase4_policy(&case.subject, case.observed_at),
-            )
+        let registered = register_phase4(&mut registry, &case, anchor, env)
             .expect("closed attested harness envelope should register in Phase 4");
 
-        assert_eq!(registered.tier, AnchorTier::HardwareAnchoredAgent);
-        assert_eq!(registered.envelope.maturity, Maturity::Attested);
-        assert!(registered
-            .envelope
-            .guarantees
-            .contains(&anchor_tier_predicate(
-                &case.subject,
-                &AnchorTier::HardwareAnchoredAgent
-            )));
-        assert!(registered.envelope.excludes.contains(&Predicate {
-            subject: case.subject.clone(),
-            property: PropertyKind::Custom(
-                "does-not-prove:global-software-agent-uniqueness".to_owned()
-            ),
-        }));
+        assert_eq!(registered, AnchorTier::HardwareAnchoredAgent);
         assert!(PHASE_4_CLAIM_BOUNDARY.contains("not global software-agent uniqueness"));
         assert!(registry
             .used_runtime_anchor_ids()

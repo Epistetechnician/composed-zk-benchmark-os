@@ -2,7 +2,8 @@ use hsai_agent_case::{
     ActionId, AgentCase, EvidenceLane, MemoryRoot, ModelId, OracleContract, Verdict,
 };
 use hsai_attestation::{
-    report_data_binding, AttestationInput, AttestationLane, ManagedTokenVerifier, Token,
+    report_data_binding, AttestationInput, AttestationLane, AttestationVerifier, Token,
+    VerifiedAttestation, VerifyError,
 };
 use hsai_claim_envelope::{
     conjoin, AcceptancePolicy, ClaimEnvelope, LaneId, Maturity, Predicate, PropertyKind, Rejection,
@@ -14,6 +15,43 @@ use hsai_distinct_agent::{
 use hsai_economy::{Credits, DemurragePolicy, Economy, EconomyError, FloorPlusDemandPeg};
 use hsai_membrane::{AutonomyLevel, ExternalAmount, Membrane, MembraneError};
 use std::collections::BTreeSet;
+
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+struct FieldOnlyTokenVerifier;
+
+impl AttestationVerifier for FieldOnlyTokenVerifier {
+    fn verify(
+        &self,
+        token: &Token,
+        expected_nonce: u64,
+        expected_report_data: &[u8],
+        expected_measurements: &[u8],
+        anchor_id: &str,
+        now: u64,
+    ) -> Result<VerifiedAttestation, VerifyError> {
+        if token.anchor_id != anchor_id {
+            return Err(VerifyError::AnchorMismatch);
+        }
+        if token.nonce != expected_nonce {
+            return Err(VerifyError::NonceMismatch);
+        }
+        if token.report_data != expected_report_data {
+            return Err(VerifyError::ReportDataMismatch);
+        }
+        if token.measurements != expected_measurements {
+            return Err(VerifyError::MeasurementMismatch);
+        }
+        if now < token.not_before || now > token.not_after {
+            return Err(VerifyError::Expired);
+        }
+        Ok(VerifiedAttestation {
+            anchor_id: token.anchor_id.clone(),
+            not_before: token.not_before,
+            not_after: token.not_after,
+            verifier_trust_roots: BTreeSet::new(),
+        })
+    }
+}
 
 fn subject(id: &str) -> SubjectId {
     SubjectId(id.to_owned())
@@ -76,7 +114,7 @@ fn phase1_input(case: &AgentCase) -> AttestationInput {
 fn closed_distinct_env(case: &AgentCase, input: AttestationInput) -> ClaimEnvelope {
     let distinct =
         DistinctAgentLane::new(AnchorBundle(BTreeSet::from([input.anchor.clone()]))).evaluate(case);
-    let attestation = AttestationLane::new(ManagedTokenVerifier, vec![input]).evaluate(case);
+    let attestation = AttestationLane::new(FieldOnlyTokenVerifier, vec![input]).evaluate(case);
     conjoin(distinct, attestation)
 }
 

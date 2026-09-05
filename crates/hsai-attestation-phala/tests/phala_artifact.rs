@@ -1,8 +1,10 @@
 use hsai_agent_case::EvidenceLane;
 use hsai_agent_case::{ActionId, AgentCase, MemoryRoot, ModelId, OracleContract, Verdict};
 use hsai_attestation_phala::{
-    parse_phala_artifact, validate_phala_artifact, PhalaArtifactAttestationLane,
-    PhalaArtifactBundle, PhalaValidationError, PhalaValidationPolicy,
+    parse_phala_artifact, validate_phala_artifact, validate_phala_artifact_with_quote_verifier,
+    PhalaArtifactAttestationLane, PhalaArtifactBundle, PhalaQuoteVerificationError,
+    PhalaQuoteVerifier, PhalaValidationError, PhalaValidationPolicy, ValidatedPhalaAttestation,
+    VerifiedPhalaQuote,
 };
 use hsai_claim_envelope::{
     admits, conjoin, AcceptancePolicy, Maturity, Predicate, PropertyKind, SubjectId, TrustRoot,
@@ -12,6 +14,63 @@ use hsai_distinct_agent::{distinctness, Anchor, AnchorBundle, DistinctAgentLane}
 use std::collections::BTreeSet;
 
 const FIXTURE: &str = include_str!("fixtures/phala_trust_center_app_2026_06_16.json");
+
+struct FixtureQuoteVerifier;
+
+impl PhalaQuoteVerifier for FixtureQuoteVerifier {
+    fn verify_quote(
+        &self,
+        quote: &[u8],
+        expected_report_data: &[u8],
+    ) -> Result<VerifiedPhalaQuote, PhalaQuoteVerificationError> {
+        if quote.is_empty() || expected_report_data.is_empty() {
+            return Err(PhalaQuoteVerificationError::Invalid);
+        }
+        Ok(VerifiedPhalaQuote {
+            report_data: expected_report_data.to_vec(),
+            trust_roots: BTreeSet::from([root("test:fixture-quote-verifier")]),
+        })
+    }
+}
+
+struct UnboundQuoteVerifier;
+
+impl PhalaQuoteVerifier for UnboundQuoteVerifier {
+    fn verify_quote(
+        &self,
+        _quote: &[u8],
+        expected_report_data: &[u8],
+    ) -> Result<VerifiedPhalaQuote, PhalaQuoteVerificationError> {
+        Ok(VerifiedPhalaQuote {
+            report_data: vec![0; expected_report_data.len()],
+            trust_roots: BTreeSet::from([root("test:unbound-quote-verifier")]),
+        })
+    }
+}
+
+fn validate_fixture(
+    bundle: &PhalaArtifactBundle,
+    policy: &PhalaValidationPolicy,
+    now: u64,
+) -> Result<ValidatedPhalaAttestation, PhalaValidationError> {
+    validate_phala_artifact_with_quote_verifier(bundle, policy, now, &FixtureQuoteVerifier)
+}
+
+fn bind_bundle_to_case(mut bundle: PhalaArtifactBundle, case: &AgentCase) -> PhalaArtifactBundle {
+    let case_hash = hsai_attestation_phala::agent_case_hash(case).expect("case hash serializes");
+    bundle.case_hash_hex = encode_hex(&case_hash);
+    let nonce = bundle.nonce_hex.to_ascii_lowercase();
+    let suffix_len = bundle
+        .report_data_hex
+        .len()
+        .saturating_sub(nonce.len() + 64);
+    bundle.report_data_hex = format!("{nonce}{}{}", bundle.case_hash_hex, "0".repeat(suffix_len));
+    bundle
+}
+
+fn encode_hex(bytes: &[u8]) -> String {
+    bytes.iter().map(|byte| format!("{byte:02x}")).collect()
+}
 
 fn bundle() -> PhalaArtifactBundle {
     parse_phala_artifact(FIXTURE).expect("fixture must parse")
@@ -71,9 +130,10 @@ fn mutate_first_hex_char(value: &mut String) {
 
 #[test]
 fn accepted_captured_artifact_closes_distinctness() {
-    let bundle = bundle();
+    let original = bundle();
+    let bundle = bind_bundle_to_case(original.clone(), &case(&original));
     let policy = PhalaValidationPolicy::for_bundle(&bundle, 600);
-    let validated = validate_phala_artifact(&bundle, &policy, bundle.observed_timestamp)
+    let validated = validate_fixture(&bundle, &policy, bundle.observed_timestamp)
         .expect("captured artifact must validate");
 
     assert_eq!(validated.anchor_id, bundle.anchor_id);
@@ -90,12 +150,57 @@ fn accepted_captured_artifact_closes_distinctness() {
     let anchor = anchor(&bundle);
     let distinct =
         DistinctAgentLane::new(AnchorBundle(BTreeSet::from([anchor.clone()]))).evaluate(&case);
-    let attestation = PhalaArtifactAttestationLane::new(anchor, bundle, policy).evaluate(&case);
+    let attestation = PhalaArtifactAttestationLane::new(anchor, bundle, policy)
+        .evaluate_with_quote_verifier(&case, &FixtureQuoteVerifier);
     let combined = conjoin(distinct, attestation);
 
     assert_eq!(combined.maturity, Maturity::Attested);
     assert!(combined.assumptions.is_empty());
     assert!(admits(acceptance_policy(&case), combined).is_ok());
+}
+
+#[test]
+fn artifact_cannot_transfer_to_a_different_case_or_subject() {
+    let original = bundle();
+    let original_case = case(&original);
+    let bundle = bind_bundle_to_case(original, &original_case);
+    let policy = PhalaValidationPolicy::for_bundle(&bundle, 600);
+    let anchor = anchor(&bundle);
+    let mut transferred = original_case;
+    transferred.subject = subject("different-agent");
+
+    let attestation = PhalaArtifactAttestationLane::new(anchor, bundle, policy)
+        .evaluate_with_quote_verifier(&transferred, &FixtureQuoteVerifier);
+
+    assert_eq!(attestation.maturity, Maturity::Stub);
+    assert!(attestation.guarantees.is_empty());
+}
+
+#[test]
+fn artifact_without_authenticated_quote_is_not_validated() {
+    let bundle = bundle();
+    let policy = PhalaValidationPolicy::for_bundle(&bundle, 600);
+
+    assert!(matches!(
+        validate_phala_artifact(&bundle, &policy, bundle.observed_timestamp),
+        Err(PhalaValidationError::QuoteUnverified)
+    ));
+}
+
+#[test]
+fn quote_backend_must_return_bound_report_data_and_a_trust_root() {
+    let bundle = bundle();
+    let policy = PhalaValidationPolicy::for_bundle(&bundle, 600);
+
+    assert!(matches!(
+        validate_phala_artifact_with_quote_verifier(
+            &bundle,
+            &policy,
+            bundle.observed_timestamp,
+            &UnboundQuoteVerifier,
+        ),
+        Err(PhalaValidationError::QuoteUnverified)
+    ));
 }
 
 #[test]
@@ -152,7 +257,7 @@ fn wrong_anchor_rejects() {
 fn managed_verifier_dependency_is_visible_in_trust_roots() {
     let bundle = bundle();
     let policy = PhalaValidationPolicy::for_bundle(&bundle, 600);
-    let validated = validate_phala_artifact(&bundle, &policy, bundle.observed_timestamp)
+    let validated = validate_fixture(&bundle, &policy, bundle.observed_timestamp)
         .expect("captured artifact must validate");
 
     assert!(validated

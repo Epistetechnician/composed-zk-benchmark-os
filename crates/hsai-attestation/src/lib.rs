@@ -1,5 +1,7 @@
 //! Attestation-verification lane — the capstone of the trust stack.
 //!
+//! State slice: `agent-identity-end-to-end-verification-hardening-v1`.
+//!
 //! Since L2, every distinctness envelope from the distinct-agent lane has
 //! carried one open assumption: that the anchor is valid
 //! (`Anchor::validity_assumption(subject)`). This lane discharges it. It turns a
@@ -8,17 +10,13 @@
 //! removes the assumption and makes the distinctness envelope admissible under a
 //! `require_closed` policy for the first time in the build.
 //!
-//! # Honesty boundary (the whole point of this phase)
+//! # Honesty boundary
 //!
-//! This is attestation at the *interface* level. The reference
-//! [`ManagedTokenVerifier`] checks the token's anchor id, nonce, report-data
-//! binding, measurements, and freshness, but does **not** cryptographically verify
-//! the managed attestation service's signature over the token (an Azure
-//! Attestation / Intel Trust Authority JWT against the service JWKS, or a vendor
-//! quote against its root cert). That signature check is the single real
-//! integration step and the point at which the stack leaves the pure-data regime.
-//! It is deliberately out of scope here, and is the clean seam the
-//! [`AttestationVerifier`] trait marks.
+//! This lane is attestation at the interface level. The default
+//! [`ManagedTokenVerifier`] is deliberately fail-closed: it refuses tokens
+//! unless a signature-verifying backend such as [`ManagedJwtVerifier`] is
+//! explicitly supplied. A real backend must verify the managed attestation
+//! service's signature before checking the bound fields.
 //!
 //! Therefore:
 //! - a verified attestation is `Attested`, never `Proven`;
@@ -44,9 +42,8 @@ use std::collections::{BTreeMap, BTreeSet};
 pub struct Token {
     /// Optional compact managed-attestation JWT carrying the same fields.
     ///
-    /// The reference [`ManagedTokenVerifier`] ignores this field. Signature
-    /// verifying backends require it and reject tokens whose local fields do not
-    /// match the signed claims.
+    /// Signature-verifying backends require this field and reject tokens whose
+    /// local fields do not match the signed claims.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub signed_jwt: Option<String>,
     /// Which anchor this token attests; must equal the `Anchor`'s id.
@@ -94,17 +91,14 @@ pub enum VerifyError {
     ReportDataMismatch,
     /// `now` was outside `[not_before, not_after]`.
     Expired,
-    /// Reserved for real signature-verifying backends. The reference
-    /// [`ManagedTokenVerifier`] NEVER returns this — it does not check the
-    /// managed service signature.
+    /// The token has no authenticated managed-service signature.
     SignatureUnverified,
 }
 
 /// A backend that decides whether a [`Token`] verifies.
 ///
-/// A real backend FIRST verifies the managed service's signature over the token,
-/// then the fields below. The reference impl verifies only the fields, and is
-/// the seam where a signature-verifying backend drops in.
+/// A backend must first authenticate the managed service's signature over the
+/// token, then check the bound fields below.
 pub trait AttestationVerifier {
     /// Verify `token` for `anchor_id` at time `now` against the expected nonce
     /// and measurements.
@@ -119,13 +113,12 @@ pub trait AttestationVerifier {
     ) -> Result<VerifiedAttestation, VerifyError>;
 }
 
-/// The reference attestation backend.
+/// The default managed-token backend.
 ///
-/// Returns `Ok` iff `token.anchor_id == anchor_id`, `token.nonce ==
-/// expected_nonce`, `token.report_data == expected_report_data`,
-/// `token.measurements == expected_measurements`, and `not_before <= now <=
-/// not_after`. It does **not** verify the managed service signature and never
-/// returns [`VerifyError::SignatureUnverified`].
+/// This type is retained as the default wiring sentinel, but it is
+/// fail-closed. It never turns caller-provided fields into an attestation. Use
+/// [`ManagedJwtVerifier`] or another explicit [`AttestationVerifier`] backend
+/// that authenticates the provider response before checking the fields.
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
 pub struct ManagedTokenVerifier;
 
@@ -139,29 +132,15 @@ impl AttestationVerifier for ManagedTokenVerifier {
         anchor_id: &str,
         now: u64,
     ) -> Result<VerifiedAttestation, VerifyError> {
-        if token.anchor_id != anchor_id {
-            return Err(VerifyError::AnchorMismatch);
-        }
-        if token.nonce != expected_nonce {
-            return Err(VerifyError::NonceMismatch);
-        }
-        if token.report_data != expected_report_data {
-            return Err(VerifyError::ReportDataMismatch);
-        }
-        if token.measurements != expected_measurements {
-            return Err(VerifyError::MeasurementMismatch);
-        }
-        if now < token.not_before || now > token.not_after {
-            return Err(VerifyError::Expired);
-        }
-        // DEFERRED REAL STEP: the managed service signature is not verified here.
-        // The lane below therefore caps maturity at Attested, never Proven.
-        Ok(VerifiedAttestation {
-            anchor_id: token.anchor_id.clone(),
-            not_before: token.not_before,
-            not_after: token.not_after,
-            verifier_trust_roots: BTreeSet::new(),
-        })
+        let _ = (
+            token,
+            expected_nonce,
+            expected_report_data,
+            expected_measurements,
+            anchor_id,
+            now,
+        );
+        Err(VerifyError::SignatureUnverified)
     }
 }
 
@@ -680,15 +659,52 @@ mod tests {
         ManagedJwtVerifier::new(issuer, vec![key])
     }
 
-    fn lane(inputs: Vec<AttestationInput>) -> AttestationLane<ManagedTokenVerifier> {
-        AttestationLane::new(ManagedTokenVerifier, inputs)
+    #[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
+    struct FieldOnlyTokenVerifier;
+
+    impl AttestationVerifier for FieldOnlyTokenVerifier {
+        fn verify(
+            &self,
+            token: &Token,
+            expected_nonce: u64,
+            expected_report_data: &[u8],
+            expected_measurements: &[u8],
+            anchor_id: &str,
+            now: u64,
+        ) -> Result<VerifiedAttestation, VerifyError> {
+            if token.anchor_id != anchor_id {
+                return Err(VerifyError::AnchorMismatch);
+            }
+            if token.nonce != expected_nonce {
+                return Err(VerifyError::NonceMismatch);
+            }
+            if token.report_data != expected_report_data {
+                return Err(VerifyError::ReportDataMismatch);
+            }
+            if token.measurements != expected_measurements {
+                return Err(VerifyError::MeasurementMismatch);
+            }
+            if now < token.not_before || now > token.not_after {
+                return Err(VerifyError::Expired);
+            }
+            Ok(VerifiedAttestation {
+                anchor_id: token.anchor_id.clone(),
+                not_before: token.not_before,
+                not_after: token.not_after,
+                verifier_trust_roots: BTreeSet::new(),
+            })
+        }
+    }
+
+    fn lane(inputs: Vec<AttestationInput>) -> AttestationLane<FieldOnlyTokenVerifier> {
+        AttestationLane::new(FieldOnlyTokenVerifier, inputs)
     }
 
     fn verify_input(
         input: &AttestationInput,
         now: u64,
     ) -> Result<VerifiedAttestation, VerifyError> {
-        ManagedTokenVerifier.verify(
+        FieldOnlyTokenVerifier.verify(
             &input.token,
             input.expected_nonce,
             &input.expected_report_data,
@@ -838,8 +854,32 @@ mod tests {
         assert_ne!(left, ambiguous_concat);
     }
 
-    // The reference verifier reports anchor mismatch and never claims to have
-    // verified a signature.
+    // State slice: agent-identity-end-to-end-verification-hardening-v1.
+    // The default verifier must not admit unsigned field-only data.
+    #[test]
+    fn managed_token_verifier_rejects_unsigned_token() {
+        let case = fixture_case(150);
+        assert_eq!(
+            ManagedTokenVerifier.verify(
+                &good_input().token,
+                good_input().expected_nonce,
+                &good_input().expected_report_data,
+                &good_input().expected_measurements,
+                &good_input().anchor.anchor_id(),
+                case.observed_at,
+            ),
+            Err(VerifyError::SignatureUnverified)
+        );
+        assert!(
+            AttestationLane::new(ManagedTokenVerifier, vec![good_input()])
+                .evaluate(&case)
+                .guarantees
+                .is_empty()
+        );
+    }
+
+    // The default verifier reports anchor mismatch before signature status so
+    // malformed input remains diagnosable without becoming admissible.
     #[test]
     fn anchor_mismatch_and_signature_never_unverified() {
         let case = fixture_case(150);
