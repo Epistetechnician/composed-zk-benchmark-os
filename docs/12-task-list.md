@@ -2,6 +2,23 @@
 
 Each phase names goal, deliverables, dependencies, validation gate, anti-goals, and exit criteria.
 
+## Aligned holistic continual-learning causal monitor V1
+
+Status: design-only monorepo setup complete; implementation, model execution,
+provider spend, and assessment remain closed pending independent review.
+
+State slice: `aligned-holistic-continual-learning-interpretability-monorepo-v1`.
+
+The repository-wide source and literature map is recorded in
+[`844-aligned-holistic-continual-learning-monorepo-v1.md`](research/agent-platform/844-aligned-holistic-continual-learning-monorepo-v1.md).
+The end-to-end study protocol is recorded in
+[`296-aligned-holistic-continual-learning-causal-monitor-v1-protocol.md`](research/continual-learning/296-aligned-holistic-continual-learning-causal-monitor-v1-protocol.md).
+The study tests a fit-only causal feature monitor against behavioral, probe,
+shuffled-feature, random-projection, donor, no-op, and evaluator-gaming
+controls on fresh family-level continual-learning episodes. It has no scalar
+alignment shortcut and cannot alter the evaluator, validator, policy, or base
+model.
+
 ## Astral Gemma 3 Causal Feature-Bundle Effects V3
 
 Status: V2 is terminal `NoCandidate`; V3 is a fresh jointly causal bundle
@@ -25224,3 +25241,145 @@ does not add execution, publication, accepted Evidence Ledger mutation,
 production readiness, benchmark superiority, or runtime authority.
 Deletion test: removing this Module forces both packet Adapters to repeat outer
 readback decisions, reopening the drift seam this slice closes.
+
+## Agent Platform Track: Proof-Carrying Capability-Bounded Agent Platform V1
+
+Status: complete for local pure-data contract validation under named state slice
+`hsai-proof-carrying-capability-bounded-agent-platform-v1`.
+
+The isolated `crates/hsai-control-plane` crate implements the first narrow
+vertical slice of the north-star path:
+
+```text
+intent -> typed proposal -> admission -> capability receipt
+       -> replay-checked execution seam -> monitoring -> rollback/freeze/shutdown
+```
+
+It also carries the alignment plans as explicit contract types: behavioral,
+mechanistic, and scalable-oversight evidence requirements; prediction-lock and
+independent-validator gates; held-out and causal-intervention requirements;
+model-controlled-evaluator rejection; and shadow-only update proposals with
+immutable base, independent evaluation, rollback, and protected evaluator,
+validator, ledger, and capability-policy surfaces.
+
+The mesh-market seam matches a bounded compute job to a typed provider offer
+and emits an unexecuted `SettlementIntent` labeled `Hyperliquid`. The matcher
+does not verify a proof, select a live provider, submit a transaction, or grant
+authority.
+
+Focused gate:
+
+```text
+cargo fmt -p hsai-control-plane -- --check
+cargo test -p hsai-control-plane --quiet
+cargo clippy -p hsai-control-plane --all-targets -- -D warnings
+cargo test -p hsai-control-plane-checker --quiet
+cargo clippy -p hsai-control-plane-checker --all-targets -- -D warnings
+```
+
+The claim ceiling is local pure-data control-plane contract evidence only. No
+OS sandbox, egress control, secret broker, signer, provider, ZK/FHE/MPC/TEE
+execution, Hyperliquid integration, accepted Evidence Ledger mutation,
+alignment result, benchmark claim, semantic-correctness claim, production
+readiness, or runtime authority exists in this slice. See
+`docs/research/agent-platform/840-proof-carrying-capability-bounded-agent-platform-v1.md`.
+
+Hardening continuation: the additive `hsai-control-plane-checker` crate now
+provides implementation-diverse local recomputation of public invariants. It
+does not verify signatures or proofs, replace independent review, authorize
+execution, settle value, or raise the claim ceiling.
+
+The control-plane property suite also covers nonce monotonicity, explicit
+capability expansion, forbidden execution transitions, and non-authoritative
+market matches. `ReplayJournal` now provides an immutable serializable
+caller-owned snapshot with a digest chain, rejected-nonce immutability, and
+checked-tip append semantics. Filesystem persistence and cross-process
+atomicity are separate concerns. `ReplayJournalFileStore` now provides
+canonical JSON, atomic temp-file replacement, and valid-temp recovery, while
+cross-process locking and linearizable compare-and-swap remain future local
+Adapters.
+
+Parallel delivery plan mutation under state slice
+`hsai-proof-carrying-capability-bounded-agent-platform-parallel-plan-v1`:
+[841-parallel-build-plan-v1.md](research/agent-platform/841-parallel-build-plan-v1.md).
+This plan freezes the shared contract before dispatching five isolated lanes:
+security kernel, evidence/provenance, adversarial benchmark/evaluation,
+alignment measurement, and runtime/deployment. It keeps the persistent
+workflow specialist as the first product wedge and defers the fixed
+compute-market bridge until typed receipt verification and rollback gates pass.
+
+SOTA guidance mutation under state slice
+`hsai-proof-carrying-capability-bounded-agent-platform-sota-build-guidance-v1`:
+[842-sota-build-guidance-v1.md](research/agent-platform/842-sota-build-guidance-v1.md).
+The appendix maps source-backed reference points to explicit Interfaces and
+Adapters for evaluation, isolation, provenance, serving, adaptation, formal
+verification, verifiable compute, FHE/MPC, and governance. It requires source,
+license, version, digest, threat model, independent acceptance, and claim
+ceiling records before any reference becomes implementation input. It does not
+authorize model/provider execution, data acquisition, signing, settlement,
+deployment, or any closed research-slice change.
+
+Outcome-priced work-market plan mutation under state slice
+`hsai-proof-carrying-capability-bounded-agent-platform-outcome-priced-work-market-v1`:
+[843-outcome-priced-work-market-plan-v1.md](research/agent-platform/843-outcome-priced-work-market-plan-v1.md).
+The plan adds offchain outcome pricing, Hyperliquid testnet conformance,
+Stripe/Tempo payment Adapters, evidence-bound resolution, manipulation controls,
+baseline experiments, and a staged path from advisory signals to bounded
+contractual pricing.
+
+Wave 1 local implementation mutation under state slice
+`hsai-proof-carrying-capability-bounded-agent-platform-outcome-priced-work-market-contracts-v1`:
+`crates/hsai-outcome-work-market` and
+`crates/hsai-outcome-work-market-checker`. The local path now covers job and
+market contracts, observation replay checks, advisory TWAP, evidence-bound
+resolution, pending payout intents, and independent checker recomputation;
+testnet and payment execution remain closed.
+
+Outcome-market adapter mutation under state slice
+`hsai-proof-carrying-capability-bounded-agent-platform-outcome-priced-work-market-adapters-v1`:
+`crates/hsai-outcome-work-market-adapters` now provides dry-run Hyperliquid
+testnet configuration/observation confirmation and Stripe/Tempo-compatible
+payment preparation/reconciliation records. The adapter is deliberately
+non-networked and cannot sign, move value, or grant authority. Its focused
+contract test covers the local job-to-observation-to-payout preparation path
+and rejects invalid payment transitions. Live integration remains a future
+Wave 3/4 gate.
+
+Offchain simulation mutation under state slice
+`hsai-proof-carrying-capability-bounded-agent-platform-offchain-work-market-v1`:
+`crates/hsai-outcome-work-market-offchain` now provides an append-only local
+quote/close event log, deterministic projection replay, advisory budget
+projection, explicit fixed-bounty/provider-auction baseline records, validated
+provider bids, deterministic best-bid matching, and replayed fills. Three
+focused tests pass, including deterministic replay, post-close rejection, and
+matching. This slice uses internal data only; external credits, live market
+connectivity, and settlement remain closed.
+
+Capacity-accounting mutation under the same offchain state slice adds unit
+counts to fills, deterministic repeated allocation until quote capacity is
+exhausted, and fail-closed aggregate over-allocation checks. The focused
+offchain tests cover exhaustion while the independent checker rejects a forged
+over-capacity event.
+
+The same slice now exposes canonical JSON event-log encode/decode with digest
+preservation across readback and fail-closed malformed-input handling. This is
+restart-readiness evidence for local contracts only; durable production
+journaling and cross-process consistency remain future work.
+
+Offchain replay-checker mutation under state slice
+`hsai-proof-carrying-capability-bounded-agent-platform-offchain-work-market-checker-v1`:
+`crates/hsai-outcome-work-market-offchain-checker` independently checks event
+ordering, bid/fill bindings, close semantics, capacity, and projection fields. Two
+focused tests pass for valid replay acceptance and forged projection/event
+rejection. This does not constitute economic, cryptographic, or production
+validation.
+
+Offchain journal mutation under state slice
+`hsai-proof-carrying-capability-bounded-agent-platform-offchain-journal-v1`:
+`OffchainMarketLogFileStore` adds caller-owned canonical JSON persistence,
+atomic replacement, expected-digest compare-and-replace, digest-verified
+readback, and fail-closed stale/malformed/invalid/orphan-temporary handling.
+Eight focused offchain tests and strict static checks pass. The claim ceiling
+is local deterministic file-persistence contract evidence; cross-process
+linearizability and live settlement remain closed. See
+`docs/research/agent-platform/845-offchain-journal-file-store-v1.md`.

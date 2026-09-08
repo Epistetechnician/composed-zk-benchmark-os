@@ -1,0 +1,10 @@
+[package]
+name = "hsai-outcome-work-market-checker"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+description = "Independent local checker for outcome-priced work-market contracts."
+
+[dependencies]
+hsai-control-plane = { path = "../hsai-control-plane" }
+hsai-outcome-work-market = { path = "../hsai-outcome-work-market" }

@@ -3,6 +3,13 @@ resolver = "2"
 members = [
     "crates/astral-stage0-protocol",
     "crates/hsai-agent-admission",
+    "crates/hsai-control-plane",
+    "crates/hsai-control-plane-checker",
+    "crates/hsai-outcome-work-market",
+    "crates/hsai-outcome-work-market-checker",
+    "crates/hsai-outcome-work-market-adapters",
+    "crates/hsai-outcome-work-market-offchain",
+    "crates/hsai-outcome-work-market-offchain-checker",
     "crates/hsai-agent-case",
     "crates/hsai-agent-anchor-registry",
     "crates/hsai-attestation",

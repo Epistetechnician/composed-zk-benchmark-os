@@ -23,6 +23,18 @@ Core novelty:
 
 This is now a Level 1 local Rust foundation plus the original Level 0 architecture scaffold. It defines the architecture, vocabulary, repo integration decisions, DSL schema, Rust core crate, deterministic generator, v0 mutation engine, local JSON replay adapter, evidence ledger, benchmark pack skeleton, zk-Harness dry-run adapter preparation, external-runner boundary contracts, manual handoff bundle schema, synthetic result import prototype, evidence append proposal workflow, reviewed proposal acceptance policy, evidence-record candidate metadata, append previews, Level2 eligibility checks, review ledger primitives, proposal ledger primitives, scoring primitives, inert recursion-envelope metadata, inert zkML workload manifest metadata, inert pack-readiness metadata, HSAI accepted-result output import-candidate metadata, validation gates, and adapter roadmap.
 
+The aligned holistic continual-learning research monorepo map and causal-monitor
+design are recorded under state slice
+`aligned-holistic-continual-learning-interpretability-monorepo-v1`:
+
+- [Monorepo and literature map](docs/research/agent-platform/844-aligned-holistic-continual-learning-monorepo-v1.md)
+- [Machine-readable monorepo manifest](docs/research/agent-platform/aligned-holistic-continual-learning-monorepo-v1.manifest.json)
+- [End-to-end causal-monitor protocol](docs/research/continual-learning/296-aligned-holistic-continual-learning-causal-monitor-v1-protocol.md)
+
+This setup indexes existing code in place. It does not vendor external
+interpretability repositories, mix runtime environments, import terminal
+scientific artifacts, or authorize model execution.
+
 ## What This Repo Is Not
 
 This repo is not a benchmark-results claim, formal-verification claim, live external backend integration, fork of existing ZK tooling, or dashboard. No document or test claims Level 2+ evidence. No benchmark results have been generated here.
@@ -3419,3 +3431,101 @@ The plasticity-recovery mechanism family is terminally closed as
 `NoCandidate`. Any continuation requires a materially new theory and estimand
 for the adaptation-forgetting tradeoff, with a fresh protocol, fresh guards,
 and separate authorization. See the [terminal closure record](docs/research/continual-learning/120-plasticity-recovery-family-terminal-closure-2026-08-29.md).
+
+## Proof-Carrying Capability-Bounded Agent Platform V1
+
+The isolated `hsai-control-plane` crate materializes the next narrow vertical
+slice of the HSAI architecture under named state slice
+`hsai-proof-carrying-capability-bounded-agent-platform-v1`.
+
+It provides pure-data typed proposals, explicit capability sets, digest-bound
+short-lived receipts, strict nonce replay checking, an explicit admission-to-
+execution state machine, monitoring dispositions, alignment-plan and safe-
+update gates, and a compute-job/offer matcher that emits an unexecuted
+Hyperliquid settlement intent. Every receipt and permit reports
+`authority_granted=false`.
+
+The companion `hsai-control-plane-checker` crate independently recomputes
+public invariants for receipts, permits, monitor decisions, alignment/update
+decisions, and market matches. It is a local checker, not an external
+validator or proof system. Property-style tests cover nonce monotonicity,
+capability expansion, forbidden execution transitions, and non-authoritative
+market matches.
+
+`ReplayJournal` adds an immutable serializable snapshot with a digest chain and
+caller-owned append semantics. `append_if_tip` rejects stale snapshots and
+invalid journal state without mutation. `ReplayJournalFileStore` provides
+canonical JSON, atomic temp-file replacement, and valid-temp recovery; it does
+not provide cross-process locking or linearizable compare-and-swap.
+
+This is local contract evidence only. It does not verify signatures, execute
+models or providers, enforce OS/network/secret controls, run ZK/FHE/MPC, move
+value, verify compute proofs, produce alignment evidence, mutate the accepted
+Evidence Ledger, or establish production readiness. The complete architecture,
+threat model, alignment tracks, safe-learning policy, mesh-market topology,
+invariants, and nonclaims are recorded in
+[the V1 architecture record](docs/research/agent-platform/840-proof-carrying-capability-bounded-agent-platform-v1.md).
+
+The parallel end-to-end delivery plan is recorded in
+[the V1 parallel build plan](docs/research/agent-platform/841-parallel-build-plan-v1.md)
+under state slice
+`hsai-proof-carrying-capability-bounded-agent-platform-parallel-plan-v1`. It
+defines the contract-freeze prerequisite, five isolated workstreams, cross-lane
+integration gates, the persistent-specialist product wedge, and the later
+fixed compute-market bridge without raising the current claim ceiling.
+
+The source-backed SOTA implementation map is recorded in
+[the SOTA build guidance](docs/research/agent-platform/842-sota-build-guidance-v1.md).
+It covers evaluation and agent-security references, Firecracker/gVisor
+isolation, in-toto/SLSA/Sigstore provenance, vLLM serving controls,
+LoRA/QLoRA candidate adaptation, Kani verification, RISC Zero/Boundless
+receipt lifecycles, OpenFHE/MP-SPDZ privacy Adapters, and frontier-governance
+patterns. These references are versioned design inputs only; they do not raise
+the local claim ceiling or authorize execution, acquisition, signing,
+settlement, or deployment.
+
+The outcome-priced work-market extension is recorded in
+[the outcome-priced work market plan](docs/research/agent-platform/843-outcome-priced-work-market-plan-v1.md).
+It covers offchain outcome pricing, Hyperliquid testnet experimentation,
+Stripe and Tempo payment Adapters, independent outcome resolution, market-health
+metrics, and staged contractual use without raising the current claim ceiling.
+
+The first local market-contract slice is implemented in
+`crates/hsai-outcome-work-market` with an independent checker in
+`crates/hsai-outcome-work-market-checker`. It covers canonical work and market
+records, replay-protected observations, advisory TWAP, evidence-bound
+resolution, and pending payout intents. It does not call a live market or
+payment rail, execute providers, verify proofs, or grant authority.
+
+The bounded external-integration seam is implemented in
+`crates/hsai-outcome-work-market-adapters` under state slice
+`hsai-proof-carrying-capability-bounded-agent-platform-outcome-priced-work-market-adapters-v1`.
+It validates Hyperliquid testnet configuration and prepares local observation
+records, plus Stripe/Tempo-compatible payment preparation and reconciliation
+records. This is dry-run contract evidence only: no RPC/API call, wallet or
+transaction signing, payment call, value movement, or authority occurs.
+
+The deterministic offchain simulation is implemented in
+`crates/hsai-outcome-work-market-offchain` under state slice
+`hsai-proof-carrying-capability-bounded-agent-platform-offchain-work-market-v1`.
+It replays local quote/close events, computes an advisory budget projection,
+validates provider bids, selects a deterministic eligible match, replays fills,
+supports canonical JSON readback with digest preservation, and keeps
+fixed-bounty and provider-auction comparisons explicit. It remains
+internal-credit, non-networked, and non-authoritative.
+
+Provider capacity is enforced across repeated fills; exhausted quotes are
+skipped and aggregate over-allocation is rejected during replay.
+
+The caller-owned file-backed journal is implemented in
+`crates/hsai-outcome-work-market-offchain/src/storage.rs` under state slice
+`hsai-proof-carrying-capability-bounded-agent-platform-offchain-journal-v1`.
+It provides canonical JSON readback, atomic replacement, expected-digest
+compare-and-replace, and fail-closed stale/malformed/orphan-temporary handling.
+See [the journal slice](docs/research/agent-platform/845-offchain-journal-file-store-v1.md).
+
+An implementation-diverse checker is implemented in
+`crates/hsai-outcome-work-market-offchain-checker` under state slice
+`hsai-proof-carrying-capability-bounded-agent-platform-offchain-work-market-checker-v1`.
+It checks event ordering, bid/fill bindings, close semantics, capacity, and projection
+fields without trusting the simulator’s replay function.

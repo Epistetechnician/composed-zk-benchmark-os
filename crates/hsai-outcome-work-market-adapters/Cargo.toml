@@ -1,0 +1,16 @@
+[package]
+name = "hsai-outcome-work-market-adapters"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+description = "Dry-run integration seams for Hyperliquid testnet and work-market payment rails."
+
+[dependencies]
+hsai-control-plane = { path = "../hsai-control-plane" }
+hsai-outcome-work-market = { path = "../hsai-outcome-work-market" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+
+[dev-dependencies]
+hsai-outcome-work-market-offchain = { path = "../hsai-outcome-work-market-offchain" }

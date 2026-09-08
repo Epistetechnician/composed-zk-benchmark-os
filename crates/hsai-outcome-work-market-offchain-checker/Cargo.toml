@@ -1,0 +1,11 @@
+[package]
+name = "hsai-outcome-work-market-offchain-checker"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+description = "Independent replay checker for deterministic outcome-work market projections."
+
+[dependencies]
+hsai-control-plane = { path = "../hsai-control-plane" }
+hsai-outcome-work-market = { path = "../hsai-outcome-work-market" }
+hsai-outcome-work-market-offchain = { path = "../hsai-outcome-work-market-offchain" }

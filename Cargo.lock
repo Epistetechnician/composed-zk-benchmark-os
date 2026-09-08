@@ -389,6 +389,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "hsai-control-plane"
+version = "0.1.0"
+dependencies = [
+ "proptest",
+ "serde",
+ "serde_json",
+ "sha2",
+]
+
+[[package]]
+name = "hsai-control-plane-checker"
+version = "0.1.0"
+dependencies = [
+ "hsai-control-plane",
+ "serde_json",
+]
+
+[[package]]
 name = "hsai-distinct-agent"
 version = "0.1.0"
 dependencies = [
@@ -468,6 +486,57 @@ dependencies = [
  "serde",
  "serde_json",
  "sha2",
+]
+
+[[package]]
+name = "hsai-outcome-work-market"
+version = "0.1.0"
+dependencies = [
+ "hsai-control-plane",
+ "serde",
+ "serde_json",
+ "sha2",
+]
+
+[[package]]
+name = "hsai-outcome-work-market-adapters"
+version = "0.1.0"
+dependencies = [
+ "hsai-control-plane",
+ "hsai-outcome-work-market",
+ "hsai-outcome-work-market-offchain",
+ "serde",
+ "serde_json",
+ "sha2",
+]
+
+[[package]]
+name = "hsai-outcome-work-market-checker"
+version = "0.1.0"
+dependencies = [
+ "hsai-control-plane",
+ "hsai-outcome-work-market",
+]
+
+[[package]]
+name = "hsai-outcome-work-market-offchain"
+version = "0.1.0"
+dependencies = [
+ "hsai-control-plane",
+ "hsai-outcome-work-market",
+ "serde",
+ "serde_json",
+ "sha2",
+ "tempfile",
+]
+
+[[package]]
+name = "hsai-outcome-work-market-offchain-checker"
+version = "0.1.0"
+dependencies = [
+ "hsai-control-plane",
+ "hsai-outcome-work-market",
+ "hsai-outcome-work-market-offchain",
 ]
 
 [[package]]
