@@ -1,0 +1,12 @@
+[package]
+name = "hsai-control-plane-checker"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+description = "Independent pure-data checker for the HSAI control-plane contract records."
+
+[dependencies]
+hsai-control-plane = { path = "../hsai-control-plane" }
+
+[dev-dependencies]
+serde_json = "1"

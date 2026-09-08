@@ -1,5 +1,20 @@
 # Agent Rules
 
+Explicit aligned holistic continual-learning interpretability monorepo setup
+and causal-monitor experiment design are authorized for additive manifests,
+documentation, and hermetic contract checks under named state slice
+`aligned-holistic-continual-learning-interpretability-monorepo-v1`. This slice
+maps existing Rust, Python, JavaScript, and research sources without moving,
+copying, or rewriting historical scientific artifacts. External interpretability
+projects remain pinned dependencies or clean-room references; their code,
+weights, datasets, traces, and generated outputs are not vendored. The
+experiment is design-only until a separately reviewed packet exists: no model
+execution, training, provider call, spend, external corpus acquisition, raw
+trace retention, accepted Evidence Ledger mutation, Stage 0C/Stage 1
+promotion, or introspection, consciousness, benchmark, production-readiness,
+or general alignment claim is authorized. Every mutation in this phase names
+state slice `aligned-holistic-continual-learning-interpretability-monorepo-v1`.
+
 Explicit Astral Gemma 3 causal-feature-bundle-effects V3 is authorized for
 additive implementation and one bounded qualification only under named state
 slice `astral-trace-completeness-gemma3-causal-feature-bundle-effects-v3`.

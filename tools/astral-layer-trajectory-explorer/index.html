@@ -1,0 +1,106 @@
+<!doctype html>
+<!-- State slice: astral-layer-trajectory-explorer-prototype-v1. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#10111f" />
+    <meta name="description" content="A bounded Astral prototype for inspecting synthetic layer-state trajectories." />
+    <title>Astral / Layer Trajectory Explorer</title>
+    <link rel="stylesheet" href="/tools/astral-layer-trajectory-explorer/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <a class="wordmark" href="#top" aria-label="Astral home">ASTRAL <span>/ layer trajectory explorer</span></a>
+        <div class="topbar-meta">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span>local prototype</span>
+          <span class="meta-divider">/</span>
+          <span>no model trace loaded</span>
+        </div>
+      </header>
+
+      <section class="intro" id="top" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">Causal telemetry / visual instrument</p>
+          <h1 id="page-title">Layer state<br /><em>in motion.</em></h1>
+          <p class="intro-copy">A research-facing reconstruction of a token trajectory view. Every ribbon is a synthetic residual-state path across 78 layers; use it to inspect the interaction model before connecting qualified traces.</p>
+        </div>
+        <aside class="boundary-note">
+          <span class="eyebrow">Evidence boundary</span>
+          <strong>Illustrative geometry only.</strong>
+          <p>This surface does not contain model activations, causal effects, or assessment evidence. The demo dataset is deterministic and local.</p>
+          <span class="boundary-chip">DESIGN / INSTRUMENT FEASIBILITY</span>
+        </aside>
+      </section>
+
+      <section class="workspace" aria-label="Layer trajectory workspace">
+        <div class="workspace-head">
+          <div>
+            <p class="eyebrow">Trajectory field / synthetic fixture</p>
+            <h2>Pretty angel-shaped trajectory</h2>
+            <p class="workspace-subtitle"><span id="pathCount">255</span> paths × <span id="layerCount">78</span> layers · PCA 1–3 projection · layer 0 → 77</p>
+          </div>
+          <div class="workspace-actions">
+            <button class="mode-button is-active" type="button" data-mode="direction" aria-pressed="true">direction</button>
+            <button class="mode-button" type="button" data-mode="raw" aria-pressed="false">raw</button>
+            <button class="play-button" type="button" id="playButton" aria-pressed="false"><span class="play-icon" aria-hidden="true">▶</span><span id="playLabel">replay path</span></button>
+          </div>
+        </div>
+
+        <div class="visual-frame">
+          <div class="visual-legend" aria-hidden="true">
+            <span>direction = unit-normalised</span>
+            <span>raw = as-is</span>
+            <span class="legend-gradient"><i></i> L0 <b></b> L77</span>
+          </div>
+          <canvas id="trajectoryCanvas" width="1200" height="620" aria-label="Synthetic token layer trajectories. Click a path to select it; drag the selected bead to propose a push."></canvas>
+          <div class="canvas-hint"><span class="hint-key">shift</span><span>drag a bead to propose a push</span><span class="hint-separator">·</span><span>scroll to zoom</span></div>
+          <div class="canvas-status" id="canvasStatus" role="status" aria-live="polite">Synthetic fixture / select a ribbon</div>
+        </div>
+
+        <div class="timeline-row">
+          <button class="timeline-play" type="button" id="timelinePlay" aria-label="Play layer timeline"><span aria-hidden="true">▶</span></button>
+          <input id="layerSlider" type="range" min="0" max="77" value="41" aria-label="Selected layer" />
+          <div class="layer-readout"><span>L</span><strong id="layerValue">41</strong></div>
+        </div>
+
+        <div class="workspace-grid">
+          <section class="panel selection-panel" aria-labelledby="selection-heading">
+            <div class="panel-heading">
+              <div><p class="eyebrow">Selected path</p><h3 id="selection-heading">Token <span id="selectedToken">184</span></h3></div>
+              <span class="selection-state" id="selectionState">tracking</span>
+            </div>
+            <div class="selection-grid">
+              <div><span class="data-label">position</span><strong id="selectedPosition">L41 / 78</strong></div>
+              <div><span class="data-label">norm</span><strong id="selectedNorm">0.72</strong></div>
+              <div><span class="data-label">trajectory</span><strong id="selectedTrajectory">active</strong></div>
+            </div>
+            <p class="panel-copy" id="selectionCopy">This highlighted path is a synthetic token residual state. The bead marks the current layer and is the only draggable control in the field.</p>
+          </section>
+
+          <section class="panel sweep-panel" aria-labelledby="sweep-heading">
+            <div class="panel-heading">
+              <div><p class="eyebrow">Push sweep / proposal</p><h3 id="sweep-heading">Intervention preview</h3></div>
+              <span class="sweep-state" id="sweepState">uncommitted</span>
+            </div>
+            <div class="sweep-row"><span>dose</span><div class="sweep-track"><i id="sweepTrack"></i></div><strong id="sweepValue">0.00</strong></div>
+            <div class="sweep-actions"><button class="commit-button" id="commitButton" type="button" disabled>commit proposal</button><button class="reset-button" id="resetButton" type="button">reset</button></div>
+            <p class="panel-copy">A committed push remains a visual annotation. It does not alter a model, produce an effect estimate, or open an assessment gate.</p>
+          </section>
+        </div>
+      </section>
+
+      <section class="record-strip" aria-label="Fixture record">
+        <div><span class="eyebrow">fixture</span><strong>ASTRAL / LAYER-FIELD-01</strong></div>
+        <div><span class="eyebrow">model</span><strong>not connected</strong></div>
+        <div><span class="eyebrow">trace status</span><strong class="amber-text">illustrative only</strong></div>
+        <div><span class="eyebrow">claim ceiling</span><strong>instrument feasibility</strong></div>
+      </section>
+
+      <footer class="footer"><span>ASTRAL / research instrument prototype</span><span>state slice: astral-layer-trajectory-explorer-prototype-v1</span><a href="/tools/astral-research-atlas/index.html">return to research atlas ↗</a></footer>
+    </main>
+    <script src="/tools/astral-layer-trajectory-explorer/app.js"></script>
+  </body>
+</html>

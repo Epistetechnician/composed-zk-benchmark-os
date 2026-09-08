@@ -1,0 +1,122 @@
+{
+  "schema": "aligned-holistic-continual-learning-monorepo-v1",
+  "state_slice": "aligned-holistic-continual-learning-interpretability-monorepo-v1",
+  "status": "DesignOnlyNoExecution",
+  "claim_ceiling": "LocalDevelopmentAlignedContinualLearningCausalMonitorDesignV1",
+  "workspace_roots": {
+    "rust": "Cargo.toml",
+    "javascript_orchestration": "package.json",
+    "python_experiments": [
+      "experiments/continual_learning",
+      "experiments/experience_learning",
+      "experiments/self_model_benchmark",
+      "tools/astral-trace-completeness-v2",
+      "tools/astral-trace-completeness-v3",
+      "tools/astral-trace-completeness-v4",
+      "tools/astral-trace-completeness-gemma3-causal-feature-bundle-effects-v3"
+    ],
+    "research_ui": [
+      "tools/astral-research-atlas",
+      "tools/astral-layer-trajectory-explorer"
+    ],
+    "governance_crates": [
+      "crates/hsai-control-plane",
+      "crates/hsai-agent-admission",
+      "crates/hsai-claim-envelope",
+      "crates/hsai-attestation",
+      "crates/hsai-gateway-digest-checker",
+      "crates/hsai-e2e-harness"
+    ]
+  },
+  "local_contract_sources": [
+    "docs/research/agent-platform/840-proof-carrying-capability-bounded-agent-platform-v1.md",
+    "docs/research/agent-platform/841-parallel-build-plan-v1.md",
+    "docs/research/agent-platform/842-sota-build-guidance-v1.md",
+    "experiments/continual_learning/README.md",
+    "docs/research/continual-learning/89-plasticity-guard-reversible-adapter-v1-protocol.md",
+    "docs/research/continual-learning/117-plasticity-recovery-v2-protocol.md",
+    "docs/research/astral-self-modeling/137-trace-completeness-gemma3-causal-feature-bundle-effects-v3-protocol.md"
+  ],
+  "literature": [
+    {
+      "name": "TransformerLens",
+      "url": "https://github.com/TransformerLensOrg/TransformerLens",
+      "role": "activation capture and intervention adapter reference"
+    },
+    {
+      "name": "SAELens",
+      "url": "https://github.com/decoderesearch/SAELens",
+      "role": "sparse-autoencoder loading, training, and analysis reference"
+    },
+    {
+      "name": "Gemma Scope",
+      "url": "https://ai.google.dev/gemma/docs/gemma_scope",
+      "role": "model-matched Gemma SAE and transcoder asset provenance"
+    },
+    {
+      "name": "circuit-tracer",
+      "url": "https://github.com/decoderesearch/circuit-tracer",
+      "role": "attribution-graph discovery and feature-intervention reference"
+    },
+    {
+      "name": "ACDC",
+      "url": "https://arxiv.org/abs/2304.14997",
+      "role": "automated circuit-discovery method reference"
+    },
+    {
+      "name": "Attribution Patching",
+      "url": "https://arxiv.org/abs/2310.10348",
+      "role": "first-order edge-screening method reference"
+    },
+    {
+      "name": "NNsight",
+      "url": "https://github.com/ndif-team/nnsight",
+      "role": "optional PyTorch tracing backend reference"
+    },
+    {
+      "name": "pyvene",
+      "url": "https://github.com/stanfordnlp/pyvene",
+      "role": "model-agnostic intervention reference"
+    },
+    {
+      "name": "LoRA",
+      "url": "https://arxiv.org/abs/2106.09685",
+      "role": "reversible parameter-efficient update reference"
+    },
+    {
+      "name": "Neuronpedia",
+      "url": "https://github.com/hijohnnylin/neuronpedia",
+      "role": "aggregate-only feature exploration reference"
+    },
+    {
+      "name": "EWC",
+      "url": "https://arxiv.org/abs/1612.00796",
+      "role": "retention baseline reference"
+    },
+    {
+      "name": "GEM",
+      "url": "https://arxiv.org/abs/1706.08840",
+      "role": "constrained continual-learning baseline reference"
+    },
+    {
+      "name": "Learning without Forgetting",
+      "url": "https://arxiv.org/abs/1606.09282",
+      "role": "continual-learning baseline reference"
+    }
+  ],
+  "excluded_from_inputs": [
+    "historical Astral, Oak Lab, Gemma, Qwen, MiniMind, and continual-learning result artifacts",
+    "external model checkpoints and feature assets until a fresh packet binds them",
+    "raw prompts, tokens, activations, logits, adapter tensors, and per-trial outcomes",
+    "semantica/ nested untracked checkout and its generated environments"
+  ],
+  "execution": {
+    "model_execution": false,
+    "training": false,
+    "provider_spend": false,
+    "corpus_acquisition": false,
+    "assessment": false,
+    "evidence_ledger_mutation": false,
+    "every_mutation_names_state_slice": true
+  }
+}
