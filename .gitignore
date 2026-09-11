@@ -3,11 +3,16 @@
 .DS_Store
 /.phala-capture/
 /.autoresearch/
+# state slice: weco-isolated-autoresearch-v1
+/.weco/
 /.local-artifact-campaigns/
 /.gateway-demo-runs/
 /formal/hsai-gateway-digest/.lake/
+/docs/research/evidence-bounded-ai/build/
 
 # repo-package-manager-contract-v1: local Python test/runtime caches are not source.
 **/__pycache__/
 *.py[cod]
 .pytest_cache/
+# state slice: repo-package-manager-contract-v1
+/.venv/

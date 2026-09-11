@@ -579,6 +579,24 @@ Every mutation in this phase names state slice
 
 Explicit Phase 815 continual-learning Gemma3 paper-aligned recirculation execution is now allowed under named state slice `continual-learning-gemma3-paper-recirculation-v1`: additive Python source and hermetic tests under `experiments/continual_learning/`, a repository-external immutable Gemma3 model/corpus campaign root, an independent validator, a phase record under `docs/research/continual-learning/`, and navigation/status updates under `README.md`, `docs/12-task-list.md`, `experiments/continual_learning/README.md`, and `AGENTS.md`. This phase permits only offline execution against the already-cached pretrained `google/gemma-3-1b-pt` checkpoint through the cached BF16 MLX conversion, the one-additional-iteration recurrence from [Recirculation, arXiv:2608.17981](https://arxiv.org/html/2608.17981v1), paper-shaped 1024-token fit/evaluation panels supplied in an immutable external artifact root, fit-only source/destination and alpha qualification, the reported Gemma3 1B PT target pair `(source=11, destination=4)` as an expected replication target rather than a forced outcome, locked evaluation with `alpha=0.15` and `beta=0.85`, source-to-destination norm adjustment, native/MLX parity, zero-alpha identity, deterministic repeat, temperature and looping controls, digest-bound artifacts, and independent validation. It does not permit model or corpus downloads, network access during execution, training, adapter updates, Qwen V5 configuration reuse, adaptive assessment tuning, Astral self-modeling claims, Astral claim-ledger mutation, Stage 0C or Stage 1 promotion, accepted Evidence Ledger mutation, benchmark evidence, provider calls, production traffic, or claims above `LocalDevelopmentGemma3PaperAlignedRecirculationReplication`. Every mutation in this phase names state slice `continual-learning-gemma3-paper-recirculation-v1`.
 
+Explicit internal multi-instance recirculation verification is authorized
+under named state slice
+`continual-learning-gemma3-paper-recirculation-internal-multimachine-v1`.
+This fresh additive lane permits bounded offline Gemma3 execution using
+external corpus/model roots, fixed candidate pairs, zero-alpha and deterministic
+repeat controls, and digest-bound per-instance receipts. Three same-host
+processes are an engineering fallback and must be classified
+`SingleMachineMultiInstanceOnly`; at least two distinct host identities are
+required for `MultiMachineInternalReplication`. The external-reviewer gate is
+removed only for this lower internal claim ceiling:
+`LocalDevelopmentGemma3InternalMultiInstanceReplication`. This lane does not
+prove paper replication, independent validation, benchmark performance,
+general recirculation, or production readiness. No provider call, network
+access, training, adapter update, accepted Evidence Ledger mutation, or reuse
+of prior results as evidence is allowed. Every mutation in this phase names
+state slice
+`continual-learning-gemma3-paper-recirculation-internal-multimachine-v1`.
+
 Phase 836 Gemma3 FineWeb-Edu H100 replication V1 is terminally closed as
 `ProtocolReviewRejectedNoExecution` under named state slice
 `continual-learning-gemma3-fineweb-edu-replication-h100-v1`. The exact
@@ -595,6 +613,61 @@ claim, Evidence Ledger mutation, or Astral coupling is permitted under this
 identity. Any continuation requires a fresh protocol, corrected receipt
 contract, new freeze, and independent review. Every mutation in this phase
 names state slice `continual-learning-gemma3-fineweb-edu-replication-h100-v1`.
+
+Explicit user-authorized Phase 837 Gemma3 FineWeb-Edu H100 replication V7 is
+allowed under named state slice
+`continual-learning-gemma3-fineweb-edu-replication-h100-v7`: additive fresh
+protocol, implementation, provider bundle, hermetic tests, and external
+custody records only. V6 is terminally rejected and contributes no scientific
+data, model execution, effects, results, or receipts. V7 fixes V6's exact
+decimal budget parsing, binds the actual model/raw/source/corpus custody paths
+to the launch manifest, and independently validates trust-root path custody.
+The exact hard ceiling is USD 69.00. Execution requires a fresh packet-bound
+signed independent Ed25519 ACCEPT, a GiveMeANode trust-root snapshot, an
+actual image digest, fresh disjoint FineWeb-Edu custody, and no-spend preflight
+before exactly one clock-locked h100-1 batch job. No training, network during
+effects, adaptive retuning, Evidence Ledger mutation, benchmark, production,
+breakthrough, or paper-replication claim is authorized. A rejected review or
+failed gate closes V7 without retry. Every mutation in this phase names state
+slice `continual-learning-gemma3-fineweb-edu-replication-h100-v7`.
+
+Explicit user-authorized Phase 838 Gemma3 FineWeb-Edu H100 replication V8 is
+allowed under named state slice
+`continual-learning-gemma3-fineweb-edu-replication-h100-v8`: additive fresh
+protocol, implementation, provider bundle, hermetic tests, and external
+custody records only. V7 is terminally rejected and contributes no scientific
+data, model execution, effects, results, or receipts. V8 corrects the IPv6
+route proof path and requires both preflight and independent validation to
+recompute the immutable external code-bundle digest. The exact hard ceiling is
+USD 69.00. Execution requires a fresh packet-bound signed independent Ed25519
+ACCEPT, a GiveMeANode trust-root snapshot, an actual image digest, fresh
+disjoint FineWeb-Edu custody, and no-spend preflight before exactly one
+clock-locked h100-1 batch job. No training, network during effects, adaptive
+retuning, Evidence Ledger mutation, benchmark, production, breakthrough, or
+paper-replication claim is authorized. A rejected review or failed gate closes
+V8 without retry. Every mutation in this phase names state slice
+`continual-learning-gemma3-fineweb-edu-replication-h100-v8`.
+
+Explicit user-authorized Phase 839 Gemma3 FineWeb-Edu H100 replication V9 is
+allowed under named state slice
+`continual-learning-gemma3-fineweb-edu-replication-h100-v9`: additive fresh
+protocol, implementation, provider bundle, hermetic tests, and external
+custody records only. V8 and all earlier H100 identities remain terminal
+historical records and contribute no scientific data, model execution,
+effects, results, or receipts. V9 binds an explicit scalar V8 exclusion
+boundary, exact Decimal budget arithmetic, private candidate-result staging,
+and promotion only after independent validation. The exact hard ceiling is
+USD 69.00. Execution requires a fresh packet-bound signed independent Ed25519
+ACCEPT, a GiveMeANode trust-root snapshot, an actual image digest, fresh
+disjoint FineWeb-Edu custody, and no-spend preflight before exactly one
+clock-locked h100-1 batch job. Execution is offline, training is forbidden,
+the validator gate is mandatory, and failed validation may not leave final
+publication artifacts. No adaptive retuning, Evidence Ledger mutation,
+benchmark, production, breakthrough, or paper-replication claim is
+authorized. The claim ceiling is
+`LocalDevelopmentGemma3FineWebEduReplicationH100V9`. A rejected review or
+failed gate closes V9 without retry. Every mutation in this phase names state
+slice `continual-learning-gemma3-fineweb-edu-replication-h100-v9`.
 
 Explicit Phase 831 cached-model plasticity-guard execution is now allowed under named state slice `continual-learning-plasticity-guard-reversible-adapter-v1`: additive Python source and hermetic tests under `experiments/continual_learning/`, a repository-external immutable Gemma3 model/corpus/output root under PrimaryED with a DAed mirror, an independent aggregate-only validator, and protocol/execution records under `docs/research/continual-learning/`. This phase permits only offline execution against the already-cached `google/gemma-3-1b-pt` BF16 MLX conversion through MLX `0.31.2` and MLX-LM `0.31.3`; the new digest-bound NEWSROOM cohort after the prior eight eligible local-pilot documents; fixed forward/reverse fit orders and seeds; fixed-cadence and predeclared `plasticity_guard` arms; equal-budget reversible LoRA adapters; candidate commit or active-pointer rollback; prediction locking before assessment; and independent validation. The base checkpoint must remain byte-identical and no adapter may be merged. Astral integration is `not_run` and remains limited to causal-effect prediction, calibration, or instrumental correction. This phase does not permit model or corpus downloads, network access during model execution, adaptive assessment tuning, model shopping, waves, stochastic scheduling, provider/H100 calls, ZK/PQC backend evidence, accepted Evidence Ledger mutation, V48 or prior Astral artifact reuse, Stage 0C or Stage 1 promotion, introspection or causal-self-modeling claims, benchmark evidence, production traffic, or claims above `LocalDevelopmentPlasticityGuardReversibleAdapterFeasibility`. Any qualification, lock, custody, mirror, validator, or hard-guard failure closes execution without retry. Every mutation in this phase names state slice `continual-learning-plasticity-guard-reversible-adapter-v1`.
 

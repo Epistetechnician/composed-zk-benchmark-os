@@ -1,0 +1,33 @@
+{
+  "type": "step_code_snapshot",
+  "created_at": "2026-09-10T11:06:06.315336",
+  "file_count": 5,
+  "files": [
+    {
+      "path": ".weco/gemma3-h100-v9/optimize/packer.py",
+      "artifact_path": ".weco/gemma3-h100-v9/optimize/packer.py",
+      "bytes": 22065
+    },
+    {
+      "path": ".weco/gemma3-h100-v9/optimize/preflight.py",
+      "artifact_path": ".weco/gemma3-h100-v9/optimize/preflight.py",
+      "bytes": 24639
+    },
+    {
+      "path": ".weco/gemma3-h100-v9/optimize/run_h100.sh",
+      "artifact_path": ".weco/gemma3-h100-v9/optimize/run_h100.sh",
+      "bytes": 2796
+    },
+    {
+      "path": ".weco/gemma3-h100-v9/optimize/runner.py",
+      "artifact_path": ".weco/gemma3-h100-v9/optimize/runner.py",
+      "bytes": 49568
+    },
+    {
+      "path": ".weco/gemma3-h100-v9/optimize/validator.py",
+      "artifact_path": ".weco/gemma3-h100-v9/optimize/validator.py",
+      "bytes": 69558
+    }
+  ],
+  "step": 1
+}

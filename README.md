@@ -23,6 +23,19 @@ Core novelty:
 
 This is now a Level 1 local Rust foundation plus the original Level 0 architecture scaffold. It defines the architecture, vocabulary, repo integration decisions, DSL schema, Rust core crate, deterministic generator, v0 mutation engine, local JSON replay adapter, evidence ledger, benchmark pack skeleton, zk-Harness dry-run adapter preparation, external-runner boundary contracts, manual handoff bundle schema, synthetic result import prototype, evidence append proposal workflow, reviewed proposal acceptance policy, evidence-record candidate metadata, append previews, Level2 eligibility checks, review ledger primitives, proposal ledger primitives, scoring primitives, inert recursion-envelope metadata, inert zkML workload manifest metadata, inert pack-readiness metadata, HSAI accepted-result output import-candidate metadata, validation gates, and adapter roadmap.
 
+The evidence-bounded aligned-AI synthesis paper is recorded under state slice
+`evidence-bounded-aligned-ai-research-paper-v1`:
+
+- [Paper source and literature record](docs/research/evidence-bounded-ai/README.md)
+- [Rendered PDF](output/pdf/evidence-bounded-ai.pdf)
+
+The paper joins the benchmark OS, proof-carrying HSAI control plane,
+Statebook, mechanistic-interpretability qualification, and continual-learning
+protocols into one evidence-and-authority architecture. It reports local
+engineering evidence and bounded research results without promoting them into
+general alignment, introspection, causal-self-modeling, benchmark,
+production-readiness, or authority claims.
+
 The aligned holistic continual-learning research monorepo map and causal-monitor
 design are recorded under state slice
 `aligned-holistic-continual-learning-interpretability-monorepo-v1`:

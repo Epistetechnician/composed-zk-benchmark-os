@@ -158,7 +158,7 @@ ATTESTATION_KEYS = {
     "trust_root_id", "attestation_public_key", "key_certificate_signature",
 }
 ALLOWED_STOP_REASONS = frozenset({"completed", "failed_gate", "budget_boundary", "provider_cancelled"})
-HARD_USD_CEILING = 100.0
+HARD_USD_CEILING = 69.0
 PROVIDER_TRUST_ROOT_SCHEMA = "givemeanode-attestation-trust-root-v1"
 DATASET_REPO = "HuggingFaceFW/fineweb-edu"
 DATASET_REVISION = "87f09149ef4734204d70ed1d046ddc9ca3f2b8f9"

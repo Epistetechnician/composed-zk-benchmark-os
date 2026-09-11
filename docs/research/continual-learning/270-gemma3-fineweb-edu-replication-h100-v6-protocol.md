@@ -36,7 +36,7 @@ raw data.
    owner-only `0700` roots. Model execution is offline.
 6. Create one launch manifest binding code, runtime, model, data, image,
    review receipt, provider trust root, node shape, and the exact hard ceiling
-   `USD 100.00`. Decimal arithmetic must satisfy
+   `USD 69.00`. Decimal arithmetic must satisfy
    `quote * max_runtime_minutes == estimated_max_total_usd` exactly, with the
    estimate no greater than the ceiling.
 7. Run no-spend preflight. Any failure stops the slice.

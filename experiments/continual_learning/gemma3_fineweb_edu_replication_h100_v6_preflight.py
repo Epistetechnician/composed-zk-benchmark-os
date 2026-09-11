@@ -120,7 +120,7 @@ REVIEW_RECEIPT_KEYS = {
     "review_signature", "receipt_sha256",
 }
 STOP_RULE = "terminate at first failed gate or budget boundary"
-HARD_USD_CEILING = 100.0
+HARD_USD_CEILING = 69.0
 PROVIDER_TRUST_ROOT_SCHEMA = "givemeanode-attestation-trust-root-v1"
 
 
@@ -360,7 +360,7 @@ def validate_launch_manifest(
         "estimated_max_total_usd",
     )
     if ceiling != HARD_USD_CEILING:
-        raise ValueError("hard_usd_ceiling must be exactly USD 100.00")
+        raise ValueError("hard_usd_ceiling must be exactly USD 69.00")
     if exact_decimal(manifest["quoted_gpu_usd_per_minute"], "quoted_gpu_usd_per_minute") * exact_decimal(manifest["max_runtime_minutes"], "max_runtime_minutes") != exact_decimal(manifest["estimated_max_total_usd"], "estimated_max_total_usd") or estimate > ceiling:
         raise ValueError("launch budget arithmetic exceeds the hard ceiling")
 

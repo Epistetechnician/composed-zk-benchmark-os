@@ -34,7 +34,7 @@ Every finding below must be `true`:
 - `independent_validator_and_publication_order`
 - `v1_v2_identity_preserved_without_scientific_reuse`
 
-Reject if any digest or path is stale, the exact USD 100.00 ceiling is not
+Reject if any digest or path is stale, the exact USD 69.00 ceiling is not
 enforced with exact decimal arithmetic, the provider trust chain is not
 verified, dependencies are not installed from the lock, model identity is
 generic, network proof is incomplete, candidate or control behavior is

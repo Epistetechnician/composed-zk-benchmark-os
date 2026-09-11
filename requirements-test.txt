@@ -1,0 +1,5 @@
+# State slice: repo-package-manager-contract-v1.
+# The repository test wrapper selects .venv/bin/python when it exists.
+pytest==9.1.1
+cryptography==50.0.1
+torch==2.13.0

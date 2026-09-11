@@ -1,0 +1,3 @@
+# State slice: repo-package-manager-contract-v1.
+# This repository has no pnpm workspace packages; keep pnpm discovery local.
+packages: []
