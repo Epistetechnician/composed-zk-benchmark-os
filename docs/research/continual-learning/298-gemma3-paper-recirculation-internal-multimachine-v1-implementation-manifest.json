@@ -1,0 +1,27 @@
+{
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "ce1b4b218892f52a385f21648ae48f6360c02f605149ff8ba81badeb954c01bb"
+    },
+    {
+      "path": "docs/research/continual-learning/297-gemma3-paper-recirculation-internal-multimachine-v1-protocol.md",
+      "sha256": "f52634f57756f446076669c32c37749feeac8ffa812fed2695b0975e18d4d791"
+    },
+    {
+      "path": "experiments/continual_learning/gemma3_paper_recirculation_internal_multimachine_v1.py",
+      "sha256": "0fd6c2b45dc4ddb8b6bf33d25699f81aece02cf4416b995842ab443e9cf6bff8"
+    },
+    {
+      "path": "experiments/continual_learning/pack_gemma3_paper_recirculation_internal_multimachine_v1.py",
+      "sha256": "dfcf6d88cfcf7e8a2c4910fa6a37f4595867c72992c2682ece33697d4591c4d9"
+    },
+    {
+      "path": "experiments/continual_learning/validate_gemma3_paper_recirculation_internal_multimachine_v1.py",
+      "sha256": "21af32f93580bbabb6d04a8d1ee74018da084543d9b070384d937e118878a08a"
+    }
+  ],
+  "schema": "gemma3-paper-recirculation-internal-multimachine-v1-implementation",
+  "state_slice": "continual-learning-gemma3-paper-recirculation-internal-multimachine-v1",
+  "manifest_sha256": "7f80051befcef533d093f6c15b808d15fe1a3a92ce5313b003d185c63b7b5875"
+}

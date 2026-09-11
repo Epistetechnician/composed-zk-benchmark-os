@@ -30,7 +30,7 @@ def _manifest() -> dict[str, object]:
         "provider": "givemeanode",
         "node_type": "h100-1",
         "job_mode": "batch",
-        "hard_usd_ceiling": 100.0,
+        "hard_usd_ceiling": 69.0,
         "quoted_gpu_usd_per_minute": 0.05,
         "max_runtime_minutes": 100.0,
         "estimated_max_total_usd": 5.0,

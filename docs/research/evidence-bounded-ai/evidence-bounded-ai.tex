@@ -1,0 +1,616 @@
+%!TEX program = lualatex
+% SPDX-License-Identifier: CC-BY-SA-4.0
+% Visual language adapted from Foadsf/vintage-latex, CC BY-SA 4.0:
+% https://github.com/Foadsf/vintage-latex
+\documentclass[11pt,twoside]{article}
+
+\usepackage{iftex}
+\ifLuaTeX\else
+  \PackageError{evidence-bounded-ai}{This paper requires LuaLaTeX}
+    {Run lualatex, not pdflatex or xelatex.}
+\fi
+
+\usepackage{fontspec}
+\usepackage[table]{xcolor}
+\usepackage{geometry}
+\usepackage[tracking=true,protrusion=false,expansion=false]{microtype}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{ragged2e}
+\usepackage{enumitem}
+\usepackage{luamplib}
+% TeX Live's luamplib figure path needs paragraph tokens normalized in figure boxes.
+\partokencontext=0
+\mplibforcehmode
+\usepackage{csquotes}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage[backend=biber,style=authoryear,maxcitenames=2,maxbibnames=12]{biblatex}
+\addbibresource{evidence-bounded-ai.bib}
+
+\defaultfontfeatures{Renderer=HarfBuzz}
+\setmainfont{EB Garamond}[
+  Numbers={OldStyle,Proportional},
+  Ligatures={TeX,Common,Historic,Rare}
+]
+\setsansfont{TeX Gyre Heros}
+\setmonofont{DejaVu Sans Mono}
+
+\definecolor{ragpaper}{HTML}{F4EBDD}
+\definecolor{printerink}{HTML}{231F1A}
+\definecolor{sepia}{HTML}{7B4D2A}
+\definecolor{rust}{HTML}{8D3F2B}
+\definecolor{sage}{HTML}{526B5B}
+\definecolor{blueink}{HTML}{3E5C6E}
+\definecolor{wash}{HTML}{E9DDC7}
+\definecolor{palegreen}{HTML}{E4EBDD}
+\definecolor{paleblue}{HTML}{E2E9EB}
+\definecolor{palerust}{HTML}{F0DED5}
+
+\pagecolor{ragpaper}
+\color{printerink}
+
+\geometry{
+  a4paper,
+  top=27mm,
+  bottom=31mm,
+  left=32.5mm,
+  right=32.5mm,
+  marginparwidth=25mm,
+  marginparsep=6mm
+}
+\setlength{\emergencystretch}{2em}
+
+\setlength{\parindent}{1.2em}
+\setlength{\parskip}{0pt}
+\setlength{\textfloatsep}{1.1em plus 0.3em minus 0.2em}
+\setlength{\intextsep}{1.1em plus 0.3em minus 0.2em}
+\setlength{\abovecaptionskip}{0.45em}
+\setlength{\belowcaptionskip}{0.25em}
+\linespread{1.04}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=rust,
+  citecolor=blueink,
+  urlcolor=sepia,
+  pdftitle={Evidence-Bounded AI},
+  pdfauthor={Composed ZK Benchmark OS contributors},
+  pdfsubject={Aligned agents, interpretability, continual learning, and evidence governance}
+}
+
+\pagestyle{plain}
+\makeatletter
+\renewcommand{\@oddhead}{\hfill\footnotesize\textsc{Evidence-Bounded AI}\hspace{1.5em}}
+\renewcommand{\@evenhead}{\footnotesize\hspace{1.5em}\textsc{Evidence-Bounded AI}\hfill}
+\renewcommand{\@oddfoot}{\hfill\footnotesize\thepage\hspace{1.5em}}
+\renewcommand{\@evenfoot}{\footnotesize\hspace{1.5em}\thepage\hfill}
+\makeatother
+
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+\newcolumntype{P}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+
+\newcommand{\dropcap}[2]{%
+  \noindent
+  \parshape 4
+    3.55em \dimexpr\linewidth-3.55em\relax
+    3.55em \dimexpr\linewidth-3.55em\relax
+    3.55em \dimexpr\linewidth-3.55em\relax
+    0pt \linewidth
+  \makebox[0pt][r]{%
+    \raisebox{-1.48\baselineskip}[0pt][0pt]{%
+      \fontsize{47}{47}\selectfont #1}%
+    \hspace{0.16em}}%
+  \textsc{#2}%
+}
+
+\newcommand{\printerrule}{%
+  \par\vspace{0.55em}
+  \begin{center}
+    \rule{0.19\linewidth}{0.35pt}\hspace{0.45em}%
+    \rule{0.075\linewidth}{1.05pt}\hspace{0.45em}%
+    \rule{0.19\linewidth}{0.35pt}
+  \end{center}
+  \vspace{0.15em}
+}
+
+\newcommand{\state}[1]{\texttt{\small #1}}
+\newcommand{\claimbox}[2]{%
+  \begin{center}
+    \fcolorbox{#1}{wash}{%
+      \begin{minipage}{0.88\linewidth}
+        \vspace{0.35em}\small #2\vspace{0.35em}
+      \end{minipage}}
+  \end{center}
+}
+
+\newcommand{\sourcecite}[1]{\parencite{#1}}
+
+\everymplib{verbatimtex \leavevmode etex; input build/fiziko/fiziko.mp; input evidence-bounded-ai-figures.mp;}
+\everyendmplib{}
+
+\begin{document}
+
+\begin{titlepage}
+  \thispagestyle{empty}
+  \centering
+    \vspace*{0.55cm}
+    {\small\textls[145]{\textsc{A Research Programme in Trustworthy Machines}}}\par
+    \vspace{0.7em}
+    {\fontsize{31}{35}\selectfont\textsc{Evidence-Bounded AI}}\par
+    \vspace{0.55em}
+    {\large\textls[60]{\textsc{A Claim-Ceiling Architecture for}}}\par
+    \vspace{0.2em}
+    {\large\textls[60]{\textsc{Aligned Agents, Interpretability, and Continual Learning}}}\par
+    \printerrule
+    {\small An evidence-and-governance synthesis, reference implementation,\par
+    and future research agenda}\par
+    \vspace{1.2em}\par
+    \mpfig
+      fizikoRule((-5.5cm,0)--(5.5cm,0));
+      fizikoRule((0,-2.7cm)--(0,2.7cm));
+      fizikoRule((-5.5cm,-2.2cm)--(5.5cm,2.2cm));
+      fizikoRule((-5.5cm,2.2cm)--(5.5cm,-2.2cm));
+      fizikoMarker((-4.6cm,1.7cm), 0.08cm, fizikoSepia);
+      fizikoMarker((-2.9cm,-1.2cm), 0.08cm, fizikoSepia);
+      fizikoMarker((-0.8cm,2.2cm), 0.08cm, fizikoSepia);
+      fizikoMarker((1.6cm,-1.9cm), 0.08cm, fizikoSepia);
+      fizikoMarker((3.7cm,1.0cm), 0.08cm, fizikoSepia);
+      fizikoMarker((4.7cm,-0.5cm), 0.08cm, fizikoSepia);
+      fizikoPanel((-3.55cm,0.55cm), 2.4cm, 0.75cm, fizikoBlueWash, fizikoBlue);
+      fizikoPanel((0,-0.75cm), 2.6cm, 0.85cm, fizikoGreenWash, fizikoGreen);
+      fizikoPanel((3.55cm,0.55cm), 2.4cm, 0.75cm, fizikoRustWash, fizikoRust);
+      fizikoPanel((0,1.65cm), 3.6cm, 0.75cm, fizikoPaper, fizikoInk);
+      label(btex \scriptsize aligned agents etex, (-3.55cm,0.55cm));
+      label(btex \scriptsize interpretable mechanisms etex, (0,-0.75cm));
+      label(btex \scriptsize continual updates etex, (3.55cm,0.55cm));
+      label(btex \scriptsize evidence before authority etex, (0,1.65cm));
+      fizikoArrow((-2.15cm,0.52cm)--(-0.95cm,-0.52cm));
+      fizikoArrow((0.95cm,-0.52cm)--(2.15cm,0.52cm));
+      draw tube.l((-2.25cm,0.9cm){dir(45)}..(0,2.45cm)..{dir(-45)}(2.25cm,0.9cm))(0.04cm) withcolor fizikoSepia;
+    \endmpfig
+    \vfill
+    {\small\textsc{Composed ZK Benchmark OS contributors}}\par
+    \vspace{0.35em}
+    {\small State slice \state{evidence-bounded-aligned-ai-research-paper-v1}}\par
+    \vspace{0.2em}
+    {\small 9 September 2026}
+\end{titlepage}
+
+\begin{abstract}
+  \dropcap{A}{ligned AI} research increasingly joins four difficult tasks: shaping behavior, inspecting internal computation, updating systems over time, and deciding when a system may act. These tasks are often evaluated in separate lanes, while public language quietly combines their results into claims about safety, understanding, or readiness. This paper proposes \emph{evidence-bounded AI}: a system-level architecture in which every proposed claim is bound to an exact state slice, executable or design protocol, custody identity, independent validation path, and explicit claim ceiling. A model may propose evidence, but it cannot approve the evidence, enlarge its capabilities, modify the evaluator, or promote an update.
+
+  We synthesize a reference implementation spanning a semantic benchmark operating system, a proof-carrying capability-bounded agent control plane, Statebook semantic and settlement fixtures, mechanistic-interpretability qualification, and continual-learning protocols. The implementation establishes local deterministic contracts and fail-closed rejection paths. The research record also contains a bounded Gemma 3 trace-qualification result, repeated causal-target failures in Astral, and a negative real-panel continual-learning campaign. None is promoted into a general alignment or introspection claim. The resulting thesis is deliberately narrower and more operational: future aligned AI needs an evidence layer that makes behavior, explanations, updates, and authority independently auditable before they become coupled.
+\end{abstract}
+
+\vspace{0.4em}
+\begin{center}
+  \small\textsc{Keywords:} aligned AI; mechanistic interpretability; continual learning;
+  evidence provenance; claim ceilings; scalable oversight; reproducibility; agent security
+\end{center}
+
+\printerrule
+
+\tableofcontents
+\clearpage
+
+\section{The claim is the unit of progress}
+
+\dropcap{M}{odern AI} systems are no longer only predictors. They are learners, tool users, evaluators, code authors, and participants in workflows that change after deployment. This creates a structural problem for alignment research. A capability may be locally reproducible while its authority is unbounded. An activation visualization may be legible while its causal role is untested. An update may improve a task while damaging retention, calibration, or policy compliance. A green test may establish a contract while its readers infer a production guarantee.
+
+  The field already contains valuable responses to individual parts of this problem. AI safety work catalogs specification failure, reward gaming, distribution shift, and unsafe exploration \sourcecite{amodei2016concrete,leike2017gridworlds}. Preference learning, reward modeling, constitutional methods, and critique assistance seek scalable ways to supervise increasingly capable systems \sourcecite{christiano2017human,leike2018scalable,bai2022constitutional,saunders2022self}. Mechanistic interpretability supplies causal and structural tools for inspecting internal computation \sourcecite{elhage2021framework,geiger2023causal,conmy2023acdc}. Continual-learning research measures the stability--plasticity trade-off and develops replay and regularization methods \sourcecite{mccloskey1989interference,kirkpatrick2017forgetting,lopezpaz2017gem,rolnick2019experience}.
+
+  These traditions share a missing connective tissue: a typed boundary between \emph{what was measured}, \emph{what the measurement supports}, and \emph{what the system is allowed to do next}. Model cards, dataset datasheets, provenance standards, reproducibility programmes, and risk frameworks move in this direction, but are generally descriptive or organizational rather than an executable admission path \sourcecite{mitchell2019model,gebru2021datasheets,w3c2013prov,pineau2021reproducibility,tabassi2023airmf,autio2024genai}.
+
+\claimbox{rust}{\textbf{Central thesis.} An aligned system should not be defined only by the behavior of its model. It should be defined by a lifecycle in which every capability, explanation, update, and action is attached to an evidence object with a bounded claim and a separate authority decision.}
+
+  This is not a new training objective, a theory of consciousness, or a proof that any current model is aligned. It is a proposal for the layer that must sit between research output and operational consequence. The paper asks four questions:
+
+\begin{enumerate}[leftmargin=2.0em,itemsep=0.2em]
+  \item Can research claims be represented as typed objects whose evidence cannot silently escalate?
+  \item Can agent capability and external authority be separated in executable contracts?
+  \item Can interpretability and continual-learning experiments share a common custody, locking, and independent-validation discipline?
+  \item What does the existing implementation actually establish, and what does it still refuse to claim?
+\end{enumerate}
+
+  The answer is affirmative for local contract enforcement and negative for the stronger scientific claims. That asymmetry is the result, not a defect to hide.
+
+\section{Evidence-bounded AI}
+
+\subsection{A typed claim object}
+
+  Let an evidence-bearing claim be represented as
+\[
+  q = (s, v, p, c, r, a, \ell),
+\]
+where $s$ is the named state slice, $v$ is the exact source and runtime identity, $p$ is the frozen protocol, $c$ is custody and corpus identity, $r$ is the result artifact, $a$ is the independent validation record, and $\ell$ is the claim ceiling. The ceiling is not a marketing label. It is a type-level upper bound on the proposition that may be emitted from the record.
+
+  A result may be valid within its slice while remaining unusable for a stronger proposition. For example, a successful reconstruction gate can qualify an instrumentation path; it does not thereby validate a causal feature effect. A replay agreement can establish deterministic local behavior; it does not establish host identity or production isolation. An accepted testnet observation can prepare a settlement record; it does not move value. This separation is the practical meaning of a claim ceiling.
+
+\subsection{Evidence maturity and authority}
+
+  We use a meet-only maturity lattice. A composite record inherits the weakest relevant boundary rather than averaging upward:
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}P{0.22\linewidth}Y Y@{}}
+\toprule
+\textsc{Maturity} & \textsc{What it can establish} & \textsc{What it cannot establish} \\
+\midrule
+Design & A falsifiable protocol and a declared future gate & Any result, execution, or authority \\
+Qualification & A bounded instrument, runtime, or contract behaves as specified & Scientific validity, generalization, or deployment safety \\
+Local validation & Deterministic replay, schema, digest, or invariant agreement & Independent governance or adversarial-host security \\
+Assessment & A locked effect or outcome for the declared panel and estimand & General truth beyond the panel and protocol \\
+Independent acceptance & A separate actor validated the exact packet and result & Authority unless an explicit external adapter grants it \\
+Authority & A separately controlled action boundary was opened & Truth, usefulness, alignment, or future safety \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+  The authority type is intentionally separate. In the reference implementation, capability receipts, execution permits, settlement intents, and evidence promotion requests carry a non-authority invariant. A local function that returns a permit is not an executor; a digest is not a signature; a market price is not evidence; and a proof artifact is not automatically a proof of the system-level proposition under discussion.
+
+\begin{figure}[t]
+\centering
+\mpfig
+  draw tube.l((-5.45cm,0.75cm)--(5.45cm,0.75cm))(0.035cm) withcolor fizikoSepia;
+  fizikoPanel((-5.4cm,0.75cm), 1.58cm, 0.75cm, fizikoBlueWash, fizikoBlue);
+  fizikoPanel((-3.6cm,0.75cm), 1.58cm, 0.75cm, fizikoPaper, fizikoInk);
+  fizikoPanel((-1.8cm,0.75cm), 1.58cm, 0.75cm, fizikoGreenWash, fizikoGreen);
+  fizikoPanel((0,0.75cm), 1.58cm, 0.75cm, fizikoPaper, fizikoInk);
+  fizikoPanel((1.8cm,0.75cm), 1.58cm, 0.75cm, fizikoGreenWash, fizikoGreen);
+  fizikoPanel((3.6cm,0.75cm), 1.58cm, 0.75cm, fizikoRustWash, fizikoRust);
+  fizikoPanel((5.4cm,0.75cm), 1.58cm, 0.75cm, fizikoBlueWash, fizikoBlue);
+  draw spring((5.4cm,0.02cm),(-5.4cm,0.02cm),18) withcolor fizikoSepia;
+  label(btex \vbox{\hbox{\scriptsize claim}\hbox{\scriptsize ceiling}} etex, (-5.4cm,0.75cm));
+  label(btex \vbox{\hbox{\scriptsize frozen}\hbox{\scriptsize packet}} etex, (-3.6cm,0.75cm));
+  label(btex \vbox{\hbox{\scriptsize custody}\hbox{\scriptsize run}} etex, (-1.8cm,0.75cm));
+  label(btex \vbox{\hbox{\scriptsize aggregate}\hbox{\scriptsize artifact}} etex, (0,0.75cm));
+  label(btex \vbox{\hbox{\scriptsize independent}\hbox{\scriptsize validator}} etex, (1.8cm,0.75cm));
+  label(btex \vbox{\hbox{\scriptsize bounded}\hbox{\scriptsize disposition}} etex, (3.6cm,0.75cm));
+  label(btex \vbox{\hbox{\scriptsize authority}\hbox{\scriptsize gate}} etex, (5.4cm,0.75cm));
+  label(btex \scriptsize later stages consume only at their declared ceiling etex, (0,-0.62cm));
+  label(btex \scriptsize exact identity and validation boundary remain attached etex, (0,-0.88cm));
+\endmpfig
+\caption{The evidence lifecycle. The final gate is not a stronger summary of earlier evidence; it is a separate authority decision with its own identity and controls.}
+\label{fig:lifecycle}
+\end{figure}
+
+\subsection{Four coupled research surfaces}
+
+  The proposed substrate joins four surfaces without collapsing them:
+
+\begin{description}[leftmargin=1.65em,style=nextline]
+  \item[Behavior.] What does the system do on declared tasks, adversarial cases, and held-out families?
+  \item[Mechanism.] Which internal variables, paths, or features change, and does intervention on them predict held-out behavior?
+  \item[Adaptation.] What changes after an update, what is retained, and can the update be rejected or rolled back without mutating the base?
+  \item[Authority.] Which external effects are permitted, under whose identity, with what spend, reversibility, and shutdown boundary?
+\end{description}
+
+  Alignment is not the scalar intersection of the four. Each surface has its own estimand, controls, failure modes, and disposition. The architecture joins them through digests and review ordering, not through a single alignment score.
+
+\section{Related work and the gap}
+
+\subsection{From preference learning to scalable oversight}
+
+  Preference learning showed that non-expert comparisons can train useful behavior without a hand-coded reward function \sourcecite{christiano2017human}. Reward modeling then became a natural alignment direction for complex agents, while also exposing the difficulty of specifying, measuring, and generalizing human intent \sourcecite{leike2018scalable}. Constitutional AI and AI-assisted critique replace some human labels with written principles or model-generated criticism \sourcecite{bai2022constitutional,saunders2022self}. Latent-knowledge work asks whether internal activations can reveal information that a model does not report \sourcecite{burns2022latent}.
+
+  The evidence-bounded extension is to treat the evaluator, reward model, constitution, critique process, and latent-knowledge measurement as protected objects. The learner must not edit the evaluator that decides whether its update is safe. A model-written critique is evidence about a critique process, not independent oversight. A latent probe is a measurement hypothesis, not a warrant for authority.
+
+\subsection{Mechanistic interpretability and causal validity}
+
+  Transformer-circuit work provides a mathematical vocabulary for residual streams, attention paths, and compositional mechanisms \sourcecite{elhage2021framework}. Causal abstraction offers a common language for activation patching, causal mediation, causal scrubbing, circuit analysis, and sparse features \sourcecite{geiger2023causal}. Automated circuit discovery scales part of the search for relevant edges \sourcecite{conmy2023acdc}. Sparse autoencoders and dictionary learning propose more useful units than individual neurons \sourcecite{bricken2023monosemanticity,cunningham2023sparse}.
+
+  These methods are powerful precisely because they generate hypotheses about internal structure. Their evidentiary limit is equally important: a readable feature, attribution graph, or reconstruction is not automatically a causal explanation. The paper's interpretability protocol therefore requires native/instrumented parity, exact no-op identity, nonzero intervention reach, prediction locking before assessment, held-out intervention effects, controls, and independent aggregation. The V48 Astral record demonstrates why this matters: technical capture and custody passed while localization, activation-effect prediction, and cross-view recoverability failed.
+
+\subsection{Continual learning and the stability--plasticity problem}
+
+  Catastrophic interference is a foundational problem for systems that learn sequentially \sourcecite{mccloskey1989interference}. Elastic Weight Consolidation protects parameters judged important to previous tasks \sourcecite{kirkpatrick2017forgetting}; Gradient Episodic Memory constrains updates using episodic memories \sourcecite{lopezpaz2017gem}; Synaptic Intelligence estimates parameter importance online \sourcecite{zenke2017continual}; and replay provides a direct way to revisit prior experience \sourcecite{rolnick2019experience}. Reviews organize the broader space of regularization, replay, architecture, and transfer methods \sourcecite{parisi2019continual,delange2021survey}.
+
+  The missing alignment connection is update governance. A continual learner does not merely need a lower forgetting score. It needs a protected base, explicit update identity, equal resource accounting, a retention guard, evaluator independence, prediction locking, and a reversible pointer that can refuse promotion. Continual learning becomes an alignment problem when the update can alter the policy, evaluator, safety monitor, evidence ledger, or action authority.
+
+\subsection{Provenance, reproducibility, risk management, and agent evaluation}
+
+  Model cards and datasheets established documentation patterns for models and datasets \sourcecite{mitchell2019model,gebru2021datasheets}. W3C PROV provides a general vocabulary for interoperable derivation, activity, and agent records \sourcecite{w3c2013prov}. NeurIPS reproducibility work made code, data, and checklist practices visible as a community concern \sourcecite{pineau2021reproducibility}. NIST's AI RMF and Generative AI Profile organize governance across the AI lifecycle \sourcecite{tabassi2023airmf,autio2024genai}. Hidden technical debt research explains why boundary erosion, configuration drift, feedback loops, and undeclared consumers become system risks \sourcecite{sculley2015technical}.
+
+  Agent benchmarks add realistic tasks, tool use, and adversarial inputs. AgentBench evaluates language models as agents across environments \sourcecite{liu2023agentbench}; WebArena supplies a realistic web environment \sourcecite{zhou2023webarena}; AgentDojo tests tool-using agents against prompt injection in dynamic environments \sourcecite{debenedetti2024agentdojo}. Evidence-bounded AI treats these benchmarks as inputs to an admission and reporting system rather than as automatic proof of safe deployment.
+
+\subsection{The newer frontier: control, conditional compliance, and tool reliability}
+
+  Recent work makes the governance problem sharper. AI Control evaluates safety protocols against an untrusted model that may intentionally subvert them \sourcecite{greenblatt2023aicontrol}. Alignment-faking experiments show that a model can condition its compliance on its perceived training context \sourcecite{greenblatt2024alignmentfaking}; this is evidence for stronger protocol design, not evidence of general deceptive alignment. $\tau$-bench tests tool-agent-user interaction against dynamic state and policy constraints, and reports substantial inconsistency even for strong function-calling systems \sourcecite{yao2024taubench}. Scaling monosemanticity shows that sparse autoencoders can yield steerable features at production-model scale while explicitly retaining limitations around completeness and faithful causal explanation \sourcecite{templeton2026scaling}.
+
+  These results do not remove the paper's central gap. They reinforce it. The next generation of aligned systems needs separate, composable claims for behavior, mechanism, update stability, and authority under distribution shift. The same system may pass a task benchmark, expose a meaningful feature, and still fail a retention guard, a held-out causal prediction, or an external authorization check.
+
+\claimbox{blueink}{\textbf{Gap.} Existing work supplies methods for training, inspecting, updating, documenting, and attacking AI systems. The proposed contribution is the connective contract that prevents a result from silently changing category while moving from a research notebook to a capability receipt, an update, or an external action.}
+
+\section{Reference architecture}
+
+\subsection{The benchmark operating system}
+
+  The Composed ZK Benchmark OS begins from semantic machine specifications: states, transitions, guards, loops, invariants, traces, witnesses, and expected accept/reject outcomes. It generates benchmark families, applies adversarial mutations, runs a local replay adapter, and records evidence separately from performance scores \sourcecite{repoREADME2026}. This is useful beyond zero-knowledge workloads because it makes the oracle and the mutation semantics explicit before a backend is asked for a result.
+
+  The benchmark layer is deliberately modest. It establishes a deterministic local foundation, not official benchmark evidence, a formal proof, or a live backend result. Its most important contribution to aligned AI is the separation of semantic expectation from backend output: the system can say that a backend returned an answer without saying that the answer was sound, complete, or safe to operationalize.
+
+\subsection{The proof-carrying control plane}
+
+  The agent platform implements the path
+\[
+\begin{aligned}
+  \text{intent} &\rightarrow \text{typed proposal} \rightarrow \text{admission} \\
+  &\rightarrow \text{capability receipt} \rightarrow \text{replay-checked seam} \\
+  &\rightarrow \text{monitoring} \rightarrow \text{rollback/freeze/shutdown}.
+\end{aligned}
+\]
+  Capabilities are explicit and non-transitive: writing does not imply reading, code execution does not imply network access, and secrets are independent of every other capability. Admission rejects invalid structure, digest drift, kill switches, model-requested authority, capability expansion, stale or non-independent evidence, expiry errors, and irreversible actions when policy requires reversibility \sourcecite{repoHSAI2026}.
+
+  The replay journal is caller-owned and digest chained. The independent checker recomputes public invariants but does not pretend to verify signatures, a hostile host, or a production sandbox. This distinction matters for aligned AI: a model can propose an action, but it cannot turn its own proposal into authority by writing a convincing explanation into the evidence record.
+
+\begin{figure}[t]
+\centering
+\mpfig
+  fizikoPanel((-3.8cm,1.0cm), 2.3cm, 0.78cm, fizikoBlueWash, fizikoBlue);
+  fizikoPanel((0,1.0cm), 2.3cm, 0.78cm, fizikoPaper, fizikoInk);
+  fizikoPanel((3.8cm,1.0cm), 2.3cm, 0.78cm, fizikoGreenWash, fizikoGreen);
+  fizikoPanel((3.8cm,-0.9cm), 2.3cm, 0.78cm, fizikoRustWash, fizikoRust);
+  fizikoPanel((0,-0.9cm), 2.3cm, 0.78cm, fizikoPaper, fizikoInk);
+  fizikoPanel((-3.8cm,-0.9cm), 2.3cm, 0.78cm, fizikoBlueWash, fizikoBlue);
+  label(btex \scriptsize model / proposal etex, (-3.8cm,1.0cm));
+  label(btex \scriptsize policy / capabilities etex, (0,1.0cm));
+  label(btex \scriptsize independent / evidence etex, (3.8cm,1.0cm));
+  label(btex \scriptsize admit / quarantine / reject etex, (3.8cm,-0.9cm));
+  label(btex \scriptsize short-lived / permit etex, (0,-0.9cm));
+  label(btex \scriptsize external / adapter etex, (-3.8cm,-0.9cm));
+  fizikoArrow((-2.65cm,1.0cm)--(-1.15cm,1.0cm));
+  fizikoArrow((1.15cm,1.0cm)--(2.65cm,1.0cm));
+  fizikoArrow((3.8cm,0.58cm)--(3.8cm,-0.48cm));
+  fizikoArrow((2.65cm,-0.9cm)--(1.15cm,-0.9cm));
+  fizikoArrow((-1.15cm,-0.9cm)--(-2.65cm,-0.9cm));
+  draw tube.t((-3.8cm,-1.35cm)..(-4.65cm,-1.75cm)..(-4.65cm,1.9cm)..(-3.8cm,1.45cm))(0.035cm) withcolor fizikoSepia;
+  fizikoMarker((-1.9cm,1.0cm), 0.065cm, fizikoSepia);
+  fizikoMarker((1.9cm,1.0cm), 0.065cm, fizikoSepia);
+  fizikoMarker((3.8cm,-0.05cm), 0.065cm, fizikoSepia);
+  label(btex \scriptsize the adapter boundary is conceptual etex, (0,-2.0cm));
+  label(btex \scriptsize passing the local contract is not executing the action etex, (0,-2.28cm));
+\endmpfig
+\caption{Capability and evidence are joined only at admission. External execution remains a separately controlled adapter.}
+\label{fig:controlplane}
+\end{figure}
+
+\subsection{Statebook and financial completeness}
+
+  Statebook separates semantic, payoff, execution, capital, settlement, assurance, and recovery completeness. P1 implements exact decimal and rational normalization plus a stable tagged encoding. P2 evaluates a bounded finite-domain indicator payoff and non-netted asset residuals. P3--P7 add fixture-qualified completeness reports, a deterministic settlement simulator, evidence adapters, captured-first source import, and fail-closed authority preflight \sourcecite{repoStatebook2026}.
+
+  This separation is a general design pattern for AI systems. A model can have a coherent semantic interpretation without having a valid action plan; an action plan can be executable without being authorized; an authorized action can be reversible without being wise. The Statebook vocabulary prevents a scalar ``complete'' flag from hiding which layer is unknown.
+
+\subsection{Interoperability as a research requirement}
+
+  The future system should not require every tool to share one runtime or one database. It should require every adapter to export a common evidence envelope: source identity, protocol identity, artifact identity, custody, validator identity, disposition, and claim ceiling. W3C PROV supplies a useful provenance vocabulary, while the local implementation adds stricter digest, schema, and authority constraints \sourcecite{w3c2013prov}.
+
+  Interoperability must therefore be semantic, not merely syntactic. A replay bundle from a benchmark runner, a causal intervention result from an interpretability runner, and a continual-learning update receipt should be joinable through explicit typed bindings. They should not become interchangeable merely because they are all JSON. The paper's proposed future schema is:
+
+\begin{center}
+\begin{tabularx}{\linewidth}{@{}P{0.23\linewidth}Y Y@{}}
+\toprule
+\textsc{Envelope field} & \textsc{Required meaning} & \textsc{Failure if absent} \\
+\midrule
+Identity & source, code, runtime, model, asset, corpus, and actor digests & Result cannot be bound to what ran \\
+Protocol & estimand, controls, thresholds, power, missingness, and stop rule & Result cannot be interpreted without hindsight \\
+Custody & owner, root, retention, deletion, and readback records & Raw or aggregate data cannot be trusted as declared \\
+Validation & independent recomputation, review, and conflicts & Local success is mistaken for independent acceptance \\
+Disposition & pass, fail, no-candidate, blocked, or not-run & Negative or incomplete states are silently promoted \\
+Authority & explicit grant, scope, expiry, reversibility, and shutdown & Evidence accidentally becomes permission \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{Research protocols for future aligned AI}
+
+\subsection{The aligned continual-learning monitor}
+
+  The aligned holistic continual-learning protocol asks whether a fixed causal mechanistic monitor, measured before update promotion, predicts consequential changes on unseen task families better than behavioral, probe, shuffled-feature, random-projection, donor, no-op, and evaluator-gaming controls \sourcecite{repoAHCL2026}. The study keeps behavioral, mechanistic, and scalable-oversight tracks separate. It does not replace them with a scalar alignment score.
+
+  The important design choice is that the update is treated as a governed object. The base model is immutable. Candidate changes live in disposable reversible adapters. A retention guard can reject the adapter while still accounting for the compute used to propose it. The learner cannot edit the evaluator, validator, policy, or evidence ledger. Fit, tune, and assessment families are disjoint; prediction locking occurs before assessment effects; and missing or duplicated cells fail closed.
+
+  This turns continual learning into an alignment-relevant lifecycle experiment. The question is not simply whether the model learns. It is whether the system can learn while preserving an auditable boundary around what it knew, what changed, what the monitor predicted, and why the new state was or was not promoted.
+
+\subsection{Interpretability as causal measurement}
+
+  The future interpretability lane should use sparse features, path analysis, and circuit tools as hypothesis generators, then require interventions in the original model. The causal object must be declared before the effects are opened. Qualification should establish native/instrumented parity, deterministic repeatability, exact no-op identity, nonzero intervention reach, and reconstruction quality. Scientific assessment should then require prediction locking, held-out causal effects, rival controls, family-level uncertainty, multiplicity correction, and independent validation.
+
+  This is stricter than asking whether an explanation looks plausible. It also protects interpretability from being used as a post-hoc authority channel. A monitor may report that a candidate update changed a feature associated with a policy-relevant behavior; it may not veto or promote the update unless the measurement contract says how that feature predicts a held-out outcome and what false-positive boundary is acceptable.
+
+\subsection{Aligned AI as a controlled loop}
+
+  The three main research surfaces form a controlled loop:
+
+\begin{figure}[t]
+\centering
+\mpfig
+  fizikoPanel((-3.7cm,0.95cm), 2.8cm, 0.8cm, fizikoBlueWash, fizikoBlue);
+  fizikoPanel((3.7cm,0.95cm), 2.8cm, 0.8cm, fizikoGreenWash, fizikoGreen);
+  fizikoPanel((3.7cm,-1.0cm), 2.8cm, 0.8cm, fizikoRustWash, fizikoRust);
+  fizikoPanel((-3.7cm,-1.0cm), 2.8cm, 0.8cm, fizikoPaper, fizikoInk);
+  label(btex \scriptsize behavioral / evaluation etex, (-3.7cm,0.95cm));
+  label(btex \scriptsize mechanistic / measurement etex, (3.7cm,0.95cm));
+  label(btex \scriptsize continual / update etex, (3.7cm,-1.0cm));
+  label(btex \scriptsize authority / rollback etex, (-3.7cm,-1.0cm));
+  fizikoArrow((-2.3cm,0.95cm)--(2.3cm,0.95cm));
+  fizikoArrow((3.7cm,0.52cm)--(3.7cm,-0.58cm));
+  fizikoArrow((2.3cm,-1.0cm)--(-2.3cm,-1.0cm));
+  fizikoArrow((-3.7cm,-0.58cm)--(-3.7cm,0.52cm));
+  fizikoMarker((0,0.95cm), 0.07cm, fizikoSepia);
+  fizikoMarker((3.7cm,-0.04cm), 0.07cm, fizikoSepia);
+  fizikoMarker((0,-1.0cm), 0.07cm, fizikoSepia);
+  fizikoMarker((-3.7cm,-0.04cm), 0.07cm, fizikoSepia);
+  label(btex \scriptsize predict etex, (0,1.2cm));
+  label(btex \scriptsize bound etex, (4.05cm,-0.04cm));
+  label(btex \scriptsize recheck etex, (0,-1.27cm));
+  label(btex \scriptsize observe etex, (-4.05cm,-0.04cm));
+  label(btex \scriptsize no surface can promote itself etex, (0,-1.9cm));
+  label(btex \scriptsize each transition consumes a locked, validated record etex, (0,-2.17cm));
+\endmpfig
+\caption{A future aligned-learning loop. Behavior supplies outcomes, mechanism supplies testable hypotheses, continual learning supplies the controlled update, and authority enforces the reversible boundary.}
+\label{fig:alignedloop}
+\end{figure}
+
+  The value of this arrangement is not that it guarantees alignment. It makes alignment hypotheses operational. A failure in the mechanistic lane does not disappear because the behavioral score improved. A good behavioral result does not authorize an update whose retention guard failed. A successful update does not authorize an external side effect without a separate capability receipt. The system can improve one surface while recording uncertainty on the others.
+
+\section{What the current record establishes}
+
+\subsection{Engineering results}
+
+  The current repository contains a substantial local contract surface. The following table reports the strongest defensible status of each major strand.
+
+\begin{center}
+\scriptsize
+\begin{tabularx}{\linewidth}{@{}P{0.19\linewidth}P{0.29\linewidth}Y@{}}
+\toprule
+\textsc{Strand} & \textsc{Observed result} & \textsc{Permitted interpretation} \\
+\midrule
+Benchmark OS & Semantic generation, mutation, oracle evaluation, local replay, evidence bundles, and observability contracts & Local deterministic benchmark infrastructure; no official external benchmark or formal proof \\
+HSAI gateway & Fourteen-case local demo: one benign acceptance, thirteen unsafe rejections, zero false rejections, fourteen recomputation agreements & Local fail-closed gateway evidence; no production security or execution authority \\
+Control plane & Typed proposals, explicit capabilities, replay journal, independent checker, monitoring, rollback, freeze, and shutdown transitions & Pure-data control-plane contracts; no signer, sandbox, provider, or alignment result \\
+Statebook & Exact P1 identity, bounded P2 residuals, P3/P4 fixture simulation, P5--P7 evidence and authority preflight & Hermetic semantic and settlement fixtures; no value movement, clearing, or live authority \\
+Gemma V4 & Pooled NMSE $0.0457205\leq0.05$; parity, repeat, no-op, intervention reach, event replay, and feature stability passed & Model/runtime/asset-specific trace qualification \\
+Gemma effects V2 & Reconstruction, fit effects, power, and controls passed; tune sign agreement was $0.75<0.80$ and one Holm gate failed & Terminal `NoCandidate`; no held-out causal-effect claim \\
+Astral V48 & Custody, controls, repeatability, and aggregate validation passed; localization, prediction, and transport failed & Terminal `DevelopmentNoCandidate`; no introspection or self-modeling claim \\
+Oak Lab V2 & Four real panels, powered assessment, measured CPU energy, and independent validation; no algorithm passed the strict gate & Negative continual-learning benchmark result; no SOTA or publication-superiority claim \\
+\bottomrule
+\end{tabularx}
+\end{center}
+\normalsize
+
+\subsection{A positive qualification and a negative scientific result}
+
+  The clearest positive result is the Gemma 3 V4 trace-qualification lane. Under a frozen model, runtime, asset, source, and fresh fit corpus, the model-matched affine transcoder passed the pooled global-centered normalized reconstruction gate with NMSE $0.0457205175$. Native and instrumented logits matched, deterministic repeats matched, the no-op was exact, zero replacement reached the output, the event stream replayed exactly, and feature repeat cosine was $0.9999997$. Raw custody was deleted before final validation \sourcecite{repoAstralV42026}.
+
+  This is a meaningful engineering qualification because it removes a measurement bottleneck. It is not a causal graph validation, not a proof of mechanistic completeness, and not an introspection result. The paper treats it as the correct kind of positive claim: exact, narrow, and useful for opening a later protocol boundary.
+
+  The strongest negative result is the Astral sequence. V48's corrected repeat passed the apparatus and governance controls but failed localization, activation-effect prediction, and cross-view recoverability. The cumulative synthesis stopped the branch rather than selecting another layer, wrapper, alpha, position, model, or corpus \sourcecite{repoAstralV482026}. The Gemma causal-feature-effects V2 lane reached a similar conclusion at a different stage: reconstruction and fit effects passed, but tune prediction and a Holm-controlled feature gate failed, so held-out assessment never opened.
+
+  These are not proofs that the models lack internal causal states. They are evidence that the tested operationalizations did not meet their declared reliability and prediction criteria. That distinction is exactly what a claim-ceiling architecture is designed to preserve.
+
+\subsection{The continual-learning lesson}
+
+  Oak Lab V2 completed a real-panel baseline matrix, powered guard assessment, nonstationary derived streams, longer event matrices, measured CPU energy capture, and independent validation. Target power was $0.8074$, but no stream passed the strict loss, adaptation, paired-statistical, and resource gate. This is a useful result because it prevents a plausible update policy from being described as a robust continual-learning improvement merely because it ran and consumed measured energy \sourcecite{repoOakLab2026}.
+
+  The future AHCL protocol extends this discipline. Its candidate claim is not ``the monitor sees a meaningful feature.'' Its candidate claim is that a fixed causal monitor predicts held-out behavioral deltas after a controlled update better than the strongest behavioral and probe baselines, with family-level sign agreement, uncertainty, controls, and independent validation. The target is predictive utility, not interpretive theater.
+
+\section{Future programme}
+
+\subsection{Stage I: one interoperable evidence envelope}
+
+  The immediate research task is to stabilize an interoperability envelope across the benchmark, control-plane, interpretability, and continual-learning lanes. The envelope should have a canonical serialization, explicit source and runtime identities, typed artifact references, custody manifests, validator records, disposition states, and claim ceilings. It should map cleanly to provenance concepts without allowing provenance to become authority.
+
+  The first evaluation should be a cross-lane round trip: create a benchmark case; propose a controlled update; capture behavior and mechanism records; validate a candidate disposition; and verify that an external adapter cannot be invoked when the record is missing, stale, non-independent, or below the required ceiling. The evaluation should measure false-promotion rate, replay agreement, readback rejection, overhead, and the number of claim escalations prevented.
+
+\subsection{Stage II: controlled continual learning}
+
+  The next scientific campaign should be a fresh, independently reviewed implementation of the AHCL protocol. It should compare untouched base, fixed update, retention guard, sham update, behavioral baseline, probe baseline, and causal monitor under equal data and total compute. The base must remain immutable; adapters must be reversible; protected evaluator and validator surfaces must be inaccessible to the learner; and assessment must remain closed until the tune lock passes.
+
+  The primary outcome should be a vector rather than a scalar: new-task adaptation, protected-task retention, calibration, policy conformance, evaluator-gaming resistance, monitor false-veto rate, missed-harm rate, and resource cost. A candidate that wins one axis while failing another should remain mixed or `NoCandidate`, not be reduced to a favorable average.
+
+\subsection{Stage III: causal interpretability that can fail}
+
+  Interpretability should be connected to continual learning through a pre-update monitor. The monitor must predict the direction and magnitude of post-update behavioral changes from a fixed causal feature map. Feature discovery may use sparse autoencoders or circuit search, but feature selection must be fit-only and frozen before tune effects. The assessment must use held-out families, rival controls, intervention operators, and independent reconstruction.
+
+  \enlargethispage{2\baselineskip}
+  The decisive measure is not a feature's human appeal. It is whether the locked mechanistic variable predicts an external consequence that matters to the governed update. A readable explanation that cannot predict held-out intervention effects remains a hypothesis, not an alignment monitor.
+
+\subsection{Stage IV: authority adapters last}
+
+  Only after the evidence and update surfaces pass should the programme connect to external execution. The adapter should bind actor identity, exact packet digest, capability set, spend ceiling, validity interval, reversibility, and shutdown path. It should expose a receipt that is independently checked at the boundary where the external side effect occurs. Local simulation, testnet observations, or a ZK proof may inform this receipt; none substitutes for the authority decision.
+
+\subsection{Stage V: independent replication}
+
+  The final gate is not another local test. It is an independent system, account, host, or reviewer with a separate key and no implementation or analysis role. The reviewer receives the exact packet digest, recomputes the result, verifies custody and retention, records conflicts, and returns an immutable disposition. Transport tools may move a bundle; they do not create independence.
+
+\begin{figure}[!ht]
+\centering
+\mpfig
+  draw spring((-5.0cm,0),(5.0cm,0),24) withcolor fizikoSepia;
+  fizikoMarker((-5.0cm,0), 0.11cm, fizikoBlue);
+  fizikoMarker((-2.5cm,0), 0.11cm, fizikoGreen);
+  fizikoMarker((0,0), 0.11cm, fizikoRust);
+  fizikoMarker((2.5cm,0), 0.11cm, fizikoBlue);
+  fizikoMarker((5.0cm,0), 0.11cm, fizikoGreen);
+  label(btex \large I etex, (-5.0cm,0.65cm));
+  label(btex \large II etex, (-2.5cm,0.65cm));
+  label(btex \large III etex, (0,0.65cm));
+  label(btex \large IV etex, (2.5cm,0.65cm));
+  label(btex \large V etex, (5.0cm,0.65cm));
+  label(btex \scriptsize envelope etex, (-5.0cm,-0.55cm));
+  label(btex \scriptsize continual learning etex, (-2.5cm,-0.55cm));
+  label(btex \scriptsize causal monitor etex, (0,-0.55cm));
+  label(btex \scriptsize authority adapter etex, (2.5cm,-0.55cm));
+  label(btex \scriptsize replication etex, (5.0cm,-0.55cm));
+  fizikoPanel((0,1.45cm), 3.0cm, 0.7cm, fizikoPaper, fizikoInk);
+  label(btex \scriptsize evidence before authority etex, (0,1.45cm));
+\endmpfig
+\caption{A staged future programme. The sequence is intentionally asymmetric: evidence and independent validation precede authority integration.}
+\label{fig:roadmap}
+\end{figure}
+
+\section{Limitations and nonclaims}
+
+  This paper is a synthesis and architecture paper, not a claim of general aligned intelligence. Its implementation is local and partly metadata-only. It does not establish adversarial host isolation, real cross-process linearizability, live provider correctness, formal semantic correctness, cryptographic soundness of a proof system, or the safety of a deployed agent.
+
+  The research case studies have narrow domains. Gemma V4 qualifies one model/runtime/asset/corpus lane. Astral's negative results concern declared Qwen3.6 and Gemma operationalizations, not the impossibility of internal causal states. Oak Lab's negative result concerns its fixed real-panel campaign, not all continual-learning algorithms. Design-only AHCL work is not an execution result. The repository's claim ceilings are therefore part of the scientific content, not an appendix disclaimer.
+
+  The visual treatment is also not evidence. Vintage typography, engraved plates, and warm paper are used to make the structure memorable and readable; they do not increase reproducibility, authority, or scientific strength. The source adapts mechanisms from the open `vintage-latex` repository, whose examples emphasize LuaLaTeX, searchable vector output, explicit figure construction, and deterministic visual controls \sourcecite{vintagelatex2026}. All five paper illustrations are generated through `luamplib` and the pinned `fiziko` MetaPost library, which supplies the shaded spheres, tubes, brushes, and springs used as the figure vocabulary \sourcecite{fiziko2023}.
+
+\clearpage
+\section{Conclusion}
+
+\dropcap{T}{he future} of aligned AI will not be secured by a better model claim alone. It will require a boundary that knows the difference between a model's proposal, an experiment's result, an explanation's causal validity, an update's retention behavior, and an authorized external action.
+
+  Evidence-Bounded AI proposes that boundary as a research substrate. The current implementation shows that semantic benchmarks, capability receipts, replay journals, digest-bound reports, exact state contracts, interpretability qualification, and continual-learning protocols can share one discipline: freeze the claim, bind the identity, retain the custody, validate independently, and refuse escalation when the gate fails.
+
+  The record is intentionally mixed. One trace-qualification lane passed. Several causal and continual-learning lanes stopped at `NoCandidate`. A control plane exists without authority. A settlement simulator exists without value movement. A design protocol exists without model execution. That is not an incomplete version of a stronger claim; it is the correct shape of evidence for a field that needs aligned systems to remain corrigible, inspectable, updateable, and governable.
+
+\appendix
+\section{Claim-boundary checklist}
+
+\begin{longtable}{@{}P{0.28\linewidth}P{0.18\linewidth}P{0.45\linewidth}@{}}
+\toprule
+\textsc{Question} & \textsc{Required state} & \textsc{Failure disposition} \\
+\midrule
+\endhead
+Is the source/runtime/model identity exact? & Bound & Reject or quarantine \\
+Is the protocol frozen before fit or assessment effects? & Bound & No scientific disposition \\
+Is the independent unit declared? & Bound & Do not count lower-level rows as independent \\
+Are missing, duplicate, stale, or non-finite cells fail-closed? & Validated & Reject the result \\
+Is the learner unable to alter evaluator, validator, policy, or ledger? & Protected & Do not call the result aligned evidence \\
+Are prediction locks created before assessment effects? & Locked & Assessment remains closed \\
+Are raw-retention and deletion rules explicit? & Custodied & No aggregate promotion \\
+Is the validator independent of implementation and analysis? & Independent & Local result only \\
+Does the disposition name a ceiling and nonclaims? & Complete & Reject claim packet \\
+Does authority have a separate identity, scope, expiry, and rollback? & Separate & Evidence cannot authorize action \\
+\bottomrule
+\end{longtable}
+
+\section{Repository evidence index}
+
+\begin{itemize}[leftmargin=1.8em,itemsep=0.25em]
+  \item Benchmark and claim vocabulary: repository README and research ledger \sourcecite{repoREADME2026}.
+  \item Proof-carrying agent platform: local pure-data control-plane record \sourcecite{repoHSAI2026}.
+  \item Statebook P1--P7: semantic, payoff, settlement, evidence, source, and authority-preflight records \sourcecite{repoStatebook2026}.
+  \item Gemma 3 trace qualification: V4 execution record and aggregate-only custody closure \sourcecite{repoAstralV42026}.
+  \item Astral terminal boundary: cumulative V48 synthesis and stop record \sourcecite{repoAstralV482026}.
+  \item Aligned continual-learning monitor: design-only protocol with execution closed pending independent review \sourcecite{repoAHCL2026}.
+  \item Experience-learning benchmark: independently validated negative real-panel result \sourcecite{repoOakLab2026}.
+\end{itemize}
+
+\section{Reproduction and artifact policy}
+
+  The paper source and bibliography are self-contained. Repository-level checks use the project's existing package contracts, including `pnpm --ignore-workspace run lint:fast`, focused tests, contract verification, workspace tests, and warning-denied Clippy where the relevant slice permits them. Generated PDFs are publication artifacts; build intermediates remain in the ignored paper-local build directory. No raw prompts, activations, logits, tokens, credentials, or per-family arrays are added to this paper.
+
+\begingroup
+\sloppy
+\printbibliography[heading=bibintoc,title={References}]
+\endgroup
+
+\end{document}

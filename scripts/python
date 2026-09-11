@@ -1,0 +1,12 @@
+#!/bin/sh
+# State slice: repo-package-manager-contract-v1.
+set -eu
+
+REPO_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+LOCAL_PYTHON="$REPO_ROOT/.venv/bin/python"
+
+if [ -x "$LOCAL_PYTHON" ]; then
+    exec "$LOCAL_PYTHON" "$@"
+fi
+
+exec python3 "$@"

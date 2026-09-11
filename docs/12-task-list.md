@@ -2,6 +2,31 @@
 
 Each phase names goal, deliverables, dependencies, validation gate, anti-goals, and exit criteria.
 
+## Evidence-Bounded Aligned-AI Research Paper V1
+
+Status: source, literature map, LuaLaTeX build, and rendered PDF complete for
+named state slice `evidence-bounded-aligned-ai-research-paper-v1`.
+
+The paper, `docs/research/evidence-bounded-ai/evidence-bounded-ai.tex`,
+synthesizes the benchmark OS, proof-carrying HSAI control plane, Statebook,
+mechanistic-interpretability qualification, and continual-learning protocols
+as one evidence-and-authority architecture. It includes a primary-source
+literature review covering scalable oversight, causal interpretability,
+continual learning, provenance, reproducibility, risk management, and agent
+security. Its positive claims are local and bounded; Astral and Oak Lab
+negative results remain negative; design-only protocols remain design-only.
+
+Validation: LuaLaTeX/Biber compilation, PDF metadata inspection, text
+extraction, page-count and warning review, source/bibliography consistency,
+`git diff --check`, and repository hygiene. The upstream
+`Foadsf/vintage-latex` visual mechanisms are credited and adapted under
+CC BY-SA 4.0. The paper does not add raw research data or model traces.
+
+Anti-goals: new model execution, corpus acquisition, provider spend, Astral
+reopening, Evidence Ledger mutation, benchmark promotion, alignment proof,
+introspection claim, causal-self-modeling claim, production readiness, or
+authority integration.
+
 ## Aligned holistic continual-learning causal monitor V1
 
 Status: design-only monorepo setup complete; implementation, model execution,

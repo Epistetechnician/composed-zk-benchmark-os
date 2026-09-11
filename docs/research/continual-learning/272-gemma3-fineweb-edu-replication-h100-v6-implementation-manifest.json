@@ -2,15 +2,15 @@
   "files": [
     {
       "path": "docs/research/continual-learning/270-gemma3-fineweb-edu-replication-h100-v6-protocol.md",
-      "sha256": "b171133ffd8cfda61bc2297eadc24505e14b44e6fd16337391126015cff6fce9"
+      "sha256": "9cb38a8512a58a5855759094a3f71abcc0058ec6b0e6869dbc4f7a3041a872f8"
     },
     {
       "path": "docs/research/continual-learning/271-gemma3-fineweb-edu-replication-h100-v6-review-packet.md",
-      "sha256": "0437fca8871f1b282aa93a97ef0ebd92970a3b537acfa7db6dc2ec57ede7465c"
+      "sha256": "7305292340bc3325ebd9e4108aa2d087d8bf9b7831ca12832f9845df09ad82b8"
     },
     {
       "path": "experiments/continual_learning/gemma3_fineweb_edu_replication_h100_v6_preflight.py",
-      "sha256": "57fc520f5d33ddb421509d861c683da14978534c1ac5e514c65ac804dd0bb545"
+      "sha256": "a2bc2c5c5bb633d3aea781a52efa15025fa8b662685c0a47610791270292d923"
     },
     {
       "path": "experiments/continual_learning/gemma3_fineweb_edu_replication_h100_v6.py",
@@ -18,7 +18,7 @@
     },
     {
       "path": "experiments/continual_learning/validate_gemma3_fineweb_edu_replication_h100_v6.py",
-      "sha256": "00549d561e4341865c323943f255100136ea1b1f299bec6af171b27aad5f05f6"
+      "sha256": "1e83e0b3b6c7fee738b0f25b338d88abc068860de0fa368ff4c92a9d53ff0de2"
     },
     {
       "path": "experiments/continual_learning/pack_gemma3_fineweb_edu_replication_h100_v6.py",
@@ -26,11 +26,11 @@
     },
     {
       "path": "experiments/continual_learning/tests/test_gemma3_fineweb_edu_replication_h100_v6_preflight.py",
-      "sha256": "dcc8e8b8438c0ab8ead3038266722a32b713345893c1dd7754142e984103ee32"
+      "sha256": "74e68a683580f591c7c734677592c557d26649200e0fd282bd125fb2b2f8ae47"
     },
     {
       "path": "experiments/continual_learning/tests/test_gemma3_fineweb_edu_replication_h100_v6.py",
-      "sha256": "06ead5511565fcc41066f1c2f1a9641fe2c83e99d883ed6094367fd4deabc950"
+      "sha256": "46133aa83732603c1340ad0d05cb32c3526cb022633e81500b5c32919336ab3b"
     },
     {
       "path": "experiments/continual_learning/gemma3_fineweb_edu_replication_h100_v6_provider/Dockerfile",
@@ -50,10 +50,10 @@
     },
     {
       "path": "AGENTS.md",
-      "sha256": "57367f5f3f3a5426493d66632b9d044c8b9edc3d3aeb15c9edc600456c7843c0"
+      "sha256": "ce1b4b218892f52a385f21648ae48f6360c02f605149ff8ba81badeb954c01bb"
     }
   ],
-  "manifest_sha256": "4cabfc9f0131ace21aa901b29150900af3a7f38b903fccfbe480e51d147490a1",
+  "manifest_sha256": "739b3d637e431d956a59130d031099bc1dffcec5d3a21f3d8764102de27d641c",
   "schema": "gemma3-fineweb-edu-replication-h100-v6-implementation",
   "state_slice": "continual-learning-gemma3-fineweb-edu-replication-h100-v6"
 }
