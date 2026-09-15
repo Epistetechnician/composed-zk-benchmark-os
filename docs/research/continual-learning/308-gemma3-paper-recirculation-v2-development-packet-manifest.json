@@ -1,0 +1,48 @@
+{
+  "schema": "gemma3-paper-recirculation-development-packet-manifest-v2",
+  "state_slice": "gemma3-paper-recirculation-schema-resolution-v2-development",
+  "packet_id": "gemma3-paper-recirculation-v2-development",
+  "status": "DevelopmentPass",
+  "claim_ceiling": "LocalDevelopmentGemma3PaperRecirculationEngineeringV2",
+  "scientific_execution_authorized": false,
+  "provider_calls_authorized": false,
+  "files": [
+    {
+      "path": "experiments/continual_learning/gemma3_paper_recirculation_development_v2.py",
+      "sha256": "8245bef75cc534675ed9da049f16b7d9f3ea4270ce99d00c0d538eeda49ec913"
+    },
+    {
+      "path": "experiments/continual_learning/fixtures/gemma3_recirculation_v2_reference.json",
+      "sha256": "d409816c3131fe287dcf1c7e66e781246379a146ef9328599f31244835d1a54e"
+    },
+    {
+      "path": "experiments/continual_learning/fixtures/gemma3_recirculation_v2_candidate.json",
+      "sha256": "697c79e0e028bd0cc88af7a184c6c6f88dee36b1427f3ee9e59c6aff03759e23"
+    },
+    {
+      "path": "experiments/continual_learning/tests/test_gemma3_paper_recirculation_development_v2.py",
+      "sha256": "fefa60670e9b288eba141de99d37ab992406732b2ef3ca47a6b491cf95cbf477"
+    },
+    {
+      "path": "docs/research/continual-learning/306-gemma3-paper-recirculation-v2-development-acceleration.md",
+      "sha256": "cd49a407747b832d9b65b171eb9e9a7c53a2e40e1d2aa5fe9b54684309fa65fc"
+    }
+  ],
+  "oracle_receipt": {
+    "path": ".weco/gemma3-paper-recirculation-v2-development/semantic-oracle-receipt.json",
+    "sha256": "602327673a6841b0d7c582e7bb51cf846358c78a1b21bea4cee72f7afdb962c1",
+    "receipt_sha256": "ad204152ec1ed7fedc3f97b63966697d962386b80924c34cfd537f77d6e6f40c",
+    "status": "PASS"
+  },
+  "focused_tests": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 ./scripts/python -B -m pytest -q experiments/continual_learning/tests/test_gemma3_paper_recirculation_development_v2.py",
+    "passed": 8,
+    "failed": 0
+  },
+  "local_weco_dry_run": {
+    "command": ".weco/gemma3-paper-recirculation-v2-development/evaluate-gated.sh",
+    "policy_score": 1.0,
+    "oracle_status": "PASS",
+    "provider_loop_started": false
+  }
+}

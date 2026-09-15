@@ -597,6 +597,23 @@ of prior results as evidence is allowed. Every mutation in this phase names
 state slice
 `continual-learning-gemma3-paper-recirculation-internal-multimachine-v1`.
 
+Explicit Gemma3 paper-shaped recirculation V2 development acceleration is
+authorized under named state slice
+`gemma3-paper-recirculation-schema-resolution-v2-development`. This additive
+lane permits synthetic fixtures, offline contract tests, semantic-oracle
+development, deterministic search-policy experiments, and Weco dry-runs that
+do not consume or produce scientific corpus/model results. It may use only
+repository-local synthetic inputs or already-custodied frozen development
+fixtures. It does not permit external corpus acquisition, relabeling or
+substitution of the V1 corpus, model execution against the V2 scientific
+panel, provider calls, spending, assessment effects, accepted Evidence Ledger
+mutation, publication, or claims above
+`LocalDevelopmentGemma3PaperRecirculationEngineeringV2`. The V2 acquisition
+packet, exact 16-fit/16-assessment corpus, semantic-oracle result, and Weco
+scientific lane remain independently review-gated. Every mutation in this
+phase names state slice
+`gemma3-paper-recirculation-schema-resolution-v2-development`.
+
 Phase 836 Gemma3 FineWeb-Edu H100 replication V1 is terminally closed as
 `ProtocolReviewRejectedNoExecution` under named state slice
 `continual-learning-gemma3-fineweb-edu-replication-h100-v1`. The exact

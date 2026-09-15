@@ -2,6 +2,30 @@
 
 Each phase names goal, deliverables, dependencies, validation gate, anti-goals, and exit criteria.
 
+## Phase 841: Universal Harness Interoperability V1
+
+Status: local pure-data contract implemented and independently validated for
+state slice `universal-harness-interoperability-v1`.
+
+Deliverables: closed-world ACP, MCP, A2A, and OpenSSH/SFTP binding manifest;
+stdio and Streamable HTTP transport declarations; lifecycle and envelope
+identity fields; capability, trust-zone, artifact, observability, and
+all-false execution rules; one-time compiler; implementation-independent
+source/digest/schema validator; and hermetic adversarial tests.
+
+Validation: `pnpm --ignore-workspace run verify:universal-harness-interoperability-v1`,
+`pnpm --ignore-workspace run lint:fast`, and the repository root `pnpm run lint`.
+
+Anti-goals: runtime ACP/MCP/A2A/OpenSSH adapters, network access, provider
+calls, credentials, model execution, remote execution, accepted evidence,
+production readiness, security proof, or a claim that this is already a
+universal wire protocol.
+
+Exit criteria: the compiler output passes the independent validator; duplicate
+keys, binding drift, transport mismatch, authority escalation, source drift,
+digest tampering, and overwrite attempts fail closed; no generated manifest is
+committed.
+
 ## Evidence-Bounded Aligned-AI Research Paper V1
 
 Status: source, literature map, LuaLaTeX build, and rendered PDF complete for

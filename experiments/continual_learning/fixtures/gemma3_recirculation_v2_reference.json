@@ -1,0 +1,72 @@
+{
+  "fixture_id": "reference-v2",
+  "fixture_sha256": "c76755c4a8fc2e7743991a5473bfb1adf59d33416cdb3c457d15523a20924d27",
+  "measurement": {
+    "representative_wall_clock_seconds": 0.16,
+    "throughput_windows_per_second": 100.0,
+    "timing_samples_seconds": [
+      0.16,
+      0.158,
+      0.162
+    ]
+  },
+  "policy": {
+    "assessment_rows_read": [],
+    "discovery_ids": [
+      "discovery-001",
+      "discovery-002"
+    ],
+    "fit_rows_read": [
+      "fit-001",
+      "fit-002"
+    ]
+  },
+  "protocol_id": "gemma3-paper-recirculation-development-fixture-v2",
+  "schema": "gemma3-paper-recirculation-development-fixture-v2",
+  "semantic": {
+    "logits": [
+      [
+        0.25,
+        -0.5,
+        1.0
+      ],
+      [
+        0.125,
+        -0.25,
+        0.75
+      ],
+      [
+        0.0,
+        0.5,
+        -0.75
+      ]
+    ],
+    "nll": [
+      1.25,
+      1.5,
+      1.75
+    ],
+    "recurrence_state": [
+      [
+        0.1,
+        0.2
+      ],
+      [
+        0.3,
+        0.4
+      ],
+      [
+        0.5,
+        0.6
+      ]
+    ]
+  },
+  "throughput_metadata": {
+    "fit_only": true,
+    "measurement_unit": "windows_per_second",
+    "target_tokens": 16384,
+    "timed_iterations": 3,
+    "validated_windows": 16,
+    "warmup_iterations": 2
+  }
+}

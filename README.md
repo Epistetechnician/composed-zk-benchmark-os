@@ -48,6 +48,16 @@ This setup indexes existing code in place. It does not vendor external
 interpretability repositories, mix runtime environments, import terminal
 scientific artifacts, or authorize model execution.
 
+The universal harness interoperability contract is recorded under state slice
+`universal-harness-interoperability-v1`:
+
+- [Phase 841 contract and validation record](docs/841-phase-universal-harness-interoperability-v1.md)
+- [Pure-data compiler, independent validator, and hermetic tests](tools/universal_harness_interoperability_v1/)
+
+It composes ACP, MCP, A2A, and OpenSSH/SFTP as declared protocol or transport
+bindings while keeping authority, execution, provider calls, credentials,
+network access, and accepted evidence disabled.
+
 ## What This Repo Is Not
 
 This repo is not a benchmark-results claim, formal-verification claim, live external backend integration, fork of existing ZK tooling, or dashboard. No document or test claims Level 2+ evidence. No benchmark results have been generated here.
