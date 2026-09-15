@@ -1,0 +1,281 @@
+{
+  "schema": "gemma3-paper-recirculation-acquisition-manifest-v2",
+  "state_slice": "gemma3-paper-recirculation-schema-resolution-v2",
+  "protocol_id": "gemma3-paper-recirculation-schema-resolution-v2",
+  "corpus_schema": "gemma3-paper-recirculation-corpus-v2",
+  "source_record_schema": "gemma3-paper-recirculation-source-record-v2",
+  "status": "PinnedBeforeAcquisition",
+  "acquisition_authorized": false,
+  "purpose": "Packet-bound pre-acquisition contract; not a corpus manifest and not execution evidence.",
+  "paper": "https://arxiv.org/html/2608.17981v1",
+  "tokenizer_contract": {
+    "model_path": "/Users/shaanp/.lmstudio/models/mlx-community/gemma-3-1b-pt-bf16",
+    "model_manifest_sha256": "69f078b42d4521d3e53f0c388a20fa6cf32b4df7ea6535b0eb9da6ccef75c256",
+    "policy": "cached Gemma 3 1B BF16 tokenizer; no special tokens; offline only"
+  },
+  "acquisition_command": "PYTHONDONTWRITEBYTECODE=1 ./scripts/python -B experiments/continual_learning/acquire_gemma3_paper_recirculation_schema_v2.py --authorization-packet /ABS/PACKET/ACCEPT.json --raw-root /Volumes/PrimaryED/ResearchArtifacts/composed-zk-benchmark-os/gemma3-paper-recirculation-v2-raw --source-root /Volumes/PrimaryED/ResearchArtifacts/composed-zk-benchmark-os/gemma3-paper-recirculation-v2-source --corpus-root /Volumes/PrimaryED/ResearchArtifacts/composed-zk-benchmark-os/gemma3-paper-recirculation-v2-corpus",
+  "external_custody": {
+    "raw_root": "/Volumes/PrimaryED/ResearchArtifacts/composed-zk-benchmark-os/gemma3-paper-recirculation-v2-raw",
+    "source_root": "/Volumes/PrimaryED/ResearchArtifacts/composed-zk-benchmark-os/gemma3-paper-recirculation-v2-source",
+    "corpus_root": "/Volumes/PrimaryED/ResearchArtifacts/composed-zk-benchmark-os/gemma3-paper-recirculation-v2-corpus",
+    "mode": "0700",
+    "input_roots_must_exist": true,
+    "refuse_existing_output_root": true,
+    "raw_retention_hours_after_validation": 72
+  },
+  "corpus_contract": {
+    "fit_window_count": 16,
+    "assessment_window_count": 16,
+    "window_token_count": 1024,
+    "custody_mode": "0700",
+    "fit_window_quotas": {
+      "arxiv": 6,
+      "c4": 5,
+      "pg19": 5
+    },
+    "assessment_window_quotas": {
+      "arxiv": 2,
+      "big_patent": 2,
+      "billsum": 2,
+      "booksum/book": 2,
+      "c4/webtextlike": 2,
+      "gov_report": 2,
+      "lambada": 1,
+      "newsroom": 1,
+      "pg19": 1,
+      "pubmed": 1
+    },
+    "tokenizer_policy": "cached Gemma 3 1B BF16 tokenizer; no special tokens",
+    "normalization_default": "UTF-8 decode; preserve source field; no trim; no whitespace collapse; no cross-document windows",
+    "row_id_rule": "source-specific stable upstream identity plus source-field SHA-256",
+    "selected_row_ids": [],
+    "selected_window_digests": []
+  },
+  "selection_policy": {
+    "algorithm_id": "ordered-first-eligible-exact-window-v2",
+    "loader_versions": {
+      "scientific_papers": "1.1.1 archive parser",
+      "tfds_c4": "3.1.0 source semantics",
+      "huggingface_parquet": "pinned revision parquet row order",
+      "huggingface_jsonl": "pinned revision JSONL line order",
+      "newsroom_manual": "registered release JSONL line order"
+    },
+    "row_enumeration": "Use the exact source-specific order declared by each source; never sort rows unless explicitly declared.",
+    "malformed_row": "fail_closed",
+    "duplicate_row_id": "fail_closed",
+    "duplicate_source_digest": "fail_closed within and across panels",
+    "eligibility": "Decode the declared source field with UTF-8, apply only declared normalization, tokenize with the frozen Gemma tokenizer without special tokens, and require at least 1024 tokens.",
+    "window_rule": "Take exactly the first 1024 tokens from the first eligible row; one window per source row; never cross document boundaries; reject partial windows.",
+    "quota_rule": "Scan in declared order until the exact panel quota is reached; stop immediately at quota; fail if the source ends first.",
+    "assessment_adaptation": "forbidden",
+    "row_id_finalization": "Record upstream row identity, source-field SHA-256, normalized-text SHA-256, token count, and window SHA-256 for every selected row."
+  },
+  "source_root_contract": {
+    "manifest_file": "acquisition-manifest.json",
+    "record_schema": "{document_id:string,text:string}",
+    "required_manifest_fields": ["schema", "state_slice", "protocol_id", "file_map", "file_census", "file_digests", "manifest_sha256"],
+    "file_map": {
+      "fit/arxiv": "fit/arxiv.jsonl",
+      "fit/c4": "fit/c4.jsonl",
+      "fit/pg19": "fit/pg19.jsonl",
+      "assessment/arxiv": "assessment/arxiv.jsonl",
+      "assessment/big_patent": "assessment/big_patent.jsonl",
+      "assessment/billsum": "assessment/billsum.jsonl",
+      "assessment/booksum/book": "assessment/booksum-book.jsonl",
+      "assessment/c4/webtextlike": "assessment/c4-webtextlike.jsonl",
+      "assessment/gov_report": "assessment/gov_report.jsonl",
+      "assessment/lambada": "assessment/lambada.jsonl",
+      "assessment/newsroom": "assessment/newsroom.jsonl",
+      "assessment/pg19": "assessment/pg19.jsonl",
+      "assessment/pubmed": "assessment/pubmed.jsonl"
+    },
+    "blank_or_malformed_record": "fail_closed",
+    "source_root_mode": "0700"
+  },
+  "materialized_manifest_contract": {
+    "required_fields": [
+      "schema",
+      "state_slice",
+      "manifest_sha256",
+      "window_token_count",
+      "fit",
+      "assessment",
+      "fit_window_count",
+      "assessment_window_count",
+      "file_census"
+    ],
+    "window_fields": [
+      "dataset",
+      "source_row_id",
+      "document_id",
+      "path",
+      "window_ordinal",
+      "byte_len",
+      "source_sha256",
+      "text_sha256",
+      "token_count"
+    ],
+    "file_census_rule": "exactly manifest.json plus the declared fit and assessment window files; every path relative, canonical, regular, non-symlink, and owner-only"
+  },
+  "sources": [
+    {
+      "dataset_key": "arxiv",
+      "source": "https://s3.amazonaws.com/datasets.huggingface.co/scientific_papers/1.1.1/arxiv-dataset.zip",
+      "revision": "scientific-papers-1.1.1",
+      "config": "arxiv",
+      "fit_split": "train",
+      "assessment_split": "test",
+      "source_field": "article_text[] joined with LF",
+      "enumeration": "unique archive member train.txt/test.txt; source line order; article_id identity",
+      "normalization": "join article_text paragraphs with LF; UTF-8; preserve resulting text",
+      "rights_status": "rights-review-required",
+      "license_record": "unknown in current source record",
+      "selected_row_ids": []
+    },
+    {
+      "dataset_key": "c4",
+      "source": "https://www.tensorflow.org/datasets/catalog/c4",
+      "revision": "TFDS-3.1.0",
+      "config": "webtextlike",
+      "fit_split": "train",
+      "assessment_split": "validation",
+      "source_field": "text",
+      "enumeration": "TFDS 3.1.0 webtextlike builder order over the pinned OpenWebText archive and Common Crawl WET path manifests; emitted example key identity",
+      "normalization": "official TFDS 3.1.0 webtextlike builder output; no post-builder trim or collapse",
+      "rights_status": "terms-required",
+      "license_record": "ODC-BY; Common Crawl terms apply",
+      "input_artifacts": [
+        {
+          "role": "openwebtext_manual_archive",
+          "sha256": "087c1ac06b0be2c078810ad8f7dcdf74553ac8713e119fadfe90e570522841c4"
+        },
+        {
+          "role": "commoncrawl_wet_path_manifests",
+          "sha256": "e3a8addc6a33b54b1dd6488a98c875851ef1aca3b80133d39f6897330a8835fb;84002b735b0478c40ed154d16cd5183000865fba7901e5f5b4853c8de1c0881d;f04ef41e401643818ed7cf014e1f8d09e298483e180f8f1cf1691e2a314e01b1;49cebe85bd380a58997a47494489d7a41cd1f59c23a6ff8d813fe9781cb66a63;e55a4b92f4ef09d6e4df5909a2a1fc87edd22bcc3bdcd2008010e86cf3f10221;5480f284eba2633fde2a20ca4e83e44c45190fa05d73308af6bf2374a970b3fb;f7cff85e2985a861cd8e165c0b64eda218def82af97e75f4724f2a7e34fb55b;f6368a4fab92beb42b892ea3c027f79c41fc39d725120b91c5c2f556b9253213;5ff4f0e1313ce84ef553221a0595f4a3c891b3e96fb20f85669c6c17654f291b;bc66ea7d05adece388576d6ea0be67946eec248372789a8817cd7a4b1cdf2fa3;78208955de55e7bfdf05c42d5f6887cf070e0f1c094a4c1e74f59b346fae6cb3;29c5b4d594f3264c9c6da05cdff9c32c9fa9dd4e857572f8846064ba52adca96"
+        }
+      ],
+      "selected_row_ids": []
+    },
+    {
+      "dataset_key": "pg19",
+      "source": "https://huggingface.co/datasets/deepmind/pg19",
+      "revision": "4d28bd77e66947ad3835cf78ed7aaeb4dd87ad8b",
+      "config": "default",
+      "fit_split": "train",
+      "assessment_split": "test",
+      "source_field": "text file contents",
+      "enumeration": "sorted pinned upstream file lists; complete pinned test list",
+      "normalization": "UTF-8; retain dataset preprocessing; preserve text",
+      "rights_status": "attribution-required",
+      "license_record": "Apache-2.0 dataset repository; underlying source attribution retained",
+      "selected_row_ids": []
+    },
+    {
+      "dataset_key": "big_patent",
+      "source": "https://huggingface.co/datasets/NortheasternUniversity/big_patent",
+      "revision": "2a5336492ddc4e21cebd3865fd2a7e8b070bfede",
+      "config": "all",
+      "fit_split": null,
+      "assessment_split": "test",
+      "source_field": "description",
+      "enumeration": "first 10,000 records in pinned test shard order",
+      "normalization": "UTF-8; preserve description; no summary concatenation",
+      "rights_status": "attribution-required",
+      "license_record": "CC-BY-4.0",
+      "selected_row_ids": []
+    },
+    {
+      "dataset_key": "billsum",
+      "source": "https://huggingface.co/datasets/FiscalNote/billsum",
+      "revision": "3d8510441c06a3d9dfb32eb0d7f80151730bcc4f",
+      "config": "default",
+      "fit_split": null,
+      "assessment_split": "test",
+      "source_field": "text",
+      "enumeration": "complete pinned test split in file/row order",
+      "normalization": "UTF-8; preserve text; exclude title and summary",
+      "rights_status": "no-additional-license-claim",
+      "license_record": "CC0-1.0 as recorded by source",
+      "selected_row_ids": []
+    },
+    {
+      "dataset_key": "booksum/book",
+      "source": "https://huggingface.co/datasets/ubaada/booksum-complete-cleaned",
+      "revision": "ac3b2a4b161716d5611fcc98a50051f451d91ef7",
+      "config": "books",
+      "fit_split": null,
+      "assessment_split": "test",
+      "source_field": "text",
+      "enumeration": "complete pinned books/test.jsonl row order; source row identity plus text digest",
+      "normalization": "UTF-8; preserve raw book text; discard summary fields",
+      "rights_status": "rights-review-required-and-derived-source",
+      "license_record": "derived BookSum books config; underlying book and summary rights require source-level determination",
+      "selected_row_ids": []
+    },
+    {
+      "dataset_key": "gov_report",
+      "source": "https://huggingface.co/datasets/launch/gov_report",
+      "revision": "65e803e9bd07e9338075120bd10b9a1ef20fbe2f",
+      "config": "plain_text",
+      "fit_split": null,
+      "assessment_split": "test",
+      "source_field": "document",
+      "enumeration": "GAO then CRS pinned test files under the official plain_text loader; JSONL row order; id identity",
+      "normalization": "Use the official plain_text document string; no custom structured traversal or summary concatenation",
+      "rights_status": "attribution-required",
+      "license_record": "CC-BY-4.0 as recorded by the pinned source",
+      "selected_row_ids": []
+    },
+    {
+      "dataset_key": "lambada",
+      "source": "https://huggingface.co/datasets/EleutherAI/lambada_openai",
+      "revision": "900124bf3b8235c6daf21033af9948b3f07346c4",
+      "config": "en",
+      "fit_split": null,
+      "assessment_split": "test",
+      "source_field": "text",
+      "enumeration": "complete pinned English test JSONL line order",
+      "normalization": "UTF-8; preserve final target word",
+      "rights_status": "attribution-required",
+      "license_record": "Modified MIT as recorded by the pinned source",
+      "selected_row_ids": []
+    },
+    {
+      "dataset_key": "newsroom",
+      "source": "https://lil.nlp.cornell.edu/newsroom/download/index.html",
+      "revision": "registered-manual-release-r8625bda324",
+      "config": "default",
+      "fit_split": null,
+      "assessment_split": "test",
+      "source_field": "text",
+      "enumeration": "complete operator-supplied registered test JSONL line order",
+      "normalization": "UTF-8; preserve text; exclude summary",
+      "rights_status": "accepted-restricted-terms",
+      "license_record": "Cornell Newsroom Dataset Usage Agreement; non-commercial research/education; no redistribution/IP grant",
+      "acceptance_evidence_sha256": "d415a6659ee0395ac3848041d52fda8875da817dbf4c17b6db03af6c94ca3bf0",
+      "selected_row_ids": []
+    },
+    {
+      "dataset_key": "pubmed",
+      "source": "https://s3.amazonaws.com/datasets.huggingface.co/scientific_papers/1.1.1/pubmed-dataset.zip",
+      "revision": "scientific-papers-1.1.1",
+      "config": "pubmed",
+      "fit_split": null,
+      "assessment_split": "test",
+      "source_field": "article_text[] joined with LF",
+      "enumeration": "unique archive member test.txt; source line order; article_id identity",
+      "normalization": "join article_text paragraphs with LF; UTF-8; preserve resulting text",
+      "rights_status": "rights-review-required",
+      "license_record": "unknown in current source record",
+      "selected_row_ids": []
+    }
+  ],
+  "prohibitions": [
+    "Do not use the mounted FineWeb directory.",
+    "Do not relabel a derived or transformed dataset as an exact source.",
+    "Do not fetch or materialize corpus bytes before packet-bound independent authorization.",
+    "Do not run model execution or Weco before corpus custody and semantic-oracle gates pass.",
+    "Do not treat access acceptance as a data-license grant.",
+    "Do not populate selected row IDs by adaptive assessment search."
+  ]
+}
