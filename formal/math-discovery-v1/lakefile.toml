@@ -1,0 +1,9 @@
+name = "MathDiscovery"
+version = "0.1.0"
+defaultTargets = ["MathDiscovery"]
+
+[[lean_lib]]
+name = "MathDiscovery"
+roots = [
+  "MathDiscovery.TransferContract",
+]

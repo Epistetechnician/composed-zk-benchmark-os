@@ -3481,3 +3481,28 @@ only and claims no forecasting quality, official benchmark status, ZK
 performance, proof, soundness, formal validity, or production readiness.
 Every mutation in this phase names state slice
 `timesfm3-temporal-stress-scenarios-v1`.
+
+Explicit proof-carrying symbolic transfer formal V1 local-continuation
+exception now allowed: additive Lean source, pinned toolchain, checker, and
+phase documentation under `formal/math-discovery-v1/`,
+`scripts/verify_math_discovery_formal_v1.sh`, and
+`docs/research/math-discovery/` are governed by state slice
+`proof-carrying-symbolic-transfer-formal-v1` and protocol identity
+`weco-symbolic-discovery-transfer-formal-v1`. A successful Lean kernel check
+against the exact pinned `leanprover/lean4:v4.30.0` toolchain and the
+digest-bound `MathDiscovery/TransferContract.lean` is sufficient for local
+machine verification of the abstract contract and for continued clean-room
+formal refinement and synthetic contract/hill-climbing work under this slice;
+an independent reviewer is not required to continue that local work. This is
+a narrow authority exception, not a general waiver: independent review
+remains required for scientific or model-bearing execution, external corpus or
+custody, provider calls or spend, accepted Evidence Ledger mutation, external
+claims, benchmark/SOTA/breakthrough/production claims, or any claim above
+`LocalMachineCheckedFormalContractOnly`. The proof does not become
+`IndependentlyReproducedEvidence`, does not authorize a ZK prover, model or
+provider call, spend, or assessment, and does not upgrade the legacy
+`zkbench-core` `NoopFormalVerifier`. Any refinement to a concrete evaluator or
+ZK execution relation requires a fresh protocol identity, exact
+source/toolchain digests, fail-closed validation, and a separately recorded
+authority boundary. Every mutation in this phase names state slice
+`proof-carrying-symbolic-transfer-formal-v1`.
