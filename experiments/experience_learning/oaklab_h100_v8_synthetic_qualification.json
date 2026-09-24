@@ -1,7 +1,7 @@
 {
   "assessment_materialization_state": "absent",
   "claim_ceiling": "LocalDevelopmentOakLabH100ReplicationV8SyntheticQualification",
-  "compiled_protocol_sha256": "0c699cd0d92f4710515e6363498e780be726c846e6d4c299add82e8c890c74b5",
+  "compiled_protocol_sha256": "75c83e8e856ad44592f74119ca4dbeb479abed5795416b448a4400b59eaf0bda",
   "families": {
     "delayed_reward": {
       "adaptation": {
@@ -15658,7 +15658,7 @@
     }
   ],
   "real_execution": "prohibited_pending_synthetic_candidate_and_separate_authorization",
-  "result_sha256": "d4c75884613b84c3e12a4779a039fc3e4c6d89685193a0ff1c672d2c2cb0302b",
+  "result_sha256": "ed278014164df71da9cb6c2fa888b5bb6562e8b6a20e50a156ef2b38c3ca3ad2",
   "review_receipt_sha256": "9b0bd10329a1d832fea702451d5e531fc94945625d6918594ddf3a544930ac34",
   "rows_per_trajectory": 256,
   "schema": "oaklab.h100.v8.synthetic-qualification.v1",

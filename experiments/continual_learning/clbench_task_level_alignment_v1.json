@@ -1,0 +1,187 @@
+{
+  "schema_version": "clbench-task-level-alignment-v1-manifest",
+  "protocol_id": "clbench-task-level-alignment-v1",
+  "state_slice": "aligned-holistic-continual-learning-interpretability-monorepo-v1",
+  "status": "DESIGN_ONLY_PENDING_INDEPENDENT_ACCEPT",
+  "claim_ceiling": "LocalDevelopmentCLBenchTaskLevelProtocolDesignV1",
+  "benchmark": {
+    "name": "Continual Learning Bench",
+    "repository": "https://github.com/pgasawa/continual-learning-bench",
+    "paper": "https://arxiv.org/abs/2606.05661",
+    "license": "Apache-2.0",
+    "dataset_policy": "external_after_review_no_repo_copy",
+    "task_ids": [
+      "blind_spectrum_monitoring",
+      "codebase_adaptation",
+      "cohort_studies",
+      "database_exploration",
+      "exploitable_poker",
+      "sales_prediction"
+    ],
+    "task_semantics": "ordered_task_instances_with_feedback_and_reward",
+    "version_binding": "external_release_commit_and_task_manifest_required",
+    "release_commit": "9cc63c0f429048b843e8d43ac4f2b0ea4df13724",
+    "release_tree": "ec757e2d999d895a7beec03270c6d014c01f2915",
+    "task_manifest_paths": [
+      "src/tasks",
+      "configs",
+      "src/registry.py",
+      "src/system_manifest.py",
+      "pyproject.toml",
+      "uv.lock"
+    ]
+  },
+  "excluded_benchmark": {
+    "name": "CL-bench Life",
+    "dataset_license": "custom_evaluation_only",
+    "reason": "evaluation_only_license_forbids_training_finetuning_calibration_adaptation_and_parameter_updates",
+    "future_use": "separate_inference_only_protocol_after_license_review"
+  },
+  "arms": [
+    {"id": "no_update", "state_channel": "none", "mechanism": "fresh_state_per_instance"},
+    {"id": "sgd", "state_channel": "parameter_update", "mechanism": "one_shared_online_adapter"},
+    {"id": "replay", "state_channel": "parameter_update", "mechanism": "one_shared_online_adapter_plus_fixed_replay"},
+    {"id": "ewc", "state_channel": "parameter_update", "mechanism": "one_shared_online_adapter_plus_fisher_penalty"},
+    {"id": "orthogonal", "state_channel": "parameter_update", "mechanism": "one_shared_online_adapter_plus_update_projection"},
+    {"id": "icl", "state_channel": "in_context", "mechanism": "full_declared_history_context"},
+    {"id": "external_memory", "state_channel": "external_memory", "mechanism": "fixed_retrieval_memory"}
+  ],
+  "splits": {
+    "names": ["fit", "tune", "assessment"],
+    "families_per_split": 90,
+    "family_unit": "task_id:order_seed:replicate_seed:family_index",
+    "assignment": "fresh_external_instance_roster_before_fit",
+    "disjointness": [
+      "task_instance_ids_disjoint_across_fit_tune_assessment",
+      "source_and_environment_ids_disjoint_across_splits",
+      "feedback_and_labels_unavailable_to_other_splits"
+    ],
+    "assessment_is_unseen_at_lock": true
+  },
+  "schedule": {
+    "order_seeds": [73101, 73102, 73103],
+    "replicate_seeds": [202609161, 202609162, 202609163, 202609164, 202609165],
+    "repeats_per_family": 5,
+    "paired_environment_seed": true,
+    "protected_probe": "fresh_disjoint_protected_task_instances_after_each_incoming_block_without_feedback",
+    "feedback_policy": "each_arm_receives_only_feedback_generated_by_its_own_actions_and_same_declared_observation_budget"
+  },
+  "estimands": {
+    "reward": "benchmark_native_reward_and_official_normalized_gain",
+    "incoming_learning": "mean_normalized_reward_arm_minus_no_update_on_paired_incoming_task_instances",
+    "protected_retention": "post_incoming_protected_probe_reward_arm_minus_no_update_protected_probe_reward",
+    "primary": "task_level_incoming_learning_subject_to_protected_retention_and_equal_budget_gates",
+    "secondary": [
+      "official_stateful_minus_stateless_gain",
+      "per_task_learning_curve",
+      "protected_task_forgetting_harm",
+      "resource_cost_by_channel",
+      "order_sensitivity"
+    ]
+  },
+  "budgets": {
+    "max_environment_steps_per_instance": 40,
+    "max_input_tokens_per_instance": 8192,
+    "max_output_tokens_per_instance": 2048,
+    "persistent_state_bytes_per_arm": 262144,
+    "compute_budget_units_per_instance": 100000,
+    "monitor_calls_per_instance": 1,
+    "monitor_tokens_per_call": 512,
+    "accounting": [
+      "same_task_instance_roster_and_feedback_budget",
+      "same_compute_ceiling_and_forward_backward_meter",
+      "same_persistent_state_byte_ceiling_including_optimizer_memory",
+      "same_frozen_monitor_call_and_token_ceiling",
+      "base_model_bytes_excluded_and_immutable"
+    ]
+  },
+  "statistics": {
+    "unit_of_analysis": "family_then_task_macro_average",
+    "bootstrap_replicates": 10000,
+    "confidence_level": 0.95,
+    "multiplicity": "Holm_across_six_primary_task_tests",
+    "primary_task_gate": "at_least_four_of_six_tasks_have_positive_lower_95_ci_and_no_task_below_minus_0.02",
+    "protected_gate": "no_task_protected_delta_below_minus_0.05_and_macro_delta_at_least_minus_0.02",
+    "replication_gate": "same_direction_and_all_hard_gates_on_fresh_runner_seed_and_custody_set",
+    "missingness": "fail_closed_no_imputation_no_selected_cell_exclusion"
+  },
+  "prediction_lock": {
+    "required": true,
+    "sealed_before_assessment": true,
+    "selection_source": "fit_and_tune_only",
+    "assessment_labels_available_at_lock": false,
+    "assessment_effects_available_at_lock": false,
+    "one_digest_per_assessment_family": true,
+    "independent_validator_required": true,
+    "lock_contents": [
+      "selected_arm_or_no_candidate",
+      "fixed_hyperparameters_and_update_budget",
+      "fixed_monitor_and_thresholds",
+      "assessment_family_ids_and_order_seeds_without_labels",
+      "protocol_source_and_runtime_digests"
+    ]
+  },
+  "custody": {
+    "raw_trace_root": "/external/custody/clbench-task-level-alignment-v1/",
+    "root_class": "external_owner_only_ephemeral",
+    "mode": "0700",
+    "prior_roots_excluded": true,
+    "raw_trace_retention_hours": 72,
+    "aggregate_only_repository_artifacts": true,
+    "deletion_receipt_required": true,
+    "operator_and_validator_roots_distinct": true
+  },
+  "replication": {
+    "required": true,
+    "fresh_runner_identity_required": true,
+    "fresh_seed_set_required": true,
+    "same_protocol_digest_required": true,
+    "independent_recomputation_required": true,
+    "independent_custody_root_required": true,
+    "assessment_claim_blocked_until_replication": true
+  },
+  "execution_gates": {
+    "review_status": "PENDING_INDEPENDENT_ACCEPT",
+    "review_receipt": null,
+    "model_execution_authorized": false,
+    "provider_calls_authorized": false,
+    "spend_authorized_usd": 0,
+    "assessment_authorized": false,
+    "raw_trace_retention_authorized": false,
+    "evidence_ledger_mutation_authorized": false
+  },
+  "review_bundle": {
+    "schema_version": "clbench-task-level-alignment-v1-review-bundle",
+    "files": [
+      {"path": "AGENTS.md", "sha256": "221d6f9cc6578e8b2878106859a9fa7efdbeb0f9bb4e8e57f2e239a9732ecffc"},
+      {"path": "docs/research/continual-learning/310-clbench-task-level-alignment-v1-protocol.md", "sha256": "adbfa8cc97547b17b8107f6e18b7bcc415c3562bf394f8d368417510a40b67ab"},
+      {"path": "docs/research/continual-learning/311-clbench-task-level-alignment-v1-review-packet.md", "sha256": "fe3d46f1647b47c14af2066a1b2079ca03a9dfc2efb66c53729b7564509e257f"},
+      {"path": "docs/research/independent-review-communication-v1.md", "sha256": "8ae87d541950de71e7574d5daac702d408359614d4c6f5edc90f32af564ef114"},
+      {"path": "experiments/continual_learning/README.md", "sha256": "fdd268dc0588f60f72b40b6f02e2096a87c917ae3e948068084150665970f42a"},
+      {"path": "experiments/continual_learning/clbench_task_level_alignment_v1.py", "sha256": "97685ad6b31caa81972af83d14dd3acee6dda1e8d34536892e1dab80567eba7c"},
+      {"path": "experiments/continual_learning/tests/test_clbench_task_level_alignment_v1.py", "sha256": "5467f677172887f9f3fee3778e252a31b73ce4c1816cffff2ddf168f7b6d02bc"},
+      {"path": "experiments/continual_learning/clbench_task_level_alignment_review_bridge_v1.py", "sha256": "27647188ee37bf9957d74db0cb96261b8b2d9bfd3900bbe39e440f3ab570e6b0"},
+      {"path": "experiments/continual_learning/tests/test_clbench_task_level_alignment_review_bridge_v1.py", "sha256": "e491e33036085cfbe58b502cf9369717545f493352f7386d1767f198ee2591aa"},
+      {"path": "tools/independent_review_communication_v1/README.md", "sha256": "b92159e8c157bc6df687f4b98a07f0a1639310a86af584c048c4a61ebdbba944"},
+      {"path": "tools/independent_review_communication_v1/cli.py", "sha256": "a379e1bf6f0c883d4cb051176b4e1104906ca124bd45cbd7080e441568a29c1d"},
+      {"path": "tools/independent_review_communication_v1/protocol.py", "sha256": "e83ed1d06149accf9a238651a7d6fd0960076acdaf5a103854df39876a8e38ef"},
+      {"path": "tools/independent_review_communication_v1/tests/test_protocol.py", "sha256": "38f8be025edfb82ee761395ea16b35e9106cc17674f88d75983c6c98b45565d2"}
+    ],
+    "manifest_excluded": true,
+    "all_paths_repository_relative": true
+  },
+  "forbidden_actions": [
+    "benchmark_data_acquisition_before_review",
+    "model_execution_before_independent_accept_and_execution_authorization",
+    "provider_call_or_spend",
+    "assessment_before_prediction_lock_and_review",
+    "raw_trace_storage_in_repository",
+    "raw_trace_retention_beyond_72_hours",
+    "assessment_tuning_or_selected_cell_exclusion",
+    "self_signed_independent_review",
+    "accepted_evidence_ledger_mutation",
+    "general_alignment_or_production_claim"
+  ],
+  "review_packet_path": "docs/research/continual-learning/311-clbench-task-level-alignment-v1-review-packet.md",
+  "review_packet_sha256": "fe3d46f1647b47c14af2066a1b2079ca03a9dfc2efb66c53729b7564509e257f"
+}

@@ -233,6 +233,11 @@ def external_runtime_path(path: Path, repo_root: Path, label: str) -> Path:
         raise ValueError(f"{label} must not be a symlink")
     current = path
     while True:
+        if not current.exists():
+            if current.parent == current:
+                break
+            current = current.parent
+            continue
         if current.is_symlink():
             raise ValueError(f"{label} has a symlinked path component")
         if current.stat().st_mode & 0o002:

@@ -1,0 +1,9 @@
+name = "math-discovery-refinement-v2"
+defaultTargets = ["MathDiscovery.RefinementWitness"]
+
+[package]
+name = "math-discovery-refinement-v2"
+version = "0.1.0"
+
+[[lean_lib]]
+name = "MathDiscovery"

@@ -26,3 +26,10 @@ def test_attached_nano_emits_replayable_read_only_action():
     assert first.layer == 1
     assert first.site == "residual"
     assert host.snapshot() == before
+
+    revised = attachment.run(trace, timestamp="2026-09-16T12:00:00Z", action_version=2)
+    assert revised.action_digest != first.action_digest
+    assert revised.action_version == 2
+
+    replayed = attachment.replay(first)
+    assert replayed.to_dict() == first.to_dict()

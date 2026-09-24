@@ -58,6 +58,72 @@ It composes ACP, MCP, A2A, and OpenSSH/SFTP as declared protocol or transport
 bindings while keeping authority, execution, provider calls, credentials,
 network access, and accepted evidence disabled.
 
+The proof-carrying nano interpretability Phase 0/1 tracer bullet is recorded
+under state slice `proof-carrying-nano-interp-v1`:
+
+- [Design and verification record](docs/research/proof-carrying-nano-interpretability-v1.md)
+- [Jevlike reference and adapter boundary](docs/research/jevlike-integration-boundary-v1.md)
+- [Toy host, ranking/intervention nanos, concurrent store, and Lean proof engine](tools/proof_carrying_nano_interp_v1/)
+- [Pinned Lean contract](formal/proof-carrying-nano-interp-v1/)
+
+The separately authorized Jevlike adapter slice is now implemented under
+`proof-carrying-nano-interp-jevlike-adapter-v1`:
+
+- [Pinned adapter contract and claim ceiling](docs/research/proof-carrying-nano-jevlike-adapter-v1.md)
+- [External-boundary adapter, proof engine, and WAL store](tools/proof_carrying_nano_interp_jevlike_adapter_v1/)
+- `pnpm --ignore-workspace run verify:proof-carrying-nano-jevlike-adapter-v1`
+
+The adapter boundary has an independent validator and one bounded CPU
+qualification under `proof-carrying-nano-jevlike-independent-validation-v1`:
+
+- [Independent validator and qualification record](docs/research/proof-carrying-nano-jevlike-independent-validation-v1.md)
+- [Independent validator and CPU qualification harness](tools/proof_carrying_nano_jevlike_independent_validation_v1/)
+- `pnpm --ignore-workspace run verify:proof-carrying-nano-jevlike-independent-validation-v1`
+
+Its output remains `HypothesisOnly`; Jevlike is loaded only by an explicit
+runtime call against the pinned external checkout and checkpoint digest.
+
+The next real-host slice is separately bounded under
+`proof-carrying-nano-host-activation-boundary-v1`:
+
+- [Read-only host activation contract and qualification record](docs/research/proof-carrying-nano-host-activation-boundary-v1.md)
+- [Cached small-transformer adapter and external-custody qualification harness](tools/proof_carrying_nano_host_activation_boundary_v1/)
+- `pnpm --ignore-workspace run verify:proof-carrying-nano-host-activation-boundary-v1`
+
+It captures one `SmolLM2-135M` decoder-block activation on CPU from a fresh
+external custody copy. It does not define or run causal interventions. The
+claim ceiling is `LocalCachedSmallTransformerActivationCaptureOnly`.
+
+The causal-intervention record boundary is separately defined under
+`proof-carrying-nano-causal-intervention-record-v1`:
+
+- [Closed causal-intervention record and review packet](docs/research/proof-carrying-nano-causal-intervention-record-v1.md)
+- [Independent review packet](docs/research/proof-carrying-nano-causal-intervention-record-v1-review-packet.md)
+- [Record schema, Lean proof engine, and WAL store](tools/proof_carrying_nano_causal_intervention_record_v1/)
+- `pnpm --ignore-workspace run verify:proof-carrying-nano-causal-intervention-record-v1`
+
+It stores only digest-bound intervention declarations and proof attempts. The
+export status is `CausalInterventionRecordOnly`; causal assessment remains
+`SEALED_UNTIL_INDEPENDENT_REVIEW`. Jevlike remains hypothesis-only, and
+dashboard and swarm coordination remain deferred.
+
+It is local synthetic machine-checked evidence only. It does not execute a
+real host model or establish feature, circuit, intervention, alignment,
+scientific, or production claims.
+
+The implementation-diverse Bend semantic lane is recorded under state slice
+`bend-independent-semantic-lane-v1`:
+
+- [Protocol and claim boundary](docs/research/bend-independent-semantic-lane-v1.md)
+- [Rust exporter and Bend driver](tools/bend_independent_semantic_lane_v1/)
+- `pnpm --ignore-workspace run verify:bend-independent-semantic-lane-v1`
+
+It evaluates the existing finite Semantic IR/oracle subset across all nine
+deterministic generator families, checks Bend laws, compares aggregate outcomes
+with Rust, and performs bounded local parallel stress. It is local differential
+testing only; it creates no ZK, benchmark, scientific, production, or accepted
+Evidence Ledger claim.
+
 ## What This Repo Is Not
 
 This repo is not a benchmark-results claim, formal-verification claim, live external backend integration, fork of existing ZK tooling, or dashboard. No document or test claims Level 2+ evidence. No benchmark results have been generated here.

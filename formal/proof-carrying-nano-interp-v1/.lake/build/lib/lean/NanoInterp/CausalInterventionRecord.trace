@@ -1,0 +1,32 @@
+{"synthetic": false,
+ "schemaVersion": "2025-09-10",
+ "outputs":
+ {"o": ["63b4fd377926f840.olean"],
+  "m": false,
+  "i": "9b203e2fbc9ceedf.ilean",
+  "c": "81a9b4bf7cd06baa.c"},
+ "log":
+ [{"message":
+   ".> LEAN_PATH=/Users/shaanp/Documents/GitHub/composed-zk-benchmark-os/formal/proof-carrying-nano-interp-v1/.lake/build/lib/lean /Users/shaanp/.elan/toolchains/leanprover--lean4---v4.30.0/bin/lean /Users/shaanp/Documents/GitHub/composed-zk-benchmark-os/formal/proof-carrying-nano-interp-v1/NanoInterp/CausalInterventionRecord.lean -o /Users/shaanp/Documents/GitHub/composed-zk-benchmark-os/formal/proof-carrying-nano-interp-v1/.lake/build/lib/lean/NanoInterp/CausalInterventionRecord.olean -i /Users/shaanp/Documents/GitHub/composed-zk-benchmark-os/formal/proof-carrying-nano-interp-v1/.lake/build/lib/lean/NanoInterp/CausalInterventionRecord.ilean -c /Users/shaanp/Documents/GitHub/composed-zk-benchmark-os/formal/proof-carrying-nano-interp-v1/.lake/build/ir/NanoInterp/CausalInterventionRecord.c --setup /Users/shaanp/Documents/GitHub/composed-zk-benchmark-os/formal/proof-carrying-nano-interp-v1/.lake/build/ir/NanoInterp/CausalInterventionRecord.setup.json --json",
+   "level": "trace"}],
+ "inputs":
+ [["NanoInterp.CausalInterventionRecord:deps",
+   [["deps",
+     [["ProofCarryingNanoInterp/ProofCarryingNanoInterp:extraDep",
+       [["@ProofCarryingNanoInterp:extraDep", "00000000000006bb"]]],
+      ["imports", "00000000000006bb"]]],
+    ["libs",
+     [["import dynlibs", "00000000000006bb"],
+      ["package external libraries", "00000000000006bb"],
+      ["module dynlibs", "00000000000006bb"],
+      ["module plugins", "00000000000006bb"]]]]],
+  ["Lean 4.30.0, commit d024af099ca4bf2c86f649261ebf59565dc8c622",
+   "2f4703bb19086252"],
+  ["/Users/shaanp/Documents/GitHub/composed-zk-benchmark-os/formal/proof-carrying-nano-interp-v1/NanoInterp/CausalInterventionRecord.lean",
+   "a770e95c819361e9"],
+  ["options", "00000000000006bb"],
+  ["isModule: false", "feefd2a0d3a1847e"],
+  ["Module.name: NanoInterp.CausalInterventionRecord", "85e766686f7aa52d"],
+  ["Package.id?: (some ProofCarryingNanoInterp)", "6d623a95fc56f755"],
+  ["Module.leanArgs: #[]", "00000000000006bb"]],
+ "depHash": "9fa33863c8a4a767"}

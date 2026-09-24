@@ -130,7 +130,10 @@ def validate_provider_receipt(receipt: dict[str, Any], hard_usd_ceiling: float, 
     for field in ("start_utc", "stop_utc"):
         if not isinstance(receipt[field], str) or UTC_SECONDS.fullmatch(receipt[field]) is None:
             raise ValueError(f"invalid provider timestamp: {field}")
-        dt.datetime.strptime(receipt[field], "%Y-%m-%dT%H:%M:%SZ")
+        try:
+            dt.datetime.fromisoformat(receipt[field].replace("Z", "+00:00"))
+        except ValueError as error:
+            raise ValueError(f"invalid provider timestamp: {field}") from error
     if receipt["launch_manifest_sha256"] != launch_manifest_sha256:
         raise ValueError("provider receipt launch binding mismatch")
     for field in ("charged_usd", "hard_usd_ceiling"):

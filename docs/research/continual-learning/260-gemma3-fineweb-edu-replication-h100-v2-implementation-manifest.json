@@ -18,10 +18,10 @@
     },
     {
       "path": "AGENTS.md",
-      "sha256": "3ca4f128dc0ce64aecbbf719d33f958465d24a5d210a7f8807dc927bb003db80"
+      "sha256": "221d6f9cc6578e8b2878106859a9fa7efdbeb0f9bb4e8e57f2e239a9732ecffc"
     }
   ],
-  "manifest_sha256": "3380c209b20f8ec95ff73da2faa9ec66161cc98db8ee727a0e47b86361a3604a",
+  "manifest_sha256": "e13748e436f29571d4978c9244c700f4e84d6bbc7faa94408075cde215cf2f61",
   "schema": "gemma3-fineweb-edu-replication-h100-v2-implementation",
   "state_slice": "continual-learning-gemma3-fineweb-edu-replication-h100-v2"
 }

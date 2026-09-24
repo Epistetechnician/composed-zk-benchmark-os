@@ -1,0 +1,12 @@
+# State slice: proof-carrying-nano-causal-intervention-record-v1.
+name = "ProofCarryingNanoInterp"
+version = "0.1.0"
+defaultTargets = ["ProofCarryingNanoInterp"]
+
+[[lean_lib]]
+name = "ProofCarryingNanoInterp"
+roots = [
+  "NanoInterp.FeatureClaim",
+  "NanoInterp.HostActivation",
+  "NanoInterp.CausalInterventionRecord",
+]

@@ -1,0 +1,32 @@
+{"synthetic": false,
+ "schemaVersion": "2025-09-10",
+ "outputs":
+ {"o": ["874079a5f9b6f043.olean"],
+  "m": false,
+  "i": "7bd091dd502442a8.ilean",
+  "c": "236ee94b35006600.c"},
+ "log":
+ [{"message":
+   ".> LEAN_PATH=/Users/shaanp/Documents/GitHub/composed-zk-benchmark-os/formal/proof-carrying-nano-interp-v1/.lake/build/lib/lean /Users/shaanp/.elan/toolchains/leanprover--lean4---v4.30.0/bin/lean /Users/shaanp/Documents/GitHub/composed-zk-benchmark-os/formal/proof-carrying-nano-interp-v1/NanoInterp/FeatureClaim.lean -o /Users/shaanp/Documents/GitHub/composed-zk-benchmark-os/formal/proof-carrying-nano-interp-v1/.lake/build/lib/lean/NanoInterp/FeatureClaim.olean -i /Users/shaanp/Documents/GitHub/composed-zk-benchmark-os/formal/proof-carrying-nano-interp-v1/.lake/build/lib/lean/NanoInterp/FeatureClaim.ilean -c /Users/shaanp/Documents/GitHub/composed-zk-benchmark-os/formal/proof-carrying-nano-interp-v1/.lake/build/ir/NanoInterp/FeatureClaim.c --setup /Users/shaanp/Documents/GitHub/composed-zk-benchmark-os/formal/proof-carrying-nano-interp-v1/.lake/build/ir/NanoInterp/FeatureClaim.setup.json --json",
+   "level": "trace"}],
+ "inputs":
+ [["NanoInterp.FeatureClaim:deps",
+   [["deps",
+     [["ProofCarryingNanoInterp/ProofCarryingNanoInterp:extraDep",
+       [["@ProofCarryingNanoInterp:extraDep", "00000000000006bb"]]],
+      ["imports", "00000000000006bb"]]],
+    ["libs",
+     [["import dynlibs", "00000000000006bb"],
+      ["package external libraries", "00000000000006bb"],
+      ["module dynlibs", "00000000000006bb"],
+      ["module plugins", "00000000000006bb"]]]]],
+  ["Lean 4.30.0, commit d024af099ca4bf2c86f649261ebf59565dc8c622",
+   "2f4703bb19086252"],
+  ["/Users/shaanp/Documents/GitHub/composed-zk-benchmark-os/formal/proof-carrying-nano-interp-v1/NanoInterp/FeatureClaim.lean",
+   "56c44bb2c0f82c86"],
+  ["options", "00000000000006bb"],
+  ["isModule: false", "feefd2a0d3a1847e"],
+  ["Module.name: NanoInterp.FeatureClaim", "7f8251aa578c93a8"],
+  ["Package.id?: (some ProofCarryingNanoInterp)", "6d623a95fc56f755"],
+  ["Module.leanArgs: #[]", "00000000000006bb"]],
+ "depHash": "ba055b6ad24f7e43"}
