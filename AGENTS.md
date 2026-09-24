@@ -3506,3 +3506,55 @@ ZK execution relation requires a fresh protocol identity, exact
 source/toolchain digests, fail-closed validation, and a separately recorded
 authority boundary. Every mutation in this phase names state slice
 `proof-carrying-symbolic-transfer-formal-v1`.
+
+Explicit proof-carrying symbolic transfer concrete refinement V2 is now
+allowed under named state slice
+`proof-carrying-symbolic-transfer-refinement-v2`: additive closed-world
+synthetic evaluator, canonical fixtures, fail-closed adversarial tests,
+digest-bound receipts, Lean witness generation, and protocol documentation
+under `tools/proof_carrying_symbolic_transfer_refinement_v2/`,
+`formal/math-discovery-refinement-v2/`,
+`scripts/verify_math_discovery_refinement_v2.sh`, and
+`docs/research/math-discovery/`. The exact protocol identity is
+`weco-symbolic-discovery-transfer-refinement-v2`. The evaluator must expose
+only public tasks, recompute metrics from hidden assessment truth, verify
+truth-mutation invariance, enforce unique bounded discoveries, enforce
+canonical family permutation invariance, reject malformed schemas/digests and
+metric gaming, require at least two seeds across fit/tune/held-out splits, and
+compile a digest-bound witness with the pinned Lean
+`leanprover/lean4:v4.30.0` kernel. A successful run is sufficient for local
+synthetic continuation under claim ceiling
+`LocalMachineCheckedFormalContractOnly`; independent review is not required
+for this bounded work. This phase does not authorize model or provider
+execution, external corpus or custody, spend, accepted Evidence Ledger
+mutation, external claims, benchmark/SOTA/breakthrough/production claims, or
+any claim above that ceiling. The witness does not establish arbitrary
+Python-to-Lean refinement or a ZK execution relation; either requires a fresh
+protocol identity, exact digests, fail-closed validation, and a separately
+recorded authority boundary. Every mutation in this phase names state slice
+`proof-carrying-symbolic-transfer-refinement-v2`.
+
+Explicit Bend independent semantic lane V1 is now allowed under named state
+slice `bend-independent-semantic-lane-v1` and protocol identity
+`bend-independent-semantic-lane-v1`. This additive local synthetic lane may
+add the Rust Semantic IR export example
+`crates/zkbench-core/examples/bend_export_v1.rs`, the Python Bend driver and
+hermetic contract tests under `tools/bend_independent_semantic_lane_v1/`, the
+phase record under `docs/research/`, a focused package script, and navigation
+links in `README.md`. It is limited to an implementation-diverse evaluator of
+the existing finite nonnegative integer/bool FSM and trace subset, all nine
+deterministic local generator families, digest-bound aggregate outcomes,
+fail-closed unsupported-value handling, Bend `LAWS.bend`/`PROOF.bend` checks,
+deterministic repeatability, CPU thread repeatability, and bounded local
+parallel stress. Bend source and compiler identity must be pinned by the
+driver; normal execution is local and synthetic only. The exporter must derive
+cases from the existing Rust Semantic IR and may not inject expected outcomes
+into Bend laws as axioms. This lane does not permit model execution, external
+corpus or custody, provider calls or spend, network access during the test,
+external ZK execution, accepted Evidence Ledger mutation, benchmark or
+production claims, promotion of Bend output to Lean or ZK proof evidence, or
+claims above `LocalBendCheckedSemanticOracleOnly`. A missing compiler, failed
+law, unsupported-case drift, digest mismatch, evaluator mismatch, or stress
+failure is a failed qualification, not a reason for adaptive repair. Every
+mutation in this phase names state slice
+`bend-independent-semantic-lane-v1`.

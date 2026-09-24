@@ -1,0 +1,65 @@
+{
+  "schema_version": "proof-carrying-symbolic-transfer-refinement-v2",
+  "episodes": [
+    {
+      "split": "fit",
+      "seed": 101,
+      "tasks": [
+        {"task_id": "fit-101-affine-add", "family_id": "affine", "public_examples": [[-2, -1], [0, 1], [2, 3]], "assessment_inputs": [3, 4], "max_depth": 2, "hidden_program": [0], "assessment_outputs": [4, 5]},
+        {"task_id": "fit-101-affine-scale", "family_id": "affine", "public_examples": [[-2, -3], [0, 1], [2, 5]], "assessment_inputs": [3, 4], "max_depth": 2, "hidden_program": [1, 0], "assessment_outputs": [7, 9]},
+        {"task_id": "fit-101-compose", "family_id": "composition", "public_examples": [[-2, -2], [0, 2], [2, 6]], "assessment_inputs": [3, 4], "max_depth": 2, "hidden_program": [0, 1], "assessment_outputs": [8, 10]},
+        {"task_id": "fit-101-nonlinear", "family_id": "nonlinear", "public_examples": [[-2, 4], [0, 0], [2, 4]], "assessment_inputs": [3, 4], "max_depth": 1, "hidden_program": [3], "assessment_outputs": [9, 16]}
+      ]
+    },
+    {
+      "split": "tune",
+      "seed": 101,
+      "tasks": [
+        {"task_id": "tune-101-affine-sub", "family_id": "affine", "public_examples": [[-2, -3], [0, -1], [2, 1]], "assessment_inputs": [3, 4], "max_depth": 2, "hidden_program": [2], "assessment_outputs": [2, 3]},
+        {"task_id": "tune-101-compose-id", "family_id": "composition", "public_examples": [[-2, -2], [0, 0], [2, 2]], "assessment_inputs": [3, 4], "max_depth": 2, "hidden_program": [2, 0], "assessment_outputs": [3, 4]},
+        {"task_id": "tune-101-nonlinear-shift", "family_id": "nonlinear", "public_examples": [[-2, 5], [0, 1], [2, 5]], "assessment_inputs": [3, 4], "max_depth": 2, "hidden_program": [3, 0], "assessment_outputs": [10, 17]},
+        {"task_id": "tune-101-affine-add2", "family_id": "affine", "public_examples": [[-2, 0], [0, 2], [2, 4]], "assessment_inputs": [3, 4], "max_depth": 2, "hidden_program": [0, 0], "assessment_outputs": [5, 6]}
+      ]
+    },
+    {
+      "split": "held_out",
+      "seed": 101,
+      "tasks": [
+        {"task_id": "held-101-affine-scale-add", "family_id": "affine", "public_examples": [[-2, -3], [0, 1], [2, 5]], "assessment_inputs": [3, 4], "max_depth": 2, "hidden_program": [1, 0], "assessment_outputs": [7, 9]},
+        {"task_id": "held-101-compose-sub", "family_id": "composition", "public_examples": [[-2, -4], [0, 0], [2, 4]], "assessment_inputs": [3, 4], "max_depth": 2, "hidden_program": [1], "assessment_outputs": [6, 8]},
+        {"task_id": "held-101-nonlinear", "family_id": "nonlinear", "public_examples": [[-2, 4], [0, 0], [2, 4]], "assessment_inputs": [3, 4], "max_depth": 1, "hidden_program": [3], "assessment_outputs": [9, 16]},
+        {"task_id": "held-101-affine-add", "family_id": "affine", "public_examples": [[-2, -1], [0, 1], [2, 3]], "assessment_inputs": [3, 4], "max_depth": 2, "hidden_program": [0], "assessment_outputs": [4, 5]}
+      ]
+    },
+    {
+      "split": "fit",
+      "seed": 202,
+      "tasks": [
+        {"task_id": "fit-202-affine-sub", "family_id": "affine", "public_examples": [[-2, -3], [0, -1], [2, 1]], "assessment_inputs": [3, 4], "max_depth": 2, "hidden_program": [2], "assessment_outputs": [2, 3]},
+        {"task_id": "fit-202-compose-scale", "family_id": "composition", "public_examples": [[-2, -4], [0, 0], [2, 4]], "assessment_inputs": [3, 4], "max_depth": 2, "hidden_program": [1], "assessment_outputs": [6, 8]},
+        {"task_id": "fit-202-nonlinear-shift", "family_id": "nonlinear", "public_examples": [[-2, 5], [0, 1], [2, 5]], "assessment_inputs": [3, 4], "max_depth": 2, "hidden_program": [3, 0], "assessment_outputs": [10, 17]},
+        {"task_id": "fit-202-affine-add2", "family_id": "affine", "public_examples": [[-2, 0], [0, 2], [2, 4]], "assessment_inputs": [3, 4], "max_depth": 2, "hidden_program": [0, 0], "assessment_outputs": [5, 6]}
+      ]
+    },
+    {
+      "split": "tune",
+      "seed": 202,
+      "tasks": [
+        {"task_id": "tune-202-affine-add", "family_id": "affine", "public_examples": [[-2, -1], [0, 1], [2, 3]], "assessment_inputs": [3, 4], "max_depth": 2, "hidden_program": [0], "assessment_outputs": [4, 5]},
+        {"task_id": "tune-202-affine-scale", "family_id": "affine", "public_examples": [[-2, -3], [0, 1], [2, 5]], "assessment_inputs": [3, 4], "max_depth": 2, "hidden_program": [1, 0], "assessment_outputs": [7, 9]},
+        {"task_id": "tune-202-compose", "family_id": "composition", "public_examples": [[-2, -2], [0, 2], [2, 6]], "assessment_inputs": [3, 4], "max_depth": 2, "hidden_program": [0, 1], "assessment_outputs": [8, 10]},
+        {"task_id": "tune-202-nonlinear", "family_id": "nonlinear", "public_examples": [[-2, 4], [0, 0], [2, 4]], "assessment_inputs": [3, 4], "max_depth": 1, "hidden_program": [3], "assessment_outputs": [9, 16]}
+      ]
+    },
+    {
+      "split": "held_out",
+      "seed": 202,
+      "tasks": [
+        {"task_id": "held-202-affine-sub", "family_id": "affine", "public_examples": [[-2, -3], [0, -1], [2, 1]], "assessment_inputs": [3, 4], "max_depth": 2, "hidden_program": [2], "assessment_outputs": [2, 3]},
+        {"task_id": "held-202-compose-id", "family_id": "composition", "public_examples": [[-2, -2], [0, 0], [2, 2]], "assessment_inputs": [3, 4], "max_depth": 2, "hidden_program": [2, 0], "assessment_outputs": [3, 4]},
+        {"task_id": "held-202-nonlinear-shift", "family_id": "nonlinear", "public_examples": [[-2, 5], [0, 1], [2, 5]], "assessment_inputs": [3, 4], "max_depth": 2, "hidden_program": [3, 0], "assessment_outputs": [10, 17]},
+        {"task_id": "held-202-affine-add2", "family_id": "affine", "public_examples": [[-2, 0], [0, 2], [2, 4]], "assessment_inputs": [3, 4], "max_depth": 2, "hidden_program": [0, 0], "assessment_outputs": [5, 6]}
+      ]
+    }
+  ]
+}

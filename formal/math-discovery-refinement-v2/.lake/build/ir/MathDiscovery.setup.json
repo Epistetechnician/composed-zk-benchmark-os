@@ -1,0 +1,9 @@
+{"plugins": [],
+ "package": "math-discovery-refinement-v2",
+ "options": {},
+ "name": "MathDiscovery",
+ "isModule": false,
+ "importArts":
+ {"MathDiscovery.RefinementWitness":
+  ["/Users/shaanp/Documents/GitHub/composed-zk-benchmark-os/formal/math-discovery-refinement-v2/.lake/build/lib/lean/MathDiscovery/RefinementWitness.olean"]},
+ "dynlibs": []}

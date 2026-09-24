@@ -325,7 +325,7 @@ def validate_campaign_manifest(path: Path, compiled_sha256: str) -> dict[str, An
 def _valid_utc(value: Any, label: str) -> dt.datetime:
     require(isinstance(value, str) and UTC_SECONDS.fullmatch(value) is not None, f"{label} timestamp invalid")
     try:
-        return dt.datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=dt.timezone.utc)
+        return dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
     except ValueError as error:
         raise ValueError(f"{label} timestamp invalid") from error
 

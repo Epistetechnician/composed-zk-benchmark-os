@@ -7,9 +7,13 @@ This module is a synthetic contract fixture, not a frontier-model adapter.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Sequence
+from typing import TYPE_CHECKING, Any, Sequence
 
 from .protocol import PROTOCOL_ID, STATE_SLICE, ProtocolError, canonical_digest
+
+if TYPE_CHECKING:
+    from .proof import LeanProofEngine, ProofAttempt
+    from .store import ConcurrentStore
 
 
 @dataclass(frozen=True)
@@ -120,6 +124,30 @@ class MiniAction:
     def to_dict(self) -> dict[str, Any]:
         return {**self.unsigned_dict(), "action_digest": self.action_digest}
 
+    @classmethod
+    def from_dict(cls, payload: dict[str, Any]) -> "MiniAction":
+        provided = payload.get("action_digest")
+        unsigned = {key: value for key, value in payload.items() if key != "action_digest"}
+        if provided != canonical_digest(unsigned):
+            raise ProtocolError("action digest mismatch")
+        if payload.get("state_slice") != STATE_SLICE or payload.get("protocol_identity") != PROTOCOL_ID:
+            raise ProtocolError("action identity mismatch")
+        return cls(
+            state_slice=payload["state_slice"],
+            protocol_identity=payload["protocol_identity"],
+            action_version=payload["action_version"],
+            timestamp=payload["timestamp"],
+            inputs=payload["inputs"],
+            outputs=payload["outputs"],
+            host_context_hash=payload["host_context_hash"],
+            host_checkpoint_id=payload["host_checkpoint_id"],
+            nano_identity=payload["nano_identity"],
+            layer=payload["layer"],
+            site=payload["site"],
+            claim=payload["claim"],
+            action_digest=provided,
+        )
+
 
 @dataclass(frozen=True)
 class FeatureDetectorNano:
@@ -150,6 +178,8 @@ class NanoAttachment:
     site: str
 
     def run(self, trace: ActivationTrace, *, timestamp: str, action_version: int = 1) -> MiniAction:
+        if not timestamp or action_version < 1:
+            raise ProtocolError("action timestamp and positive version are required")
         if trace.checkpoint_id != self.host.checkpoint_id:
             raise ProtocolError("trace checkpoint does not match attached host")
         if trace.layer != self.layer or trace.site != self.site:
@@ -195,4 +225,49 @@ class NanoAttachment:
             site=self.site,
             claim=unsigned["claim"],
             action_digest=action_digest,
+        )
+
+    def run_and_record(
+        self,
+        trace: ActivationTrace,
+        *,
+        store: "ConcurrentStore",
+        timestamp: str,
+        action_version: int = 1,
+        proof_engine: "LeanProofEngine | None" = None,
+    ) -> tuple[MiniAction, "ProofAttempt"]:
+        """Run one action and persist its action plus proof attempt atomically by order."""
+
+        from .proof import LeanProofEngine
+
+        action = self.run(trace, timestamp=timestamp, action_version=action_version)
+        proof = (proof_engine or LeanProofEngine()).attempt(action)
+        store.commit_action(action)
+        store.commit_proof(proof)
+        return action, proof
+
+    def replay(self, action: MiniAction) -> MiniAction:
+        """Reconstruct an action from its inputs under the same host attachment."""
+
+        if action.nano_identity != self.nano.identity:
+            raise ProtocolError("action nano identity does not match attachment")
+        if action.layer != self.layer or action.site != self.site:
+            raise ProtocolError("action location does not match attachment")
+        try:
+            activation = tuple(action.inputs["activation"])
+            prompt = action.inputs["prompt"]
+            seed = action.inputs["seed"]
+        except (KeyError, TypeError) as exc:
+            raise ProtocolError("action inputs cannot be replayed") from exc
+        trace = self.host.capture(
+            prompt=prompt,
+            activation=activation,
+            seed=seed,
+            layer=action.layer,
+            site=action.site,
+        )
+        return self.run(
+            trace,
+            timestamp=action.timestamp,
+            action_version=action.action_version,
         )

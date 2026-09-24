@@ -437,6 +437,42 @@ This harness validates endpoint definitions and control behavior. It is not a
 neural-training result and cannot support breakthrough, transfer, production,
 or general continual-learning claims.
 
+## CL-Bench task-level alignment V1
+
+`clbench_task_level_alignment_v1.py` validates the fresh external protocol
+for task-level incoming learning and protected-task retention under the named
+state slice
+`aligned-holistic-continual-learning-interpretability-monorepo-v1`. The
+machine manifest is
+`clbench_task_level_alignment_v1.json`; the human protocol and independent
+review packet are documented in
+`docs/research/continual-learning/310-clbench-task-level-alignment-v1-protocol.md`
+and
+`docs/research/continual-learning/311-clbench-task-level-alignment-v1-review-packet.md`.
+
+Validate the design-only packet with:
+
+```text
+PYTHONDONTWRITEBYTECODE=1 ./scripts/python -B -m experiments.continual_learning.clbench_task_level_alignment_v1
+```
+
+Prepare the proof-bound handoff digests with:
+
+```text
+PYTHONDONTWRITEBYTECODE=1 ./scripts/python -B -m experiments.continual_learning.clbench_task_level_alignment_review_bridge_v1 binding
+```
+
+Verify a returned receipt only against an externally administered registry and
+registry-owner trust anchor. The bridge has no signing command and rejects
+receipts inside the repository.
+
+The packet includes no benchmark data or model artifacts. Its execution gate
+is permanently closed in this slice: independent acceptance, separate
+execution authorization, provider calls, spend, assessment, raw-trace
+retention, and Evidence Ledger mutation are all prohibited. CL-Bench Life is
+explicitly excluded from the update panel because its evaluation-only dataset
+license does not permit adaptation or parameter updates.
+
 The latest signed task/update pilot is documented in
 `docs/research/continual-learning/37-v18-route-boundary-representation-record.md`. Its outputs
 must stay outside the repository because adapter weights and raw run logs are
