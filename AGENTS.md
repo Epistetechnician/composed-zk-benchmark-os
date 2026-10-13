@@ -1017,6 +1017,29 @@ reuse of V22/V23 concepts, free-form mental-state reports, Stage 0C
 confirmation, Stage 1, accepted evidence, benchmark claims, consciousness
 claims, global introspection claims, or claims above
 `LocalDevelopmentHybridInstrumentCapabilityTierReplication`.
+Explicit Astral-RGS V28R2 retired-R1 fingerprint construction docs-first
+boundary now allowed and completed: one Markdown boundary under
+`docs/research/astral-self-modeling/`, plus status-only Astral roadmap,
+claim-ledger, navigation, and `AGENTS.md` updates. This slice is limited to
+state slice
+`astral-rgs-v28r2-retired-r1-fingerprint-construction-boundary` and the future
+one-time hash-only construction contract in
+`docs/research/astral-self-modeling/67-v28r2-retired-r1-fingerprint-construction-boundary.md`:
+pinning composed commit `8cf75d745c20afa885286fecfbd8d67c253b8707`,
+the exact protocol/core/CLI/builder identities, all six retained V28R1
+semantic/raw identities, the single retained input root, the single absent
+repository-external output path, exclusive canonical output, stop rules,
+independent audit requirements, and a later separate protocol-pinning gate.
+It does not permit running the real fingerprint builder in this docs slice,
+creating or committing a fingerprint, changing the V28R2 protocol or
+validator, RGS source or package mutation, seed or corpus generation, tokenizer
+or model access, baseline or update-arm execution, recovery, Astral selection,
+assessment, downloads, network access, artifact or Evidence Ledger promotion,
+acquisition or continual-learning claims, independent-replication claims,
+benchmark or breakthrough claims, self-improvement, introspection or
+self-modeling claims, Stage 0C or Stage 1 promotion, production claims, or
+claims above `LocalRetiredR1FingerprintConstructionBoundaryV28R2`.
+
 Explicit Astral-RGS V28R2 acquisition-qualification validator implementation
 now allowed and implemented: additive standard-library Python source, a declarative JSON
 protocol, hermetic tests, and one synthetic-fixture-only retired-R1 fingerprint

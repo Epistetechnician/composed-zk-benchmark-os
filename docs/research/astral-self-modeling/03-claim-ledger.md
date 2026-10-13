@@ -147,6 +147,12 @@ claim ceiling.
 |---|---|---|---|---|---|---|
 | `V28-C01` | Additive clean-room validator authorized | Validator, CLI, synthetic-only fingerprint builder, full-census fixture, and adversarial tests implemented; real fingerprint and R2 packet absent | `tools/astral-rgs-acquisition-v28r2/`; `66-v28r2-acquisition-qualification-validator-notes.md` | Author implementation plus internal independent code/statistics/scope audits; external independent scientific review `NotRun` | Exact 6,144-family and 147,456-row public-path fixture plus focused adversarial contracts pass; committed protocol remains fail-closed at `not-built` for the real R1 fingerprint | Local engineering validator evidence only; no corpus, model-backed novelty, acquisition, retention/recovery, selector, or assessment evidence |
 
+## V28R2 Retired-R1 Fingerprint Construction Boundary — 2026-07-28
+
+| ID | Old execution posture | New execution posture | Evidence artifact | Reviewer | Reason | Unchanged claim ceiling |
+|---|---|---|---|---|---|---|
+| `V28-C01` | Validator implemented; real retired-R1 fingerprint absent | Docs-first one-time hash-only construction boundary pinned; construction and protocol pinning not run | `67-v28r2-retired-r1-fingerprint-construction-boundary.md`; implementation commit `8cf75d745c20afa885286fecfbd8d67c253b8707` | Author boundary plus later independent construction audit required; external independent scientific review `NotRun` | The validator must remain fail-closed until the frozen R1 corpus is represented by a reviewed hash-only nonreuse inventory without exposing raw R1 material | Boundary only; no fingerprint, protocol pin, R2 corpus, model-backed novelty, acquisition, retention/recovery, selector, or assessment evidence |
+
 C003-C007 and C013-C014 retain the historical status `Proposed`; their current
 execution disposition is `BlockedByStage0C`. No observer, correction,
 prospective-prediction, or actor-observer optimization evidence exists. C008
