@@ -1,0 +1,30 @@
+{
+  "allowed_results": [
+    "Pass",
+    "PassWithFindings",
+    "Fail"
+  ],
+  "author_report_sha256": "3f7c64895d3e910c71bbc3dfe856e4dd6fa5ced802c70ccc5899f10b6a8b5b8c",
+  "capsule_identity": "be75a49ef88415c5632f8cfd05305451a0e023990a72eea013150c7083de7bd6",
+  "claim_ceiling": "LocalImmutableValidationCandidate",
+  "namespace": "astral-independent-review-v1",
+  "release_commit": "a875957cc1f0ba12e0027fd69a44f8b6a94bcfdf",
+  "release_package_identity": "7dd61f997bd2cbd8f55f497331ed83757bf994c80a2dc3f01fc1bf1516a9a483",
+  "release_tree": "055b7642791c5948e1735dcd59fb1c1dd00d3b69",
+  "required_roles": [
+    "artifact_reproducibility",
+    "scientific_validity"
+  ],
+  "required_scientific_sections": [
+    "preregistration_chronology",
+    "assessment_sealing",
+    "corpus_overlap_and_leakage",
+    "control_strength",
+    "statistics_and_uncertainty",
+    "stopping_and_selection_rules",
+    "claim_ledger_correspondence",
+    "v21_recovery_event",
+    "v23_pre_sweep_defect"
+  ],
+  "schema_version": 1
+}

@@ -1,0 +1,26 @@
+{
+  "coordinator": "",
+  "purpose": "external_review",
+  "registered_at": "",
+  "reviewers": [
+    {
+      "affiliation": "",
+      "independence_disclosure": "",
+      "public_key": "",
+      "public_key_fingerprint": "",
+      "reviewer_name": "",
+      "role": "artifact_reproducibility",
+      "signer_identity": ""
+    },
+    {
+      "affiliation": "",
+      "independence_disclosure": "",
+      "public_key": "",
+      "public_key_fingerprint": "",
+      "reviewer_name": "",
+      "role": "scientific_validity",
+      "signer_identity": ""
+    }
+  ],
+  "schema_version": 1
+}
