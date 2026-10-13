@@ -206,7 +206,11 @@ review and experiments rule out equivalent prior work.
   R2 controller/builder failure record; output absent and identity consumed.
 - [V28R2 retired-R1 fingerprint builder schema-correction boundary](70-v28r2-retired-r1-fingerprint-builder-schema-correction-boundary.md):
   docs-first split between three-key source/support records and two-key answer
-  options; implementation and any R3 construction remain unrun.
+  options; it initially sealed implementation and every R3 construction
+  attempt.
+- [V28R2 retired-R1 fingerprint builder schema-correction notes](71-v28r2-retired-r1-fingerprint-builder-schema-correction-notes.md):
+  corrected exact record schemas and authentic synthetic option shape; real
+  construction remains unrun.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):

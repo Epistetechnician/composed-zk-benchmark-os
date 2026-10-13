@@ -184,7 +184,6 @@ def _synthetic_r1_builder_inputs() -> tuple[dict, ...]:
             )
             answer_options.append(
                 {
-                    "license_id": "CC0-1.0",
                     "sha256": BUILDER.sha256_bytes(value.encode("utf-8")),
                     "text": value,
                 }
@@ -2111,6 +2110,31 @@ def test_builder_and_validator_share_typed_normalization() -> None:
     assert BUILDER._typed_normalize(
         surface, identifiers
     ) == V28._normalize_family_typed(family, surface)
+
+
+def test_builder_text_record_schemas_match_retained_r1_contract() -> None:
+    text = "fixed retained text"
+    digest = BUILDER.sha256_bytes(text.encode("utf-8"))
+    source = {
+        "license_id": "CC0-1.0",
+        "sha256": digest,
+        "text": text,
+    }
+    option = {"sha256": digest, "text": text}
+    assert BUILDER._verified_source_text_hash(source) == (text, digest)
+    assert BUILDER._verified_option_text_hash(option) == (text, digest)
+    with pytest.raises(ValueError, match="source text record"):
+        BUILDER._verified_source_text_hash(option)
+    with pytest.raises(ValueError, match="source text record"):
+        BUILDER._verified_source_text_hash({**source, "extra": True})
+    with pytest.raises(ValueError, match="option text record"):
+        BUILDER._verified_option_text_hash(source)
+    with pytest.raises(ValueError, match="option text record"):
+        BUILDER._verified_option_text_hash({**option, "extra": True})
+    with pytest.raises(ValueError, match="text digest mismatch"):
+        BUILDER._verified_option_text_hash(
+            {"sha256": _sha("wrong-option"), "text": text}
+        )
 
 
 def test_answer_and_derivation_mapping_hashes_use_one_encoding() -> None:

@@ -153,6 +153,12 @@ Accepted-as-design-choice.
 |---|---|---|---|---|---|---|
 | `V28-C01` | R2 controller committed and audited; construction not run | R2 controller and builder each invoked once; builder failed closed with `invalid text record`; output absent; R2 retired; narrow builder-schema correction docs-first only | `70-v28r2-retired-r1-fingerprint-builder-schema-correction-boundary.md`; controller `sha256:92bdb88cff100ccbc6f212605b7117fccda5f141679e9f30b73e46656878244e` | Author execution failure and read-only schema localization; independent correction audits required; external independent scientific review `NotRun` | Authentic source/support records have three keys while answer options have two; the shared verifier and over-specified synthetic fixture masked the incompatibility | No fingerprint, protocol pin, R2 corpus, model-backed novelty, acquisition, retention/recovery, selector, or assessment evidence |
 
+## V28R2 Retired-R1 Fingerprint Builder Schema-Correction Update — 2026-07-28
+
+| ID | Old execution posture | New execution posture | Evidence artifact | Reviewer | Reason | Unchanged claim ceiling |
+|---|---|---|---|---|---|---|
+| `V28-C01` | Builder schema correction docs-first only | Exact three-key source/support and two-key answer-option verification implemented; authentic-shape synthetic fixture and adversarial schema tests pass; real builder and R3 not run | Builder `sha256:e134b5be58bf06051c23b926617a6b04ba1f9737d1c9e445671fcbc1e53f34bc`; `71-v28r2-retired-r1-fingerprint-builder-schema-correction-notes.md` | Author implementation plus independent code/validation/scope audits required; external independent scientific review `NotRun` | The corrected split matches the retained bundle while preserving exact key and text-digest rejection | Local builder engineering evidence only; no fingerprint, protocol pin, R2 corpus, model-backed novelty, acquisition, retention/recovery, selector, or assessment evidence |
+
 C003-C007 and C013-C014 retain the historical status `Proposed`; their current
 execution disposition is `BlockedByStage0C`. No observer, correction,
 prospective-prediction, or actor-observer optimization evidence exists. C008

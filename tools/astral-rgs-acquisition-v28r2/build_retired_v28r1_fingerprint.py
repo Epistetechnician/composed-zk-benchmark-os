@@ -159,14 +159,28 @@ def _verify_self_hash(
         raise ValueError(f"unexpected self hash: {key}")
 
 
-def _verified_text_hash(value: dict[str, Any]) -> tuple[str, str]:
-    if set(value) != {"license_id", "sha256", "text"}:
-        raise ValueError("invalid text record")
+def _verified_text_payload(value: dict[str, Any]) -> tuple[str, str]:
     text = value["text"]
     digest = sha256_bytes(text.encode("utf-8"))
     if value["sha256"] != digest:
         raise ValueError("text digest mismatch")
     return text, digest
+
+
+def _verified_source_text_hash(
+    value: dict[str, Any],
+) -> tuple[str, str]:
+    if set(value) != {"license_id", "sha256", "text"}:
+        raise ValueError("invalid source text record")
+    return _verified_text_payload(value)
+
+
+def _verified_option_text_hash(
+    value: dict[str, Any],
+) -> tuple[str, str]:
+    if set(value) != {"sha256", "text"}:
+        raise ValueError("invalid option text record")
+    return _verified_text_payload(value)
 
 
 def _typed_normalize(
@@ -524,8 +538,10 @@ def _extract_manifest(
             for wrapper in row["wrappers"]:
                 _add(sets, "wrapper_ids", wrapper)
                 identifiers["wrapper"].add(wrapper)
-        source_text, source_hash = _verified_text_hash(family["source_form"])
-        support_text, support_hash = _verified_text_hash(
+        source_text, source_hash = _verified_source_text_hash(
+            family["source_form"]
+        )
+        support_text, support_hash = _verified_source_text_hash(
             family["support_source"]
         )
         if protocol_item.get("source_form_sha256") != source_hash:
@@ -538,7 +554,7 @@ def _extract_manifest(
         _add_structural_surfaces(sets, support_text, identifiers)
         option_hashes: list[str] = []
         for option in family["answer_options"]:
-            option_text, option_hash = _verified_text_hash(option)
+            option_text, option_hash = _verified_option_text_hash(option)
             option_hashes.append(option_hash)
             _add(sets, "option_hashes", option_hash)
             if option_text not in identifiers["value"]:
@@ -563,7 +579,7 @@ def _extract_manifest(
             )
             prompt_hash = sha256_bytes(raw_query["prompt"].encode("utf-8"))
             raw_option_hashes = [
-                _verified_text_hash(option)[1]
+                _verified_option_text_hash(option)[1]
                 for option in raw_query["answer_options"]
             ]
             for key, expected in {
