@@ -1171,5 +1171,79 @@ The latest signed task/update protocol is documented in
 `docs/research/continual-learning/47-v23-task-routed-replay-consolidation-record.md`.
 Its one corrected local preflight is recorded in
 `docs/research/continual-learning/48-v23-corrected-replay-preflight-record.md`.
+The next preregistered protocol is
+`docs/research/continual-learning/49-v24-shared-adapter-task-keyed-optimizer-state-protocol.md`.
+Its pure-data record is
+`docs/research/continual-learning/50-v24-shared-adapter-task-keyed-optimizer-state-record.md`.
+Its corrected local preflight is recorded in
+`docs/research/continual-learning/51-v24-corrected-shared-adapter-preflight-record.md`.
+The next acquisition-repair protocol is
+`docs/research/continual-learning/52-v25-shared-adapter-reference-initialization-protocol.md`.
+Its pure-data record is
+`docs/research/continual-learning/53-v25-shared-adapter-reference-initialization-record.md`.
+
+V25 corrected local preflight result and rejection:
+
+`docs/research/continual-learning/54-v25-shared-adapter-reference-initialization-preflight-record.md`.
+V26 shared-global-update-stream protocol:
+
+`docs/research/continual-learning/55-v26-shared-global-update-stream-protocol.md`.
+
+V26 corrected local preflight candidate:
+
+`docs/research/continual-learning/56-v26-shared-global-update-stream-preflight-record.md`.
+V27 bounded replication protocol:
+
+`docs/research/continual-learning/57-v27-shared-global-update-stream-replication-protocol.md`.
+
+V27 replication record:
+
+`docs/research/continual-learning/58-v27-shared-global-update-stream-replication-record.md`.
+V28 task-stratified microbatch protocol:
+
+`docs/research/continual-learning/59-v28-task-stratified-microbatch-protocol.md`.
+
+V28 corrected local preflight record:
+
+`docs/research/continual-learning/60-v28-task-stratified-microbatch-preflight-record.md`.
+V28 second-cell confirmation protocol:
+
+`docs/research/continual-learning/61-v28-task-stratified-microbatch-confirmation-protocol.md`.
+
+V28 second-cell confirmation record:
+
+`docs/research/continual-learning/62-v28-task-stratified-microbatch-confirmation-record.md`.
+V28 confirmation tied on the second frozen `20260812` order cell; the
+task-stratified retention repair is rejected and the next object is a new
+task/update protocol design. No H100 is authorized.
+V29 replay-anchored temporal microbatch protocol:
+
+`docs/research/continual-learning/63-v29-replay-anchored-temporal-microbatch-protocol.md`.
+
+Its preflight record is:
+
+`docs/research/continual-learning/64-v29-replay-anchored-temporal-microbatch-preflight-record.md`.
+V29 produced a targeted positive local signal on the frozen second V27 tie
+cell; the next gate is one V29 confirmation on the other `20260812` tie cell.
+No H100 is authorized.
+V29 confirmation protocol for the other frozen tie cell:
+
+`docs/research/continual-learning/65-v29-replay-anchored-temporal-confirmation-protocol.md`.
+
+Its preflight record is:
+
+`docs/research/continual-learning/66-v29-replay-anchored-temporal-confirmation-record.md`.
+Both V29 `20260812` tie-cell confirmations passed; the next gate is the
+frozen seven-cell V29 replication matrix excluding those two executions.
+V29 replication protocol:
+
+`docs/research/continual-learning/67-v29-replay-anchored-temporal-replication-protocol.md`.
+
+Its replication record is:
+
+`docs/research/continual-learning/68-v29-replay-anchored-temporal-replication-record.md`.
+V29 passes the strict local nine-cell gate, including both validated anchors;
+the claim ceiling remains local replication-matrix evidence. The next step is
+independent review and replication, not H100 allocation.
 Outputs must stay outside the repository because adapter weights and raw run
 logs are generated artifacts, not source fixtures.
