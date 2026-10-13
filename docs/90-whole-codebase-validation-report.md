@@ -12065,6 +12065,10 @@ submission, production operation, or claim escalation. See
 
 Outcome: corrected immutable audit baseline for named state slice
 `phase-796a3l6a2-p01b-corrected-immutable-gate-audit`.
+## Phase 796-A3L6A3 HSAI P01B Final Immutable-Gate Audit
+
+Outcome: final immutable audit baseline for named state slice
+`phase-796a3l6a3-p01b-final-immutable-gate-audit`.
 
 The audit binds the clean corrected implementation identity, five reviewed blob
 digests, exact 22-path source census, 32 evidence plus 33 execution focused
@@ -12076,9 +12080,32 @@ The audit commit is introduced only after this document is committed, through
 a canonical expected-bindings JSON and a clean detached checkout. The next
 required retained result is `pending-review`; it cannot accept A3L6 or
 authorize A3L7. The validators cannot prove reviewer identity or independence.
+a canonical expected-bindings JSON and a clean detached checkout. The required
+retained result is `pending-review`; it cannot accept A3L6 or authorize A3L7.
+Validators cannot prove reviewer identity or independence.
 
 No A3L6 acceptance, runtime operation, Docker, registry, network, external
 replay, independent review, accepted Evidence Ledger mutation, score movement,
 Level2+ evidence, benchmark submission, production operation, or claim
 escalation was created. Two genuine human reviews remain a distinct dependency.
 See `docs/796a3l6a2-phase-hsai-p01b-corrected-immutable-gate-audit.md`.
+See `docs/796a3l6a3-phase-hsai-p01b-final-immutable-gate-audit.md`.
+
+## Phase 796-A3L6P HSAI P01B Retained Pending-Review Run
+
+Outcome: retained local `pending-review` record for named state slice
+`phase-796a3l6p-p01b-retained-pending-review-run`.
+
+The clean detached final audit checkout retained canonical expected bindings,
+`gate-run.json`, and its SHA-256 sidecar at a caller-owned mode-0700
+non-repository root. The record binds 65 focused tests and 172
+Seatbelt-stubbed discovery-census tests and fixes A3L6 acceptance and A3L7
+authority to false.
+
+This is local regression evidence only. It establishes no reviewer identity or
+independence, A3L6 acceptance, runtime operation, Docker, registry, network,
+external replay, accepted Evidence Ledger mutation, score movement, Level2+
+evidence, benchmark submission, production operation, or claim escalation.
+Two genuine human reviews in security-capability then
+correspondence-reproducibility order remain the next dependency. See
+`docs/796a3l6p-phase-hsai-p01b-retained-pending-review-run.md`.

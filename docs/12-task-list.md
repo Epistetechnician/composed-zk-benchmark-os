@@ -21510,6 +21510,54 @@ still required for A3L7. No Docker, registry, network, container, external
 replay, accepted Evidence Ledger mutation, score movement, Level2+ evidence,
 benchmark submission, production operation, or submission authority is
 created.
+## Phase 796-A3L6A3 HSAI P01B Final Immutable-Gate Audit
+
+Status: complete final immutable audit baseline; A3L6 remains unaccepted,
+`a3l7_authorized=false`, and correspondence remains `2/10`.
+
+Named state slice:
+`phase-796a3l6a3-p01b-final-immutable-gate-audit`.
+
+Completed: froze clean implementation commit/tree, five reviewed blob digests,
+the exact 22-path census, 32+33=65 focused tests, 172 Seatbelt-stubbed discovery
+census, 1 MiB/4 MiB caps, and 201/202/271 cardinalities. The audit excludes the
+dirty primary checkout, its A3L7-adjacent P01B work, and unrelated
+admission/docs work. See
+`docs/796a3l6a3-phase-hsai-p01b-final-immutable-gate-audit.md`.
+
+Follow-through recorded: the clean detached checkout retained the required
+`pending-review` result under
+`docs/796a3l6p-phase-hsai-p01b-retained-pending-review-run.md`; A3L6 remains
+unaccepted and A3L7 remains unauthorized.
+
+Remaining: two genuine independent human reviews of the exact audit and run in
+security-capability then correspondence-reproducibility order. A separately
+authorized phase is still required for A3L7. No Docker, registry, network,
+container, external replay, accepted Evidence Ledger mutation, score movement,
+Level2+ evidence, benchmark submission, production operation, or submission
+authority is created.
+
+## Phase 796-A3L6P HSAI P01B Retained Pending-Review Run
+
+Status: complete local pending-review retention; A3L6 remains unaccepted,
+`a3l7_authorized=false`, and correspondence remains `2/10`.
+
+Named state slice:
+`phase-796a3l6p-p01b-retained-pending-review-run`.
+
+Completed: retained the canonical binding and three-file mode-0700 output from
+the final immutable detached audit checkout. The record binds 65 focused tests,
+172 Seatbelt-stubbed discovery-census tests, and fixed false A3L6/A3L7
+authority. See
+`docs/796a3l6p-phase-hsai-p01b-retained-pending-review-run.md`.
+
+Remaining: two genuine independent human reviews in security-capability then
+correspondence-reproducibility order. Local tests, self-review, and agent review
+do not satisfy this dependency. A separately authorized phase is still required
+for A3L7; A3L8/A3L9 remain separate. No Docker, registry, network, container,
+external replay, accepted Evidence Ledger mutation, score movement, Level2+
+evidence, benchmark submission, production operation, or submission authority
+is created.
 
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
