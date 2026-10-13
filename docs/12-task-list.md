@@ -26007,6 +26007,26 @@ Delivered in isolated `crates/statebook-authority`:
 - seventeen focused integration tests.
 
 P1-P6 identities remain unchanged. Live authority products remain deferred.
+## Integration Track: Statebook P7 Authority Integration Preflight Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p7-authority-integration-preflight-boundary`.
+
+## Integration Track: Statebook P7 Authority Integration Preflight Implementation
+
+Status: implemented under named state slice
+`statebook-p7-authority-integration-preflight`.
+
+Delivered in isolated `crates/statebook-authority`:
+
+- fail-closed Stage 6 package preflight for `hermetic-authority-preflight-v1`;
+- mandatory `grants_authority=false` handoff binding;
+- rejection of `production_gate=authorized`;
+- outcomes limited to `Incomplete` and `Denied`;
+- domain-separated P7 TLV digests with an independent `ring` golden encoder;
+- sixteen focused integration tests.
+
+P1-P6 identities remain unchanged. No controller client was added.
 
 Validation gate:
 
@@ -26525,3 +26545,8 @@ cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -
 Claim ceiling: local hermetic adversarial fixture regression only. No value
 moves. Not complete TD-004 satisfaction, live authority, production readiness,
 SOTA, independent audit, or full-security claims.
+Claim ceiling: local hermetic authority-preflight regression only. No value
+moves. No controller invocation, production authorization, trading, signing,
+custody, admission mutation, Evidence Ledger append, scalar trust score,
+production readiness, SOTA, independent audit, or full-security claims.
+

@@ -1,9 +1,9 @@
 use sha2::{Digest as _, Sha256};
 
-pub const AUTHORITY_STATEMENT_DOMAIN: &[u8] = b"statebook:p7-authority-statement:v1\0";
-pub const ATTACH_RECEIPT_DOMAIN: &[u8] = b"statebook:p7-attach-receipt:v1\0";
-pub const CAPITAL_OVERLAY_DOMAIN: &[u8] = b"statebook:p7-capital-overlay:v1\0";
-pub const AUTHORITY_REGISTRATION_DOMAIN: &[u8] = b"statebook:p7-authority-registration:v1\0";
+pub const AUTHORITY_PACKAGE_DOMAIN: &[u8] = b"statebook:p7-authority-package:v1\0";
+pub const PREFLIGHT_RECEIPT_DOMAIN: &[u8] = b"statebook:p7-preflight-receipt:v1\0";
+pub const LOSS_BOUND_DOMAIN: &[u8] = b"statebook:p7-loss-bound:v1\0";
+pub const NONCLAIM_SET_DOMAIN: &[u8] = b"statebook:p7-nonclaim-set:v1\0";
 
 pub fn digest(domain: &[u8], payload: &[u8]) -> [u8; 32] {
     let mut hasher = Sha256::new();
@@ -37,6 +37,28 @@ impl Canonical {
     }
 }
 
+pub fn encode_sequence<I>(values: I) -> Vec<u8>
+where
+    I: IntoIterator<Item = Vec<u8>>,
+{
+    let values: Vec<Vec<u8>> = values.into_iter().collect();
+    let mut out = Vec::new();
+    out.extend_from_slice(
+        &u32::try_from(values.len())
+            .expect("bounded canonical sequence")
+            .to_be_bytes(),
+    );
+    for value in values {
+        out.extend_from_slice(
+            &u32::try_from(value.len())
+                .expect("bounded canonical item")
+                .to_be_bytes(),
+        );
+        out.extend_from_slice(&value);
+    }
+    out
+}
+
 pub fn digest_to_hex(digest: [u8; 32]) -> String {
     hex::encode(digest)
 }
@@ -45,10 +67,11 @@ pub fn digest_to_hex(digest: [u8; 32]) -> String {
 pub struct DigestParseError;
 
 pub fn parse_digest_hex(value: &str) -> Result<[u8; 32], DigestParseError> {
-    if value.len() != 64 || !value.bytes().all(|byte| byte.is_ascii_hexdigit()) {
-        return Err(DigestParseError);
-    }
-    if value.bytes().any(|byte| byte.is_ascii_uppercase()) {
+    if value.len() != 64
+        || !value
+            .bytes()
+            .all(|byte| byte.is_ascii_hexdigit() && !byte.is_ascii_uppercase())
+    {
         return Err(DigestParseError);
     }
     let bytes = hex::decode(value).map_err(|_| DigestParseError)?;
@@ -57,93 +80,60 @@ pub fn parse_digest_hex(value: &str) -> Result<[u8; 32], DigestParseError> {
     Ok(out)
 }
 
+pub fn loss_bound_digest(numerator: &str, denominator: &str) -> [u8; 32] {
+    let mut encoder = Canonical::new();
+    encoder.field(1, numerator.as_bytes());
+    encoder.field(2, denominator.as_bytes());
+    digest(LOSS_BOUND_DOMAIN, &encoder.finish())
+}
+
+pub fn nonclaim_set_digest(nonclaims: &[String]) -> [u8; 32] {
+    let mut encoder = Canonical::new();
+    encoder.field(
+        1,
+        &encode_sequence(nonclaims.iter().map(|value| value.as_bytes().to_vec())),
+    );
+    digest(NONCLAIM_SET_DOMAIN, &encoder.finish())
+}
+
 #[allow(clippy::too_many_arguments)]
-pub fn authority_statement_digest(
+pub fn authority_package_digest(
     profile_id: &str,
-    authority_namespace: &str,
-    authority_id: &str,
-    statement_revision: &str,
-    subject_terms_digest: &str,
-    economic_residual_digest: &str,
-    recognized_numerator: &str,
-    recognized_denominator: &str,
-    issued_at: i64,
-    expires_at: i64,
+    authority_owner: &str,
+    loss_bound_digest_hex: &str,
+    rollback: &str,
+    pause: &str,
+    retention: &str,
+    legal_domain: &str,
+    production_gate: &str,
+    decision_record_digest: &str,
 ) -> [u8; 32] {
     let mut encoder = Canonical::new();
     encoder.field(1, profile_id.as_bytes());
-    encoder.field(2, authority_namespace.as_bytes());
-    encoder.field(3, authority_id.as_bytes());
-    encoder.field(4, statement_revision.as_bytes());
-    encoder.field(5, subject_terms_digest.as_bytes());
-    encoder.field(6, economic_residual_digest.as_bytes());
-    encoder.field(7, recognized_numerator.as_bytes());
-    encoder.field(8, recognized_denominator.as_bytes());
-    encoder.field(9, &issued_at.to_be_bytes());
-    encoder.field(10, &expires_at.to_be_bytes());
-    encoder.field(11, &[0_u8]);
-    digest(AUTHORITY_STATEMENT_DOMAIN, &encoder.finish())
+    encoder.field(2, authority_owner.as_bytes());
+    encoder.field(3, loss_bound_digest_hex.as_bytes());
+    encoder.field(4, rollback.as_bytes());
+    encoder.field(5, pause.as_bytes());
+    encoder.field(6, retention.as_bytes());
+    encoder.field(7, legal_domain.as_bytes());
+    encoder.field(8, production_gate.as_bytes());
+    encoder.field(9, decision_record_digest.as_bytes());
+    digest(AUTHORITY_PACKAGE_DOMAIN, &encoder.finish())
 }
 
-pub fn registration_digest(
-    authority_namespace: &str,
-    authority_id: &str,
-    statement_revision: &str,
-    statement_digest: &str,
-    status: &str,
-) -> [u8; 32] {
-    let mut encoder = Canonical::new();
-    encoder.field(1, authority_namespace.as_bytes());
-    encoder.field(2, authority_id.as_bytes());
-    encoder.field(3, statement_revision.as_bytes());
-    encoder.field(4, statement_digest.as_bytes());
-    encoder.field(5, status.as_bytes());
-    digest(AUTHORITY_REGISTRATION_DOMAIN, &encoder.finish())
-}
-
-#[allow(clippy::too_many_arguments)]
-pub fn capital_overlay_digest(
-    status: &str,
-    authority_id: &str,
-    eligible_account: &str,
-    subject_terms_digest: &str,
-    economic_residual_digest: &str,
-    recognized_numerator: &str,
-    recognized_denominator: &str,
-    evaluated_at: i64,
-) -> [u8; 32] {
-    let mut encoder = Canonical::new();
-    encoder.field(1, status.as_bytes());
-    encoder.field(2, authority_id.as_bytes());
-    encoder.field(3, eligible_account.as_bytes());
-    encoder.field(4, subject_terms_digest.as_bytes());
-    encoder.field(5, economic_residual_digest.as_bytes());
-    encoder.field(6, recognized_numerator.as_bytes());
-    encoder.field(7, recognized_denominator.as_bytes());
-    encoder.field(8, &evaluated_at.to_be_bytes());
-    digest(CAPITAL_OVERLAY_DOMAIN, &encoder.finish())
-}
-
-#[allow(clippy::too_many_arguments)]
-pub fn attach_receipt_digest(
+pub fn preflight_receipt_digest(
     profile_id: &str,
-    authority_namespace: &str,
-    authority_id: &str,
-    statement_revision: &str,
-    statement_digest: &str,
-    registration_digest_hex: &str,
-    overlay_digest: &str,
-    economic_residual_digest: &str,
+    outcome: &str,
+    package_digest: &str,
+    loss_bound_digest_hex: &str,
+    nonclaim_set_digest_hex: &str,
 ) -> [u8; 32] {
     let mut encoder = Canonical::new();
     encoder.field(1, profile_id.as_bytes());
-    encoder.field(2, authority_namespace.as_bytes());
-    encoder.field(3, authority_id.as_bytes());
-    encoder.field(4, statement_revision.as_bytes());
-    encoder.field(5, statement_digest.as_bytes());
-    encoder.field(6, registration_digest_hex.as_bytes());
-    encoder.field(7, overlay_digest.as_bytes());
-    encoder.field(8, economic_residual_digest.as_bytes());
-    encoder.field(9, &[0_u8]);
-    digest(ATTACH_RECEIPT_DOMAIN, &encoder.finish())
+    encoder.field(2, outcome.as_bytes());
+    encoder.field(3, package_digest.as_bytes());
+    encoder.field(4, loss_bound_digest_hex.as_bytes());
+    encoder.field(5, nonclaim_set_digest_hex.as_bytes());
+    encoder.field(6, b"false");
+    digest(PREFLIGHT_RECEIPT_DOMAIN, &encoder.finish())
 }

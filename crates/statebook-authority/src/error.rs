@@ -2,8 +2,8 @@ use thiserror::Error;
 
 #[derive(Debug, Error, PartialEq, Eq)]
 pub enum AuthorityErrorV1 {
-    #[error("statement exceeds maximum byte size")]
-    StatementTooLarge,
+    #[error("package exceeds maximum byte size")]
+    PackageTooLarge,
     #[error("malformed JSON")]
     MalformedJson,
     #[error("duplicate JSON key")]
@@ -20,22 +20,16 @@ pub enum AuthorityErrorV1 {
     NoncanonicalDigest,
     #[error("noncanonical identifier")]
     NoncanonicalIdentifier,
-    #[error("noncanonical rational")]
-    NoncanonicalRational,
-    #[error("authority namespace mismatch")]
-    AuthorityNamespaceMismatch,
-    #[error("invalid validity window")]
-    InvalidValidityWindow,
-    #[error("execution authority grant is forbidden in this phase")]
-    ExecutionAuthorityGrantForbidden,
-    #[error("registration count exceeds maximum")]
-    TooManyRegistrations,
-    #[error("limitation or nonclaim count exceeds maximum")]
-    TooManyLimitationsOrNonclaims,
-    #[error("statement already active with different digest")]
-    ActiveRevisionConflict,
-    #[error("authority statement not found")]
-    StatementNotFound,
-    #[error("statement already revoked")]
-    AlreadyRevoked,
+    #[error("malformed exact rational")]
+    MalformedExactRational,
+    #[error("unknown enum value: {0}")]
+    UnknownEnum(String),
+    #[error("authorized production gate rejected in this slice")]
+    AuthorizedGateRejected,
+    #[error("handoff grants_authority must be false")]
+    HandoffGrantsAuthority,
+    #[error("nonclaim count exceeds maximum")]
+    TooManyNonclaims,
+    #[error("controller name count exceeds maximum")]
+    TooManyControllerNames,
 }

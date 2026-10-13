@@ -2313,6 +2313,17 @@ deferred. See
 
 This is local hermetic queued-value / post-instant-anomaly fixture regression
 evidence only. No value moves.
+`statebook-p7-authority-integration-preflight-boundary` freezes a fail-closed
+authority-integration preflight surface in `statebook-authority`. The separately
+committed implementation slice `statebook-p7-authority-integration-preflight` adds
+isolated `crates/statebook-authority` with Stage 6 package validation, mandatory
+`grants_authority=false` handoff binding, rejection of `production_gate=authorized`,
+and domain-separated P7 digests with an independent `ring` golden check. Outcomes are
+limited to `Incomplete` and `Denied`. No controller is invoked. All P1-P6 identities
+stay unchanged. See
+[docs/statebook-p7-authority-integration-preflight-implementation-notes.md](docs/statebook-p7-authority-integration-preflight-implementation-notes.md).
+
+This is local hermetic authority-preflight regression evidence only. No value moves.
 
 ## Current Implementation Status
 

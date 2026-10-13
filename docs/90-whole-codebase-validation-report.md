@@ -12111,6 +12111,7 @@ correspondence-reproducibility order remain the next dependency. See
 `docs/796a3l6p-phase-hsai-p01b-retained-pending-review-run.md`.
 
 ## Statebook P7 Authority Integration Boundary
+## Statebook P7 Authority Integration Preflight Boundary
 
 Date: 16 July 2026.
 
@@ -12120,6 +12121,11 @@ Outcome: `DocumentationOnly`, `NotRun`, named state slice
 State slice:
 
 - `docs/statebook-p7-authority-integration-boundary-spec.md`;
+`statebook-p7-authority-integration-preflight-boundary`.
+
+State slice:
+
+- `docs/statebook-p7-authority-integration-preflight-boundary-spec.md`;
 - `README.md`;
 - `AGENTS.md`;
 - `docs/12-task-list.md`;
@@ -12132,6 +12138,12 @@ deferred live authority products. It authorizes at most
 `crates/statebook-authority`. It preserves all P1-P6 identities. Live
 execution, custody, signing, pause, real margin recognition, and settlement
 remain outside this slice.
+The boundary freezes Integration Stage 6 as a fail-closed authority-package
+preflight for profile `hermetic-authority-preflight-v1`. It requires owner,
+maximum loss, rollback/pause semantics, audit retention, legal domain, and
+production gate, while forbidding controller invocation and rejecting
+`production_gate=authorized` in this slice. It authorizes at most
+`crates/statebook-authority` and preserves all P1-P6 identities.
 
 This documentation-only slice adds no Rust or Cargo change and creates no
 proof, accepted evidence, Level2+, score axis, semantic correctness, production
@@ -12139,17 +12151,20 @@ readiness, SOTA, breakthrough, full security, external audit, or action
 authority.
 
 ## Statebook P7 Authority Integration Implementation
+## Statebook P7 Authority Integration Preflight Implementation
 
 Date: 16 July 2026.
 
 Outcome: `Level1LocalReplay`, `Pass`, named state slice
 `statebook-p7-authority-integration`.
+`statebook-p7-authority-integration-preflight`.
 
 State slice:
 
 - root `Cargo.toml` / `Cargo.lock` membership for `statebook-authority`;
 - `crates/statebook-authority/**`;
 - `docs/statebook-p7-authority-integration-implementation-notes.md`;
+- `docs/statebook-p7-authority-integration-preflight-implementation-notes.md`;
 - `README.md`;
 - `AGENTS.md`;
 - `docs/12-task-list.md`;
@@ -12747,3 +12762,15 @@ This is local hermetic queued-value / post-instant-anomaly fixture regression
 evidence only. It does not establish complete TD-004 satisfaction, live
 authority, production readiness, SOTA, independent audit, or full security. No
 value moves.
+The crate evaluates hermetic Stage 6 authority packages, binds P5 handoffs with
+`grants_authority=false`, rejects `production_gate=authorized`, and emits only
+`Incomplete` or `Denied` receipts with adapter nonclaims. Domain-separated P7
+digests are reproduced by an independent `ring` encoder. Sixteen focused
+integration tests pass; unchanged prior Statebook crate tests pass; focused
+format and warning-denied Clippy pass for `statebook-authority`.
+
+This is local hermetic authority-preflight regression evidence only. It does
+not establish controller connection, production authorization, custody, signing,
+pause, settlement, admission authority, Evidence Ledger mutation, production
+readiness, SOTA, independent audit, or full security. No value moves.
+
