@@ -1,37 +1,42 @@
 const P7_SOURCES: &[&str] = &[
     include_str!("../src/lib.rs"),
+    include_str!("../src/attach.rs"),
     include_str!("../src/bounds.rs"),
     include_str!("../src/canonical.rs"),
     include_str!("../src/error.rs"),
     include_str!("../src/json_util.rs"),
-    include_str!("../src/preflight.rs"),
+    include_str!("../src/registry.rs"),
     include_str!("../src/types.rs"),
 ];
 
 const MANIFEST: &str = include_str!("../Cargo.toml");
 
 #[test]
-fn p7_source_has_no_controller_network_or_authority_grant_surfaces() {
+fn p7_source_has_no_network_process_or_live_authority_surfaces() {
     for source in P7_SOURCES {
         for forbidden in [
             "std::net",
             "std::process",
             "Command::new",
             "TcpStream",
+            "UdpSocket",
             "reqwest",
             "tokio",
+            "hyper",
             "zkbench",
             "f32",
             "f64",
             "unsafe {",
-            "pub fn connect_",
-            "pub fn execute_",
-            "pub fn sign_",
+            "pub fn release(",
             "pub fn transfer(",
             "pub fn trade(",
+            "pub fn sign(",
+            "pub fn pause(",
+            "trust_score",
             "grants_authority: true",
-            "PreflightOutcomeV1::Authorized",
-            "ProductionGateV1::Authorized",
+            "grants_execution_authority: true",
+            "trait AuthorityAdapter",
+            "trait ClearingAdapter",
         ] {
             assert!(
                 !source.contains(forbidden),
@@ -42,7 +47,7 @@ fn p7_source_has_no_controller_network_or_authority_grant_surfaces() {
 }
 
 #[test]
-fn p7_manifest_is_closed() {
+fn p7_manifest_is_closed_to_authorized_dependencies() {
     for dependency in ["serde", "serde_json", "sha2", "hex", "thiserror"] {
         assert!(MANIFEST.contains(dependency));
     }
@@ -53,37 +58,60 @@ fn p7_manifest_is_closed() {
     for forbidden in [
         "reqwest",
         "tokio",
+        "hyper",
         "hsai",
         "zkbench",
+        "sql",
+        "rusqlite",
         "statebook-core",
         "statebook-settlement",
+        "statebook-report",
         "statebook-source",
     ] {
         assert!(
             !production.contains(forbidden),
-            "forbidden production dependency: {forbidden}"
+            "forbidden production dependency token: {forbidden}"
         );
     }
 }
 
 #[test]
-fn p7_canonical_domains_present() {
+fn p7_canonical_identity_is_domain_separated() {
     for domain in [
-        "statebook:p7-authority-package:v1\\0",
-        "statebook:p7-preflight-receipt:v1\\0",
-        "statebook:p7-loss-bound:v1\\0",
-        "statebook:p7-nonclaim-set:v1\\0",
+        "statebook:p7-authority-statement:v1\\0",
+        "statebook:p7-attach-receipt:v1\\0",
+        "statebook:p7-capital-overlay:v1\\0",
+        "statebook:p7-authority-registration:v1\\0",
     ] {
         assert!(
             P7_SOURCES.iter().any(|source| source.contains(domain)),
-            "missing domain: {domain}"
+            "missing canonical domain: {domain}"
         );
     }
 }
 
 #[test]
-fn p7_always_preserves_grants_authority_false() {
-    assert!(P7_SOURCES
+fn p7_exports_no_generic_adapter_trait() {
+    assert!(!P7_SOURCES
         .iter()
-        .any(|source| source.contains("grants_authority: false")));
+        .any(|source| source.contains("pub trait") && source.contains("Adapter")));
+}
+
+#[test]
+fn p7_legal_ops_gate_constants_remain_present() {
+    let bounds = include_str!("../src/bounds.rs");
+    for token in [
+        "LEGAL_OPS_GATE_THREAT_MODEL_V1",
+        "LEGAL_OPS_GATE_LEGAL_REVIEW_V1",
+        "LEGAL_OPS_GATE_OPERATIONAL_EVIDENCE_V1",
+        "LEGAL_OPS_GATE_LOSS_LIMITS_V1",
+        "LEGAL_OPS_GATE_AUTHORITY_OWNER_V1",
+        "LEGAL_OPS_GATE_LIVE_PRODUCTS_DEFERRED_V1",
+        "live-execution-custody-signing-pause-margin-settlement-deferred",
+    ] {
+        assert!(
+            bounds.contains(token),
+            "missing legal/ops gate token: {token}"
+        );
+    }
 }

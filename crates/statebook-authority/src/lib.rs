@@ -1,24 +1,28 @@
 #![forbid(unsafe_code)]
 
+mod attach;
 mod bounds;
 mod canonical;
 mod error;
 mod json_util;
-mod preflight;
+mod registry;
 mod types;
 
+pub use attach::{attach_authority_statement_v1, evaluate_attached_statement_v1};
 pub use bounds::{
-    CLAIM_BOUNDARY_P7, HERMETIC_PROFILE_V1, MAX_CONTROLLER_NAMES_V1, MAX_NONCLAIMS_V1,
-    MAX_PACKAGE_BYTES_V1, STATE_SLICE_P7,
+    CLAIM_BOUNDARY_P7, LEGAL_OPS_GATE_AUTHORITY_OWNER_V1, LEGAL_OPS_GATE_LEGAL_REVIEW_V1,
+    LEGAL_OPS_GATE_LIVE_PRODUCTS_DEFERRED_V1, LEGAL_OPS_GATE_LOSS_LIMITS_V1,
+    LEGAL_OPS_GATE_OPERATIONAL_EVIDENCE_V1, LEGAL_OPS_GATE_THREAT_MODEL_V1,
+    MAX_LIMITATION_OR_NONCLAIM_COUNT_V1, MAX_REGISTRATIONS_V1, MAX_STATEMENT_BYTES_V1,
+    STATE_SLICE_P7, SYNTHETIC_AUTHORITY_NAMESPACE_V1, SYNTHETIC_AUTHORITY_PROFILE_V1,
 };
 pub use canonical::{
-    authority_package_digest, digest_to_hex, loss_bound_digest, nonclaim_set_digest,
-    parse_digest_hex, preflight_receipt_digest, DigestParseError, AUTHORITY_PACKAGE_DOMAIN,
-    LOSS_BOUND_DOMAIN, NONCLAIM_SET_DOMAIN, PREFLIGHT_RECEIPT_DOMAIN,
+    attach_receipt_digest, authority_statement_digest, capital_overlay_digest, digest_to_hex,
+    parse_digest_hex, registration_digest, DigestParseError, ATTACH_RECEIPT_DOMAIN,
+    AUTHORITY_REGISTRATION_DOMAIN, AUTHORITY_STATEMENT_DOMAIN, CAPITAL_OVERLAY_DOMAIN,
 };
 pub use error::AuthorityErrorV1;
-pub use preflight::evaluate_authority_preflight_v1;
 pub use types::{
-    AuditRetentionV1, AuthorityPackageV1, ExactRationalV1, HandoffBindingV1, PauseSemanticsV1,
-    PreflightOutcomeV1, PreflightReceiptV1, ProductionGateV1, RollbackSemanticsV1,
+    AttachReceiptV1, AuthorityRegistrationV1, AuthorityRegistryV1, CapitalOverlayStatusV1,
+    CapitalOverlayV1, StatementStatusV1,
 };

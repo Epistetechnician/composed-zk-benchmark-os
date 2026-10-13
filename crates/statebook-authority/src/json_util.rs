@@ -2,7 +2,6 @@ use std::fmt;
 
 use crate::bounds::MAX_IDENTIFIER_BYTES_V1;
 use crate::error::AuthorityErrorV1;
-use crate::types::ExactRationalV1;
 use serde::de::{self, Deserializer, MapAccess, SeqAccess, Visitor};
 use serde::Deserialize;
 use serde_json::{Map, Number, Value};
@@ -103,6 +102,13 @@ pub fn require_string(value: &Value, field: &str) -> Result<String, AuthorityErr
         .ok_or_else(|| AuthorityErrorV1::MissingField(field.into()))
 }
 
+pub fn require_i64(value: &Value, field: &str) -> Result<i64, AuthorityErrorV1> {
+    value
+        .get(field)
+        .and_then(Value::as_i64)
+        .ok_or_else(|| AuthorityErrorV1::MissingField(field.into()))
+}
+
 pub fn require_bool(value: &Value, field: &str) -> Result<bool, AuthorityErrorV1> {
     value
         .get(field)
@@ -146,17 +152,16 @@ pub fn validate_digest_hex(value: &str) -> Result<(), AuthorityErrorV1> {
     Ok(())
 }
 
-pub fn validate_exact_rational(value: &ExactRationalV1) -> Result<(), AuthorityErrorV1> {
-    if value.numerator.is_empty() || value.denominator.is_empty() {
-        return Err(AuthorityErrorV1::MalformedExactRational);
-    }
-    if !value.numerator.bytes().all(|byte| byte.is_ascii_digit())
-        || !value.denominator.bytes().all(|byte| byte.is_ascii_digit())
+pub fn validate_rational(numerator: &str, denominator: &str) -> Result<(), AuthorityErrorV1> {
+    if numerator.is_empty()
+        || denominator.is_empty()
+        || !numerator.bytes().all(|byte| byte.is_ascii_digit())
+        || !denominator.bytes().all(|byte| byte.is_ascii_digit())
+        || denominator == "0"
+        || numerator.len() > MAX_IDENTIFIER_BYTES_V1
+        || denominator.len() > MAX_IDENTIFIER_BYTES_V1
     {
-        return Err(AuthorityErrorV1::MalformedExactRational);
-    }
-    if value.denominator == "0" {
-        return Err(AuthorityErrorV1::MalformedExactRational);
+        return Err(AuthorityErrorV1::NoncanonicalRational);
     }
     Ok(())
 }

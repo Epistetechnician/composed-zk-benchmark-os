@@ -3,7 +3,7 @@ name = "statebook-authority"
 version = "0.1.0"
 edition.workspace = true
 rust-version.workspace = true
-description = "Fail-closed authority-integration preflight for Statebook P7; never grants authority."
+description = "Hermetic synthetic authority-statement attach and capital overlay for Statebook P7."
 
 [dependencies]
 hex = "0.4"
