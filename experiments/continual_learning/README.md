@@ -1167,3 +1167,9 @@ record:
 - `docs/research/continual-learning/293-minimind-three-lane-sota-v2-review-packet.md`
 - `docs/research/continual-learning/294-minimind-three-lane-sota-v2-implementation-manifest.json`
 - `docs/research/continual-learning/295-minimind-three-lane-sota-v2-execution-record-2026-09-03.md`
+The latest signed task/update protocol is documented in
+`docs/research/continual-learning/47-v23-task-routed-replay-consolidation-record.md`.
+Its one corrected local preflight is recorded in
+`docs/research/continual-learning/48-v23-corrected-replay-preflight-record.md`.
+Outputs must stay outside the repository because adapter weights and raw run
+logs are generated artifacts, not source fixtures.
