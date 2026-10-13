@@ -24478,12 +24478,22 @@ resolution, conservative valuation, linked plans, obligations, multi-axis
 exactly-once budgets, queue and challenge transitions, circuit breakers,
 hysteresis, and recovery transitions under an injected clock. Outputs are
 non-authoritative decision records only.
+The next separately committed slice is
+`statebook-p4-settlement-simulator`. It may extend the existing
+`statebook-settlement` crate with one pure deterministic settlement transition
+kernel over synthetic requests, evidence, caps, anomalies, and queues. The
+kernel covers hard gates, assurance resolution, conservative valuation, linked
+plans, obligations, multi-axis exactly-once budgets, queue and challenge
+transitions, circuit breakers, hysteresis, and recovery transitions under an
+injected clock. Outputs are non-authoritative decision records only.
 
 Validation gate: unchanged P1/P2/P3 source and golden vectors; no
 `statebook-core` mutation; no new workspace crate; fail-closed hard gates with
 zero instant release on fail or unknown; no timer-only release; no
 `Halted -> Normal` breaker edge; domain-separated intent, decision-context,
 and release-attempt digests with an implementation-diverse encoder; frozen
+`Halted -> Normal` breaker edge; domain-separated intent, decision-context, and
+release-attempt digests with an implementation-diverse encoder; frozen
 adversarial corpus replay; focused format/test/Clippy; repository docs and
 hygiene checks; clean-tree workspace tests; and independent scope plus
 kernel/digest reviews.

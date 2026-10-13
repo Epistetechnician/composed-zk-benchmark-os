@@ -11678,6 +11678,13 @@ multi-axis exactly-once budgets, queue and challenge transitions, circuit
 breakers, hysteresis, and recovery transitions under an injected clock. The
 only authorized output is a non-authoritative decision record. No value moves.
 
+The boundary preserves all P1, P2, and P3 identities, reports, fixtures, and
+public APIs. It forbids a new `statebook-sim` crate, P5 portable bundles, P6
+external sources, P7 authority integration, HSAI, admission, zkbench, network,
+process, filesystem write, credential, and runtime-action surfaces. Tier
+fractions and delays remain versioned synthetic policy fixtures, not empirical
+production calibration.
+
 This documentation-only slice adds no Rust or Cargo change and creates no
 proof, accepted evidence, Level2+, score axis, semantic correctness, production
 readiness, SOTA, breakthrough, full security, external audit, or action
@@ -11823,3 +11830,29 @@ This is local hermetic authority-preflight regression evidence only. It does not
 establish controller invocation, production authorization, value movement,
 admission authority, Evidence Ledger mutation, production readiness, SOTA,
 independent audit, or full security.
+State slice:
+
+- additive `crates/statebook-settlement/src/p4/` modules and tests;
+- `tests/fixtures/p4/` hermetic JSON fixtures;
+- `docs/statebook-p4-settlement-simulator-implementation-notes.md`;
+- `README.md`;
+- `AGENTS.md`;
+- `docs/12-task-list.md`;
+- this report.
+
+The implementation adds one pure deterministic settlement transition kernel with
+fail-closed hard gates, conservative valuation, assurance tiers, linked-plan and
+obligation validation, budget CAS reservations, queue and breaker interaction, and
+domain-separated P4 TLV digests. Outputs are serialize-only decision records. No
+value moves.
+
+The crate reports forty-eight passing integration tests including unchanged P3
+completeness regressions, thirteen P4 kernel tests, and five P4 claim-boundary scans.
+Focused format, test, and warning-denied Clippy gates pass for `statebook-settlement`;
+unchanged `statebook-core` tests pass.
+
+Remaining gap: the full thirty-seven-scenario boundary adversarial corpus is not yet
+encoded as named fixtures; minimum acceptance scenarios and resource bound matrix are
+covered. This is explicit local regression evidence only, not production readiness or
+authority.
+
