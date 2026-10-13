@@ -566,6 +566,19 @@ review and experiments rule out equivalent prior work.
 - [Neural Chameleon replication V1 custody preflight](82-neural-chameleon-replication-v1-preflight.md):
   missing required Gemma/oracle/monitor artifacts; no checkpoint loaded and no
   scientific replication authorized.
+- [V27 recoverable multiscale continual learning](57-causally-guided-recoverable-multiscale-continual-learning-v27.md):
+  preregistered cross-repository model-backed update-selection lane with sealed
+  candidate predictions and constrained regret.
+- [V27-R1 execution record](58-v27-execution-record.md):
+  immutable author replay plus deterministic 54-execution development replay;
+  the development result is negative, assessment stays sealed, and independent
+  review remains `NotRun`.
+- [Holistic continual-learning benchmark V2](59-holistic-continual-learning-benchmark-v2.md):
+  separate local-update, frozen Tencent CL-bench, and independent-replication
+  evidence lanes with fail-closed claim boundaries.
+- [Dynamic rate-distortion DreamCycle research plan](60-dynamic-rate-distortion-dream-cycle-plan.md):
+  post-qualification compression and offline-consolidation design, explicitly
+  excluded from the frozen V27-R1 arms and evidence.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):

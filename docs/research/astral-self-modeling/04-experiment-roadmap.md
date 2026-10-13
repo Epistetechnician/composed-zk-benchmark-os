@@ -7,6 +7,20 @@ validated measurement plumbing, but V5 returned `Null` and V10 selected no
 method because activation magnitude remained stronger. Stage 1 observer work is
 blocked until a redesigned Stage 0C passes fresh confirmation.
 
+V27 opens a separate model-backed continual-update development lane without
+unblocking Stage 0C. It tests whether sealed telemetry predictions can improve
+constrained update selection across recoverable architecture arms. Tencent
+CL-bench is an evaluation-only frozen-system context-learning lane and cannot
+be used for training, calibration, distillation, architecture selection, or
+threshold fitting. V27 cannot change C005, C014, Stage 0C, Stage 1, independent
+review, replication, or thesis status.
+
+The V27 development matrix has now executed twice from RGS commit `57a66f9`
+with exact deterministic scientific-lock agreement. It produced no scientific
+candidate: `no_update` dominated all updated arms, and Astral's development
+regret was worse than the strongest nonprivileged selector. Assessment remains
+sealed and is not authorized for this candidate.
+
 V25 is a separate protocol-engineering lane. Its Docker synthetic positive
 control may qualify the continual-correction harness and holistic claim gate,
 but cannot unblock Stage 0C or Stage 1. A later model-backed continual-learning
@@ -42,6 +56,64 @@ requirements.
 | V23 | `NotRunCapabilityTierPerturbationQualification` | Fresh-concept Llama 1B replication failed unchanged fit/tune and activation-versus-none gates; assessment stayed unopened |
 | V24 | `AuthorDevelopmentPerturbationReadoutObserved` | A fixed downstream linear residual readout passed both development gates and the sealed assessment against text, output-logit, anomaly, and shuffled-label controls; independent verification and confirmation remain `NotRun`/`NotAuthorized` |
 | V25 | `SyntheticDockerContinualCorrectionHarnessQualified` | Construction-known positive sensitivity and null specificity passed; protocol qualification only, with model-backed learning and thesis validation still `NotRun`/`NotValidated` |
+| V27 | `DeterministicDevelopmentReplayMatchedNoCandidateAssessmentNotRun` | Two complete 54-execution development packets matched every deterministic scientific lock; no-update dominated, Astral did not beat the strongest nonprivileged selector, and assessment stayed sealed |
+
+## V27: Recoverable Multiscale Continual Update Selection
+
+V27 freezes six mandatory native architecture arms: no update, naive sequential
+LoRA, modular ghost-state, compressed adapter recollection,
+representation-through-time distillation, and nested fast/medium/slow LoRA.
+Every model-backed arm must be native-observed. Any missing implementation
+keeps the complete model-backed assessment `NotRun`.
+
+All six mechanisms passed a commit-bound one-seed, one-order development smoke
+at RGS commit `d88b04213ddfbd03b3287fe5b8e2265be91a3fff`. The revised immutable
+release at manifest
+`2f1028dcab2e3b9db7d0a1a809452ff9a5536895f615d206784c03aeb04962fe`
+then reproduced the smoke from a detached checkout and copied model with a
+normalized probe match. This closes implementation exercisability and author
+replay only. Before qualification, the family corpus, selector features,
+fit/tune-only ranking, equal qualification budgets, recovery injections, and
+assessment commitment must be locked. The plan artifact at internal digest
+`sha256:d8b761824e348e23e5d341118d730c94f5769cc6a2a63b1b3d4c7c49522f7e90`
+now freezes 54 planned executions, 12 assessment-family commitments, budgets,
+statistics, and recovery policy. It intentionally leaves every selector
+implementation pending and the prediction lock open.
+
+RGS commit `57a66f9` subsequently completed the exact-budget model-derived
+development features, outcomes, selector fit, and ranking twice. Both 539-file
+packet manifests validate, and the deterministic comparison at internal digest
+`sha256:3964d71e0e8f5f4499673c0f12961dc479e2313d59447044328d79b4a46e403e`
+has no mismatches. The strongest nonprivileged selector is
+`text_only_reflection` with zero development regret; Astral has development
+regret `0.222222`. No-update future score is `1.000000`, while the best updated
+arms score `0.746914`. This is a reproducible development negative, not a
+qualification candidate. Assessment predictions were not sealed and
+assessment stayed unopened.
+
+The primary endpoint is constrained update-selection regret. Candidates first
+pass acquisition, retention, forgetting, calibration, exact recovery, budget,
+and governance gates. The post-hoc best feasible candidate is then compared
+with the prospectively selected candidate. The Astral selector must reduce
+regret by at least `0.05` relative to the strongest nonprivileged selector,
+with a task-family/seed clustered-bootstrap 95% lower bound above zero. Shuffled
+telemetry must close the positive gate.
+
+The development matrix requires at least 12 family-disjoint assessment
+families, three seeds, three task orders, equal
+update-token/gradient-step/rank budgets, and retention of every negative, null,
+failure, crash, and exclusion. A result is invalid if candidate outcomes exist
+before the prediction lock or if any assessment row influences fitting.
+
+The immutable V27-R1 and revised native author replays are recorded in
+`58-v27-execution-record.md`. It validates artifact exercisability and the
+fail-closed open-gate behavior; it is not independent reproduction or
+model-backed evidence.
+
+The dynamic rate-distortion DreamCycle is deferred by
+`60-dynamic-rate-distortion-dream-cycle-plan.md`. It is a separately
+preregistered post-qualification experiment, not a retroactive seventh V27 arm.
+It remains `DesignOnly`, `NotAuthorized`, `NotImplemented`, and `NotRun`.
 
 ## Stage 0A: Instrument Integrity — Complete
 
