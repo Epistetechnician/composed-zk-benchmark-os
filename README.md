@@ -2048,6 +2048,19 @@ Focused P5 format, test, and warning-denied Clippy gates pass, as do unchanged
 
 This is local hermetic fixture regression and readback evidence only. No value moves.
 
+Statebook P6 authorization status: the named docs-first slice
+`statebook-p6-read-only-external-sources-boundary` freezes a captured-first
+read-only external import surface in `statebook-source`. The separately committed
+implementation slice `statebook-p6-read-only-external-sources` adds isolated
+`crates/statebook-source` with the frozen `synthetic-clearing-terms-v1` profile,
+provenance registry, fail-closed import receipts, and domain-separated P6 digests
+with an independent `ring` golden check. Live network clients remain deferred.
+All P1-P5 identities stay unchanged. No P7 authority, trading, signing, custody,
+or value movement is authorized. See
+[docs/statebook-p6-read-only-external-sources-implementation-notes.md](docs/statebook-p6-read-only-external-sources-implementation-notes.md).
+
+This is local hermetic captured-source import regression evidence only. No value moves.
+
 ## Current Implementation Status
 
 - `zkbench-core` exists as a Rust core crate.
