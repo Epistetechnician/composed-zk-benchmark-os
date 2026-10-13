@@ -72,12 +72,14 @@ authorized in this slice. The root-cause boundary is recorded in document 70.
 
 ## Mandatory stop and claim boundary
 
-After successful construction and read-only independent audit, stop with the
-output repository-external and the protocol at `not-built`. Fingerprint commit
-and protocol repinning remain a separate reviewed gate.
+Had construction succeeded, this slice would have stopped with the output
+repository-external and the protocol at `not-built`. Construction did not
+succeed. The output stayed absent and fingerprint commit and protocol
+repinning never opened.
 
-This slice can establish at most
-`LocalRetiredR1FingerprintConstructedUnpinnedV28R2`. It cannot establish
+This consumed slice established only
+`LocalRetiredR1FingerprintConstructionFailedClosedV28R2`. It did not establish
+the conditional constructed-unpinned ceiling and cannot establish
 V28R2 eligibility, novelty, acquisition, consolidation, retention/recovery,
 continual learning, Astral selection, independent replication, benchmark
 evidence, breakthrough, self-improvement, introspection, self-modeling,

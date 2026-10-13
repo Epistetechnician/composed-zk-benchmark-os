@@ -1022,6 +1022,30 @@ allowed and controller implemented: additive standard-library controller
 source and eight hermetic tests under
 `tools/astral-rgs-acquisition-v28r2/`; exactly one future invocation of
 controller SHA-256
+Explicit Astral-RGS V28R2 retired-R1 fingerprint builder schema correction now
+allowed and implemented: backward-compatible standard-library source changes
+only in
+`tools/astral-rgs-acquisition-v28r2/build_retired_v28r1_fingerprint.py`;
+synthetic-fixture and focused adversarial test changes only in
+`tools/astral-rgs-acquisition-v28r2/tests/test_v28r2.py`; one implementation
+note and status mirrors under `docs/research/astral-self-modeling/`,
+`README.md`, and `AGENTS.md`. This slice is limited to state slice
+`astral-rgs-v28r2-retired-r1-fingerprint-builder-schema-correction`, exact
+three-key source/support verification, exact two-key answer-option
+verification, shared UTF-8 SHA-256 checking, authentic synthetic option shape,
+missing/extra/cross-routed/digest-mismatch tests, and the correction boundary
+in
+`docs/research/astral-self-modeling/70-v28r2-retired-r1-fingerprint-builder-schema-correction-boundary.md`.
+It does not permit running the real builder, retrying R1 or R2, changing the
+V28R2 protocol, validator, CLI, or controller, creating or committing a
+fingerprint, RGS source or package mutation, seed or corpus generation,
+tokenizer or model access, baseline or update-arm execution, recovery, Astral
+selection, assessment, downloads, network access, artifact or Evidence Ledger
+promotion, acquisition or continual-learning claims, independent-replication
+claims, benchmark or breakthrough claims, self-improvement, introspection or
+self-modeling claims, Stage 0C or Stage 1 promotion, production claims, or
+claims above `LocalRetiredR1FingerprintBuilderSchemaCorrectedV28R2`.
+
 Explicit Astral-RGS V28R2 retired-R1 fingerprint builder schema-correction
 docs-first boundary now allowed and completed: status-only recording that the
 R2 controller and builder each ran once, the builder failed closed with
