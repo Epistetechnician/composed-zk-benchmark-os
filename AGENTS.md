@@ -1017,6 +1017,35 @@ reuse of V22/V23 concepts, free-form mental-state reports, Stage 0C
 confirmation, Stage 1, accepted evidence, benchmark claims, consciousness
 claims, global introspection claims, or claims above
 `LocalDevelopmentHybridInstrumentCapabilityTierReplication`.
+Explicit Astral-RGS V28R2 retired-R1 fingerprint one-time construction now
+allowed and controller implemented: additive standard-library controller
+source and eight hermetic tests under
+`tools/astral-rgs-acquisition-v28r2/`; exactly one future invocation of
+controller SHA-256
+`105a11041bc9fa7a116c02de9ec40ba4e8a7098a87b196e119c52906c3210e87`;
+its no-follow exact-path preflight; and, only after it passes, one invocation
+of the pinned hash-only builder against the single retained V28R1 root and
+single absent repository-external output in
+`docs/research/astral-self-modeling/68-v28r2-retired-r1-fingerprint-construction-authorization.md`;
+read-only output inspection and independent audits; one Markdown execution
+record; and status-only Astral roadmap, claim-ledger, navigation, and
+`AGENTS.md` updates. This slice is limited to state slice
+`astral-rgs-v28r2-retired-r1-fingerprint-construction`, implementation checkout
+commit `8cf75d745c20afa885286fecfbd8d67c253b8707`, the six implementation
+identities and six retained semantic/raw identities pinned in document 67,
+exclusive creation of one hash-only external JSON file, and a mandatory stop
+with the protocol still `not-built`. Any preflight or builder failure consumes
+the construction identity; no retry, copied input, alternate path, repair, or
+overwrite is allowed. It does not permit committing the fingerprint, changing
+the V28R2 protocol or validator, RGS source or package mutation, seed or corpus
+generation, tokenizer or model access, baseline or update-arm execution,
+recovery, Astral selection, assessment, downloads, network access, artifact or
+Evidence Ledger promotion, acquisition or continual-learning claims,
+independent-replication claims, benchmark or breakthrough claims,
+self-improvement, introspection or self-modeling claims, Stage 0C or Stage 1
+promotion, production claims, or claims above
+`LocalRetiredR1FingerprintConstructedUnpinnedV28R2`.
+
 Explicit Astral-RGS V28R2 retired-R1 fingerprint construction docs-first
 boundary now allowed and completed: one Markdown boundary under
 `docs/research/astral-self-modeling/`, plus status-only Astral roadmap,
