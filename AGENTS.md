@@ -1017,6 +1017,150 @@ reuse of V22/V23 concepts, free-form mental-state reports, Stage 0C
 confirmation, Stage 1, accepted evidence, benchmark claims, consciousness
 claims, global introspection claims, or claims above
 `LocalDevelopmentHybridInstrumentCapabilityTierReplication`.
+Explicit Astral-RGS V28R2 acquisition-qualification validator implementation
+now allowed and implemented: additive standard-library Python source, a declarative JSON
+protocol, hermetic tests, and one synthetic-fixture-only retired-R1 fingerprint
+builder under `tools/astral-rgs-acquisition-v28r2/`; implementation notes under
+`docs/research/astral-self-modeling/`; and status-only Astral roadmap,
+claim-ledger, V28 note, navigation, and `AGENTS.md` updates. This slice is
+limited to state slice
+`astral-rgs-v28r2-acquisition-qualification-validator` and the exact boundary
+in
+`docs/research/astral-self-modeling/65-v28r2-acquisition-qualification-validator-boundary.md`:
+clean-room reconstruction of the frozen 1,536-per-kind, 6,144-family,
+73,728-query, two-baseline protocol; 16 two-sided equivalence hypotheses;
+critical value `5.0`; independent concept/template AST interpretation;
+retired-R1 fingerprint membership; exact corpus, prompt, score, process,
+parity, and claim-boundary validation; and hermetic adversarial tests.
+It does not permit mutation of `tools/astral-rgs-acquisition-v28/`, RGS source
+or packages, running the fingerprint builder on the real R1 bundle, committing
+a real fingerprint manifest, scientific seed or corpus generation, tokenizer
+or model access, model-backed packet validation, update arms, retention or
+recovery, Astral selection, assessment, downloads, network access, artifact or
+Evidence Ledger promotion, acquisition or continual-learning claims,
+independent-replication claims, benchmark or breakthrough claims,
+self-improvement, introspection or self-modeling claims, Stage 0C or Stage 1
+promotion, production claims, or claims above
+`LocalAcquisitionQualificationValidatorV28R2`. The additive validator, CLI,
+synthetic-only fingerprint builder, and 89 hermetic V28R2 tests are implemented;
+the focused V28R1+V28R2 suite passes 127 tests, the V27 regression suite passes
+17 tests, and Ruff passes. The real R1
+fingerprint remains unbuilt, no R2 packet exists, and no model execution
+occurred. Every mutation in this slice
+names state slice
+`astral-rgs-v28r2-acquisition-qualification-validator`.
+
+Explicit Astral-RGS V28R2 powered acquisition-novelty docs-first
+preregistration now allowed: one prospective protocol note at
+`docs/research/astral-self-modeling/64-v28r2-powered-acquisition-novelty-preregistration.md`,
+updates to V28 notes `61` through `63`, append-only Astral roadmap,
+claim-ledger, and navigation updates, and this authorization record. This slice
+is limited to state slice
+`astral-rgs-v28r2-powered-acquisition-novelty-preregistration`: recording the
+retained `CorpusNotNovel` V28R1 result; permanently retiring its corpus, seed,
+namespace, generator bytes, concepts, templates, future-assessment identities,
+and model outcomes; freezing an assumption-based conservative V28R2 census of
+exactly 1,536 families per fact kind, 6,144 families total, 12 queries per
+family, and 73,728 queries per baseline run; retaining the `0.05` symmetric
+chance-normalized-lift equivalence margin, familywise alpha `0.05`, and frozen
+minimum critical value `5.0`; defining exactly one fresh-process `pre_update`
+and one separately prepared and restarted `no_update` full-corpus baseline
+run with exact row parity; freezing a new disjoint campaign, generator,
+namespace, seed commitment, and future-assessment identity commitment; and
+keeping update arms, retention/recovery, Astral selection, and assessment
+sealed.
+It does not permit Python or Rust implementation, protocol or validator
+mutation, RGS source or package mutation, seed or corpus generation, tokenizer
+or model access, baseline or update-arm execution, downloads, network access,
+threshold repair, adaptive item selection, assessment generation or opening,
+artifact or Evidence Ledger promotion, acquisition or continual-learning
+claims, independent-replication claims, benchmark or breakthrough claims,
+self-improvement, introspection or self-modeling claims, Stage 0C or Stage 1
+promotion, production claims, or claims above
+`LocalProspectivePoweredAcquisitionNoveltyProtocolV28R2`. Every mutation in
+this slice names state slice
+`astral-rgs-v28r2-powered-acquisition-novelty-preregistration`.
+
+Explicit Astral-RGS V28 acquisition-novelty producer preflight now allowed:
+one bounded authorization and execution-boundary note under
+`docs/research/astral-self-modeling/`, append-only Astral roadmap,
+claim-ledger, and navigation updates in this repository; and additive Python
+source, hermetic tests, an operator script, a validation-registry entry, and a
+scoped `AGENTS.md` in a clean committed Recoverable Ghost States worktree.
+This slice is limited to state slice
+`astral-rgs-v28-acquisition-novelty-producer`: offline inventory and hashing of
+the already-cached Qwen2.5-0.5B-Instruct 4-bit checkpoint, tokenizer, runtime,
+clean RGS source commit/tree, and Astral V28 protocol before seed creation;
+post-receipt cryptographic seed commitment; deterministic repository-owned
+qualification-corpus generation without model outputs; raw corpus and hash
+manifests; frozen configuration; four-choice label-log-probability evaluation;
+separate no-op preparation and fresh model-evaluation processes for
+`pre_update` and `no_update`; baseline-only packet V2 emission; repository-
+external artifacts; Astral validator intake; and an unconditional stop before
+updates unless the baseline-only disposition is exactly
+`NoveltyPacketCandidateUnverifiedAcquisitionArmsNotRun`.
+It does not permit downloads, network access, corpus rejection sampling,
+model-guided item generation, alternative seeds after outcomes, training,
+LoRA or any parameter update, context-only or retrieval execution, persistent
+arm execution, Gate 2 retention or recovery, corruption injection, Astral
+feature work, selection, prediction sealing, assessment generation or opening,
+artifact promotion, accepted Evidence Ledger mutation, model-backed
+acquisition claims, independent-replication claims, benchmark or breakthrough
+claims, self-improvement, introspection or self-modeling claims, Stage 0C or
+Stage 1 promotion, production claims, or claims above
+`LocalModelBackedAcquisitionNoveltyPreflightV28`. Every mutation in this slice
+names state slice `astral-rgs-v28-acquisition-novelty-producer`.
+
+Explicit Astral-RGS V28 acquisition-qualification validator now allowed:
+additive Python source, a frozen JSON contract, and hermetic tests under
+`tools/astral-rgs-acquisition-v28/`; implementation notes under
+`docs/research/astral-self-modeling/`; and append-only Astral roadmap,
+claim-ledger, and navigation updates. This slice is limited to state slice
+`astral-rgs-v28-acquisition-qualification-validator`: read-only validation of a
+caller-supplied repository-external acquisition packet; canonical hashing;
+checkpoint-before-generation ordering; exact nonce-fact, entity-relation,
+changed-rule, opaque-mapping, paraphrase, multi-hop, and withheld-composition
+censuses; query-specific answer mappings with within-family answer-position
+rotation; independent raw-row accuracy
+recomputation; near-chance pre-update and restarted no-update stops; explicit
+context-only and retrieval baseline roles; persistent-state restart binding;
+matched producer-declared arm and budget checks; and fail-closed Gate 2 and Gate
+3 states.
+It does not permit corpus generation, model or tokenizer access, cached-model
+loading, training, parameter updates, downloads, network access, RGS runtime
+mutation, process-recovery execution, retention qualification, Astral feature
+development or tuning, prediction sealing, assessment generation or opening,
+release construction, artifact or Evidence Ledger promotion, model-backed
+evidence, independent-replication claims, benchmark claims, continual-learning
+breakthrough claims, self-improvement, introspection or self-modeling claims,
+Stage 0C or Stage 1 promotion, production claims, or claims above
+`LocalAcquisitionQualificationValidatorV28`. Synthetic test fixtures are
+contract coverage only and may not fill a scientific cell. Every mutation in
+this slice names state slice
+`astral-rgs-v28-acquisition-qualification-validator`.
+
+Explicit Astral-RGS novel-knowledge acquisition and recoverable-consolidation
+V28 docs-first preregistration now allowed: one prospective protocol note under
+`docs/research/astral-self-modeling/`, append-only Astral roadmap, claim-ledger,
+and navigation updates, and this authorization record. This slice is limited to
+state slice `astral-rgs-novel-knowledge-acquisition-recoverable-consolidation-v28`:
+checkpoint-first corpus generation commitments; nonce facts, entity relations,
+changed rules, and mappings; near-chance pre-update and no-update gates;
+source-context removal and process restart; paraphrase, multi-hop, and withheld
+composition evaluation; explicit context-only, retrieval, sequential-LoRA,
+replay, SCoL-style, and nested/multiscale comparators; protected-capability,
+superseded-fact, calibration, and process-level recovery gates; and prospective
+Astral selection only after acquisition/retention tradeoff heterogeneity is
+demonstrated. It does not permit Python or Rust implementation, corpus or
+assessment generation, model access, model training or updates, downloads,
+network access, RGS runtime mutation, tuning, prediction sealing, assessment
+opening, artifact or Evidence Ledger promotion, independent-replication claims,
+benchmark claims, continual-learning breakthrough claims, self-improvement,
+introspection or self-modeling claims, Stage 0C or Stage 1 promotion, production
+claims, or claims above `LocalProspectiveNovelKnowledgeAcquisitionProtocolV28`.
+Every mutation in this slice names state slice
+`astral-rgs-novel-knowledge-acquisition-recoverable-consolidation-v28`.
+
 Explicit Astral-RGS causally guided recoverable multiscale continual-learning
 evaluation V27 now allowed: additive Python source, frozen JSON contracts,
 hermetic tests, and fail-closed validators under

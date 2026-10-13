@@ -579,6 +579,27 @@ review and experiments rule out equivalent prior work.
 - [Dynamic rate-distortion DreamCycle research plan](60-dynamic-rate-distortion-dream-cycle-plan.md):
   post-qualification compression and offline-consolidation design, explicitly
   excluded from the frozen V27-R1 arms and evidence.
+- [V28 novel-knowledge acquisition and recoverable consolidation](61-novel-knowledge-acquisition-and-recoverable-consolidation-v28.md):
+  acquisition-first three-gate protocol after the V27 no-update falsification;
+  V28R1 stopped at `CorpusNotNovel`, and update execution, process recovery,
+  assessment, and Astral selector implementation or tuning remain unauthorized.
+- [V28 acquisition-qualification validator notes](62-v28-acquisition-qualification-validator-notes.md):
+  fail-closed local Gate 1 packet validation, hermetic contract-test boundary,
+  and the V28R1 `CorpusNotNovel` disposition; no retention/recovery or selector
+  evidence.
+- [V28 acquisition-novelty producer boundary](63-v28-acquisition-novelty-producer-boundary.md):
+  completed checkpoint-first V28R1 corpus generation and fresh-process
+  baseline-only execution; the corpus and seed are retired.
+- [V28R2 powered acquisition-novelty preregistration](64-v28r2-powered-acquisition-novelty-preregistration.md):
+  docs-only 6,144-family precision census and complete V28R1 nonreuse;
+  producer, model execution, update, recovery, selection, and assessment gates
+  remain sealed.
+- [V28R2 acquisition-qualification validator boundary](65-v28r2-acquisition-qualification-validator-boundary.md):
+  additive clean-room protocol/validator implementation boundary; no real R1
+  fingerprint, R2 corpus, model execution, or later gate.
+- [V28R2 acquisition-qualification validator notes](66-v28r2-acquisition-qualification-validator-notes.md):
+  implemented clean-room validator, synthetic-only fingerprint builder,
+  full-census hermetic fixture, and fail-closed claim boundary.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):

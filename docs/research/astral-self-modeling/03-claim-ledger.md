@@ -113,6 +113,40 @@ claim ceiling.
 | `C047` | Qualification matrix not run | Development matrix completed with no candidate; assessment not run | Outcomes `sha256:e35caf9bb137c46b65036fae6700e2ad408b854ef921b58557d5905a298f3b86` | Author-operated execution; independent review `NotRun` | No-update dominated every updated arm; updated-arm calibration degradation exceeded the final ceiling in development | No model-backed qualification or confirmation |
 | `C048` | Model-backed selector comparison not run | Development selector comparison negative; assessment prediction lock not sealed | Ranking `sha256:74a41fc94d230495e51cf546084abe0ac37aaffa7238b7c3c22df359665abdfe` | Author-operated execution; independent review `NotRun` | Astral failed to beat text-only, fixed-arm, and no-update controls | No causal selector qualification, introspection, or self-modeling evidence |
 
+## V28 Novel-Knowledge Acquisition Claims — 2026-07-28
+
+| ID | Exact claim | Type / lane | Operationalization and falsifier | Required artifact | Sources | Status | Confidence / ceiling |
+|---|---|---|---|---|---|---|---|
+| V28-C01 | A checkpoint-first V28 corpus can test acquisition only when pre-update and restarted no-update performance remain near chance after source-context removal | Engineering / acquisition qualification | Four balanced unseen fact kinds, absolute chance-normalized lift at most `0.05` overall and per kind, fresh-process evaluation, and held-out paraphrase, multi-hop, and withheld-composition queries; falsified by a non-chance baseline, leakage, overlap, or incomplete provenance | Future content-addressed corpus, checkpoint-before-generation receipt, raw evaluation rows, process records, and fail-closed validator | `61-novel-knowledge-acquisition-and-recoverable-consolidation-v28.md` | Proposed | None / docs-first protocol only |
+| V28-C02 | A V28 persistent update arm jointly preserves acquisition, protected capabilities, superseded-fact behavior, calibration, and exact process-level recovery | Empirical / retention and recovery | Gate 2 hard constraints and corruption, termination, restart, byte-exact rollback, and replay; falsified by any failed dimension or in-memory-only recovery | Future native update packets, protected-suite rows, complete state inventory, corruption journal, restart record, and rollback/replay digests | `61-novel-knowledge-acquisition-and-recoverable-consolidation-v28.md` | Proposed | None / Gate 1 and implementation absent |
+| V28-C03 | Prospective Astral selection improves the acquisition-retention tradeoff over every matched nonprivileged and fixed comparator | Empirical / conditional update selection | Gate 3 opens only after two qualified native arms exhibit a real tradeoff; falsified by no tradeoff, any lock-order failure, confirmatory failure, or non-null specificity control | Future sealed selector predictions, shared candidate outcomes, matched controls, sampled-index digest, and independent scientific review | `61-novel-knowledge-acquisition-and-recoverable-consolidation-v28.md` | Proposed | None / Gates 1-2 absent and Astral sealed |
+
+## V28 Acquisition-Validator Update — 2026-07-28
+
+| ID | Old execution posture | New execution posture | Evidence artifact | Reviewer | Reason | Unchanged claim ceiling |
+|---|---|---|---|---|---|---|
+| `V28-C01` | Docs-first protocol only | Local fail-closed validator implemented; model-backed packet not supplied | `tools/astral-rgs-acquisition-v28/` frozen contract and hermetic tests | Author implementation plus internal read-only agent review; external independent scientific review `NotRun` | The validator recomputes novelty and acquisition gates from raw rows and rejects leakage, high baselines, partial comparisons, later-stage material, and overclaims | Local engineering contract coverage only; no model-backed acquisition or continual-learning evidence |
+| `V28-C01` | Validator implemented; producer absent | Baseline-only RGS novelty producer authorized; implementation and execution `NotRun` | `63-v28-acquisition-novelty-producer-boundary.md` | Pre-implementation repository, corpus, and contract audits; external independent scientific review `NotRun` | A clean committed producer may now generate one checkpoint-bound corpus and run only fresh-process pre-update/no-update falsification | Authorization only; no corpus, model-backed packet, acquisition evidence, update-arm authority, or continual-learning evidence |
+
+## V28 Acquisition-Novelty Result and R2 Protocol — 2026-07-28
+
+| ID | Old execution posture | New execution posture | Evidence artifact | Reviewer | Reason | Unchanged claim ceiling |
+|---|---|---|---|---|---|---|
+| `V28-C01` | Producer authorized; model-backed packet absent | V28R1 baseline complete; `CorpusNotNovel`; corpus and seed retired | Packet `sha256:2fd74b389907d3167518a0d91d9d63f18fda7c1231a51764657e791286ee2ad0`; report `sha256:3e24804dc84744a300bb11bc246fdfd40256459f97a68da0df7993d676b9ea3d`; manifest `sha256:5b01a32e1ba9d7d9ce84c8b301f29e0145962ac8c0eac59b07cd5cfca846e` | Author-operated execution and integrity audit; independent scientific review `NotRun` | Identical baseline point estimates were near chance, but stratified family-cluster equivalence intervals were too wide; no update arm ran | Local author-run negative novelty falsification only; no acquisition or continual-learning evidence |
+| `V28-C01` | V28R1 retired with a new-corpus requirement | Disjoint V28R2 6,144-family precision census docs-first preregistered; implementation and execution unauthorized | `64-v28r2-powered-acquisition-novelty-preregistration.md` | Conservative design calculation plus internal read-only agent review; independent scientific review `NotRun` | With family-cluster standard deviation `sqrt(2)/6`, planning lift `0.01`, a central 90% design bound, and the unchanged `0.05` margin and `5.0` critical value, the minimum is 1,534 families per kind; the frozen census is the next complete 24-permutation multiple, 1,536 per kind | Prospective protocol only; no new corpus, model run, acquisition, retention/recovery, selector, or assessment evidence |
+
+## V28R2 Validator Implementation Authorization — 2026-07-28
+
+| ID | Old execution posture | New execution posture | Evidence artifact | Reviewer | Reason | Unchanged claim ceiling |
+|---|---|---|---|---|---|---|
+| `V28-C01` | Powered V28R2 protocol docs-first only | Additive clean-room validator implementation authorized; implementation and execution not started | `65-v28r2-acquisition-qualification-validator-boundary.md` | Repository, statistical, and validation design audits; external independent scientific review `NotRun` | The validator must independently reconstruct the frozen power, semantic, permutation, score, process, and R1-nonreuse contracts before any producer or run exists | Authorization only; no real fingerprint, corpus, model-backed packet, acquisition, retention/recovery, selector, or assessment evidence |
+
+## V28R2 Validator Implementation Update — 2026-07-28
+
+| ID | Old execution posture | New execution posture | Evidence artifact | Reviewer | Reason | Unchanged claim ceiling |
+|---|---|---|---|---|---|---|
+| `V28-C01` | Additive clean-room validator authorized | Validator, CLI, synthetic-only fingerprint builder, full-census fixture, and adversarial tests implemented; real fingerprint and R2 packet absent | `tools/astral-rgs-acquisition-v28r2/`; `66-v28r2-acquisition-qualification-validator-notes.md` | Author implementation plus internal independent code/statistics/scope audits; external independent scientific review `NotRun` | Exact 6,144-family and 147,456-row public-path fixture plus focused adversarial contracts pass; committed protocol remains fail-closed at `not-built` for the real R1 fingerprint | Local engineering validator evidence only; no corpus, model-backed novelty, acquisition, retention/recovery, selector, or assessment evidence |
+
 C003-C007 and C013-C014 retain the historical status `Proposed`; their current
 execution disposition is `BlockedByStage0C`. No observer, correction,
 prospective-prediction, or actor-observer optimization evidence exists. C008
