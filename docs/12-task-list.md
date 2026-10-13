@@ -25764,3 +25764,20 @@ Eight focused offchain tests and strict static checks pass. The claim ceiling
 is local deterministic file-persistence contract evidence; cross-process
 linearizability and live settlement remain closed. See
 `docs/research/agent-platform/845-offchain-journal-file-store-v1.md`.
+Validation gate:
+
+```text
+cargo fmt -p statebook-report -- --check
+cargo test -p statebook-report --tests
+cargo clippy -p statebook-report --all-targets -- -D warnings
+cargo test -p statebook-core -p statebook-settlement --tests
+```
+
+Claim ceiling: local hermetic digest-bound audit-bundle and adapter regression
+only. No value moves. No P6 external sources, P7 authority, network, credentials,
+admission mutation, Evidence Ledger append, scalar trust score, production
+readiness, SOTA, independent audit, or full-security claims. Full eighteen-scenario
+adversarial corpus replay and in-bundle P1-P4 golden byte checks remain documented
+follow-on fixture expansion; minimum acceptance scenarios and resource bounds are
+covered.
+

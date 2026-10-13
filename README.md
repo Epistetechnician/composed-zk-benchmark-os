@@ -2023,6 +2023,31 @@ Focused P4 format, test, and warning-denied Clippy gates pass, as do unchanged
 
 This is local hermetic fixture regression evidence only. No value moves.
 
+Statebook P5 authorization status: the named docs-first slice
+`statebook-p5-evidence-adapters-and-report-bundles-boundary` freezes a future portable
+digest-bound audit-bundle and narrow HSAI/fixture adapter surface in at most
+`statebook-report`. All P1-P4 identities and the P4 kernel stay unchanged. No P6
+external source, P7 authority, network, credential, value movement, or runtime action is
+authorized.
+
+## Statebook P5 Evidence Adapters And Report Bundles Implementation
+
+The named state slice `statebook-p5-evidence-adapters-and-report-bundles` is implemented as
+a new `statebook-report` crate with:
+
+- closed manifest and record file sets with domain-separated P5 TLV digests;
+- materialization plus independent fail-closed readback validation;
+- hermetic fixture adapters and ClaimEnvelope-shaped fixture doubles without `hsai-*`
+  production dependencies;
+- proposal-only decision handoffs that always preserve `grants_authority=false`;
+- an independent `ring` golden encoder for every new public digest family.
+
+Focused P5 format, test, and warning-denied Clippy gates pass, as do unchanged
+`statebook-core` and unchanged P3/P4 `statebook-settlement` regressions. See
+[docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md](docs/statebook-p5-evidence-adapters-and-report-bundles-implementation-notes.md).
+
+This is local hermetic fixture regression and readback evidence only. No value moves.
+
 ## Current Implementation Status
 
 - `zkbench-core` exists as a Rust core crate.
