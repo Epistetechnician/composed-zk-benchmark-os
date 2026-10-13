@@ -85,6 +85,18 @@ claim ceiling.
 |---|---|---|---|---|---|---|
 | C044 | In test | Not refuted | V24 manifest `288feb32b4833544d57988a61c9e76f95856777ab4346dea553eee539fcba9c3`; assessment telemetry activation-versus-none balanced accuracy `1.0000`, strongest primary control `0.6875`, advantage `0.3125`, concept-bootstrap 95% interval `[0.1875, 0.4375]` | Author-run fail-closed validator; independent review `NotRun` | Both development gates passed, the configuration lock validated before the one-shot assessment, and the sealed assessment passed every preregistered gate | Medium / four-concept local author-development assessment; not independent verification, Stage 0C, introspection, self-modeling, or confirmation |
 
+## Docker Continual-Correction Simulation — 2026-07-27
+
+| ID | Exact claim | Type / lane | Operationalization and falsifier | Required artifact | Sources | Status | Confidence / ceiling |
+|---|---|---|---|---|---|---|---|
+| C045 | The Docker V25 validation harness distinguishes its construction-known continual-correction mechanism from matched controls and rejects the same gate in a null world | Engineering / synthetic positive control | Frozen V25 positive sensitivity and null specificity gates; refuted by either gate failure | Content-addressed V25 raw-observation bundle and fail-closed recomputation report | `53-docker-closed-loop-correction-simulation-v25.md` | In test | None / synthetic Docker harness only |
+
+## V25 Experimental Update — 2026-07-27
+
+| ID | Old status | New status | Evidence artifact | Reviewer | Reason | Unchanged claim ceiling |
+|---|---|---|---|---|---|---|
+| C045 | In test | Not refuted | V25 manifest `8da3411441d8de84b53bf7e8cbce62008a1eb72c60a68d4029cecb4ed83eab95`; positive telemetry accuracy `0.9989`, strongest control `0.7459`, advantage `0.2530`, bootstrap 95% interval `[0.2376, 0.2684]`; null advantage `-0.1280`; maximum replay loss `0.0` | Author-run Docker execution and fail-closed raw-record validator; independent review `NotRun` | The construction-known positive world passed every frozen gate and the independent-signal null world kept the same gate closed | High / synthetic Docker harness qualification only; not model-backed continual learning, self-improvement, Stage 0C, or thesis validation |
+
 C003-C007 and C013-C014 retain the historical status `Proposed`; their current
 execution disposition is `BlockedByStage0C`. No observer, correction,
 prospective-prediction, or actor-observer optimization evidence exists. C008

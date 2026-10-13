@@ -595,6 +595,18 @@ review and experiments rule out equivalent prior work.
   admin-signed role-separated agent review, retained environment-mismatch
   rejection, successful pinned-runtime retry, scientific limitations, and the
   unchanged external-human and independent-replication gates.
+- [Docker closed-loop correction simulation V25](53-docker-closed-loop-correction-simulation-v25.md):
+  preregistered construction-known sensitivity and null-specificity test for
+  the continual-correction measurement and holistic claim-validation pipeline.
+- [V25 execution record](54-v25-execution-record.md): one-shot Docker result,
+  content-addressed raw artifact, positive sensitivity, null specificity, and
+  unchanged `ThesisNotValidated` boundary.
+- [Holistic claim-validation pipeline V1](55-holistic-claim-validation-pipeline-v1.md):
+  exact claim census, immutable V18-V24 replay, V25 recomputation, structural
+  gates, and explicit non-promotion of unresolved thesis claims.
+- [Holistic claim-validation execution record](56-holistic-claim-validation-execution-record.md):
+  45-claim validation, immutable-release replays, current test gates, report
+  identities, and retained `ThesisNotValidated` disposition.
 - [Stage 0 measurement-validity preregistration](08-stage0-measurement-validity-preregistration.md):
   documentation-only compiled-circuit study boundary, locked comparisons,
   endpoints, stop rules, artifact contract, and advancement gate.

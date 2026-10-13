@@ -1,0 +1,35 @@
+{
+  "adaptation_examples": 8,
+  "actor_dimension": 5,
+  "base_weights": [1.0, 0.0, 0.0, 0.0, 0.0],
+  "bootstrap_draws": 5000,
+  "claim_ceiling": "SyntheticDockerContinualCorrectionHarnessQualified",
+  "conditions": [
+    "frozen",
+    "reflection",
+    "critic",
+    "ordinary_update",
+    "telemetry",
+    "shuffled_telemetry",
+    "incorrect_telemetry",
+    "random_direction"
+  ],
+  "future_examples": 48,
+  "gates": {
+    "maximum_brier_degradation": 0.02,
+    "maximum_null_advantage": 0.02,
+    "maximum_retention_drop": 0.02,
+    "minimum_bootstrap_lower_95": 0.0,
+    "minimum_future_accuracy": 0.75,
+    "minimum_primary_advantage": 0.05
+  },
+  "learning_rate": 0.15,
+  "protocol": "astral-docker-closed-loop-correction-simulation-v25",
+  "replay_examples": 16,
+  "schema_version": 1,
+  "seeds": [2501, 2503, 2507, 2521, 2531, 2539],
+  "tasks_per_seed": 16,
+  "telemetry_noise": 0.03,
+  "update_slots": 8,
+  "worlds": ["positive_control", "null_control"]
+}

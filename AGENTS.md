@@ -1017,6 +1017,35 @@ reuse of V22/V23 concepts, free-form mental-state reports, Stage 0C
 confirmation, Stage 1, accepted evidence, benchmark claims, consciousness
 claims, global introspection claims, or claims above
 `LocalDevelopmentHybridInstrumentCapabilityTierReplication`.
+Explicit Astral Docker closed-loop correction simulation V25 now allowed and
+completed locally:
+additive Python source, a digest-pinned Dockerfile, hermetic tests, frozen JSON
+contracts, and validators under `tools/astral-continual-correction-v25/`;
+protocol and execution notes under `docs/research/astral-self-modeling/`;
+append-only Astral claim-ledger and navigation updates; and one
+repository-external content-addressed V25 artifact and validation report. This
+phase is limited to the construction-known synthetic positive-control and null
+worlds in
+`docs/research/astral-self-modeling/53-docker-closed-loop-correction-simulation-v25.md`:
+a frozen five-dimensional actor, task-local bounded adapters, fixed episode
+streams, one update budget per task, future-unseen and replay evaluation,
+telemetry, no-update, reflection, critic, ordinary-update, shuffled,
+incorrect, and random-direction conditions, deterministic bootstrap,
+calibration and retention guards, immutable raw observations, Docker
+network isolation, content addressing, and a claim-completeness gate over the
+Astral ledger. It does not permit model downloads, cached-model access,
+training or modifying V24, adaptive assessment tuning, treating a planted
+signal as model introspection, independent-review promotion, Stage 0C or Stage
+1 promotion, consciousness claims, general continual-learning claims, general
+self-improvement claims, or claims above
+`SyntheticDockerContinualCorrectionHarnessQualified`. The completed Docker
+artifact, raw-record validation, and holistic claim-validation disposition are
+recorded in `docs/research/astral-self-modeling/54-v25-execution-record.md` and
+`docs/research/astral-self-modeling/56-holistic-claim-validation-execution-record.md`.
+The holistic pipeline completed with open claims and retained thesis status
+`NotValidated`. Every mutation in this
+phase names state slice `astral-docker-closed-loop-correction-simulation-v25`.
+
 Explicit Astral V24 independent-validation release V2 now allowed and
 completed locally: additive
 Python source, hermetic tests, schemas, and templates under
