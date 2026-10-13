@@ -4,6 +4,8 @@ Date: 16 July 2026.
 
 Status: documentation-first boundary complete; implementation shipped under
 `statebook-p20-model-confidence`.
+Status: documentation-first boundary complete; implementation requires a
+separate commit.
 
 Evidence ceiling for this document: `DocumentationOnly` at
 `Level0DesignNote`.
@@ -19,6 +21,8 @@ Future implementation state slice:
 Authorize hermetic P4 model/AI confidence non-bypass (P4 boundary scenario
 #34 / TD-004 #18): claimed model confidence must not override a failed hard
 gate or failed valuation. Instant release remains zero. No value moves.
+#34): claimed model confidence must not override a failed hard gate or failed
+valuation. Instant release remains zero. No value moves.
 
 ## Authorized behavior
 
@@ -29,6 +33,7 @@ gate or failed valuation. Instant release remains zero. No value moves.
    failing a hard gate.
 3. Baseline fixtures without the field keep unchanged digests (field omitted /
    false is not encoded).
+3. Baseline fixtures without the field keep unchanged digests.
 
 ## Authorized paths
 

@@ -26312,6 +26312,16 @@ claim-boundary hygiene.
 
 Anti-goals: live authority, complete TD-004 claim, prepared-later consumption
 (#20), compromised-upstream dual valuation (#22), artificial-profit PnL (#23),
+The next separately committed slice is `statebook-p20-model-confidence`. It may
+add `model_confidence_claimed` with `ModelConfidenceIgnored` on gate/valuation
+failure and update the model-confidence bypass corpus case. Live authority
+remains deferred. Outputs never move value.
+
+Validation gate: claimed confidence + failed gate → ModelConfidenceIgnored +
+zero instant; baseline unchanged; suites green; format/test/Clippy;
+claim-boundary hygiene.
+
+Anti-goals: live authority, complete TD-004 claim, artificial-profit PnL (#23),
 concurrent finalizer races (#31), trading, signing, custody, pause product,
 transfer command, admission mutation, Evidence Ledger append, scalar trust
 score, production readiness, SOTA, independent audit, or full-security claims.

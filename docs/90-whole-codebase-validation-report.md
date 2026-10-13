@@ -12781,3 +12781,5 @@ This documentation-only slice creates no proof, accepted evidence, Level2+,
 score axis, production readiness, SOTA, breakthrough, full security, external
 audit, or action authority. Implementation requires a separately committed
 state slice `statebook-p19-oracle-freshness-confidence`.
+audit, or action authority. Implementation requires a separately committed
+state slice `statebook-p20-model-confidence`.

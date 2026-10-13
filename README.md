@@ -1969,6 +1969,7 @@ This is local hermetic authority-preflight regression evidence only. No value mo
 | [docs/statebook-p22-queued-value-monetization-boundary-spec.md](docs/statebook-p22-queued-value-monetization-boundary-spec.md) | Docs-first P22 authorization for queued-value monetization reject and post-instant anomaly block; no live authority. |
 | [docs/statebook-p22-queued-value-monetization-implementation-notes.md](docs/statebook-p22-queued-value-monetization-implementation-notes.md) | Implemented P22 monetize-while-queued reject and post-instant anomaly block of queued remainder. |
 | [docs/statebook-p19-oracle-freshness-confidence-boundary-spec.md](docs/statebook-p19-oracle-freshness-confidence-boundary-spec.md) | Docs-first P19 authorization for stale-data/fresh-transport valuation freshness and model-confidence hard-gate non-bypass; no live authority. |
+| [docs/statebook-p20-model-confidence-boundary-spec.md](docs/statebook-p20-model-confidence-boundary-spec.md) | Docs-first P20 authorization for model-confidence hard-gate non-bypass; no live authority. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -2328,6 +2329,9 @@ This is local hermetic authority-preflight regression evidence only. No value mo
 `statebook-p19-oracle-freshness-confidence-boundary` freezes stale-data with
 fresh transport timestamp reject and model-confidence hard-gate non-bypass.
 Live authority remains deferred. This commit adds no Rust or Cargo change.
+`statebook-p20-model-confidence-boundary` freezes model-confidence hard-gate
+non-bypass. Live authority remains deferred. This commit adds no Rust or Cargo
+change.
 
 ## Current Implementation Status
 
