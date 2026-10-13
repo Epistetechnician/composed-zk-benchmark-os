@@ -193,6 +193,16 @@ lane-specific ceilings; neither establishes held-out causal-effect validity,
 mechanistic explanation, introspection, self-modeling, benchmark evidence, or
 production readiness. Stage 0C and Stage 1 remain blocked, and no accepted
 Evidence Ledger record was created.
+State slice: `astral-self-modeling-evidence-ledger-and-research-reset-v11`.
+
+Status: `ActiveLocalResearch / Stage0CDevelopmentNoCandidate`. The compiled positive
+control completed, V5 returned a valid learned-model `Null`, V7 qualified the
+family-complete actor-training recipe, and V10 completed with
+`ExploratoryNoSelection`. V12 then found no eligible cross-actor continuous
+effect estimator. Stage 1 remains blocked. The evidence ceiling is
+setup-scoped local measurement and attribution-method diagnostics, not a
+mechanistic explanation, benchmark result, proof, or accepted Evidence Ledger
+record.
 
 ## Project Thesis
 
@@ -556,6 +566,10 @@ review and experiments rule out equivalent prior work.
 - [Neural Chameleon replication V1 custody preflight](82-neural-chameleon-replication-v1-preflight.md):
   missing required Gemma/oracle/monitor artifacts; no checkpoint loaded and no
   scientific replication authorized.
+- [Immutable validation release V1](44-immutable-validation-release-v1.md):
+  content-addressed V18-V23 package and authoritative local validator.
+- [Independent validation handoff](45-independent-validation-handoff.md):
+  fail-closed reviewer forms and independent-implementation boundary.
 - [Stage 0 measurement-validity preregistration](08-stage0-measurement-validity-preregistration.md):
   documentation-only compiled-circuit study boundary, locked comparisons,
   endpoints, stop rules, artifact contract, and advancement gate.

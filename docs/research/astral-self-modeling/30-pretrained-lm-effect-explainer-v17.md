@@ -13,6 +13,7 @@ hidden states better than activation summaries, input/output features, shuffled
 hidden states, and a constant. This is a numeric intervention-prediction
 analogue of the own-model-access comparison in Li et al.,
 [*Training Language Models to Explain Their Own Computations*](https://arxiv.org/abs/2511.08579).
+[*Emergent Introspective Awareness in Large Language Models*](https://arxiv.org/abs/2511.08579).
 It is not a replication: the paper trains language-model explainers at much
 larger scale, while V17 trains a small external numeric predictor against a
 local quantized target.

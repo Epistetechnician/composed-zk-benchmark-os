@@ -1,6 +1,7 @@
 # Literature Index
 
 Observed 2026-08-24. This is a seed index, not a systematic review. Source IDs
+Observed 2026-07-26. This is a seed index, not a systematic review. Source IDs
 map to the claim ledger. Each entry states what it supports and what it does not
 establish.
 
@@ -74,6 +75,15 @@ arXiv:2601.01828, 2026.
 - Does not establish: reliable general introspection, a specific mechanism, a
   directly observed metacognitive representation, held-out causal-effect
   prediction, consciousness, or faithful explanation.
+Jack Lindsey et al., "Emergent Introspective Awareness in Large Language
+Models," Transformer Circuits Thread, 2025.
+
+- URL: https://transformer-circuits.pub/2025/introspection/
+- Evidence class: primary empirical technical report.
+- Supports: activation-injection experiments testing whether models can report
+  some manipulated internal representations under particular conditions.
+- Does not establish: reliable general introspection. Reported effects are
+  context-dependent and vary by model and post-training.
 
 ## Required Review Expansion
 

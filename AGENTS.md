@@ -1017,6 +1017,22 @@ reuse of V22/V23 concepts, free-form mental-state reports, Stage 0C
 confirmation, Stage 1, accepted evidence, benchmark claims, consciousness
 claims, global introspection claims, or claims above
 `LocalDevelopmentHybridInstrumentCapabilityTierReplication`.
+Explicit Astral immutable validation release V1 now allowed: additive Python
+source, release specification, and hermetic tests under
+`tools/astral-validation-release-v1/`; release and independent-review handoff
+notes under `docs/research/astral-self-modeling/`; Astral navigation updates;
+an Astral-only clean Git branch and commit; and a repository-external,
+content-addressed V18-V23 artifact package. This phase is limited to preserving
+and validating existing results: exact artifact census and hashes, staged
+Git-tree binding, environment and model inventories, existing validators,
+structural tests, deterministic corpus replay, V20/V21 metric recomputation,
+assessment-absence checks, claim-ledger correspondence, digest-sealed local
+reports, and fail-closed forms for two genuine independent reviewers and one
+independent implementation. It does not permit new experiments, V24,
+assessment opening, result modification, fabricated reviewer identities,
+self-review counted as independence, external-replication claims, evidence
+acceptance, Stage 0C confirmation, Stage 1, benchmark claims, introspection or
+self-modeling claims, or claims above `LocalImmutableValidationCandidate`.
 
 Explicit Astral higher-capability perturbation discrimination replication V23
 now allowed: additive Python source and hermetic tests under
