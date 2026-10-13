@@ -4521,3 +4521,11 @@ An implementation-diverse checker is implemented in
 `hsai-proof-carrying-capability-bounded-agent-platform-offchain-work-market-checker-v1`.
 It checks event ordering, bid/fill bindings, close semantics, capacity, and projection
 fields without trusting the simulator’s replay function.
+
+## Large files (Git LFS)
+
+`crates/hsai-agent-admission/src/lib.rs` (~10 MB) is stored with Git LFS from
+the repository-staging commit onward, along with `*.safetensors`, `*.gguf`, and
+`*.pt`. Install Git LFS (`git lfs install`) before cloning or the source file
+will appear as a pointer and the workspace will not build. Earlier history keeps
+the original blobs unchanged so commit hashes and timestamps are preserved.
