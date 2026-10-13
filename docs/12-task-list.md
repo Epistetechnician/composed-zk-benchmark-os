@@ -21439,6 +21439,31 @@ external replay, accepted Evidence Ledger mutation, score movement, Level2+
 evidence, benchmark evidence, production operation, or submission authority is
 created here.
 
+## Phase 796-A3L6A HSAI P01B Current Immutable-Gate Audit
+
+Status: complete immutable audit baseline; A3L6 remains unaccepted,
+`a3l7_authorized=false`, and correspondence remains `2/10`.
+
+Named state slice:
+`phase-796a3l6a-p01b-current-immutable-gate-audit`.
+
+Completed: froze the clean A3L6R implementation commit/tree, the five reviewed
+blob digests, the 22-path census, 32+33=65 focused tests, the 172
+Seatbelt-stubbed discovery census, 1 MiB/4 MiB caps, and 201/202/271
+cardinalities. The audit excludes the dirty primary checkout, including its
+A3L7-adjacent P01B edits, and requires an after-commit canonical expected
+bindings document plus a clean detached retained gate run. See
+`docs/796a3l6a-phase-hsai-p01b-current-immutable-gate-audit.md`.
+
+Remaining: retain a `pending-review` result from the detached audit checkout,
+then obtain two genuine independent human reviews of that exact audit and run:
+security-capability before correspondence-reproducibility. Local validation,
+self-review, or agent review does not satisfy this dependency. A separately
+authorized phase is still required for A3L7. No Docker, registry, network,
+container, external replay, accepted Evidence Ledger mutation, score movement,
+Level2+ evidence, benchmark submission, production operation, or submission
+authority is created.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See
