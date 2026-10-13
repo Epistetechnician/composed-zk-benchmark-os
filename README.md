@@ -48,6 +48,108 @@ This setup indexes existing code in place. It does not vendor external
 interpretability repositories, mix runtime environments, import terminal
 scientific artifacts, or authorize model execution.
 
+The local aligned-RSI adaptation and evaluation release is recorded under
+state slice `aligned-rsi-local-billsum-adaptation-internal-v1`:
+
+- [Frozen protocol and reproduction commands](docs/research/continual-learning/312-aligned-rsi-local-billsum-adaptation-v1.md)
+- [Measured execution record](docs/research/continual-learning/313-aligned-rsi-local-billsum-adaptation-v1-execution.md)
+- [Runner and machine-readable contract](experiments/continual_learning/aligned_rsi_local_billsum_v1.py)
+- [Aggregate evaluation report](release/aligned_rsi_local_billsum_v1/evaluation_report.json)
+- [Digest-bound local acceptance receipt](release/aligned_rsi_local_billsum_v1/local_acceptance.json)
+
+The local evaluation is `INTERNAL_PASS` with candidate disposition `NoCandidate`.
+It has no independent acceptance and makes no general alignment or recursive
+self-improvement claim.
+
+The aligned RSI Qwen3 chat-template adaptation V2 and V3 are terminally closed
+before model execution; V4 is terminally closed after reaching its frozen
+180-minute limit during adapter training. See the [V4 execution
+closure](docs/research/continual-learning/319-aligned-rsi-billsum-chat-template-adaptation-v4-execution-closure.md).
+
+V5 is terminally closed after its first selected-arm training batch failed
+with MPS out-of-memory. Fit scoring and all three untouched-base assessments
+completed, but no optimizer step, adapter, updated-arm comparison, aggregate
+report, or local acceptance was produced. See the [V5 execution
+closure](docs/research/continual-learning/321-aligned-rsi-billsum-chat-template-adaptation-v5-execution-closure.md).
+
+V5's frozen packet is preserved under state slice
+`aligned-rsi-billsum-chat-template-adaptation-v5`:
+
+- [Frozen protocol and reproduction commands](docs/research/continual-learning/320-aligned-rsi-billsum-chat-template-adaptation-v5.md)
+- [Machine-readable experiment contract](experiments/continual_learning/aligned_rsi_billsum_chat_template_v5.json)
+- [Runner and focused contract tests](experiments/continual_learning/aligned_rsi_billsum_chat_template_v5.py)
+- [Hash-locked runtime dependencies](experiments/continual_learning/aligned_rsi_billsum_chat_template_v5_requirements.lock)
+
+V5 uses a fresh duplicate-free and V1-disjoint 512/64 cohort, a 32-example
+loss-selected curriculum and equal-step random control, batched PEFT LoRA on
+local MPS, paired held-out generation, and aggregate-only local acceptance.
+The run is terminally incomplete; the ceiling
+`LocalDevelopmentBillSumChatTemplateCurriculumQualificationV5` was not earned.
+No V5 retry or changed configuration is authorized under that state slice.
+
+The user's continuing local-acceptance instruction authorizes one fresh V6
+qualification under a new state slice. V6 excludes reconstructed V1 and V5
+cohorts, uses target-position-only logits, one-example MPS microbatches,
+non-reentrant activation checkpointing, and token-weighted gradient
+accumulation. The frozen V6 packet and local reproduction contract are here:
+
+- [V6 protocol and run record](docs/research/continual-learning/322-aligned-rsi-billsum-chat-template-adaptation-v6.md)
+- [Machine-readable experiment contract](experiments/continual_learning/aligned_rsi_billsum_chat_template_v6.json)
+- [Runner and focused parity tests](experiments/continual_learning/aligned_rsi_billsum_chat_template_v6.py)
+- [Hash-locked runtime dependencies](experiments/continual_learning/aligned_rsi_billsum_chat_template_v6_requirements.lock)
+
+V6 is terminally closed as `ExecutionFailedUnexpectedPEFTAdapterFileSet`.
+Training completed eight selected-arm steps for seed 59, then adapter sealing
+rejected PEFT's extra `README.md`; no updated-arm assessment, aggregate
+release, or local acceptance exists. The memory-bounded update path itself
+completed those steps without OOM. See the [V6 execution
+closure](docs/research/continual-learning/323-aligned-rsi-billsum-chat-template-adaptation-v6-execution-closure.md).
+No candidate disposition or V6 claim ceiling was earned.
+
+V7 completed one offline local Apple MPS run and its digest-bound local report
+reconstruction under state slice
+`aligned-rsi-billsum-chat-template-adaptation-v7`. The 512/64 cohort was
+fresh, duplicate-free, and disjoint from reconstructed V1, V5, and V6 source
+rosters. Local assurance is `INTERNAL_PASS`; the scientific result is
+`NoCandidate`: selected minus random mean ROUGE-L was -0.0331 with a 95%
+bootstrap interval [-0.0553, -0.0122]. The curriculum claim ceiling was not
+earned, and independent acceptance was not performed. See the [V7 protocol](docs/research/continual-learning/324-aligned-rsi-billsum-chat-template-adaptation-v7.md),
+[execution record](docs/research/continual-learning/325-aligned-rsi-billsum-chat-template-adaptation-v7-execution.md),
+[aggregate report](release/aligned_rsi_billsum_chat_template_v7/evaluation_report.json),
+and [local acceptance receipt](release/aligned_rsi_billsum_chat_template_v7/local_acceptance.json).
+
+V8 is a fresh local continuation under state slice
+`aligned-rsi-billsum-length-matched-curriculum-v8`. It tests whether
+fit-loss selection still beats random after matching the number of examples
+across eight prompt-plus-summary token-length bins. The frozen design uses a
+768-document fit pool, 128 held-out bills, four training seeds, four trained
+arms, and 32 optimizer steps per arm and seed. The single offline local MPS
+run completed in 14,125.03 seconds and digest-bound report reconstruction
+passed as `INTERNAL_PASS`. The scientific disposition is `NoCandidate`: the
+length-stratified loss arm scored 0.2728 ROUGE-L versus 0.3141 for its matched
+random control, a paired mean effect of -0.0414 (95% interval
+[-0.0551, -0.0281]). The configured claim ceiling was not earned; no
+independent acceptance or clean second-environment reproduction was performed.
+V8 is terminal and must not be rerun or retuned. See the [V8 protocol](docs/research/continual-learning/326-aligned-rsi-billsum-length-matched-curriculum-v8.md),
+[execution record](docs/research/continual-learning/327-aligned-rsi-billsum-length-matched-curriculum-v8-execution.md),
+[aggregate report](release/aligned_rsi_billsum_length_matched_v8/evaluation_report.json),
+[local acceptance receipt](release/aligned_rsi_billsum_length_matched_v8/local_acceptance.json),
+[runner](experiments/continual_learning/aligned_rsi_billsum_length_matched_v8.py),
+and [machine contract](experiments/continual_learning/aligned_rsi_billsum_length_matched_v8.json).
+
+V9 is a new local experiment under state slice
+`aligned-rsi-billsum-same-roster-order-curriculum-v9` and governance slice
+`global-experiment-assurance-lifecycle-v1`. It compares easy-to-hard
+ordering by untouched-base assistant-target NLL with seeded random order over
+the exact same 128 training bills, tokens, paired LoRA initialization, and
+update budget. The fresh held-out cohort contains 120 federal test bills. The
+frozen claim ceiling is
+`LocalDevelopmentBillSumSameRosterCurriculumOrderQualificationV9`; execution
+is limited to one offline local Apple MPS run with local-only report
+reconstruction. See the [V9 protocol](docs/research/continual-learning/328-aligned-rsi-billsum-same-roster-order-curriculum-v9.md),
+[runner](experiments/continual_learning/aligned_rsi_billsum_same_roster_order_v9.py),
+and [machine contract](experiments/continual_learning/aligned_rsi_billsum_same_roster_order_v9.json).
+
 The universal harness interoperability contract is recorded under state slice
 `universal-harness-interoperability-v1`:
 
@@ -82,6 +184,59 @@ qualification under `proof-carrying-nano-jevlike-independent-validation-v1`:
 
 Its output remains `HypothesisOnly`; Jevlike is loaded only by an explicit
 runtime call against the pinned external checkout and checkpoint digest.
+
+A separate privacy-preserving decision-model proposal is design-only under
+`private-decision-model-privacy-prd-v1`:
+
+- [PRD and gated research plan](docs/research/private-decision-model-privacy-prd-v1.md)
+
+It distinguishes ciphertext evaluation with FHE from attested plaintext
+processing inside a TEE. It does not amend the existing Jevlike lanes or
+authorize execution, data acquisition, provider spend, or deployment.
+
+The local synthetic FHE inference continuation is isolated under
+`private-decision-model-fhe-inference-v1`:
+
+- [Protocol and execution record](docs/research/private-decision-model-fhe-inference-v1.md)
+- [Implementation and local run guide](tools/private_decision_model_fhe_inference_v1/README.md)
+
+The independent-review packet preparation is separately bounded under
+`private-decision-model-fhe-review-preparation-v1` and
+`global-experiment-assurance-lifecycle-v1`:
+
+- [Frozen review packet](docs/research/private-decision-model-fhe-review-packet-v1.json)
+- [Review protocol](docs/research/private-decision-model-fhe-review-protocol-v1.json)
+- [Digest-bound review target](docs/research/private-decision-model-fhe-review-target-v1.json)
+- [Artifact manifest](docs/research/private-decision-model-fhe-review-artifact-manifest-v1.json)
+- [Packet-preparation and preflight record](docs/research/private-decision-model-fhe-review-preflight-v1.md)
+- [Relay note for the registered reviewer service owner](docs/research/private-decision-model-fhe-review-relay-v1.md)
+- Offline frozen-byte/archive verification: `pnpm run verify:private-decision-model-fhe-review-v1`.
+
+The local-only FHE IPC continuation and receipt qualification are recorded
+under `private-decision-model-fhe-local-ipc-contract-v2/v3` and
+`private-decision-model-fhe-local-ipc-receipt-v4/v5`:
+
+- [V2 terminal parser-control failure](docs/research/private-decision-model-fhe-local-ipc-contract-v2-closure.md)
+- [V3 frozen protocol and packet](docs/research/private-decision-model-fhe-local-ipc-contract-v3-protocol.md)
+- [V3 execution record and claim ceiling](docs/research/private-decision-model-fhe-local-ipc-contract-v3-execution.md)
+- [V3 implementation and local run guide](tools/private_decision_model_fhe_inference_v3/README.md)
+- [V4 terminal test-discovery failure](docs/research/private-decision-model-fhe-local-ipc-receipt-v4-closure.md)
+- [V5 frozen receipt protocol and packet](docs/research/private-decision-model-fhe-local-ipc-receipt-v5-protocol.md)
+- [V5 execution record and claim ceiling](docs/research/private-decision-model-fhe-local-ipc-receipt-v5-execution.md)
+- [V5 implementation and local run guide](tools/private_decision_model_fhe_inference_v5/README.md)
+
+V2 stopped before FHE execution after one parser control failed. V3 is a fresh
+local slice: all 14 focused tests passed, and one synthetic run matched 32/32
+encrypted scores and 8/8 top rankings. Its claim ceiling is
+`LocalDevelopmentSyntheticFHEIPCContractQualificationV3`; it does not make an
+independent-review, security, remote-service, benchmark, or production claim.
+V3's runner receipt had a path-normalization discrepancy. V4 closed before
+FHE execution after its test module could not import the V4 runner. V5 fixes
+the receipt path and passed 14 frozen V3 tests, 3 V5 receipt tests, and one
+synthetic FHE run; its digest matched its frozen packet, with 32/32 scores and
+8/8 rankings. V5's ceiling is
+`LocalDevelopmentSyntheticFHEIPCReceiptQualificationV5`. No reviewer request,
+task, or artifact transfer was made for V4 or V5.
 
 The next real-host slice is separately bounded under
 `proof-carrying-nano-host-activation-boundary-v1`:

@@ -2,6 +2,328 @@
 
 Each phase names goal, deliverables, dependencies, validation gate, anti-goals, and exit criteria.
 
+## Aligned RSI BillSum chat-template adaptation V2-V6
+
+V2 status: terminal `PreparationFailedDuplicateSourceIdentity`; preparation
+stopped before model loading. See
+`docs/research/continual-learning/315-aligned-rsi-billsum-chat-template-adaptation-v2-preparation-closure.md`.
+
+V3 status: terminal `PreparationFailedAssistantTurnTrailer`; read-only
+tokenizer preflight stopped before model loading. See
+`docs/research/continual-learning/317-aligned-rsi-billsum-chat-template-adaptation-v3-preparation-closure.md`.
+
+V4 status: terminal `ExecutionFailedWallClockLimit`; the one run stopped at
+180 minutes during adapter training. No adapter, complete comparison,
+aggregate report, or local acceptance was produced. See
+`docs/research/continual-learning/319-aligned-rsi-billsum-chat-template-adaptation-v4-execution-closure.md`.
+
+V5 status: terminal `ExecutionFailedMPSOutOfMemory`. The run completed fit
+scoring and all three untouched-base assessments, then failed on the first
+selected training batch; no optimizer step, adapter, updated-arm result,
+aggregate report, or local acceptance exists. See
+`docs/research/continual-learning/321-aligned-rsi-billsum-chat-template-adaptation-v5-execution-closure.md`.
+
+State slices: `aligned-rsi-billsum-chat-template-adaptation-v2` (closed),
+`aligned-rsi-billsum-chat-template-adaptation-v3` (closed), and
+`aligned-rsi-billsum-chat-template-adaptation-v4` (terminal) and
+`aligned-rsi-billsum-chat-template-adaptation-v5` (terminal).
+
+V5 deliverables: fresh duplicate-free and V1-disjoint 512-row fit pool and
+64-row held-out assessment cohort; no-truncation prompt/target ceilings;
+32-example loss-selected and equal-budget random arms; fixed batch-four,
+eight-step PEFT LoRA updates; paired sampled evaluation with ROUGE-1/2/L; a
+layer-level residual patch control; and an aggregate-only local release. The
+execution ceiling is 360 minutes, informed by V4's terminal timeout.
+
+Validation gate: exact source, runtime, model, dataset, tokenizer template,
+roster, adapter, base-checkpoint, output, and local-acceptance digests;
+focused hermetic contract checks; one bounded Apple MPS execution; reconstructed
+report verification.
+
+Anti-goals: independent acceptance, external calls, paid execution, remote
+workers, V1-V4 scientific-artifact reuse, user data, general alignment or
+recursive-self-improvement claims, leaderboard claims, or production use.
+
+Exit criteria: V5 ended before its verifier could run. No scientific
+disposition is supported; the exact OOM failure is preserved and the state
+slice is terminal. No independent acceptance was requested or issued.
+
+V6 state slice: `aligned-rsi-billsum-chat-template-adaptation-v6`, with
+governance slice `global-experiment-assurance-lifecycle-v1`.
+
+V6 status: one offline local Apple MPS qualification and local-only
+acceptance are authorized. Its frozen protocol excludes V1 and reconstructed
+V5 rosters, retains duplicate-free 512/64 source-hash-ordered cohorts, and
+compares loss-selected and equal-budget random LoRA curricula against the
+untouched base. Training uses target-position-only logits, one-example
+microbatches, non-reentrant activation checkpointing, token-weighted
+four-example gradient accumulation, and eight optimizer steps per arm and
+seed. Focused tests include full-loss/gradient parity. The fixed held-out
+evaluation uses paired generations, ROUGE-1/2/L, a layer-level residual patch
+control, and a 360-minute terminal run bound. Raw rows, outputs, and adapters
+stay under the V6 owner-only root; repository release is aggregate-only.
+
+Validation gate: focused V6 tests; frozen source, runtime, model/data,
+cohort, adapter, output, and local-acceptance digests; one MPS execution; and
+local report reconstruction. No retry is allowed after V6 execution begins.
+
+Anti-goals: V1-V5 scientific-artifact reuse, independent acceptance, external
+calls, paid execution, remote workers, user data, network during execution,
+Evidence Ledger mutation, public deployment, leaderboard claims, broader
+alignment or recursive-self-improvement claims, or production use.
+
+Exit criteria: V6 is terminally closed as
+`ExecutionFailedUnexpectedPEFTAdapterFileSet`. Seed 59 completed its eight
+selected-arm optimizer steps, but adapter sealing stopped on PEFT's extra
+`README.md`. No updated-arm evaluation, random arm, aggregate report, release,
+or local acceptance exists; the run has no scientific candidate disposition.
+See `docs/research/continual-learning/323-aligned-rsi-billsum-chat-template-adaptation-v6-execution-closure.md`.
+
+V7 state slice: `aligned-rsi-billsum-chat-template-adaptation-v7`, with
+governance slice `global-experiment-assurance-lifecycle-v1`.
+
+Goal: perform one fresh local Qwen3/BillSum continual-learning qualification
+after the terminal V6 adapter-serialization failure. Reconstruct V1, V5, and
+V6 cohorts from immutable raw inputs only to exclude their source IDs. Freeze
+a fresh duplicate-free, split-disjoint 512/64 roster, exact protocol and
+runtime, memory-bounded PEFT update path, exact three-file adapter serializer
+contract, paired held-out metric, resource limits, and aggregate-only release.
+
+Deliverables: additive V7 runner, contract, tests, locked runtime, protocol,
+execution record, navigation, and local release if all gates pass. Adapter
+files, raw rows, generated summaries, and activations remain in the V7
+owner-only root.
+
+Validation gate: focused V7 contract and gradient-parity tests; frozen source,
+runtime, model/data, exclusion, and roster digests; one offline local Apple
+MPS run; exact adapter-file verification; and local report reconstruction.
+MPS failure, timeout, or any failed gate is terminal. Independent acceptance
+is not requested.
+
+Anti-goals: V1-V6 scientific-output reuse, external review, provider calls,
+paid execution, remote workers, user data, network during execution, Evidence
+Ledger mutation, public deployment, broader alignment or recursive
+self-improvement claims, leaderboard claims, or production use.
+
+Exit criteria: completed one offline local MPS run in 3,282.54 seconds; all
+focused tests, adapter-tree checks, and digest-bound report reconstruction
+passed. Local assurance is `INTERNAL_PASS`; candidate disposition is
+`NoCandidate` because selected-minus-random ROUGE-L was -0.0331 with a 95%
+bootstrap interval [-0.0553, -0.0122]. The configured ceiling
+`LocalDevelopmentBillSumChatTemplateCurriculumQualificationV7` was not earned.
+No independent acceptance or clean second-environment reproduction exists.
+The V7 identity is closed and must not be rerun or retuned. See
+`docs/research/continual-learning/325-aligned-rsi-billsum-chat-template-adaptation-v7-execution.md`.
+
+## Aligned RSI BillSum length-matched curriculum V8
+
+V8 state slice: `aligned-rsi-billsum-length-matched-curriculum-v8`, with
+governance slice `global-experiment-assurance-lifecycle-v1`.
+
+Goal: test whether fit-loss selection still improves held-out BillSum ROUGE-L
+when the selected and random arms use the same eight total-token-length bins.
+Use a fresh 768-document fit pool and 128-document assessment cohort, excluding
+V1 and the verified V4-V7 owner-only source rosters. The four trained arms are
+global loss, global random, length-stratified loss, and length-stratified
+random; each uses 128 examples and 32 fixed optimizer steps per seed. The
+primary contrast is length-stratified loss versus length-stratified random.
+
+Deliverables: additive V8 runner, frozen contract, focused tests, locked
+runtime, protocol and execution record, navigation, and an aggregate-only
+local release if all gates pass. Raw rows, generations, adapter weights, and
+activations stay in the V8 owner-only root.
+
+Validation gate: exact source, runtime, prior-exclusion, and fresh-roster
+digests; focused contract and gradient-parity tests; one offline local Apple
+MPS execution under an eight-hour hard limit; complete paired held-out
+assessment; exact adapter-tree checks; and digest-bound local report
+reconstruction. Any failed gate is terminal. Independent acceptance is not
+requested.
+
+Anti-goals: V1-V7 scientific-output reuse, external review, provider calls,
+paid execution, remote workers, user data, network during execution, Evidence
+Ledger mutation, public deployment, broader alignment or recursive
+self-improvement claims, leaderboard claims, and production use.
+
+Execution result: one frozen offline local MPS run completed in 14,125.03
+seconds. All four trained arms across four seeds, 512 optimizer steps, 2,560
+held-out completions, and 256 mechanistic diagnostic rows completed. Local
+report reconstruction passed as `INTERNAL_PASS`; the scientific disposition is
+`NoCandidate`. The primary paired mean effect was -0.0414 ROUGE-L (95%
+bootstrap interval [-0.0551, -0.0281]) against a required effect of +0.02.
+The selected arm averaged 0.2728 ROUGE-L and its matched random control 0.3141.
+The configured V8 claim ceiling was not earned. Independent acceptance and
+clean second-environment reproduction were not performed. The V8 identity is
+terminal and must not be rerun or retuned. See
+`docs/research/continual-learning/327-aligned-rsi-billsum-length-matched-curriculum-v8-execution.md`.
+
+## Aligned RSI BillSum same-roster order curriculum V9
+
+V9 state slice: `aligned-rsi-billsum-same-roster-order-curriculum-v9`, with
+governance slice `global-experiment-assurance-lifecycle-v1`.
+
+Goal: test whether easy-to-hard presentation order by untouched-base
+assistant-target NLL improves held-out federal BillSum ROUGE-L over random
+ordering when both arms use the exact same 128 documents and tokens, paired
+LoRA initialization, and 32 optimizer steps per seed. The fresh assessment
+contains 120 documents. Four paired seeds and paired generation seeds are
+fixed in the contract.
+
+Deliverables: additive runner, focused tests, frozen protocol and machine
+contract, exact prepared-input receipt, one offline local MPS run, report
+reconstruction, and aggregate-only local acceptance. The local claim ceiling
+is `LocalDevelopmentBillSumSameRosterCurriculumOrderQualificationV9`;
+independent acceptance is not requested.
+
+Validation: exact model/data and V1/V4-V8 receipt identities, fresh duplicate-
+free and split-disjoint cohorts, exact per-arm source and target token totals,
+four paired adapter initializations, eight-hour hard run bound, complete
+paired held-out outputs and adapter manifests, layer-14 identity-patch gate,
+and digest-bound report reconstruction. Any failed gate is terminal; do not
+retry or alter the V9 identity.
+
+Anti-goals: V1-V8 scientific-output reuse, external review, provider calls,
+paid execution, remote workers, user data, network during execution, Evidence
+Ledger mutation, public deployment, broader alignment or recursive
+self-improvement claims, leaderboard claims, feature-level mechanism claims,
+and production use.
+
+## Private Decision Model FHE Inference V1
+
+Status: local synthetic client-to-server FHE inference passed and was
+reproduced in a fresh same-owner environment under state slice
+`private-decision-model-fhe-inference-v1`, with claim ceiling
+`LocalDevelopmentSyntheticFHEInferenceV1`.
+
+Deliverables: fixed-shape six-feature/four-option synthetic scorer, isolated
+Concrete runtime, separate local client and ciphertext-only server processes,
+hermetic synthetic contract checks, and an aggregate-only execution record.
+
+Validation: 7 hermetic contract checks, 256 bounded randomized scorer checks,
+32/32 exact FHE/clear score equality, 8/8 top-rank agreement, server rejection
+of cleartext/key-field payloads, and a sanitized server process environment.
+`REPRODUCED_LOCAL` passed in a fresh isolated Python 3.12.13 environment with
+matching source, project manifest, contract harness, lock, fixture, runtime,
+and aggregate receipt digests. This was same-owner and same-host; independent
+review remains `NOT_REQUESTED`.
+
+Anti-goals: user or external data, remote services, encrypted training, TEE,
+Jevlike artifact reuse, provider calls, spend, external review submission,
+production deployment, or security, benchmark, commercial-readiness, and
+production claims.
+
+Exit criteria: the encrypted feature inputs execute in a distinct local server
+process with no client secret key or clear feature array; the client decrypts
+the returned scores; aggregate checks pass; and temporary keys, circuit
+artifacts, ciphertexts, and synthetic arrays are removed.
+
+## Private Decision Model FHE Independent Review Preparation V1
+
+State slices: `private-decision-model-fhe-review-preparation-v1` and
+`global-experiment-assurance-lifecycle-v1`; frozen target slice:
+`private-decision-model-fhe-inference-v1`.
+
+Status: local packet artifacts and a 13-entry manifest-bound archive are
+frozen and validated for independent source and protocol review. The
+configured reviewer Agent Card returned HTTP 404 on two checks on 2026-10-01
+and a recheck on 2026-10-02, so external review is
+`EXTERNAL_REVIEW_UNAVAILABLE`; no task was created and no artifact bytes were
+transferred. The claim ceiling remains
+`LocalDevelopmentSyntheticFHEInferenceV1`.
+
+Deliverables: digest-bound target, protocol, packet, artifact manifest, and
+owner-only local archive; source, harness, dependency, fixture, and aggregate
+receipt identities; a preflight record with exact blockers; and a concise
+relay note for the registered service owner. Canonical
+target SHA-256 is
+`43d300f3e910704016e6b953f417a7a457b2a9b69cd35f44d6620e832f39793d`; archive
+SHA-256 is
+`90836174530b563179a4e7ff95ca20109f15ea2ed806d5491139f07d702e9f3a`.
+An offline repeatable validator rechecked target/protocol/packet canonical
+digests, all manifest file digests, the exact 13-entry archive payload set,
+and owner-only permissions on 2026-10-03; all remained byte-identical.
+
+Anti-goals: changing the frozen FHE source, harness, fixture, outputs, or
+claim ceiling; running another model or provider; using real data, remote
+workers, paid execution, public services, review-task submission, or changing
+reviewer identity, key, schema, or endpoint.
+
+Exit criteria: every archive entry matches the manifest; required protocol
+and review-packet digests match the target; archive, target, protocol, packet,
+and manifest digests are recorded; and live preflight remains closed until the
+registered endpoint and secure-transfer path are available and the user
+authorizes the exact frozen target.
+
+## Private Decision Model FHE Local IPC Contract V2-V3 and Receipt V4-V5
+
+State slices: `private-decision-model-fhe-local-ipc-contract-v2`,
+`private-decision-model-fhe-local-ipc-contract-v3`, and
+`global-experiment-assurance-lifecycle-v1`; frozen dependency slice:
+`private-decision-model-fhe-inference-v1`.
+
+Status: V2 is terminally closed as `QualificationFailedParserControl`; 12 of
+13 frozen focused tests passed, but `strict_json_loads("[]")` accepted a
+non-object JSON root. No V2 FHE execution ran. V3 is a fresh local-only slice
+with explicit root-object enforcement. Its 14 focused tests passed, followed
+by one synthetic FHE qualification: 32/32 encrypted scores and 8/8 top
+rankings matched the frozen V1 scorer. Temporary keys, circuit bundle,
+ciphertexts, responses, and arrays were removed. Assurance is `INTERNAL_PASS`
+for the exact local scope; reproducibility is one local run, not
+`REPRODUCED_LOCAL`. Reviewer status remains
+`EXTERNAL_REVIEW_UNAVAILABLE` for the separate V1 review packet; no V3 review
+request or transfer was made.
+
+V3's canonical packet SHA-256 is
+`5d709c44ea4dceabc966ad26d4e584d3f7724cd6224d1a899cac1ac6a11e59f8`; its
+source composite SHA-256 is
+`4f2fd8b71459584b99f2672d3c9781e30c085aaf92e53c079b8260c4bb172d3c`. The
+runner's returned source-digest field differed because it incorporated the
+unnormalized `..` invocation path. The frozen source and packet digests were
+independently rechecked after execution and matched; V3 source is not amended
+or rerun to repair this receipt field.
+
+Claim ceiling: `LocalDevelopmentSyntheticFHEIPCContractQualificationV3`.
+Known limits include a same-host/same-user boundary, clear model weights in
+the server circuit, no second-environment reproduction, and no cryptographic,
+real-data, remote-service, benchmark, commercial, or production claim. Any
+future real-data, remote, paid, public, security, or production step remains
+blocked on a fresh scope and packet plus applicable owner or independent
+authority. Further bounded local development does not require external-review
+contact.
+
+Receipt continuation: V4 is terminally closed as
+`QualificationFailedReceiptTestImport`. Its inherited V3 tests passed, but
+its receipt test module failed discovery because the V4 directory was missing
+from `sys.path`; no V4 FHE run occurred. V5 is a fresh local slice that pins
+the V3 implementation and explicitly adds its own implementation directory
+before importing the runner. Its 14 inherited V3 tests and 3 V5 receipt tests
+passed. One V5 synthetic FHE run passed with a packet-matching canonical
+source digest, 32/32 score matches, 8/8 ranking matches, and temporary
+artifacts removed. Assurance is `INTERNAL_PASS` for V5 only; reproducibility
+is one local run, not `REPRODUCED_LOCAL`. Reviewer status remains
+`EXTERNAL_REVIEW_UNAVAILABLE` for the separate V1 packet; no V4 or V5 review
+request or transfer was made.
+
+V5 canonical packet SHA-256:
+`873a1733d73ae763f212588f4519f28cb1d39046d0603fa61c63e345626e6098`.
+V5 source composite SHA-256:
+`f0abcac8c47d04b893aa6abad0b7dc5bcf8e724cd3c6a1a490d3af831b5f08dd`.
+The claim ceiling is
+`LocalDevelopmentSyntheticFHEIPCReceiptQualificationV5`. Limits remain a
+same-host/same-user process boundary, clear weights in the server circuit,
+and no independent review, second-environment reproduction, cryptographic,
+real-data, remote-service, benchmark, commercial, or production claim.
+Further bounded local work needs no reviewer contact. Real-data, remote, paid,
+public, security, or production work remains blocked on a fresh scope and
+packet plus the applicable owner or independent authority.
+
+Records: [V2 closure](research/private-decision-model-fhe-local-ipc-contract-v2-closure.md),
+[V3 execution](research/private-decision-model-fhe-local-ipc-contract-v3-execution.md),
+[V4 closure](research/private-decision-model-fhe-local-ipc-receipt-v4-closure.md),
+[V5 protocol](research/private-decision-model-fhe-local-ipc-receipt-v5-protocol.md),
+[V5 execution](research/private-decision-model-fhe-local-ipc-receipt-v5-execution.md),
+[V5 implementation](../tools/private_decision_model_fhe_inference_v5/).
+
 ## Phase 841: Universal Harness Interoperability V1
 
 Status: local pure-data contract implemented and independently validated for

@@ -1,0 +1,23 @@
+{
+  "accepted_report_core_sha256": "a76cb61108e5ed8b8541ce573fb8be6645d331aaaf70d1cc5d16e6d333408517",
+  "assurance_level": "INTERNAL_PASS",
+  "candidate_disposition": "NoCandidate",
+  "claim_ceiling": "LocalDevelopmentBillSumChatTemplateCurriculumQualificationV7",
+  "governance_slice": "global-experiment-assurance-lifecycle-v1",
+  "independent_acceptance": false,
+  "local_acceptance": "INTERNAL_PASS",
+  "prepared_inputs_sha256": "1fb1fab0b68e0cc1bad7bbe4a920e0c223a8238bfbebfc00be75551fb2cc9adc",
+  "private_run_sha256": "0c7262fd3fcb6ec362b849f728e9d44a9c0e5bbbcd50dc53df6812e28ce10c82",
+  "reviewer_status": "LOCAL_ACCEPTANCE_ONLY_NO_INDEPENDENT_ACCEPT",
+  "schema_version": "aligned-rsi-billsum-chat-template-v7-local-acceptance",
+  "source_digests": {
+    "focused_tests": "1590361088b416597b130b597ee5edaa86e885c302ed0534c69cc1992e7d59fc",
+    "protocol": "a88b0964a25b80dff47953f84615e0ab6360ca84c024dbbf9f4c8bef543b1575",
+    "protocol_manifest": "e57636b8fee68e2030882b016295e52120bace21ee85498aebc1d5806fdbe22c",
+    "repository_instructions": "6c5b58433305dd3e351e6250e2e84c1dca2e44149443f93184dd2ca07132dca5",
+    "requirements_lock": "ecc7b3b3db1fc626612128839c416f2d21ab6e0672870983a368f6cd57c7b883",
+    "runner": "e0e32618f43ea32711d96d4b9883995f34b86320a1239f7b13143820c08b510d"
+  },
+  "source_manifest_sha256": "5047273052fe6051293f5d2f536509209dd2cb029e2622ff64582653d1026ce5",
+  "state_slice": "aligned-rsi-billsum-chat-template-adaptation-v7"
+}

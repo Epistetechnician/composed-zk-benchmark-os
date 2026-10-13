@@ -1,0 +1,18 @@
+{
+  "files": [
+    {
+      "path": "evaluation_report.json",
+      "sha256": "a93bbe15c7b1835902c4642c649b3cd0a765474d575d42cd075a5a9f7993f619"
+    },
+    {
+      "path": "local_acceptance.json",
+      "sha256": "f6390380e22f89db770793df19ab1f9f83bfc76bf124f738ddaf8a9794ef4588"
+    }
+  ],
+  "generated_summaries_included": false,
+  "independent_acceptance": false,
+  "model_weights_included": false,
+  "raw_data_included": false,
+  "schema_version": "aligned-rsi-local-billsum-v1-aggregate-release",
+  "state_slice": "aligned-rsi-local-billsum-adaptation-internal-v1"
+}

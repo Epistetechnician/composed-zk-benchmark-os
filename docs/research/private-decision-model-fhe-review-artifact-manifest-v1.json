@@ -1,0 +1,67 @@
+[
+  {
+    "path": "AGENTS.md",
+    "role": "authorization",
+    "sha256": "efe268a3187ee20559a2ce780145afc5c5a4b397df6263b43ab597cac0f15426"
+  },
+  {
+    "path": "docs/research/private-decision-model-fhe-inference-v1.md",
+    "role": "execution_report",
+    "sha256": "630287c5c6ab04ad3922064ff77fbb3212f6b8713e189051efb0dd03702a634f"
+  },
+  {
+    "path": "docs/research/private-decision-model-privacy-prd-v1.md",
+    "role": "design_context",
+    "sha256": "43400cb165029d53a7be9b437ee56a0a759453fac0f1c5acf94d29de84aaf8af"
+  },
+  {
+    "path": "tools/private_decision_model_fhe_inference_v1/README.md",
+    "role": "implementation_guide",
+    "sha256": "e42b7d2f568d21af10dd1a25bf31fe7ec791a0f93dd07d97b0e573d44b1f0638"
+  },
+  {
+    "path": "tools/private_decision_model_fhe_inference_v1/run_v1.py",
+    "role": "runner_source",
+    "sha256": "31fb1d5d6fb12b0a3ba60df658856edb7d0875df26cc66ea7dee4f7565be9897"
+  },
+  {
+    "path": "tools/private_decision_model_fhe_inference_v1/server_worker.py",
+    "role": "server_source",
+    "sha256": "8d722acadc174aea07db29951b888c29badb893373ba7726c4208fe656eeafdd"
+  },
+  {
+    "path": "tools/private_decision_model_fhe_inference_v1/decision_model.py",
+    "role": "model_source",
+    "sha256": "c31125d5882e7a8c1b246d19a7a849d0344c9afeddd5026a6e0f545764c3614c"
+  },
+  {
+    "path": "tools/private_decision_model_fhe_inference_v1/tests/test_contract.py",
+    "role": "test_harness",
+    "sha256": "0db58dd79e216a2f15b87d3e99a891f40ec4aafd24bb0ef00283addb842dc94d"
+  },
+  {
+    "path": "tools/private_decision_model_fhe_inference_v1/pyproject.toml",
+    "role": "project_manifest",
+    "sha256": "da7caa076b89c4d578c348c4bd8784984e71a8bd57eebf9577bdd2f502d579ae"
+  },
+  {
+    "path": "tools/private_decision_model_fhe_inference_v1/uv.lock",
+    "role": "dependency_lock",
+    "sha256": "cf9852e2b16da1d6dabb13fd9fbcf368e36822043907aa0a5154589504b0a8b2"
+  },
+  {
+    "path": "docs/research/private-decision-model-fhe-review-protocol-v1.json",
+    "role": "protocol",
+    "sha256": "669e9e0f67e0b8b054a9dcfd28e893974503a6a36758a3005fa221356201b3c3"
+  },
+  {
+    "path": "docs/research/private-decision-model-fhe-review-packet-v1.json",
+    "role": "review_packet",
+    "sha256": "61b575b8841dbcba1d0271942cf38ed9de1b4d92098e04a42d6fc1ced4ce209d"
+  },
+  {
+    "path": "docs/research/private-decision-model-fhe-review-target-v1.json",
+    "role": "target",
+    "sha256": "b77e6966e246a62a282f16a5b7535a59079253576f531b89900cd4b618c48339"
+  }
+]

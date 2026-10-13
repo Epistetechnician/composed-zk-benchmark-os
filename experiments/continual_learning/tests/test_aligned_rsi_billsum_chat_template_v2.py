@@ -1,0 +1,200 @@
+from __future__ import annotations
+
+import hashlib
+import random
+from unittest.mock import patch
+
+import pytest
+import torch
+from peft import LoraConfig, get_peft_model
+from peft.tuners.lora.layer import LoraLayer
+from transformers import Qwen3Config, Qwen3ForCausalLM
+
+from experiments.continual_learning import aligned_rsi_billsum_chat_template_v2 as experiment
+
+
+class FakeTokenizer:
+    eos_token_id = 151645
+
+    def apply_chat_template(
+        self,
+        messages,
+        *,
+        tokenize,
+        add_generation_prompt,
+        enable_thinking,
+        return_dict,
+    ):
+        assert tokenize is True
+        assert enable_thinking is False
+        assert return_dict is False
+        user_ids = [abs(hash(token)) % 10_000 for token in messages[1]["content"].split()]
+        prefix = [151644, 8948, *user_ids, 151644, 77091]
+        if messages[-1]["role"] == "assistant":
+            assistant_ids = [abs(hash(token)) % 10_000 for token in messages[-1]["content"].split()]
+            return [*prefix, *assistant_ids, self.eos_token_id]
+        return prefix
+
+    def __call__(self, text, *, add_special_tokens):
+        assert add_special_tokens is False
+        return {"input_ids": text.split()}
+
+
+def _row(split: str, index: int, text: str | None = None, summary: str | None = None):
+    source = text or f"{split} bill {index} carries a policy change."
+    target = summary or f"The bill changes policy area {index}."
+    return {
+        "doc_id": experiment._document_id(source),
+        "legacy_v1_doc_id": experiment._legacy_v1_document_id(source, target),
+        "text": source,
+        "summary": target,
+    }
+
+
+def test_json_loader_rejects_duplicate_keys(tmp_path):
+    path = tmp_path / "duplicate.json"
+    path.write_text('{"same": 1, "same": 2}', encoding="utf-8")
+    with pytest.raises(experiment.ExperimentError, match="duplicate JSON key"):
+        experiment.load_json(path)
+
+
+def test_source_identifier_does_not_depend_on_reference():
+    source = "A bill text remains the same."
+    first = experiment._document_id(source)
+    second = experiment._document_id(source)
+    assert first == second == hashlib.sha256(source.encode()).hexdigest()
+    assert experiment._legacy_v1_document_id(source, "one summary") != experiment._legacy_v1_document_id(
+        source, "different summary"
+    )
+
+
+def test_chat_training_masks_prompt_and_keeps_end_of_turn():
+    row = _row("train", 1)
+    encoded = experiment._tokenize_row(FakeTokenizer(), row)
+    prompt_count = len(encoded["prompt_ids"])
+    assert encoded["input_ids"][:prompt_count] == encoded["prompt_ids"]
+    assert encoded["labels"][:prompt_count] == [-100] * prompt_count
+    assert encoded["labels"][prompt_count:] == encoded["target_ids"]
+    assert encoded["target_ids"][-1] == FakeTokenizer.eos_token_id
+    assert encoded["target_token_count"] == len(encoded["target_ids"])
+
+
+def test_fresh_rosters_exclude_v1_and_use_source_hash_order():
+    train = [_row("train", index) for index in range(5)]
+    test = [_row("test", index) for index in range(4)]
+    with (
+        patch.object(experiment, "V1_FIT_PREFIX", 1),
+        patch.object(experiment, "V1_ASSESSMENT_PREFIX", 1),
+        patch.object(experiment, "FIT_POOL_SIZE", 2),
+        patch.object(experiment, "ASSESSMENT_SIZE", 1),
+    ):
+        result = experiment._fresh_rosters(FakeTokenizer(), train, test)
+    expected_train_exclusion = sorted(row["legacy_v1_doc_id"] for row in train)[:1]
+    expected_test_exclusion = sorted(row["legacy_v1_doc_id"] for row in test)[:1]
+    assert result["v1_excluded"]["fit_legacy_ids_sha256"] == experiment.sha256_bytes(
+        experiment.canonical_bytes(expected_train_exclusion)
+    )
+    assert result["v1_excluded"]["assessment_legacy_ids_sha256"] == experiment.sha256_bytes(
+        experiment.canonical_bytes(expected_test_exclusion)
+    )
+    assert len(result["fit_ids"]) == 2
+    assert len(result["assessment_ids"]) == 1
+    assert not set(result["fit_ids"]) & set(result["assessment_ids"])
+    assert [row["doc_id"] for row in result["fit_rows"]] == sorted(
+        row["doc_id"] for row in result["fit_rows"]
+    )
+
+
+def test_generation_seed_is_stable_and_training_seed_sensitive():
+    doc_id = "0123456789abcdef" + "0" * 48
+    first = experiment._generation_seed(17, doc_id)
+    assert first == experiment._generation_seed(17, doc_id)
+    assert first != experiment._generation_seed(29, doc_id)
+
+
+def test_bootstrap_interval_is_paired_and_deterministic():
+    values = [0.1, 0.2, -0.1, 0.3, 0.0]
+    assert experiment._bootstrap_interval(values) == experiment._bootstrap_interval(values)
+    with pytest.raises(experiment.ExperimentError, match="non-finite"):
+        experiment._bootstrap_interval([0.1, float("nan")])
+
+
+def test_google_rouge_scorer_returns_standard_f1_metrics():
+    result = experiment._rouge_rows(
+        {"doc-a": "A concise bill summary."},
+        {"doc-a": "A concise bill summary."},
+    )
+    assert set(result["doc-a"]) == {"rouge1", "rouge2", "rougeL"}
+    assert all(value == pytest.approx(1.0) for value in result["doc-a"].values())
+
+
+def test_peft_adapter_reset_is_seeded_and_only_lora_is_trainable():
+    class ToyProjectionModel(torch.nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.q_proj = torch.nn.Linear(4, 4)
+            self.v_proj = torch.nn.Linear(4, 4)
+
+        def forward(self, values):
+            return self.q_proj(values) + self.v_proj(values)
+
+    model = get_peft_model(
+        ToyProjectionModel(),
+        LoraConfig(
+            r=2,
+            lora_alpha=4,
+            lora_dropout=0.0,
+            bias="none",
+            target_modules=["q_proj", "v_proj"],
+        ),
+    )
+    layers = [module for module in model.modules() if isinstance(module, LoraLayer)]
+    parameters = experiment._reset_peft_adapter_for_seed(model, layers, 17)
+    first_state = [parameter.detach().clone() for parameter in parameters]
+    assert len(layers) == 2
+    assert parameters
+    assert all("lora_" in name for name, value in model.named_parameters() if value.requires_grad)
+    assert all(torch.count_nonzero(layer.lora_B["default"].weight).item() == 0 for layer in layers)
+
+    experiment._reset_peft_adapter_for_seed(model, layers, 17)
+    second_state = [parameter.detach().clone() for parameter in parameters]
+    assert all(torch.equal(first, second) for first, second in zip(first_state, second_state, strict=True))
+
+    with model.disable_adapter():
+        pass
+
+
+def test_qwen3_peft_wrapper_trains_only_assistant_label_positions():
+    config = Qwen3Config(
+        vocab_size=128,
+        hidden_size=16,
+        intermediate_size=32,
+        num_hidden_layers=1,
+        num_attention_heads=2,
+        num_key_value_heads=2,
+        max_position_embeddings=64,
+        head_dim=8,
+    )
+    model = get_peft_model(
+        Qwen3ForCausalLM(config),
+        LoraConfig(
+            r=2,
+            lora_alpha=4,
+            lora_dropout=0.0,
+            bias="none",
+            target_modules=["q_proj", "v_proj"],
+            task_type="CAUSAL_LM",
+            init_lora_weights=True,
+        ),
+    )
+    layers = [module for module in model.modules() if isinstance(module, LoraLayer)]
+    parameters = experiment._reset_peft_adapter_for_seed(model, layers, 17)
+    token_ids = torch.tensor([[1, 2, 3, 4, 5, 6, 7, 8]], dtype=torch.long)
+    labels = torch.tensor([[-100, -100, -100, -100, 5, 6, 7, 8]], dtype=torch.long)
+    output = model(input_ids=token_ids, labels=labels, use_cache=False, return_dict=True)
+    output.loss.backward()
+    assert torch.isfinite(output.loss)
+    assert len(layers) == 2
+    assert parameters
+    assert any(parameter.grad is not None for parameter in parameters)
+    assert all(not parameter.requires_grad for name, parameter in model.named_parameters() if "lora_" not in name)

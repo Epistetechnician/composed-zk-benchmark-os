@@ -1,5 +1,51 @@
 # Agent Rules
 
+Explicit private-decision-model FHE V1 independent-review packet preparation
+is authorized under named state slice
+`private-decision-model-fhe-review-preparation-v1` and governance slice
+`global-experiment-assurance-lifecycle-v1`. This continuation is limited to
+freezing and locally validating the exact synthetic FHE review packet,
+protocol, target, artifact manifest, and archive under `docs/research/` plus
+an owner-only local staging directory, and to read-only checks of the
+registered reviewer Agent Card, health, contract, key pin, and no-task
+readiness after the bytes are frozen. It does not authorize a model run,
+provider call, paid execution, real or user data, remote worker, public
+service, secure-channel transfer, review-task creation or submission,
+decision, signature, registry mutation, Evidence Ledger mutation, or any
+increase to the existing `LocalDevelopmentSyntheticFHEInferenceV1` claim
+ceiling. The existing FHE implementation remains frozen under
+`private-decision-model-fhe-inference-v1`; this continuation cannot amend its
+source, harness, fixture, result, or claim ceiling. If the configured gateway
+is stale or unavailable, record `EXTERNAL_REVIEW_UNAVAILABLE`, stop live
+preflight without guessing another endpoint, and continue only the local
+packet validation authorized here. Every mutation in this continuation names
+both `private-decision-model-fhe-review-preparation-v1` and
+`global-experiment-assurance-lifecycle-v1`.
+
+Explicit private-decision-model FHE inference V1 is authorized under named
+state slice `private-decision-model-fhe-inference-v1`: additive source and
+hermetic tests under `tools/private_decision_model_fhe_inference_v1/`, an
+isolated Python 3.12 environment using the exact official `concrete-python`
+2.11.0 package, and protocol/execution records under
+`docs/research/private-decision-model-fhe-inference-v1.md`, with README
+navigation. The only workload is a deterministic synthetic option-ranking
+example with six signed integer features per option and four options per
+request. A linear scorer may be fit only on generated synthetic examples;
+inference must encrypt client features, run a separate local server process
+that receives ciphertexts and evaluation keys but no client secret key or
+clear features, return an encrypted score vector, and decrypt/rank only in the
+client process. Temporary keys, circuit bundles, ciphertexts, and synthetic
+inputs stay outside the repository and are removed at run completion. This
+slice permits fetching the pinned package from the official PyPI distribution
+into an isolated temporary environment only. It does not permit external
+models or corpora, real or user data, remote calls, paid execution, encrypted
+training, TEE execution, network services, production deployment, reviewer
+submission, Evidence Ledger mutation, Jevlike artifact reuse, or security,
+benchmark, commercial-readiness, or production claims. Its maximum claim
+ceiling is `LocalDevelopmentSyntheticFHEInferenceV1`; any expansion needs a
+fresh state slice. Every mutation in this phase names state slice
+`private-decision-model-fhe-inference-v1`.
+
 Explicit aligned holistic continual-learning interpretability monorepo setup
 and causal-monitor experiment design are authorized for additive manifests,
 documentation, and hermetic contract checks under named state slice
@@ -14,6 +60,242 @@ trace retention, accepted Evidence Ledger mutation, Stage 0C/Stage 1
 promotion, or introspection, consciousness, benchmark, production-readiness,
 or general alignment claim is authorized. Every mutation in this phase names
 state slice `aligned-holistic-continual-learning-interpretability-monorepo-v1`.
+
+Explicit aligned RSI BillSum chat-template adaptation V2 is authorized for
+one bounded local qualification under named state slice
+`aligned-rsi-billsum-chat-template-adaptation-v2` and governance slice
+`global-experiment-assurance-lifecycle-v1`. This permits additive Python
+source and hermetic tests under `experiments/continual_learning/`, the frozen
+protocol and execution records under `docs/research/continual-learning/`,
+hash-locked dependency metadata, and an aggregate-only local release under
+`release/aligned_rsi_billsum_chat_template_v2/`, with navigation in
+`README.md`, `docs/12-task-list.md`, and
+`experiments/continual_learning/README.md`. The experiment is limited to the
+pinned Qwen3-0.6B and federal BillSum train/test inputs, a fresh fit/test
+cohort disjoint from V1, local Apple MPS execution, PEFT LoRA updates, paired
+held-out evaluation, a layer-level activation patch, and digest-bound local
+acceptance. Reuse of V1 is limited to immutable raw model and dataset bytes
+and reconstructing its old rosters for overlap exclusion; V1 adapters,
+scores, generations, activation results, and claims remain terminal and are
+not V2 inputs. No independent acceptance, external reviewer, provider call,
+paid execution, remote worker, user data, network access during execution,
+Evidence Ledger mutation, public deployment, or broader alignment,
+recursive-self-improvement, leaderboard, mechanistic-feature, or production
+claim is authorized. Raw rows, summaries, adapters, scores, and activations
+remain in an owner-only external root. Any changed model, data, harness,
+threshold, runtime, or cohort requires a fresh state slice; a failed V2 run is
+terminal under this identity. Every mutation in this phase names state slice
+`aligned-rsi-billsum-chat-template-adaptation-v2`.
+
+V2 is terminally closed as PreparationFailedDuplicateSourceIdentity. Its
+preparation stopped before model load because the pinned BillSum train split
+contains repeated source texts. The frozen V2 protocol, runner, manifest,
+tests, and dependency lock remain unchanged. No V2 model run or local
+acceptance exists. Closure record:
+docs/research/continual-learning/315-aligned-rsi-billsum-chat-template-adaptation-v2-preparation-closure.md.
+
+The user's continuing end-to-end instruction authorizes a fresh V3
+qualification under named state slice
+`aligned-rsi-billsum-chat-template-adaptation-v3` and governance slice
+`global-experiment-assurance-lifecycle-v1`. V3 permits additive source and
+hermetic tests under experiments/continual_learning, a new hash-locked packet
+and execution record under docs/research/continual-learning, and an
+aggregate-only local release under
+release/aligned_rsi_billsum_chat_template_v3, with navigation in README.md and
+docs/12-task-list.md. It may reuse only the immutable pinned raw Qwen3 model
+and federal BillSum train/test bytes already present in the V1 owner-only
+cache. It must exclude every source-text duplicate group within each split,
+exclude every V1 source document before roster selection, then select fresh
+source-hash-ordered fit and assessment rosters under the frozen prompt-length
+rule. No V1 or V2 scientific output is eligible as an input. Local Apple MPS
+execution, PEFT LoRA, paired held-out sampling, the layer-level residual
+patch, and local acceptance are permitted. No independent acceptance,
+external reviewer, provider call, spend, remote worker, user data, network
+during execution, Evidence Ledger mutation, public deployment, or broader
+alignment, recursive-self-improvement, leaderboard, feature-mechanistic, or
+production claim is authorized. A V3 preparation or execution failure is
+terminal under V3; any changed identity requires another fresh state slice.
+Every mutation in this phase names state slice
+`aligned-rsi-billsum-chat-template-adaptation-v3`.
+
+V3 is terminally closed as `PreparationFailedAssistantTurnTrailer`. Its
+read-only roster materialization stopped before a prepared-input receipt or
+model load because the Qwen3 chat template appends a newline after the
+assistant `<|im_end|>` token. The V3 tokenizer contract incorrectly required
+the returned sequence to end at the marker, although the pinned tokenizer's
+generic EOS ID is that same marker. Preserve the V3 runner, manifest, tests,
+lock, protocol, and this failure; do not retry or edit V3.
+
+The user's continuing end-to-end local-acceptance instruction authorizes a
+fresh V4 qualification under named state slice
+`aligned-rsi-billsum-chat-template-adaptation-v4` and governance slice
+`global-experiment-assurance-lifecycle-v1`. V4 permits additive Python source
+and hermetic tests under `experiments/continual_learning/`, a new hash-locked
+packet and execution record under `docs/research/continual-learning/`, and an
+aggregate-only release under
+`release/aligned_rsi_billsum_chat_template_v4/`, with navigation updates in
+`README.md`, `docs/12-task-list.md`, and
+`experiments/continual_learning/README.md`. It may reuse only the immutable
+pinned raw Qwen3 model and federal BillSum train/test bytes in the V1
+owner-only cache. It must exclude every repeated-source group within each
+split and every V1 source document before selecting fresh disjoint rosters.
+It must use the pinned Qwen3 chat template, require the assistant end marker
+`<|im_end|>` token ID 151645 followed by exactly the pinned template trailer
+newline token ID 198, include the assistant summary and end marker in the
+assistant-only loss, and exclude the trailing template newline from that loss.
+Local Apple MPS execution, PEFT LoRA, paired held-out sampling, the
+layer-level residual patch, and local acceptance are permitted. No V1, V2,
+or V3 scientific output is eligible as an input. No independent acceptance,
+external reviewer, provider call, spend, remote worker, user data, network
+during execution, Evidence Ledger mutation, public deployment, or broader
+alignment, recursive-self-improvement, leaderboard, feature-mechanistic, or
+production claim is authorized. The V4 claim ceiling is
+`LocalDevelopmentBillSumChatTemplateCurriculumQualificationV4`. A V4
+preparation or execution failure is terminal; any changed identity requires
+another explicitly authorized fresh state slice. Every mutation in this
+phase names state slice
+`aligned-rsi-billsum-chat-template-adaptation-v4`.
+
+V4 is terminally closed as `ExecutionFailedWallClockLimit`. Its one local run
+reached the 180-minute limit during selected-arm seed-17 training after the
+96/128 optimizer-step checkpoint. It completed fit-pool scoring and the
+untouched-base assessment, but no adapter completed, no aggregate report or
+release was written, and no local acceptance was issued. Preserve the V4
+source, manifest, tests, lock, protocol, run status, and failure; do not edit,
+retry, or accept V4.
+
+The user's continuing end-to-end local request authorizes a fresh V5
+qualification under named state slice
+`aligned-rsi-billsum-chat-template-adaptation-v5` and governance slice
+`global-experiment-assurance-lifecycle-v1`. V5 may reuse only the immutable
+pinned raw Qwen3 model and federal BillSum train/test bytes in the V1
+owner-only cache. Before freezing V5, it may perform a read-only tokenizer and
+cohort-feasibility audit over those inputs. The frozen V5 packet must define a
+fresh duplicate-free, V1-disjoint cohort, a practical sequence-length ceiling
+without source or reference truncation, fixed PEFT LoRA batch/update counts,
+paired held-out evaluation, primary metric and stopping rule, local resource
+bound, and aggregate-only release. A single offline local Apple MPS execution
+and local acceptance are permitted only after that exact packet and all source
+bytes are frozen. No V1-V4 scientific output is eligible as an input. No
+independent acceptance, external reviewer, provider call, spend, remote
+worker, user data, network during model execution, Evidence Ledger mutation,
+public deployment, or broader alignment, recursive-self-improvement,
+leaderboard, feature-mechanistic, or production claim is authorized. V5's
+claim ceiling is `LocalDevelopmentBillSumChatTemplateCurriculumQualificationV5`.
+A V5 preparation or execution failure is terminal; any changed identity
+requires another explicitly authorized fresh state slice. Every mutation in
+this phase names state slice
+`aligned-rsi-billsum-chat-template-adaptation-v5`.
+
+V5 is terminally closed as `ExecutionFailedMPSOutOfMemory`. Its single run
+completed fit scoring and the untouched-base assessment, then failed on the
+first selected-arm seed-17 training batch when MPS could not allocate another
+3.07 GiB. No optimizer step, adapter, updated-arm evaluation, aggregate
+report, or local acceptance exists. Preserve the V5 source, protocol,
+manifest, tests, lock, prepared-input receipt, and failed status; do not retry
+or edit V5. Any continuation requires a separately authorized fresh state
+slice. See
+`docs/research/continual-learning/321-aligned-rsi-billsum-chat-template-adaptation-v5-execution-closure.md`.
+
+The user's continuing end-to-end local-acceptance instruction authorizes a
+fresh V6 qualification under named state slice
+`aligned-rsi-billsum-chat-template-adaptation-v6` and governance slice
+`global-experiment-assurance-lifecycle-v1`. V6 permits additive Python source
+and hermetic tests under `experiments/continual_learning/`, a frozen protocol
+and execution record under `docs/research/continual-learning/`, a hash-locked
+runtime contract, and aggregate-only local release under
+`release/aligned_rsi_billsum_chat_template_v6/`, with navigation in
+`README.md`, `docs/12-task-list.md`, and
+`experiments/continual_learning/README.md`. It may reuse only the immutable
+pinned raw Qwen3 model and federal BillSum train/test bytes in the V1
+owner-only cache. It reconstructs and excludes every V1 document and the V5
+fit/assessment rosters from those raw inputs; no V1-V5 scientific output is an
+input. Cohorts are fresh, duplicate-free, source-hash ordered, split-disjoint,
+and bounded by the frozen no-truncation tokenizer rules. V6 uses a
+memory-bounded one-example forward path, target-position-only vocabulary
+projection, non-reentrant activation checkpointing, four-example token-weighted
+gradient accumulation, PEFT LoRA, paired held-out evaluation, the layer-level
+residual patch diagnostic, and local report reconstruction. A single offline
+local Apple MPS execution and local acceptance are permitted after exact
+source, protocol, runtime, and prepared-input bytes are frozen. An MPS OOM,
+wall-clock breach, or other failed gate is terminal for V6; do not retry or
+edit it. No independent acceptance, external reviewer, provider call, spend,
+remote worker, user data, network during execution, Evidence Ledger mutation,
+public deployment, or broader alignment, recursive-self-improvement,
+leaderboard, feature-mechanistic, or production claim is authorized. V6's
+claim ceiling is
+`LocalDevelopmentBillSumChatTemplateCurriculumQualificationV6`. Every
+mutation in this phase names state slice
+`aligned-rsi-billsum-chat-template-adaptation-v6`.
+
+V6 is terminally closed as `ExecutionFailedUnexpectedPEFTAdapterFileSet`. Its
+single MPS run completed the fit-loss pass, all untouched-base assessments,
+and eight selected-arm seed-59 optimizer steps. Adapter sealing rejected
+PEFT's extra `README.md`; updated-arm evaluation, the random arm, aggregate
+report, release, and local acceptance did not occur. Preserve the exact V6
+source, protocol, manifest, focused tests, lock, prepared-input receipt,
+partial adapter, and terminal run status. Do not edit, retry, verify, or
+accept V6. Any continuation requires a separately authorized fresh state
+slice and newly frozen packet. Closure record:
+`docs/research/continual-learning/323-aligned-rsi-billsum-chat-template-adaptation-v6-execution-closure.md`.
+
+The user's continuing end-to-end local-acceptance instruction authorizes a
+fresh V7 qualification under named state slice
+`aligned-rsi-billsum-chat-template-adaptation-v7` and governance slice
+`global-experiment-assurance-lifecycle-v1`. V7 permits additive Python source
+and hermetic tests under `experiments/continual_learning/`, a frozen protocol
+and execution record under `docs/research/continual-learning/`, a hash-locked
+runtime contract, and aggregate-only local release under
+`release/aligned_rsi_billsum_chat_template_v7/`, with navigation in
+`README.md`, `docs/12-task-list.md`, and
+`experiments/continual_learning/README.md`. It may reuse only the immutable
+pinned raw Qwen3 model and federal BillSum train/test bytes in the V1
+owner-only cache. It reconstructs V1, V5, and V6 roster IDs from those raw
+inputs solely to exclude prior sources; no V1-V6 scientific output is an
+input. V7 uses fresh duplicate-free source-hash-ordered 512/64 cohorts,
+bounded by frozen no-truncation tokenizer rules. It uses memory-bounded
+one-example forwards, target-position-only vocabulary projection,
+non-reentrant activation checkpointing, four-example token-weighted gradient
+accumulation, PEFT LoRA, paired held-out evaluation, the layer-level residual
+patch diagnostic, and local report reconstruction. Adapter custody binds
+PEFT's exact `README.md`, `adapter_config.json`, and
+`adapter_model.safetensors` file set and digests. One offline local Apple MPS
+execution and local acceptance are permitted only after the exact source,
+protocol, runtime, and prepared-input bytes are frozen. An MPS OOM,
+wall-clock breach, or other failed gate is terminal for V7; do not retry or
+edit it. No independent acceptance, external reviewer, provider call, spend,
+remote worker, user data, network during model execution, Evidence Ledger
+mutation, public deployment, or broader alignment, recursive-self-improvement,
+leaderboard, feature-mechanistic, or production claim is authorized. V7's
+claim ceiling is
+`LocalDevelopmentBillSumChatTemplateCurriculumQualificationV7`. Every
+mutation in this phase names state slices
+`aligned-rsi-billsum-chat-template-adaptation-v7` and
+`global-experiment-assurance-lifecycle-v1`.
+
+V7 completed its single local run and local report reconstruction. The local
+assurance result is `INTERNAL_PASS`; the scientific disposition is
+`NoCandidate` because the selected curriculum missed the preregistered
+selected-versus-random ROUGE-L gate. The configured V7 claim ceiling was not
+earned. Preserve the frozen packet, prepared receipt, private run, adapters,
+aggregate release, and local receipt. Do not rerun or retune V7. The execution
+record is `docs/research/continual-learning/325-aligned-rsi-billsum-chat-template-adaptation-v7-execution.md`.
+
++Explicit aligned RSI BillSum length-matched curriculum V8 is authorized by the user's continuing end-to-end local-acceptance instruction under named state slice
+`aligned-rsi-billsum-length-matched-curriculum-v8` and governance slice
+`global-experiment-assurance-lifecycle-v1`. This is a fresh hypothesis and packet; V7 remains terminal `NoCandidate` and may not be rerun, retuned, or edited.
+V8 permits additive source and hermetic tests under `experiments/continual_learning/`, a frozen protocol and execution record under `docs/research/continual-learning/`, a hash-locked runtime contract, and an aggregate-only release under `release/aligned_rsi_billsum_length_matched_v8/`, with navigation in `README.md`, `docs/12-task-list.md`, and `experiments/continual_learning/README.md`.
+V8 may reuse only immutable pinned Qwen3-0.6B and federal BillSum train/test bytes from the V1 owner-only cache. It reconstructs V1's historical roster and uses the verified V4-V7 prepared-input roster IDs solely to exclude every prior fully materialized cohort; no prior model weights, adapters, scores, generations, activations, reports, or scientific conclusions are model inputs. V2 stopped before roster materialization and V3 stopped before a prepared roster or model load.
+The fresh V8 fit pool contains 768 duplicate-free, source-hash-ordered federal train documents; assessment contains 128 duplicate-free, source-hash-ordered federal test documents. Both are disjoint from V1 and V4-V7 rosters and each other, obey the pinned tokenizer's 1,280 prompt / 512 assistant-target limits without truncation, and exclude `ca_test`.
+V8 compares untouched base, global top-loss selection, global random selection, length-stratified top-loss selection, and length-stratified random selection. The fit pool is sorted by combined prompt-plus-assistant-target token count then source ID and partitioned into eight contiguous bins of 96 documents. Each stratified arm uses 16 documents per bin. Four fixed adapter seeds are `211`, `307`, `401`, and `503`; each trained arm receives 128 examples and exactly 32 AdamW steps per seed with PEFT LoRA. The primary contrast is length-stratified loss selection minus length-stratified random control on paired held-out ROUGE-L F1, with a 0.02 minimum effect and a 10,000-resample document bootstrap.
+One offline local Apple MPS execution and local report reconstruction are permitted only after source, protocol, runtime, and prepared-input bytes are frozen. The hard local wall-clock ceiling is eight hours; any OOM, wall-clock breach, custody failure, incomplete output, or other failed gate is terminal for V8. No independent acceptance, external reviewer, provider call, spend, remote worker, user data, network during model execution, Evidence Ledger mutation, public deployment, or broader alignment, recursive-self-improvement, leaderboard, mechanistic-feature, or production claim is authorized.
+V8's maximum claim ceiling is `LocalDevelopmentBillSumLengthMatchedCurriculumQualificationV8`. The result is limited to the stated local BillSum cohort and procedure. Every mutation in this phase names state slices `aligned-rsi-billsum-length-matched-curriculum-v8` and `global-experiment-assurance-lifecycle-v1`.
+
+Explicit aligned RSI BillSum same-roster curriculum-order V9 is authorized by the user's continuing end-to-end local-acceptance instruction under named state slice `aligned-rsi-billsum-same-roster-order-curriculum-v9` and governance slice `global-experiment-assurance-lifecycle-v1`. V8 is terminal `NoCandidate` and may not be edited, rerun, retuned, or treated as scientific evidence. V9 tests whether easy-to-hard presentation order improves held-out federal BillSum summarization over random order when both arms train on the exact same examples, source tokens, assistant-target tokens, optimizer steps, and paired initialization. Loss is used only to order the fixed training roster, never to select examples. The treatment orders all 128 training examples by increasing untouched-base assistant-target NLL, with source ID as the deterministic tie-breaker. The control uses a frozen seeded permutation of the same 128 examples for each of four paired adapter seeds. An untouched-base assessment is included. The primary endpoint is paired held-out ROUGE-L F1 with a fixed minimum effect of 0.02, a 10,000-resample document bootstrap, and a frozen candidate rule.
+
+V9 permits a read-only tokenizer/cohort-feasibility audit before packet freeze, then additive runner and hermetic tests under `experiments/continual_learning/`, a frozen protocol and execution record under `docs/research/continual-learning/`, a hash-locked runtime contract, navigation in `README.md`, `docs/12-task-list.md`, and `experiments/continual_learning/README.md`, and an aggregate-only release under `release/aligned_rsi_billsum_same_roster_order_v9/`. It may reuse only the immutable pinned Qwen3-0.6B model bytes and federal BillSum train/test bytes in the existing V1 owner-only cache, and verified V1 and V4-V8 source-roster IDs solely to exclude previously used documents. V2/V3 produced no complete roster or model execution. No previous scientific output, fit score, adapter, generation, activation, report, or conclusion is a model input. Fresh duplicate-free cohorts must exclude V1 and V4-V8 rosters and be mutually split-disjoint. The packet freezes exact roster digests after the read-only audit; fewer than 128 fit documents or 120 assessment documents closes V9 before model loading.
+
+After exact source, contract, runtime, and prepared-input bytes are frozen, one offline local Apple MPS run and digest-bound local report reconstruction are permitted. The run uses PEFT LoRA with the pinned runtime, four fixed paired seeds, 128 identical examples per arm/seed, 32 optimizer steps per arm/seed, paired held-out generation, and a layer-14 residual activation patch with identity control as a secondary diagnostic only. The hard wall-clock ceiling is eight hours; timeout, OOM, custody failure, changed identity, incomplete/non-finite output, or failed report reconstruction is terminal for V9, with no retry. No independent acceptance, external reviewer, provider call, spend, remote worker, user data, network during model execution, Evidence Ledger mutation, public deployment, or production operation is authorized. The maximum claim ceiling is `LocalDevelopmentBillSumSameRosterCurriculumOrderQualificationV9`; the result is limited to this local model/data/runtime slice and does not establish general alignment, recursive self-improvement, benchmark leadership, or a feature-level mechanism. Every mutation in this phase names state slices `aligned-rsi-billsum-same-roster-order-curriculum-v9` and `global-experiment-assurance-lifecycle-v1`.
 
 Explicit Astral Gemma 3 causal-feature-bundle-effects V3 is authorized for
 additive implementation and one bounded qualification only under named state

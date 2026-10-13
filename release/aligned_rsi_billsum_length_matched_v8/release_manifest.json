@@ -1,0 +1,19 @@
+{
+  "adapter_weights_included": false,
+  "files": [
+    {
+      "path": "evaluation_report.json",
+      "sha256": "bc7f90e1f8882f21fcb6fad148f6d99d60390c0b901bcfd84bb4131bbff8e096"
+    },
+    {
+      "path": "local_acceptance.json",
+      "sha256": "cef4f9c581104b6a571d5ec2bc5ed4b516973b7ddd2723b8fa79cc161bc8a6bd"
+    }
+  ],
+  "generated_summaries_included": false,
+  "independent_acceptance": false,
+  "model_weights_included": false,
+  "raw_data_included": false,
+  "schema_version": "aligned-rsi-billsum-length-matched-curriculum-v8-aggregate-release",
+  "state_slice": "aligned-rsi-billsum-length-matched-curriculum-v8"
+}

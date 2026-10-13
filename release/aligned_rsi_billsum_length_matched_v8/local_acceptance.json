@@ -1,0 +1,23 @@
+{
+  "accepted_report_core_sha256": "2faff44db4c434b36f7833f96603862649b33ffe7c7352f60114825fa5151d94",
+  "assurance_level": "INTERNAL_PASS",
+  "candidate_disposition": "NoCandidate",
+  "claim_ceiling": "LocalDevelopmentBillSumLengthMatchedCurriculumQualificationV8",
+  "governance_slice": "global-experiment-assurance-lifecycle-v1",
+  "independent_acceptance": false,
+  "local_acceptance": "INTERNAL_PASS",
+  "prepared_inputs_sha256": "10c5f55d697a119c503b77237d0fc69778044a2f32b502e22d6363450139a084",
+  "private_run_sha256": "5a6cdc81ab047aa45e736301afab318dd56c8b9038e8d3c24803c33296c08539",
+  "reviewer_status": "LOCAL_ACCEPTANCE_ONLY_NO_INDEPENDENT_ACCEPT",
+  "schema_version": "aligned-rsi-billsum-length-matched-curriculum-v8-local-acceptance",
+  "source_digests": {
+    "focused_tests": "adb8f6c0fe5b39dc65367390349ec09e7416c6494cce49791314117f01450438",
+    "protocol": "f00694b9a46d857ece4110cead28cbe6e6b7192d96b92b2565fd318313813028",
+    "protocol_manifest": "bf92cb8468a3d1647f357217ec92f376753ffee50942e312d9afb663454c2626",
+    "repository_instructions": "ea6bd143df4f44591d8ac912bdd2f877db9c6cc1cfbfdc6587d36b762cb34234",
+    "requirements_lock": "e8c11d4a260328b27732188d1080891dd9da8cf253a6477e486b256fedcba085",
+    "runner": "a283132b28161dea1c6e1b389267f18b618f76d77cb3c1d213a1b237d7192e89"
+  },
+  "source_manifest_sha256": "8b292d4f10f81c3d291b4c9c277d9bb90bec74effdd9c8edbc1e743eb2002dbe",
+  "state_slice": "aligned-rsi-billsum-length-matched-curriculum-v8"
+}

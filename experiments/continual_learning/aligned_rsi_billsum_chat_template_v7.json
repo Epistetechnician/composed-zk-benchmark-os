@@ -1,0 +1,250 @@
+{
+  "schema_version": "aligned-rsi-billsum-chat-template-v7-protocol",
+  "protocol_id": "aligned-rsi-billsum-chat-template-adaptation-v7",
+  "state_slice": "aligned-rsi-billsum-chat-template-adaptation-v7",
+  "governance_slice": "global-experiment-assurance-lifecycle-v1",
+  "status": "LOCAL_EXECUTION_AUTHORIZED_BY_USER",
+  "assurance_target": "INTERNAL_PASS",
+  "independent_acceptance_requested": false,
+  "claim_ceiling": "LocalDevelopmentBillSumChatTemplateCurriculumQualificationV7",
+  "hypothesis": "Under the frozen Qwen3 chat-template and decoding path, a fit-loss-selected 32-example curriculum improves held-out BillSum ROUGE-L F1 over an equal-budget random curriculum by at least 0.02, using memory-bounded target-only adapter updates.",
+  "model": {
+    "repo_id": "Qwen/Qwen3-0.6B",
+    "revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+    "license": "apache-2.0",
+    "chat_template_sha256": "a55ee1b1660128b7098723e0abcd92caa0788061051c62d51cbe87d9cf1974d8",
+    "enable_thinking": false,
+    "base_weights_mutable": false,
+    "adapter_implementation": "huggingface-peft",
+    "adapter_package": "peft==0.21.2"
+  },
+  "prompt": {
+    "system_message": "You are a concise U.S. federal bill summarization assistant. State the bill's main purpose and key provisions. Do not add unsupported claims.",
+    "user_message_prefix": "Summarize this U.S. federal bill.\n\nBILL:\n",
+    "assistant_target": "the exact BillSum summary field",
+    "source_truncation": false,
+    "assistant_target_truncation": false
+  },
+  "dataset": {
+    "repo_id": "FiscalNote/billsum",
+    "revision": "3d8510441c06a3d9dfb32eb0d7f80151730bcc4f",
+    "license": "cc0-1.0",
+    "included_splits": [
+      "train",
+      "test"
+    ],
+    "excluded_splits": [
+      "ca_test"
+    ],
+    "source_boundary": "US_federal_GPO_bills_only",
+    "new_document_id": "sha256(utf8(text))"
+  },
+  "prepared_identity": {
+    "model_files_sha256": "e77990a87387a8bd81db5a96b8ec8b2853d08b1c4b7fa65c8a34d768eab6459b",
+    "dataset_files_sha256": "03ff3ea855c3e5840722315fb7a986da0001b2a3a932b5e6cd98b34eb967eda1",
+    "v1_excluded": {
+      "fit_prefix_count": 512,
+      "assessment_prefix_count": 128,
+      "fit_source_ids_sha256": "0d25ecc5c577397d131332be3bd4660381f47e4bfb9a3420f70e4cf7e63eae5a",
+      "assessment_source_ids_sha256": "cd5d8e89c50cef363544b9831fed09aba98703bba5efe30e5f67975cb89fc908"
+    },
+    "v5_excluded": {
+      "fit_count": 512,
+      "assessment_count": 64,
+      "fit_source_ids_sha256": "9dab518511424ce830a4598bc45dd96f61be4de51839a3252866c750b84ca6eb",
+      "assessment_source_ids_sha256": "abc9cfbebdbc4cb24c4d271e3aeb70070d419bba3e29537e9f3ca4cdd51b13c1"
+    },
+    "v6_excluded": {
+      "fit_count": 512,
+      "assessment_count": 64,
+      "fit_source_ids_sha256": "4288836f34fef9362ea66889b7e307bc285045b60ead44653542d750a5e00d66",
+      "assessment_source_ids_sha256": "eeff4c21fbe6dd7d6b116d365f322e6087b394f9067933da9875899a3e1d19c8"
+    },
+    "duplicate_source_groups_excluded": {
+      "train_groups": 8,
+      "train_rows": 16,
+      "test_groups": 0,
+      "test_rows": 0
+    },
+    "fit_roster_sha256": "20cf848ea84c1de6db9defda4e539083852509eab7ff8ff2adc10964767ecb13",
+    "assessment_roster_sha256": "568e0de51fa481f912b1aef76b8ce2834a1e06cd1900cda0766f74e670336670"
+  },
+  "runtime": {
+    "python": "3.14.5",
+    "platform": "darwin-arm64",
+    "torch": "2.13.0",
+    "transformers": "5.14.1",
+    "datasets": "5.0.1",
+    "huggingface-hub": "1.27.0",
+    "safetensors": "0.8.0",
+    "numpy": "2.5.1",
+    "pyarrow": "25.0.0",
+    "peft": "0.21.2",
+    "accelerate": "1.14.0",
+    "rouge-score": "0.1.2",
+    "absl-py": "2.5.0",
+    "nltk": "3.10.2",
+    "tokenizers": "0.22.2"
+  },
+  "cohorts": {
+    "fit_pool_size": 512,
+    "assessment_size": 64,
+    "fit_split": "train",
+    "assessment_split": "test",
+    "fit_sort": "ascending_sha256_of_source_text",
+    "assessment_sort": "ascending_sha256_of_source_text",
+    "duplicate_source_rule": "exclude_all_rows_for_source_hash_appearing_more_than_once_within_each_split",
+    "fit_v1_exclusion": "exclude_all_source_ids_from_first_512_rows_sorted_by_sha256(text||NUL||summary)",
+    "assessment_v1_exclusion": "exclude_all_source_ids_from_first_128_rows_sorted_by_sha256(text||NUL||summary)",
+    "fit_v5_exclusion": "reconstruct_and_exclude_the_512_source_ids_in_the_v5_fit_roster_from_raw_pinned_inputs",
+    "assessment_v5_exclusion": "reconstruct_and_exclude_the_64_source_ids_in_the_v5_assessment_roster_from_raw_pinned_inputs",
+    "fit_v6_exclusion": "reconstruct_and_exclude_the_512_source_ids_in_the_v6_fit_roster_from_raw_pinned_inputs",
+    "assessment_v6_exclusion": "reconstruct_and_exclude_the_64_source_ids_in_the_v6_assessment_roster_from_raw_pinned_inputs",
+    "source_eligibility": "chat-template prompt is at most 1280 tokens and assistant target is at most 512 tokens; no source or target truncation",
+    "assistant_target_truncation": false,
+    "v1_scientific_outputs_reused": false,
+    "v2_scientific_outputs_reused": false,
+    "split_disjointness_required": true,
+    "ca_test_access": false,
+    "v3_scientific_outputs_reused": false,
+    "v4_scientific_outputs_reused": false,
+    "v5_scientific_outputs_reused": false,
+    "v6_scientific_outputs_reused": false
+  },
+  "arms": [
+    {
+      "id": "untouched_base",
+      "training_examples": 0,
+      "assessment_repeats": 3
+    },
+    {
+      "id": "loss_selected",
+      "selection": "top_32_fit_pool_assistant_target_nll",
+      "assessment_repeats": 3
+    },
+    {
+      "id": "random_control",
+      "selection": "uniform_32_fit_pool_per_seed",
+      "assessment_repeats": 3
+    }
+  ],
+  "training": {
+    "seeds": [
+      109,
+      127,
+      149
+    ],
+    "optimizer": "AdamW",
+    "learning_rate": 0.0001,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "epsilon": 1e-8,
+    "weight_decay": 0.01,
+    "batch_size": 4,
+    "microbatch_size": 1,
+    "gradient_accumulation_examples": 4,
+    "epochs": 1,
+    "lora_rank": 8,
+    "lora_alpha": 16,
+    "lora_dropout": 0,
+    "lora_target_modules": [
+      "q_proj",
+      "v_proj"
+    ],
+    "adapter_library": "PEFT",
+    "max_source_tokens": 1280,
+    "max_assistant_target_tokens": 512,
+    "assistant_only_loss": true,
+    "gradient_clip_norm": 1,
+    "base_weights_mutable": false,
+    "equal_optimizer_steps_per_updated_arm": 8,
+    "generation_pad_token_id": 151643,
+    "batch_padding": "one_unpadded_sequence_per_forward",
+    "loss_reduction": "token_weighted_mean_assistant_cross_entropy_over_each_four_example_accumulation_group",
+    "logits_projection": "apply_lm_head_only_to_assistant_target_prediction_positions",
+    "gradient_checkpointing": "transformer_layer_checkpointing_non_reentrant"
+  },
+  "decoding": {
+    "chat_template": "tokenizer.apply_chat_template",
+    "enable_thinking": false,
+    "do_sample": true,
+    "temperature": 0.7,
+    "top_p": 0.8,
+    "top_k": 20,
+    "repetition_penalty": 1,
+    "max_new_tokens": 512,
+    "pairing": "same per-document generation seed across all arms within each training seed",
+    "generation_seed": "sha256-source-id-prefix xor training-seed-constant xor protocol-constant",
+    "generation_seed_constants": {
+      "training_seed_multiplier": "0x9E3779B1",
+      "protocol_constant": "0xA17E2028",
+      "mask": "0x7FFFFFFF"
+    }
+  },
+  "primary_metric": {
+    "name": "paired_document_bootstrap_rougeL_loss_selected_minus_random_control",
+    "implementation": "rouge-score==0.1.2",
+    "use_stemmer": false,
+    "minimum_meaningful_effect": 0.02,
+    "bootstrap_resamples": 10000,
+    "bootstrap_seed": 20261009,
+    "candidate_rule": "estimate>=0.02_and_ci95_lower>0_and_selected_not_below_base_and_selected_target_nll_no_more_than_0.05_above_base_and_all_locked_outputs_finite"
+  },
+  "secondary_metrics": [
+    "ROUGE-1 F1",
+    "ROUGE-2 F1",
+    "assistant-target NLL",
+    "output/reference token ratio",
+    "training loss",
+    "per-seed held-out ROUGE-L",
+    "layer-14 residual activation patch with identity control",
+    "elapsed time",
+    "peak process RSS"
+  ],
+  "mechanistic_diagnostic": {
+    "kind": "causal_layer_activation_patch",
+    "layer_index_zero_based": 13,
+    "assessment_documents": 16,
+    "intervention": "replace adapted-run summary-prediction residual activations with corresponding base activations",
+    "identity_patch_max_abs_nll_error": 0.00001,
+    "feature_level_claim": false
+  },
+  "execution": {
+    "device": "Apple_MPS_local",
+    "paid_provider_calls": false,
+    "remote_workers": false,
+    "network_during_run": false,
+    "wall_clock_limit_minutes": 360,
+    "input_root": "$HOME/.local/share/aligned-rsi-local-billsum-adaptation-v1/inputs",
+    "output_root": "$HOME/.local/share/aligned-rsi-billsum-chat-template-adaptation-v7",
+    "custody_mode": "0700",
+    "raw_data_in_repository": false,
+    "model_weights_in_repository": false,
+    "adapter_weights_in_repository": false,
+    "generated_summaries_in_repository": false,
+    "aggregate_only_repository_output": true,
+    "local_acceptance_only": true,
+    "automatic_expiry": false
+  },
+  "nonclaims": [
+    "independent_acceptance",
+    "general_alignment",
+    "general_recursive_self_improvement",
+    "feature_level_mechanistic_explanation",
+    "benchmark_leaderboard_result",
+    "production_readiness",
+    "user_data_evidence",
+    "clean_second_environment_reproduction"
+  ],
+  "assistant_termination": {
+    "assistant_end_marker": "<|im_end|>",
+    "assistant_end_token_id": 151645,
+    "trailing_template_separator_token_ids": [
+      198
+    ],
+    "assistant_loss_includes_end_marker": true,
+    "assistant_loss_excludes_template_separator": true
+  }
+}

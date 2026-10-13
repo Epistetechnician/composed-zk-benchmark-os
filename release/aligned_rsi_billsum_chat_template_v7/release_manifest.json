@@ -1,0 +1,19 @@
+{
+  "adapter_weights_included": false,
+  "files": [
+    {
+      "path": "evaluation_report.json",
+      "sha256": "744ad97509a43fd18729c8fa1155fa79c1c9f7373032b65f4abee34c251c6474"
+    },
+    {
+      "path": "local_acceptance.json",
+      "sha256": "122ca72d24cb3a56d6e9f2df16eecdbb0e3e3d2336acd70c8873afe427c5339c"
+    }
+  ],
+  "generated_summaries_included": false,
+  "independent_acceptance": false,
+  "model_weights_included": false,
+  "raw_data_included": false,
+  "schema_version": "aligned-rsi-billsum-chat-template-v7-aggregate-release",
+  "state_slice": "aligned-rsi-billsum-chat-template-adaptation-v7"
+}

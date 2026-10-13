@@ -1,0 +1,159 @@
+{
+  "assessment": {
+    "arms": [
+      "untouched_base",
+      "easy_to_hard_order",
+      "random_order_control"
+    ],
+    "assessment_roster_sha256": "a0d2608ccc9af7aeaede2e13a07df0e6b29abaff7b831835211116d5411d1f09",
+    "documents": 120,
+    "held_out_completions": 1440,
+    "repeats_per_arm": 4
+  },
+  "assurance": {
+    "next_blocked_authority_gate": "independent acceptance or any claim above the local qualification ceiling requires a fresh packet and applicable authority",
+    "reproducibility_status": "SINGLE_LOCAL_EXECUTION",
+    "reviewer_status": "LOCAL_ACCEPTANCE_ONLY_NO_INDEPENDENT_ACCEPT"
+  },
+  "assurance_level": "PENDING_LOCAL_VERIFICATION",
+  "candidate_disposition": "NoCandidate",
+  "candidate_gates": {
+    "all_outputs_finite_and_complete": true,
+    "bootstrap_95_percent_lower_bound_positive": false,
+    "easy_to_hard_not_below_untouched_base": true,
+    "easy_to_hard_target_nll_at_most_0_05_above_base": true,
+    "identity_patch_error_within_1e_5": true,
+    "mean_effect_at_least_0_02": false
+  },
+  "claim_ceiling": "LocalDevelopmentBillSumSameRosterCurriculumOrderQualificationV9",
+  "custody": {
+    "adapter_weights_in_release": false,
+    "data_and_artifact_custody": "pinned source bytes plus owner-only 0700 local V9 root; private files 0600",
+    "generated_summaries_in_release": false,
+    "model_weights_in_release": false,
+    "raw_inputs_and_private_run_owner_only": true,
+    "repository_release_aggregate_only": true
+  },
+  "dataset_manifest_sha256": "03ff3ea855c3e5840722315fb7a986da0001b2a3a932b5e6cd98b34eb967eda1",
+  "governance_slice": "global-experiment-assurance-lifecycle-v1",
+  "independent_acceptance": false,
+  "layer_activation_patch_diagnostic": {
+    "feature_level_mechanism_claim": false,
+    "identity_patch_max_abs_nll_error": 0.0,
+    "kind": "layer_14_residual_activation_patch_secondary_only",
+    "mean_activation_patch_delta_nll": 0.06178278988227248,
+    "rows": 128
+  },
+  "local_acceptance": "PENDING_LOCAL_VERIFICATION",
+  "mean_assistant_target_nll": {
+    "easy_to_hard_order": 1.0931847189863524,
+    "random_order_control": 1.0930317962542175,
+    "untouched_base": 1.6490649739901224
+  },
+  "mean_output_reference_token_ratio": {
+    "easy_to_hard_order": 0.9027398436006988,
+    "random_order_control": 1.0759444902787356,
+    "untouched_base": 0.9250812863916508
+  },
+  "mean_rouge_f1": {
+    "rouge1": {
+      "easy_to_hard_order": 0.4003061952123827,
+      "random_order_control": 0.39320852206850504,
+      "untouched_base": 0.3507172391608261
+    },
+    "rouge2": {
+      "easy_to_hard_order": 0.24030580252043274,
+      "random_order_control": 0.2382348347105779,
+      "untouched_base": 0.14693127585254934
+    },
+    "rougeL": {
+      "easy_to_hard_order": 0.32005262506873705,
+      "random_order_control": 0.31513553668203464,
+      "untouched_base": 0.22861761873643655
+    }
+  },
+  "model_weights_manifest_sha256": "e77990a87387a8bd81db5a96b8ec8b2853d08b1c4b7fa65c8a34d768eab6459b",
+  "nonclaims": [
+    "independent acceptance",
+    "general alignment",
+    "general recursive self-improvement",
+    "feature-level mechanism",
+    "benchmark leaderboard result",
+    "production readiness",
+    "user-data evidence",
+    "clean second-environment reproduction"
+  ],
+  "per_seed_rougeL_f1": {
+    "easy_to_hard_order": {
+      "607": 0.328448786514589,
+      "701": 0.3220654328002086,
+      "809": 0.31311155048593126,
+      "907": 0.31658473047421937
+    },
+    "random_order_control": {
+      "607": 0.31416102428956655,
+      "701": 0.31607443158915777,
+      "809": 0.3082163166698581,
+      "907": 0.32209037417955616
+    },
+    "untouched_base": {
+      "607": 0.22263787874072646,
+      "701": 0.23032729523491433,
+      "809": 0.2276341004046701,
+      "907": 0.23387120056543528
+    }
+  },
+  "prepared_inputs_sha256": "d377e4ab75f839e0321fcc91850abb59800bfdf806d35c308a540760d25190db",
+  "primary_metric": {
+    "bootstrap_resamples": 10000,
+    "bootstrap_seed": 20261011,
+    "ci95_high": 0.013991998496146138,
+    "ci95_low": -0.003983699673098066,
+    "mean_effect": 0.004917088386702404,
+    "minimum_meaningful_effect": 0.02,
+    "n_documents": 120,
+    "n_seed_pairs": 4,
+    "name": "paired_document_bootstrap_rougeL_easy_to_hard_minus_random_order"
+  },
+  "private_run_sha256": "4c51e7c9f2a1a61b273be823962e0084ca6264faf8d76e3a6fc8d8ce0aea52e8",
+  "protocol_id": "aligned-rsi-billsum-same-roster-order-v9",
+  "reproducibility_status": "SINGLE_LOCAL_EXECUTION",
+  "resources": {
+    "elapsed_seconds": 6927.625202749972,
+    "energy_measurement": "not_measured",
+    "local_compute_cost": "not_measured",
+    "mps_current_allocated_bytes": 1205309440,
+    "mps_driver_allocated_bytes": 8913600512,
+    "peak_process_rss_bytes": 4716691456,
+    "provider_calls": 0,
+    "provider_spend": "none",
+    "wall_clock_limit_seconds": 28800
+  },
+  "reviewer_status": "LOCAL_ACCEPTANCE_ONLY_NO_INDEPENDENT_ACCEPT",
+  "run_id": "run-20261007T201235066122Z",
+  "schema_version": "aligned-rsi-billsum-same-roster-order-v9-evaluation-report",
+  "source_digests": {
+    "focused_tests": "f45970a36835331d189d36eda2fa78dc0d7a65b86b3296703cf42b687a6ec41d",
+    "machine_contract": "825a656ad262ca3977c4a8e762f50ea237d54289e815b61a84a6308b61a1be2b",
+    "pinned_v8_helper": "a283132b28161dea1c6e1b389267f18b618f76d77cb3c1d213a1b237d7192e89",
+    "pinned_v8_resolved_runtime_lock": "e8c11d4a260328b27732188d1080891dd9da8cf253a6477e486b256fedcba085",
+    "protocol": "230f204528c793ae60bd8001407069523e76057f437c7e3cc25fe2f54a6d55ee",
+    "repository_instructions": "0e3190af63a3aec94eda07834ac8bfbd8cabd2ec3306f7ded54c5a80652ee900",
+    "runner": "0b1f4031c28b58ccc0978f575090ddabad36eb3c6b690cf6a4bb0d80ca21fef4"
+  },
+  "source_manifest_sha256": "a2ee15380bfd9b741e11df342e6b37bbc2f4014ebd03f64598f0a16d362345b2",
+  "source_revision": "62bf2bfb5b6775327eb635d722bd2a715a2c6a42",
+  "source_worktree_dirty": true,
+  "state_slice": "aligned-rsi-billsum-same-roster-order-curriculum-v9",
+  "training": {
+    "fit_assistant_target_tokens_per_arm_seed": 22561,
+    "fit_combined_tokens_per_arm_seed": 171151,
+    "fit_documents": 128,
+    "fit_roster_sha256": "7beba247d474ca17858aa7b156c863bf869ee3bec3f0f98ed045bcf2152771aa",
+    "fit_source_tokens_per_arm_seed": 148590,
+    "paired_initialization_per_seed": true,
+    "same_source_ids_and_token_sequences_across_arms": true,
+    "steps_per_arm_seed": 32,
+    "total_optimizer_steps": 256
+  }
+}

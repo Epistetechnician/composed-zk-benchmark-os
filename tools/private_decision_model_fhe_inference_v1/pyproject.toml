@@ -1,0 +1,14 @@
+# State slice: private-decision-model-fhe-inference-v1.
+[project]
+name = "private-decision-model-fhe-inference-v1"
+version = "0.1.0"
+description = "Local synthetic FHE inference demonstration for a linear option scorer"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "concrete-python==2.11.0",
+  "numpy>=1.26,<2.0",
+  "setuptools==80.9.0",
+]
+
+[tool.uv]
+package = false

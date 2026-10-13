@@ -1,0 +1,27 @@
+{
+  "claim_ceiling": "LocalDevelopmentSyntheticFHEInferenceV1",
+  "execution_authorized": false,
+  "governance_state_slice": "global-experiment-assurance-lifecycle-v1",
+  "protocol_id": "private-decision-model-fhe-independent-review-v1",
+  "review_scope": [
+    "protocol_validity",
+    "exact_byte_binding",
+    "claim_ceiling",
+    "execution_closure",
+    "retention_policy",
+    "security",
+    "reviewer_independence"
+  ],
+  "reviewer_submission_authorized_by_this_protocol": false,
+  "schema_version": "private-decision-model-fhe-review-protocol-v1",
+  "state_slice": "private-decision-model-fhe-review-preparation-v1",
+  "stop_conditions": [
+    "Do not submit if the registered Agent Card, contract, key pin, or no-task readiness is unavailable or mismatched.",
+    "Do not transfer the archive until an explicitly agreed secure file channel is available.",
+    "Do not create a review task until the user authorizes this exact frozen target by digest.",
+    "Do not open real data, remote execution, paid execution, public release, or a higher claim ceiling under this packet."
+  ],
+  "target_state_slice": "private-decision-model-fhe-inference-v1",
+  "target_summary": "Review only the source, hermetic harness, fixed synthetic workload, local FHE client/server boundary, aggregate execution report, retention, limitations, and claim ceiling of the reproduced local V1 prototype.",
+  "workflow": "Freeze source and evidence identities, validate the packet and archive locally, then perform read-only reviewer checks. Submission and transfer require separate exact-target authorization and a working registered channel."
+}

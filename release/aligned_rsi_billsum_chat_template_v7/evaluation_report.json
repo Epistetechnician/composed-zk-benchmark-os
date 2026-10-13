@@ -1,0 +1,425 @@
+{
+  "assurance_level": "INTERNAL_PASS",
+  "candidate_disposition": "NoCandidate",
+  "claim_ceiling": "LocalDevelopmentBillSumChatTemplateCurriculumQualificationV7",
+  "cohorts": {
+    "assessment_documents": 64,
+    "assessment_roster_sha256": "568e0de51fa481f912b1aef76b8ce2834a1e06cd1900cda0766f74e670336670",
+    "duplicate_source_groups_excluded": {
+      "test_groups": 0,
+      "test_rows": 0,
+      "train_groups": 8,
+      "train_rows": 16
+    },
+    "fit_pool_documents": 512,
+    "fit_roster_sha256": "20cf848ea84c1de6db9defda4e539083852509eab7ff8ff2adc10964767ecb13",
+    "fresh_v1_v5_v6_document_overlap": 0,
+    "v1_assessment_prefix_excluded": 128,
+    "v1_fit_prefix_excluded": 512,
+    "v5_assessment_exclusion_ids_sha256": "abc9cfbebdbc4cb24c4d271e3aeb70070d419bba3e29537e9f3ca4cdd51b13c1",
+    "v5_assessment_source_ids_excluded": 64,
+    "v5_fit_exclusion_ids_sha256": "9dab518511424ce830a4598bc45dd96f61be4de51839a3252866c750b84ca6eb",
+    "v5_fit_source_ids_excluded": 512,
+    "v6_assessment_exclusion_ids_sha256": "eeff4c21fbe6dd7d6b116d365f322e6087b394f9067933da9875899a3e1d19c8",
+    "v6_assessment_source_ids_excluded": 64,
+    "v6_fit_exclusion_ids_sha256": "4288836f34fef9362ea66889b7e307bc285045b60ead44653542d750a5e00d66",
+    "v6_fit_source_ids_excluded": 512
+  },
+  "cost": {
+    "energy_measurement": "not_measured",
+    "local_compute_cost": "not_measured",
+    "paid_provider_calls": false,
+    "provider_spend": "none_no_provider_calls"
+  },
+  "counts": {
+    "held_out_completions": 576,
+    "mechanistic_rows": 96,
+    "training_examples_per_arm_per_seed": 32,
+    "training_seeds": [
+      109,
+      127,
+      149
+    ],
+    "training_steps_per_updated_arm": 8
+  },
+  "custody": {
+    "automatic_expiry": false,
+    "pinned_model_and_dataset_external_owner_only": true,
+    "raw_rows_generations_and_adapter_weights_external_owner_only": true,
+    "repository_release_aggregate_only": true
+  },
+  "dataset": {
+    "excluded_splits": [
+      "ca_test"
+    ],
+    "included_splits": [
+      "train",
+      "test"
+    ],
+    "repo_id": "FiscalNote/billsum",
+    "revision": "3d8510441c06a3d9dfb32eb0d7f80151730bcc4f"
+  },
+  "device": "mps",
+  "frozen_protocol": {
+    "arms": [
+      {
+        "assessment_repeats": 3,
+        "id": "untouched_base",
+        "training_examples": 0
+      },
+      {
+        "assessment_repeats": 3,
+        "id": "loss_selected",
+        "selection": "top_32_fit_pool_assistant_target_nll"
+      },
+      {
+        "assessment_repeats": 3,
+        "id": "random_control",
+        "selection": "uniform_32_fit_pool_per_seed"
+      }
+    ],
+    "assistant_termination": {
+      "assistant_end_marker": "<|im_end|>",
+      "assistant_end_token_id": 151645,
+      "assistant_loss_excludes_template_separator": true,
+      "assistant_loss_includes_end_marker": true,
+      "trailing_template_separator_token_ids": [
+        198
+      ]
+    },
+    "assurance_target": "INTERNAL_PASS",
+    "claim_ceiling": "LocalDevelopmentBillSumChatTemplateCurriculumQualificationV7",
+    "cohorts": {
+      "assessment_size": 64,
+      "assessment_sort": "ascending_sha256_of_source_text",
+      "assessment_split": "test",
+      "assessment_v1_exclusion": "exclude_all_source_ids_from_first_128_rows_sorted_by_sha256(text||NUL||summary)",
+      "assessment_v5_exclusion": "reconstruct_and_exclude_the_64_source_ids_in_the_v5_assessment_roster_from_raw_pinned_inputs",
+      "assessment_v6_exclusion": "reconstruct_and_exclude_the_64_source_ids_in_the_v6_assessment_roster_from_raw_pinned_inputs",
+      "assistant_target_truncation": false,
+      "ca_test_access": false,
+      "duplicate_source_rule": "exclude_all_rows_for_source_hash_appearing_more_than_once_within_each_split",
+      "fit_pool_size": 512,
+      "fit_sort": "ascending_sha256_of_source_text",
+      "fit_split": "train",
+      "fit_v1_exclusion": "exclude_all_source_ids_from_first_512_rows_sorted_by_sha256(text||NUL||summary)",
+      "fit_v5_exclusion": "reconstruct_and_exclude_the_512_source_ids_in_the_v5_fit_roster_from_raw_pinned_inputs",
+      "fit_v6_exclusion": "reconstruct_and_exclude_the_512_source_ids_in_the_v6_fit_roster_from_raw_pinned_inputs",
+      "source_eligibility": "chat-template prompt is at most 1280 tokens and assistant target is at most 512 tokens; no source or target truncation",
+      "split_disjointness_required": true,
+      "v1_scientific_outputs_reused": false,
+      "v2_scientific_outputs_reused": false,
+      "v3_scientific_outputs_reused": false,
+      "v4_scientific_outputs_reused": false,
+      "v5_scientific_outputs_reused": false,
+      "v6_scientific_outputs_reused": false
+    },
+    "dataset": {
+      "excluded_splits": [
+        "ca_test"
+      ],
+      "included_splits": [
+        "train",
+        "test"
+      ],
+      "license": "cc0-1.0",
+      "new_document_id": "sha256(utf8(text))",
+      "repo_id": "FiscalNote/billsum",
+      "revision": "3d8510441c06a3d9dfb32eb0d7f80151730bcc4f",
+      "source_boundary": "US_federal_GPO_bills_only"
+    },
+    "decoding": {
+      "chat_template": "tokenizer.apply_chat_template",
+      "do_sample": true,
+      "enable_thinking": false,
+      "generation_seed": "sha256-source-id-prefix xor training-seed-constant xor protocol-constant",
+      "generation_seed_constants": {
+        "mask": "0x7FFFFFFF",
+        "protocol_constant": "0xA17E2028",
+        "training_seed_multiplier": "0x9E3779B1"
+      },
+      "max_new_tokens": 512,
+      "pairing": "same per-document generation seed across all arms within each training seed",
+      "repetition_penalty": 1,
+      "temperature": 0.7,
+      "top_k": 20,
+      "top_p": 0.8
+    },
+    "execution": {
+      "adapter_weights_in_repository": false,
+      "aggregate_only_repository_output": true,
+      "automatic_expiry": false,
+      "custody_mode": "0700",
+      "device": "Apple_MPS_local",
+      "generated_summaries_in_repository": false,
+      "input_root": "$HOME/.local/share/aligned-rsi-local-billsum-adaptation-v1/inputs",
+      "local_acceptance_only": true,
+      "model_weights_in_repository": false,
+      "network_during_run": false,
+      "output_root": "$HOME/.local/share/aligned-rsi-billsum-chat-template-adaptation-v7",
+      "paid_provider_calls": false,
+      "raw_data_in_repository": false,
+      "remote_workers": false,
+      "wall_clock_limit_minutes": 360
+    },
+    "governance_slice": "global-experiment-assurance-lifecycle-v1",
+    "hypothesis": "Under the frozen Qwen3 chat-template and decoding path, a fit-loss-selected 32-example curriculum improves held-out BillSum ROUGE-L F1 over an equal-budget random curriculum by at least 0.02, using memory-bounded target-only adapter updates.",
+    "independent_acceptance_requested": false,
+    "mechanistic_diagnostic": {
+      "assessment_documents": 16,
+      "feature_level_claim": false,
+      "identity_patch_max_abs_nll_error": 1e-05,
+      "intervention": "replace adapted-run summary-prediction residual activations with corresponding base activations",
+      "kind": "causal_layer_activation_patch",
+      "layer_index_zero_based": 13
+    },
+    "model": {
+      "adapter_implementation": "huggingface-peft",
+      "adapter_package": "peft==0.21.2",
+      "base_weights_mutable": false,
+      "chat_template_sha256": "a55ee1b1660128b7098723e0abcd92caa0788061051c62d51cbe87d9cf1974d8",
+      "enable_thinking": false,
+      "license": "apache-2.0",
+      "repo_id": "Qwen/Qwen3-0.6B",
+      "revision": "c1899de289a04d12100db370d81485cdf75e47ca"
+    },
+    "nonclaims": [
+      "independent_acceptance",
+      "general_alignment",
+      "general_recursive_self_improvement",
+      "feature_level_mechanistic_explanation",
+      "benchmark_leaderboard_result",
+      "production_readiness",
+      "user_data_evidence",
+      "clean_second_environment_reproduction"
+    ],
+    "prepared_identity": {
+      "assessment_roster_sha256": "568e0de51fa481f912b1aef76b8ce2834a1e06cd1900cda0766f74e670336670",
+      "dataset_files_sha256": "03ff3ea855c3e5840722315fb7a986da0001b2a3a932b5e6cd98b34eb967eda1",
+      "duplicate_source_groups_excluded": {
+        "test_groups": 0,
+        "test_rows": 0,
+        "train_groups": 8,
+        "train_rows": 16
+      },
+      "fit_roster_sha256": "20cf848ea84c1de6db9defda4e539083852509eab7ff8ff2adc10964767ecb13",
+      "model_files_sha256": "e77990a87387a8bd81db5a96b8ec8b2853d08b1c4b7fa65c8a34d768eab6459b",
+      "v1_excluded": {
+        "assessment_prefix_count": 128,
+        "assessment_source_ids_sha256": "cd5d8e89c50cef363544b9831fed09aba98703bba5efe30e5f67975cb89fc908",
+        "fit_prefix_count": 512,
+        "fit_source_ids_sha256": "0d25ecc5c577397d131332be3bd4660381f47e4bfb9a3420f70e4cf7e63eae5a"
+      },
+      "v5_excluded": {
+        "assessment_count": 64,
+        "assessment_source_ids_sha256": "abc9cfbebdbc4cb24c4d271e3aeb70070d419bba3e29537e9f3ca4cdd51b13c1",
+        "fit_count": 512,
+        "fit_source_ids_sha256": "9dab518511424ce830a4598bc45dd96f61be4de51839a3252866c750b84ca6eb"
+      },
+      "v6_excluded": {
+        "assessment_count": 64,
+        "assessment_source_ids_sha256": "eeff4c21fbe6dd7d6b116d365f322e6087b394f9067933da9875899a3e1d19c8",
+        "fit_count": 512,
+        "fit_source_ids_sha256": "4288836f34fef9362ea66889b7e307bc285045b60ead44653542d750a5e00d66"
+      }
+    },
+    "primary_metric": {
+      "bootstrap_resamples": 10000,
+      "bootstrap_seed": 20261009,
+      "candidate_rule": "estimate>=0.02_and_ci95_lower>0_and_selected_not_below_base_and_selected_target_nll_no_more_than_0.05_above_base_and_all_locked_outputs_finite",
+      "implementation": "rouge-score==0.1.2",
+      "minimum_meaningful_effect": 0.02,
+      "name": "paired_document_bootstrap_rougeL_loss_selected_minus_random_control",
+      "use_stemmer": false
+    },
+    "prompt": {
+      "assistant_target": "the exact BillSum summary field",
+      "assistant_target_truncation": false,
+      "source_truncation": false,
+      "system_message": "You are a concise U.S. federal bill summarization assistant. State the bill's main purpose and key provisions. Do not add unsupported claims.",
+      "user_message_prefix": "Summarize this U.S. federal bill.\n\nBILL:\n"
+    },
+    "protocol_id": "aligned-rsi-billsum-chat-template-adaptation-v7",
+    "runtime": {
+      "absl-py": "2.5.0",
+      "accelerate": "1.14.0",
+      "datasets": "5.0.1",
+      "huggingface-hub": "1.27.0",
+      "nltk": "3.10.2",
+      "numpy": "2.5.1",
+      "peft": "0.21.2",
+      "platform": "darwin-arm64",
+      "pyarrow": "25.0.0",
+      "python": "3.14.5",
+      "rouge-score": "0.1.2",
+      "safetensors": "0.8.0",
+      "tokenizers": "0.22.2",
+      "torch": "2.13.0",
+      "transformers": "5.14.1"
+    },
+    "schema_version": "aligned-rsi-billsum-chat-template-v7-protocol",
+    "secondary_metrics": [
+      "ROUGE-1 F1",
+      "ROUGE-2 F1",
+      "assistant-target NLL",
+      "output/reference token ratio",
+      "training loss",
+      "per-seed held-out ROUGE-L",
+      "layer-14 residual activation patch with identity control",
+      "elapsed time",
+      "peak process RSS"
+    ],
+    "state_slice": "aligned-rsi-billsum-chat-template-adaptation-v7",
+    "status": "LOCAL_EXECUTION_AUTHORIZED_BY_USER",
+    "training": {
+      "adapter_library": "PEFT",
+      "assistant_only_loss": true,
+      "base_weights_mutable": false,
+      "batch_padding": "one_unpadded_sequence_per_forward",
+      "batch_size": 4,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "epochs": 1,
+      "epsilon": 1e-08,
+      "equal_optimizer_steps_per_updated_arm": 8,
+      "generation_pad_token_id": 151643,
+      "gradient_accumulation_examples": 4,
+      "gradient_checkpointing": "transformer_layer_checkpointing_non_reentrant",
+      "gradient_clip_norm": 1,
+      "learning_rate": 0.0001,
+      "logits_projection": "apply_lm_head_only_to_assistant_target_prediction_positions",
+      "lora_alpha": 16,
+      "lora_dropout": 0,
+      "lora_rank": 8,
+      "lora_target_modules": [
+        "q_proj",
+        "v_proj"
+      ],
+      "loss_reduction": "token_weighted_mean_assistant_cross_entropy_over_each_four_example_accumulation_group",
+      "max_assistant_target_tokens": 512,
+      "max_source_tokens": 1280,
+      "microbatch_size": 1,
+      "optimizer": "AdamW",
+      "seeds": [
+        109,
+        127,
+        149
+      ],
+      "weight_decay": 0.01
+    }
+  },
+  "independent_acceptance": false,
+  "local_acceptance": "INTERNAL_PASS",
+  "local_acceptance_receipt_sha256": "122ca72d24cb3a56d6e9f2df16eecdbb0e3e3d2336acd70c8873afe427c5339c",
+  "model": {
+    "repo_id": "Qwen/Qwen3-0.6B",
+    "revision": "c1899de289a04d12100db370d81485cdf75e47ca"
+  },
+  "model_weights_manifest_sha256": "e77990a87387a8bd81db5a96b8ec8b2853d08b1c4b7fa65c8a34d768eab6459b",
+  "next_blocked_authority_gate": "No independent acceptance requested; any claim above this local qualification ceiling requires a fresh evidence packet and applicable authority.",
+  "nonclaims": [
+    "independent_acceptance",
+    "general_alignment",
+    "general_recursive_self_improvement",
+    "feature_level_mechanistic_explanation",
+    "benchmark_leaderboard_result",
+    "production_readiness",
+    "user_data_evidence"
+  ],
+  "prepared_inputs_sha256": "1fb1fab0b68e0cc1bad7bbe4a920e0c223a8238bfbebfc00be75551fb2cc9adc",
+  "primary": {
+    "ci95_lower": -0.055307196170419945,
+    "ci95_upper": -0.01219770982665898,
+    "loss_selected_mean_rouge_l_f1": 0.23286130997517937,
+    "mean_effect": -0.033077090502949186,
+    "metric": "paired_document_bootstrap_rougeL_loss_selected_minus_random_control",
+    "minimum_meaningful_effect": 0.02,
+    "random_control_mean_rouge_l_f1": 0.2659384004781285,
+    "untouched_base_mean_rouge_l_f1": 0.2034329935569532
+  },
+  "private_run_sha256": "0c7262fd3fcb6ec362b849f728e9d44a9c0e5bbbcd50dc53df6812e28ce10c82",
+  "protocol_id": "aligned-rsi-billsum-chat-template-adaptation-v7",
+  "protocol_manifest_sha256": "e57636b8fee68e2030882b016295e52120bace21ee85498aebc1d5806fdbe22c",
+  "protocol_sha256": "a88b0964a25b80dff47953f84615e0ab6360ca84c024dbbf9f4c8bef543b1575",
+  "reproducibility_status": "SINGLE_LOCAL_EXECUTION",
+  "resources": {
+    "elapsed_seconds": 3282.5378278749995,
+    "energy_measurement": "not_measured",
+    "mps_current_allocated_bytes": 1203520512,
+    "mps_driver_allocated_bytes": 7832109056,
+    "peak_process_rss_bytes": 5005541376,
+    "wall_clock_limit_seconds": 21600
+  },
+  "reviewer_status": "LOCAL_ACCEPTANCE_ONLY_NO_INDEPENDENT_ACCEPT",
+  "run_id": "run-20261007T132131001473Z",
+  "runtime": {
+    "absl-py": "2.5.0",
+    "accelerate": "1.14.0",
+    "datasets": "5.0.1",
+    "huggingface-hub": "1.27.0",
+    "nltk": "3.10.2",
+    "numpy": "2.5.1",
+    "peft": "0.21.2",
+    "platform": "darwin-arm64",
+    "pyarrow": "25.0.0",
+    "python": "3.14.5",
+    "rouge-score": "0.1.2",
+    "safetensors": "0.8.0",
+    "tokenizers": "0.22.2",
+    "torch": "2.13.0",
+    "transformers": "5.14.1"
+  },
+  "schema_version": "aligned-rsi-billsum-chat-template-v7-evaluation-report",
+  "secondary": {
+    "complete_finite_outputs": true,
+    "identity_patch_max_abs_nll_error": 0.0,
+    "loss_selected_minus_base_mean_target_nll": -0.26013653802995873,
+    "mean_activation_patch_delta_nll": 0.08192227687686682,
+    "mean_fraction_base_activation_recovered": 0.31868133382357394,
+    "mean_output_reference_token_ratio": 0.77900597723737,
+    "per_seed_rouge_l": [
+      {
+        "loss_selected_rouge_l": 0.23659234653472888,
+        "random_control_rouge_l": 0.2591233251710795,
+        "seed": 109,
+        "untouched_base_rouge_l": 0.2086646278062819
+      },
+      {
+        "loss_selected_rouge_l": 0.22915865950082007,
+        "random_control_rouge_l": 0.26544589060082796,
+        "seed": 127,
+        "untouched_base_rouge_l": 0.19130208291816236
+      },
+      {
+        "loss_selected_rouge_l": 0.23283292388998908,
+        "random_control_rouge_l": 0.2732459856624781,
+        "seed": 149,
+        "untouched_base_rouge_l": 0.2103322699464154
+      }
+    ],
+    "rouge1_f1_by_arm": {
+      "loss_selected": 0.3219278108172266,
+      "random_control": 0.3684093207833404,
+      "untouched_base": 0.30846749459882106
+    },
+    "rouge2_f1_by_arm": {
+      "loss_selected": 0.15831165588077661,
+      "random_control": 0.19471140828592728,
+      "untouched_base": 0.12158947232549376
+    }
+  },
+  "source_digests": {
+    "focused_tests": "1590361088b416597b130b597ee5edaa86e885c302ed0534c69cc1992e7d59fc",
+    "protocol": "a88b0964a25b80dff47953f84615e0ab6360ca84c024dbbf9f4c8bef543b1575",
+    "protocol_manifest": "e57636b8fee68e2030882b016295e52120bace21ee85498aebc1d5806fdbe22c",
+    "repository_instructions": "6c5b58433305dd3e351e6250e2e84c1dca2e44149443f93184dd2ca07132dca5",
+    "requirements_lock": "ecc7b3b3db1fc626612128839c416f2d21ab6e0672870983a368f6cd57c7b883",
+    "runner": "e0e32618f43ea32711d96d4b9883995f34b86320a1239f7b13143820c08b510d"
+  },
+  "source_manifest_sha256": "5047273052fe6051293f5d2f536509209dd2cb029e2622ff64582653d1026ce5",
+  "source_revision": "62bf2bfb5b6775327eb635d722bd2a715a2c6a42",
+  "source_worktree_dirty": true,
+  "state_slice": "aligned-rsi-billsum-chat-template-adaptation-v7"
+}

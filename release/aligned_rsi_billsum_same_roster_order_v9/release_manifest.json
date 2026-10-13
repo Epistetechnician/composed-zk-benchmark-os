@@ -1,0 +1,16 @@
+{
+  "adapter_weights_included": false,
+  "files": [
+    {
+      "path": "evaluation_report.json",
+      "sha256": "04ba4d3c0eca2bd032f88c6aa666cf4c5ce77ea5ebdc3487e3ca5f7981adc1f4"
+    }
+  ],
+  "generated_summaries_included": false,
+  "governance_slice": "global-experiment-assurance-lifecycle-v1",
+  "independent_acceptance": false,
+  "model_weights_included": false,
+  "raw_data_included": false,
+  "schema_version": "aligned-rsi-billsum-same-roster-order-v9-aggregate-release",
+  "state_slice": "aligned-rsi-billsum-same-roster-order-curriculum-v9"
+}

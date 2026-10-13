@@ -1,0 +1,143 @@
+{
+  "aggregate_receipt_bytes_available": false,
+  "aggregate_receipt_sha256": "ca8142bb1c45d0075fdf8eacae9427cb9ef7ff952a4dafc9368dad72235aa510",
+  "baseline_revision": "62bf2bfb5b6775327eb635d722bd2a715a2c6a42",
+  "claim_ceiling": "LocalDevelopmentSyntheticFHEInferenceV1",
+  "controls": [
+    "Seven hermetic contract tests cover deterministic fixture identity, shapes and ranges, fitted coefficients, secret and cleartext field rejection, and server environment filtering.",
+    "A fixed-seed set of 256 synthetic requests is compared with an independent integer scorer formula.",
+    "The local FHE runner checks every encrypted score against its clear reference and checks each top-ranked option."
+  ],
+  "data_identity": {
+    "calibration_requests": 12,
+    "evaluation_requests": 8,
+    "features_per_option": 6,
+    "fixture_sha256": "7144207ead235b20cea7a26b899c42fc7249a66b9dfc12a1f02d68fe2da534f7",
+    "options_per_request": 4,
+    "seed": 20260930,
+    "seed_offsets": {
+      "calibration": 1,
+      "evaluation": 2
+    },
+    "synthetic_feature_range_inclusive": [
+      -8,
+      8
+    ],
+    "training_rows": 128
+  },
+  "execution_budget": {
+    "additional_model_runs_in_preparation_slice": 0,
+    "paid_or_provider_execution": false,
+    "real_or_user_data": false,
+    "remote_workers": false
+  },
+  "governance_state_slice": "global-experiment-assurance-lifecycle-v1",
+  "known_limitations": [
+    "The output receipt bytes are unavailable; only the aggregate summary and receipt digest remain.",
+    "No performance, latency, peak-memory, or end-to-end resource measurements were retained.",
+    "The model is a small planted linear synthetic scorer; model weights are clear in the compiled server circuit.",
+    "Client and server are separate local processes under the same host and user account.",
+    "No real-data utility, formal cryptographic analysis, remote-service qualification, or production evidence exists."
+  ],
+  "nonclaims": [
+    "No independent acceptance, external validation, or production authorization.",
+    "No formal security certification, model-weight privacy, encrypted training, or TEE protection.",
+    "No real or user data, remote execution, provider evidence, benchmark, commercial-readiness, or production claim."
+  ],
+  "protocol_canonical_sha256": "4ce1c4382da99e8b8e4bac171268f71f05944039edbc513ac33dea1ec57f5c82",
+  "protocol_file_sha256": "669e9e0f67e0b8b054a9dcfd28e893974503a6a36758a3005fa221356201b3c3",
+  "protocol_path": "docs/research/private-decision-model-fhe-review-protocol-v1.json",
+  "protocol_sha256": "669e9e0f67e0b8b054a9dcfd28e893974503a6a36758a3005fa221356201b3c3",
+  "reproduction": {
+    "assurance": [
+      "INTERNAL_PASS",
+      "REPRODUCED_LOCAL"
+    ],
+    "concrete_python": "2.11.0",
+    "machine": "arm64",
+    "numpy": "1.26.4",
+    "platform": "macOS-26.6.1-arm64-arm-64bit",
+    "python": "3.12.13",
+    "uv_lock_sha256": "cf9852e2b16da1d6dabb13fd9fbcf368e36822043907aa0a5154589504b0a8b2"
+  },
+  "review_packet_canonical_sha256": "94ae6b4460aba7bbabab32f853a075d43dfd1e5a949103c7e4665853fc41defc",
+  "review_packet_file_sha256": "61b575b8841dbcba1d0271942cf38ed9de1b4d92098e04a42d6fc1ced4ce209d",
+  "review_packet_path": "docs/research/private-decision-model-fhe-review-packet-v1.json",
+  "review_packet_sha256": "61b575b8841dbcba1d0271942cf38ed9de1b4d92098e04a42d6fc1ced4ce209d",
+  "reviewer_identity": "Independent Experiment Review Gateway",
+  "reviewer_key_fingerprint": "ed25519:676cb4e8f55ee166d1b0e21aa3de91a2306f654bea64ba8404e6dfd48699c859",
+  "reviewer_status": "EXTERNAL_REVIEW_UNAVAILABLE",
+  "review_scope": [
+    "protocol_validity",
+    "exact_byte_binding",
+    "claim_ceiling",
+    "execution_closure",
+    "retention_policy",
+    "security",
+    "reviewer_independence"
+  ],
+  "schema_version": "private-decision-model-fhe-review-target-v1",
+  "state_slices": {
+    "governance": "global-experiment-assurance-lifecycle-v1",
+    "preparation": "private-decision-model-fhe-review-preparation-v1",
+    "target": "private-decision-model-fhe-inference-v1"
+  },
+  "target_artifacts": [
+    {
+      "path": "AGENTS.md",
+      "role": "authorization",
+      "sha256": "efe268a3187ee20559a2ce780145afc5c5a4b397df6263b43ab597cac0f15426"
+    },
+    {
+      "path": "docs/research/private-decision-model-fhe-inference-v1.md",
+      "role": "execution_report",
+      "sha256": "630287c5c6ab04ad3922064ff77fbb3212f6b8713e189051efb0dd03702a634f"
+    },
+    {
+      "path": "docs/research/private-decision-model-privacy-prd-v1.md",
+      "role": "design_context",
+      "sha256": "43400cb165029d53a7be9b437ee56a0a759453fac0f1c5acf94d29de84aaf8af"
+    },
+    {
+      "path": "tools/private_decision_model_fhe_inference_v1/README.md",
+      "role": "implementation_guide",
+      "sha256": "e42b7d2f568d21af10dd1a25bf31fe7ec791a0f93dd07d97b0e573d44b1f0638"
+    },
+    {
+      "path": "tools/private_decision_model_fhe_inference_v1/run_v1.py",
+      "role": "runner_source",
+      "sha256": "31fb1d5d6fb12b0a3ba60df658856edb7d0875df26cc66ea7dee4f7565be9897"
+    },
+    {
+      "path": "tools/private_decision_model_fhe_inference_v1/server_worker.py",
+      "role": "server_source",
+      "sha256": "8d722acadc174aea07db29951b888c29badb893373ba7726c4208fe656eeafdd"
+    },
+    {
+      "path": "tools/private_decision_model_fhe_inference_v1/decision_model.py",
+      "role": "model_source",
+      "sha256": "c31125d5882e7a8c1b246d19a7a849d0344c9afeddd5026a6e0f545764c3614c"
+    },
+    {
+      "path": "tools/private_decision_model_fhe_inference_v1/tests/test_contract.py",
+      "role": "test_harness",
+      "sha256": "0db58dd79e216a2f15b87d3e99a891f40ec4aafd24bb0ef00283addb842dc94d"
+    },
+    {
+      "path": "tools/private_decision_model_fhe_inference_v1/pyproject.toml",
+      "role": "project_manifest",
+      "sha256": "da7caa076b89c4d578c348c4bd8784984e71a8bd57eebf9577bdd2f502d579ae"
+    },
+    {
+      "path": "tools/private_decision_model_fhe_inference_v1/uv.lock",
+      "role": "dependency_lock",
+      "sha256": "cf9852e2b16da1d6dabb13fd9fbcf368e36822043907aa0a5154589504b0a8b2"
+    }
+  ],
+  "target_state_slice": "private-decision-model-fhe-inference-v1",
+  "working_tree": {
+    "base_revision_is_head": true,
+    "base_revision": "62bf2bfb5b6775327eb635d722bd2a715a2c6a42",
+    "target_is_explicit_file_subset": true
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "accepted_report_core_sha256": "c1ee2ef173cd196707152a911d1bfba61783bab41620d0c5d3bca048e49b5985",
+  "assurance_level": "INTERNAL_PASS",
+  "candidate_disposition": "NoCandidate",
+  "claim_ceiling": "LocalDevelopmentBillSumAdaptiveCurriculumQualificationV1",
+  "independent_acceptance": false,
+  "local_acceptance": "INTERNAL_PASS",
+  "manifest_sha256": "af2e30f7edb179c9939779c67257e8810ef2b07edc0ecedd8e34777fa8bcabbb",
+  "prepared_inputs_sha256": "7d7afc33d5343c2d543648de9cfc73f523d94b7606bf879b7d600deae68c79f1",
+  "private_run_sha256": "a89c461bdce2aba98cc7319a3712fa17ce28bc12c6bccd79ecc5d037393ff54e",
+  "protocol_sha256": "a19c9ceaf593ea5fd1968988cfeca7331929172b923823dacb6d85cd518fb055",
+  "reviewer_status": "LOCAL_ACCEPTANCE_ONLY_NO_INDEPENDENT_ACCEPT",
+  "schema_version": "aligned-rsi-local-billsum-v1-local-acceptance",
+  "source_code_sha256": "501ce774a65d078087c21202ac243f671e6de062396b6b2c999bfbca1a2b13df",
+  "state_slice": "aligned-rsi-local-billsum-adaptation-internal-v1"
+}

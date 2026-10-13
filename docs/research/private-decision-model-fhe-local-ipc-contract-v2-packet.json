@@ -1,0 +1,119 @@
+{
+  "assurance": "PENDING_LOCAL_QUALIFICATION",
+  "claim_ceiling": "LocalDevelopmentSyntheticFHEIPCContractQualificationV2",
+  "custody": {
+    "external_or_user_data": false,
+    "raw_ipc_retention": "none",
+    "temporary_artifacts": "system temporary directory; removed at completion",
+    "synthetic_fixture_sha256": "7144207ead235b20cea7a26b899c42fc7249a66b9dfc12a1f02d68fe2da534f7"
+  },
+  "data_identity": {
+    "calibration_requests": 12,
+    "evaluation_requests": 8,
+    "feature_count_per_option": 6,
+    "feature_range_inclusive": [
+      -8,
+      8
+    ],
+    "fixture_sha256": "7144207ead235b20cea7a26b899c42fc7249a66b9dfc12a1f02d68fe2da534f7",
+    "options_per_request": 4,
+    "seed": 20260930,
+    "training_rows": 128
+  },
+  "governance_state_slice": "global-experiment-assurance-lifecycle-v1",
+  "known_limitations": [
+    "same-host and same-user local process boundary",
+    "model weights are clear in the compiled server circuit",
+    "no real-data utility or remote-service behavior is measured",
+    "the packet does not establish cryptographic security or production readiness",
+    "the separate FHE V1 packet has no independent review decision"
+  ],
+  "nonclaims": [
+    "no external or independent review was performed",
+    "no cryptographic security, model-weight privacy, or malicious-server integrity claim",
+    "no real-data, remote-service, provider, benchmark, commercial, or production claim"
+  ],
+  "protocol": {
+    "path": "docs/research/private-decision-model-fhe-local-ipc-contract-v2-protocol.md",
+    "sha256": "de03eb41b2aaf39bbc74557dc72b5bc2942119dd940c3a16de0fa39e78105a34"
+  },
+  "reproducibility_status": "NOT_YET_RUN",
+  "reviewer_status": "EXTERNAL_REVIEW_UNAVAILABLE",
+  "schema_version": "private-decision-model-fhe-local-ipc-contract-v2-packet",
+  "source_identity": {
+    "baseline_revision": "62bf2bfb5b6775327eb635d722bd2a715a2c6a42",
+    "v1_original_source_composite_sha256": "41bdd10bd882d7f7174fdfadae4f8b9688a28dab2bb839f11a93bbf660d5ad47",
+    "v1_dependency_lock_sha256": "cf9852e2b16da1d6dabb13fd9fbcf368e36822043907aa0a5154589504b0a8b2",
+    "v1_project_manifest_sha256": "da7caa076b89c4d578c348c4bd8784984e71a8bd57eebf9577bdd2f502d579ae",
+    "v1_scorer_fixture_source_sha256": "c31125d5882e7a8c1b246d19a7a849d0344c9afeddd5026a6e0f545764c3614c",
+    "v2_source_composite_sha256": "ce63aba37713d9e4fe6e36bb4117de8caf67b35d9c1028dd6971405c1eb5e51e",
+    "files": [
+      {
+        "path": "tools/private_decision_model_fhe_inference_v2/run_v2.py",
+        "role": "runner_source",
+        "sha256": "11402315436abba9234b875ae3b0e67985d834b9da0adff005a3e0473916e2e0"
+      },
+      {
+        "path": "tools/private_decision_model_fhe_inference_v2/server_worker_v2.py",
+        "role": "worker_source",
+        "sha256": "0c858725efec8c46d78e8323444356d852cf2e2c45d1743464a17de9ea86f6b5"
+      },
+      {
+        "path": "tools/private_decision_model_fhe_inference_v2/ipc_contract.py",
+        "role": "ipc_contract_source",
+        "sha256": "45169598b814be1ea56c3e6a6fb8942e62bd160c62d81fd2a84f233c06ae23af"
+      },
+      {
+        "path": "tools/private_decision_model_fhe_inference_v2/tests/test_ipc_contract.py",
+        "role": "test_harness",
+        "sha256": "99faee9be1cb739852023d67677509faf9d8f3db3ad83eba18e524a6c08b0897"
+      },
+      {
+        "path": "tools/private_decision_model_fhe_inference_v1/decision_model.py",
+        "role": "frozen_v1_scorer_dependency",
+        "sha256": "c31125d5882e7a8c1b246d19a7a849d0344c9afeddd5026a6e0f545764c3614c"
+      },
+      {
+        "path": "tools/private_decision_model_fhe_inference_v1/pyproject.toml",
+        "role": "dependency_project_manifest",
+        "sha256": "da7caa076b89c4d578c348c4bd8784984e71a8bd57eebf9577bdd2f502d579ae"
+      },
+      {
+        "path": "tools/private_decision_model_fhe_inference_v1/uv.lock",
+        "role": "dependency_lock",
+        "sha256": "cf9852e2b16da1d6dabb13fd9fbcf368e36822043907aa0a5154589504b0a8b2"
+      },
+      {
+        "path": "tools/private_decision_model_fhe_inference_v2/README.md",
+        "role": "implementation_guide",
+        "sha256": "b2632fab1183bf0c84bde7beff5f8c08a96b0786443b69a54fc9f5a26fa449f6"
+      }
+    ]
+  },
+  "state_slice": "private-decision-model-fhe-local-ipc-contract-v2",
+  "stop_conditions": [
+    "any V2 parser control fails",
+    "any V1 source, fixture, dependency, or runtime digest changes",
+    "any exact FHE score or top-ranking check fails",
+    "any worker invocation exceeds its timeout",
+    "temporary key, circuit, ciphertext, or synthetic input cleanup fails",
+    "any external review, transfer, user data, remote service, or paid execution would be required"
+  ],
+  "toolchain": {
+    "concrete_python": "2.11.0",
+    "numpy": "1.26.4",
+    "python": "3.12.x via the frozen V1 lock"
+  },
+  "work_budgets": {
+    "fhe_qualifications": 1,
+    "max_evaluation_requests": 8,
+    "max_options_per_request": 4,
+    "max_worker_timeout_seconds": 900,
+    "max_features_per_option": 6,
+    "max_worker_invocations": 3,
+    "parser_only_subprocess_timeout_seconds": 30,
+    "paid_or_provider_execution": false,
+    "real_or_user_data": false,
+    "remote_workers": false
+  }
+}

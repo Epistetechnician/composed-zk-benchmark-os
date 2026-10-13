@@ -1,5 +1,185 @@
 # Continual-learning protocol harness
 
+## Aligned RSI BillSum chat-template adaptation V2-V7
+
+V2 is terminally closed as `PreparationFailedDuplicateSourceIdentity`; its
+preparation stopped before model loading. Do not edit or retry that identity.
+See `docs/research/continual-learning/315-aligned-rsi-billsum-chat-template-adaptation-v2-preparation-closure.md`.
+
+V3 is terminally closed as `PreparationFailedAssistantTurnTrailer`; its
+read-only tokenizer preflight stopped before model loading. Do not edit or
+retry that identity. See
+`docs/research/continual-learning/317-aligned-rsi-billsum-chat-template-adaptation-v3-preparation-closure.md`.
+
+V4 is terminally closed as `ExecutionFailedWallClockLimit`; its one MPS run
+reached the 180-minute limit during adapter training. No complete comparison
+or local acceptance resulted. See
+`docs/research/continual-learning/319-aligned-rsi-billsum-chat-template-adaptation-v4-execution-closure.md`.
+
+V5 is terminally closed as `ExecutionFailedMPSOutOfMemory`. The fit-loss pass
+and three untouched-base assessments completed, but the first selected-arm
+training batch exhausted MPS memory. No adapter or complete comparison was
+saved, and no local acceptance was issued. See
+`docs/research/continual-learning/321-aligned-rsi-billsum-chat-template-adaptation-v5-execution-closure.md`.
+
+The preserved V5 packet is under state slice
+`aligned-rsi-billsum-chat-template-adaptation-v5`. It excludes repeated source
+groups and V1 source documents, uses a 512-document fit pool and 64-document
+held-out assessment, requires an untruncated Qwen3 prompt of at most 1,280
+tokens and assistant target of at most 512 tokens, and compares a 32-example
+loss-selected curriculum with a 32-example uniform control. Each updated seed
+uses exactly eight batch-four PEFT LoRA steps under a single 360-minute
+wall-clock bound. Assistant-only loss includes `<|im_end|>` and excludes the
+template separator newline. V5
+uses paired held-out sampling, standard ROUGE metrics, a layer-14 diagnostic,
+and an aggregate-only local release. Independent acceptance is not requested.
+
+Protocol, runner, contract, and runtime lock:
+
+- `docs/research/continual-learning/320-aligned-rsi-billsum-chat-template-adaptation-v5.md`
+- `experiments/continual_learning/aligned_rsi_billsum_chat_template_v5.py`
+- `experiments/continual_learning/aligned_rsi_billsum_chat_template_v5.json`
+- `experiments/continual_learning/aligned_rsi_billsum_chat_template_v5_requirements.lock`
+
+The commands below document the frozen procedure. V5 is terminal and must not
+be run again; they are not current execution authorization:
+
+~~~sh
+uv pip install --python .venv/bin/python --require-hashes -r experiments/continual_learning/aligned_rsi_billsum_chat_template_v5_requirements.lock
+PYTHONDONTWRITEBYTECODE=1 ./.venv/bin/python -B -m experiments.continual_learning.aligned_rsi_billsum_chat_template_v5 prepare
+PYTHONDONTWRITEBYTECODE=1 ./.venv/bin/python -B -m experiments.continual_learning.aligned_rsi_billsum_chat_template_v5 run
+PYTHONDONTWRITEBYTECODE=1 ./.venv/bin/python -B -m experiments.continual_learning.aligned_rsi_billsum_chat_template_v5 verify
+~~~
+
+The local run binds exact source and input digests, three training seeds,
+paired held-out generations, PEFT adapter files, and a layer-14 intervention
+diagnostic. Its ceiling is
+`LocalDevelopmentBillSumChatTemplateCurriculumQualificationV5`. A failed
+preparation or execution is terminal under V5.
+
+### V6 fresh memory-bounded continuation
+
+V6 is authorized under state slice
+`aligned-rsi-billsum-chat-template-adaptation-v6`. It preserves terminal V1-V5
+identities and reconstructs V1/V5 cohort IDs from raw pinned public inputs
+only to exclude them. A feasibility audit found 1,923 eligible unique train
+documents and 382 test documents after those exclusions. The frozen 512/64
+cohort is disjoint from prior V1/V5 rosters and has no train/test source
+overlap.
+
+The V6 runner applies the Qwen3 vocabulary head only to assistant target
+prediction positions. It trains with an unpadded single-example forward,
+non-reentrant activation checkpointing, and four-example token-weighted
+gradient accumulation. A tiny Qwen3/PEFT contract test checks that the
+accumulated objective and gradients match ordinary full causal loss. The
+experiment keeps the 32-example selected/random comparison, three fresh
+training seeds, 64 paired held-out documents, layer-14 identity and residual
+patch diagnostics, and an aggregate-only local release. It has one 360-minute
+offline MPS run; MPS OOM or timeout is terminal. Independent acceptance is
+not requested.
+
+Protocol and reproduction commands:
+
+- `docs/research/continual-learning/322-aligned-rsi-billsum-chat-template-adaptation-v6.md`
+- `experiments/continual_learning/aligned_rsi_billsum_chat_template_v6.py`
+- `experiments/continual_learning/aligned_rsi_billsum_chat_template_v6.json`
+- `experiments/continual_learning/aligned_rsi_billsum_chat_template_v6_requirements.lock`
+- `experiments/continual_learning/tests/test_aligned_rsi_billsum_chat_template_v6.py`
+
+V6 focused tests passed 11/11 and the dependency environment passed
+`uv pip check`. Its single local execution completed fit scoring, all base
+assessments, and eight selected-arm seed-59 optimizer steps, then terminated
+because PEFT wrote a `README.md` outside the frozen adapter allowlist. No
+updated-arm evaluation, random control, aggregate report, or local acceptance
+exists. The state slice is terminal with no candidate disposition. See
+`docs/research/continual-learning/323-aligned-rsi-billsum-chat-template-adaptation-v6-execution-closure.md`.
+
+### V7 fresh local continuation
+
+V7 completed one run under state slice
+`aligned-rsi-billsum-chat-template-adaptation-v7`. Its read-only raw-input
+audit reconstructed V1, V5, and V6 source rosters for exclusion, found eight
+repeated train-source groups and no test duplicates, and selected a fresh
+512/64 cohort with no cross-split overlap. The roster digests are recorded in
+the V7 protocol; underlying IDs and source text stay private.
+
+The runner retains the memory-bounded target-only update path and binds the
+exact PEFT 0.21.2 adapter tree: `README.md`, `adapter_config.json`, and
+`adapter_model.safetensors`. It includes all three file digests in private
+run reconstruction. The packet fixes three new training seeds, paired
+held-out evaluation, one offline local Apple MPS run, a 360-minute bound, and
+aggregate-only repository output. The run completed in 3,282.54 seconds and
+local report reconstruction passed as `INTERNAL_PASS`. The scientific result
+is `NoCandidate`: selected-minus-random mean ROUGE-L was -0.0331 (95% paired
+document-bootstrap interval [-0.0553, -0.0122]). The configured claim ceiling
+was not earned. Independent acceptance and clean second-environment
+reproduction were not performed. V7 is terminal and must not be rerun.
+
+Protocol and reproduction commands:
+
+- `docs/research/continual-learning/324-aligned-rsi-billsum-chat-template-adaptation-v7.md`
+- `docs/research/continual-learning/325-aligned-rsi-billsum-chat-template-adaptation-v7-execution.md`
+- `experiments/continual_learning/aligned_rsi_billsum_chat_template_v7.py`
+- `experiments/continual_learning/aligned_rsi_billsum_chat_template_v7.json`
+- `experiments/continual_learning/aligned_rsi_billsum_chat_template_v7_requirements.lock`
+- `experiments/continual_learning/tests/test_aligned_rsi_billsum_chat_template_v7.py`
+- `release/aligned_rsi_billsum_chat_template_v7/evaluation_report.json`
+- `release/aligned_rsi_billsum_chat_template_v7/local_acceptance.json`
+
+### V8 fresh length-matched local continuation
+
+V8 is authorized under state slice
+`aligned-rsi-billsum-length-matched-curriculum-v8`; V7 remains terminal and
+unchanged. The frozen V8 cohort uses 768 fit documents and 128 held-out federal
+bills after excluding V1 and the verified V4-V7 source rosters. Four trained
+arms compare global and length-stratified loss selection with corresponding
+random controls, at 128 examples and 32 optimizer steps per seed. The
+length-stratified loss versus random contrast is primary. The one offline
+local MPS run completed in 14,125.03 seconds with 512 optimizer steps and
+2,560 held-out completions. Digest-bound local report reconstruction passed
+as `INTERNAL_PASS`; the scientific disposition is `NoCandidate`. The primary
+paired mean effect was -0.0414 ROUGE-L (95% interval [-0.0551, -0.0281]); the
+length-stratified loss arm scored below its matched random control. No
+independent acceptance or clean second-environment reproduction occurred.
+V8 is terminal and must not be rerun or retuned.
+
+Protocol and reproduction commands:
+
+- `docs/research/continual-learning/326-aligned-rsi-billsum-length-matched-curriculum-v8.md`
+- `experiments/continual_learning/aligned_rsi_billsum_length_matched_v8.py`
+- `experiments/continual_learning/aligned_rsi_billsum_length_matched_v8.json`
+- `experiments/continual_learning/aligned_rsi_billsum_length_matched_v8_requirements.lock`
+- `experiments/continual_learning/tests/test_aligned_rsi_billsum_length_matched_v8.py`
+- `docs/research/continual-learning/327-aligned-rsi-billsum-length-matched-curriculum-v8-execution.md`
+- `release/aligned_rsi_billsum_length_matched_v8/evaluation_report.json`
+- `release/aligned_rsi_billsum_length_matched_v8/local_acceptance.json`
+
+### V9 same-roster order qualification
+
+V9 is authorized under state slice
+`aligned-rsi-billsum-same-roster-order-curriculum-v9` and governance slice
+`global-experiment-assurance-lifecycle-v1`. It compares easy-to-hard ordering
+by untouched-base assistant-target NLL with seeded random permutations of the
+same fixed 128-document roster. Source IDs, input tokens, paired LoRA
+initialization, optimizer, update count, and token budgets are held equal.
+The assessment contains 120 fresh federal test bills. The claim ceiling is
+`LocalDevelopmentBillSumSameRosterCurriculumOrderQualificationV9`; no
+independent acceptance is requested.
+
+The one-shot run is offline on local Apple MPS and has an eight-hour hard
+limit. Prior V1 and V4-V8 prepared receipts are used only to bind pinned input
+bytes and exclude prior source IDs. V8 scientific results remain terminal and
+are not inputs. Any failed execution or verification gate closes V9 without
+retry.
+
+Protocol, runner, contract, focused checks, and eventual execution record:
+
+- `docs/research/continual-learning/328-aligned-rsi-billsum-same-roster-order-curriculum-v9.md`
+- `experiments/continual_learning/aligned_rsi_billsum_same_roster_order_v9.py`
+- `experiments/continual_learning/aligned_rsi_billsum_same_roster_order_v9.json`
+- `experiments/continual_learning/tests/test_aligned_rsi_billsum_same_roster_order_v9.py`
+- `docs/research/continual-learning/329-aligned-rsi-billsum-same-roster-order-curriculum-v9-execution.md`
+
 ## MiniMind domain-specific continual-learning V1
 
 The separately named state slice

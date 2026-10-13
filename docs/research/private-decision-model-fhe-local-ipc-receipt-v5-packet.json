@@ -1,0 +1,193 @@
+{
+  "assurance": "PENDING_LOCAL_QUALIFICATION",
+  "claim_ceiling": "LocalDevelopmentSyntheticFHEIPCReceiptQualificationV5",
+  "custody": {
+    "external_or_user_data": false,
+    "raw_ipc_retention": "none",
+    "temporary_artifacts": "system temporary directory; removed by frozen V3 runner",
+    "synthetic_fixture_sha256": "7144207ead235b20cea7a26b899c42fc7249a66b9dfc12a1f02d68fe2da534f7"
+  },
+  "data_identity": {
+    "calibration_requests": 12,
+    "evaluation_requests": 8,
+    "feature_count_per_option": 6,
+    "feature_range_inclusive": [
+      -8,
+      8
+    ],
+    "fixture_sha256": "7144207ead235b20cea7a26b899c42fc7249a66b9dfc12a1f02d68fe2da534f7",
+    "options_per_request": 4,
+    "seed": 20260930,
+    "training_rows": 128
+  },
+  "governance_state_slice": "global-experiment-assurance-lifecycle-v1",
+  "known_limitations": [
+    "same-host and same-user local process boundary",
+    "model weights are clear in the compiled server circuit",
+    "no real-data utility or remote-service behavior is measured",
+    "no second-environment reproduction is authorized in this slice",
+    "no cryptographic security, benchmark, commercial, or production claim is supported",
+    "external review remains unavailable for the separate V1 packet",
+    "V4 stopped at test discovery and performed no FHE run"
+  ],
+  "nonclaims": [
+    "no V5 external or independent review was performed",
+    "no cryptographic security, model-weight privacy, or malicious-server integrity claim",
+    "no real-data, remote-service, provider, benchmark, commercial, or production claim"
+  ],
+  "packet_digest_canonicalization": "SHA-256 over UTF-8 JSON with recursively sorted object keys, compact separators, no trailing newline",
+  "predecessor": {
+    "state_slice": "private-decision-model-fhe-local-ipc-receipt-v4",
+    "terminal_disposition": "QualificationFailedReceiptTestImport",
+    "v4_packet_canonical_sha256": "650fa9db8acba8cbb5a10045b7ebc0c450d331d6a00356551b18000ca9cd6f4e",
+    "v4_packet_raw_sha256": "9ede613606d7a5c7afe8cfcb389ff68d552224543c935c9b8e4a306d0ee16a8b",
+    "v4_protocol_sha256": "b19fe07ef39452254e3b0a5231588262a0adbd69bef380eb39ce01c7248285fe",
+    "v4_source_composite_sha256": "ba875f1823ce41aab89bdb5d43c95779d7f07ff56b000875509515788348de60",
+    "v3_source_composite_sha256": "4f2fd8b71459584b99f2672d3c9781e30c085aaf92e53c079b8260c4bb172d3c"
+  },
+  "protocol": {
+    "path": "docs/research/private-decision-model-fhe-local-ipc-receipt-v5-protocol.md",
+    "sha256": "5b85b425a5b10f20e9c6075873c7ad206bd1ada683ed4c1365e8894e0df31cb4"
+  },
+  "reproducibility_status": "NOT_YET_RUN",
+  "reviewer_status": "EXTERNAL_REVIEW_UNAVAILABLE",
+  "reviewer_status_scope": "separate V1 review packet; no V5 request, task, transfer, or contact is authorized or planned",
+  "schema_version": "private-decision-model-fhe-local-ipc-receipt-v5-packet",
+  "source_identity": {
+    "baseline_revision": "62bf2bfb5b6775327eb635d722bd2a715a2c6a42",
+    "composite_digest_algorithm": "SHA-256 over composite_files order; append each resolved canonical UTF-8 repository-relative path followed by exact file bytes",
+    "composite_files": [
+      "tools/private_decision_model_fhe_inference_v5/run_v5.py",
+      "tools/private_decision_model_fhe_inference_v5/tests/test_receipt_digest.py",
+      "tools/private_decision_model_fhe_inference_v3/run_v3.py",
+      "tools/private_decision_model_fhe_inference_v3/server_worker_v3.py",
+      "tools/private_decision_model_fhe_inference_v3/ipc_contract.py",
+      "tools/private_decision_model_fhe_inference_v3/tests/test_ipc_contract.py",
+      "tools/private_decision_model_fhe_inference_v1/decision_model.py"
+    ],
+    "v1_original_source_composite_sha256": "41bdd10bd882d7f7174fdfadae4f8b9688a28dab2bb839f11a93bbf660d5ad47",
+    "v1_dependency_lock_sha256": "cf9852e2b16da1d6dabb13fd9fbcf368e36822043907aa0a5154589504b0a8b2",
+    "v1_project_manifest_sha256": "da7caa076b89c4d578c348c4bd8784984e71a8bd57eebf9577bdd2f502d579ae",
+    "v1_scorer_fixture_source_sha256": "c31125d5882e7a8c1b246d19a7a849d0344c9afeddd5026a6e0f545764c3614c",
+    "v3_source_composite_sha256": "4f2fd8b71459584b99f2672d3c9781e30c085aaf92e53c079b8260c4bb172d3c",
+    "v5_source_composite_sha256": "f0abcac8c47d04b893aa6abad0b7dc5bcf8e724cd3c6a1a490d3af831b5f08dd",
+    "files": [
+      {
+        "path": "tools/private_decision_model_fhe_inference_v5/run_v5.py",
+        "role": "receipt_runner_source",
+        "sha256": "f9ca1d0fc1649fa4f8a5bf8a9ffff290f5d28d77b7ebe70e62c71b701971ac36"
+      },
+      {
+        "path": "tools/private_decision_model_fhe_inference_v5/tests/test_receipt_digest.py",
+        "role": "receipt_test_harness",
+        "sha256": "19c5f0bc3be9a83e16040addc03010507d72a540cb43464ef20c9c91ee91b795"
+      },
+      {
+        "path": "tools/private_decision_model_fhe_inference_v5/README.md",
+        "role": "implementation_guide",
+        "sha256": "66389634cdb8659af8befc66d956b7338d131283c33653d2aac7569e54755de6"
+      },
+      {
+        "path": "docs/research/private-decision-model-fhe-local-ipc-receipt-v5-protocol.md",
+        "role": "frozen_protocol",
+        "sha256": "5b85b425a5b10f20e9c6075873c7ad206bd1ada683ed4c1365e8894e0df31cb4"
+      },
+      {
+        "path": "docs/research/private-decision-model-fhe-local-ipc-receipt-v4-protocol.md",
+        "role": "v4_protocol_history",
+        "sha256": "b19fe07ef39452254e3b0a5231588262a0adbd69bef380eb39ce01c7248285fe"
+      },
+      {
+        "path": "docs/research/private-decision-model-fhe-local-ipc-receipt-v4-closure.md",
+        "role": "v4_failure_record",
+        "sha256": "928581cb6d4e93219646f164ddeedec068a7d88f04b31b806fc09d2d89cda75b"
+      },
+      {
+        "path": "docs/research/private-decision-model-fhe-local-ipc-receipt-v4-packet.json",
+        "role": "v4_packet_history",
+        "sha256": "9ede613606d7a5c7afe8cfcb389ff68d552224543c935c9b8e4a306d0ee16a8b"
+      },
+      {
+        "path": "docs/research/private-decision-model-fhe-local-ipc-contract-v3-protocol.md",
+        "role": "v3_protocol_history",
+        "sha256": "8e3267561b70bba779b9ee261580265022d4cd25d2ae77f100a37c823dee0143"
+      },
+      {
+        "path": "docs/research/private-decision-model-fhe-local-ipc-contract-v3-packet.json",
+        "role": "v3_packet_history",
+        "sha256": "f78ba5dcfd820ec92b2783cdff66c0895e1a563f53e0cc5dad3fbea5490c87dc"
+      },
+      {
+        "path": "docs/research/private-decision-model-fhe-local-ipc-contract-v3-execution.md",
+        "role": "v3_execution_record",
+        "sha256": "e50cee5571bbdb028fda368b42140d57b0a38c8e047e1733edf6d99d05e0936d"
+      },
+      {
+        "path": "tools/private_decision_model_fhe_inference_v3/run_v3.py",
+        "role": "frozen_v3_runner_dependency",
+        "sha256": "82cc9c9c2ab0742411a0797f52657075ebf48abc46b245a4fd323266dca8bd17"
+      },
+      {
+        "path": "tools/private_decision_model_fhe_inference_v3/server_worker_v3.py",
+        "role": "frozen_v3_worker_dependency",
+        "sha256": "af119775e44c936a05b7da09b1d3602e9bf9d8e074f518fbde13e162260a7dc5"
+      },
+      {
+        "path": "tools/private_decision_model_fhe_inference_v3/ipc_contract.py",
+        "role": "frozen_v3_contract_dependency",
+        "sha256": "f34b5e42394fcce29b266fa038b49f2e6d09937022235733135916f183f2e764"
+      },
+      {
+        "path": "tools/private_decision_model_fhe_inference_v3/tests/test_ipc_contract.py",
+        "role": "frozen_v3_contract_tests_dependency",
+        "sha256": "708d12fc4ea08b0e5c29aba53b75f0c7820385ccf369eef022306b6aa66739dd"
+      },
+      {
+        "path": "tools/private_decision_model_fhe_inference_v1/decision_model.py",
+        "role": "frozen_v1_scorer_dependency",
+        "sha256": "c31125d5882e7a8c1b246d19a7a849d0344c9afeddd5026a6e0f545764c3614c"
+      },
+      {
+        "path": "tools/private_decision_model_fhe_inference_v1/pyproject.toml",
+        "role": "dependency_project_manifest",
+        "sha256": "da7caa076b89c4d578c348c4bd8784984e71a8bd57eebf9577bdd2f502d579ae"
+      },
+      {
+        "path": "tools/private_decision_model_fhe_inference_v1/uv.lock",
+        "role": "dependency_lock",
+        "sha256": "cf9852e2b16da1d6dabb13fd9fbcf368e36822043907aa0a5154589504b0a8b2"
+      }
+    ]
+  },
+  "state_slice": "private-decision-model-fhe-local-ipc-receipt-v5",
+  "stop_conditions": [
+    "any V5 packet source, protocol, V3 predecessor, or source composite digest differs",
+    "relative and absolute source path spellings hash differently",
+    "either focused test suite or any parser control fails",
+    "any exact FHE score or top-ranking check fails",
+    "the receipt result digest differs from the packet composite",
+    "any worker invocation exceeds its timeout",
+    "the original V3 digest supplier is not restored",
+    "temporary keys, circuit, ciphertexts, or synthetic arrays are not removed"
+  ],
+  "toolchain": {
+    "concrete_python": "2.11.0",
+    "numpy": "1.26.4",
+    "python": "3.12.13",
+    "pytorch": "2.14.1",
+    "dependency_mode": "offline locked V1 environment"
+  },
+  "work_budgets": {
+    "focused_test_suites": 2,
+    "fhe_qualifications": 1,
+    "max_evaluation_requests": 8,
+    "max_options_per_request": 4,
+    "max_worker_timeout_seconds": 900,
+    "max_features_per_option": 6,
+    "max_worker_invocations": 3,
+    "parser_only_subprocess_timeout_seconds": 30,
+    "paid_or_provider_execution": false,
+    "real_or_user_data": false,
+    "remote_workers": false
+  }
+}
