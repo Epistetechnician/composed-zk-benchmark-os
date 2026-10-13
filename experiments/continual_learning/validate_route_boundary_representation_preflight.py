@@ -43,6 +43,24 @@ def expected_prompt(fact, context=()) -> str:
     )
 
 
+def model_accuracy(model, facts) -> dict:
+    rows = []
+    correct = 0
+    for fact in facts:
+        prediction = model.answer(expected_prompt(fact))["prediction"]
+        hit = prediction == fact["label"] if isinstance(fact, dict) else prediction == fact.label
+        correct += int(hit)
+        rows.append(
+            {
+                "fact_id": fact["fact_id"] if isinstance(fact, dict) else fact.fact_id,
+                "expected": fact["label"] if isinstance(fact, dict) else fact.label,
+                "observed": prediction,
+                "correct": hit,
+            }
+        )
+    return {"correct": correct, "n": len(facts), "accuracy": correct / len(facts) if facts else None, "rows": rows}
+
+
 def validate(root: Path) -> dict:
     config = json.loads((root / "config.json").read_text())
     tasks = json.loads((root / "tasks.json").read_text())
@@ -55,8 +73,8 @@ def validate(root: Path) -> dict:
         raise ValueError("result digest mismatch")
     fixed = {
         "source_state_slice": SOURCE_STATE_SLICE,
-        "seed": 20260810,
-        "order": [0, 1, 2, 3],
+        "seed": config["seed"],
+        "order": config["order"],
         "task_count": 4,
         "train_facts_per_task": 8,
         "test_facts_per_task": 8,

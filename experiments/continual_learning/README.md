@@ -654,7 +654,7 @@ explicitly excluded from the update panel because its evaluation-only dataset
 license does not permit adaptation or parameter updates.
 
 The latest signed task/update pilot is documented in
-`docs/research/continual-learning/39-v19-task-routed-compact-residual-record.md`. Its outputs
+`docs/research/continual-learning/41-v20-compact-routing-replication-record.md`. Its outputs
 must stay outside the repository because adapter weights and raw run logs are
 generated artifacts, not source fixtures.
 
