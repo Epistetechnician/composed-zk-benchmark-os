@@ -3371,6 +3371,24 @@ evidence, create benchmark-submission or production authority, or support
 proof, production-readiness, SOTA, breakthrough, full-security, or
 external-audit claims. A fresh immutable audit and retained run are required.
 
+Explicit Phase 796-A3L6A2 HSAI P01B corrected immutable-gate audit is now
+allowed and completed as audit documentation under
+`docs/796a3l6a2-phase-hsai-p01b-corrected-immutable-gate-audit.md` plus
+standard navigation mirrors. This named state slice freezes clean
+implementation commit `d70b879e01de7978597be698eace127cb0604ff7`, its five
+reviewed blobs, exact 22-path source census, 32+33 focused tests, 172
+Seatbelt-stubbed discovery census, caps, and 201/202/271 cardinalities. It
+excludes the dirty primary checkout, including its A3L7-adjacent P01B changes,
+and requires a post-commit canonical expected-bindings JSON, a clean detached
+audit checkout, and atomically retained `pending-review` output at a
+caller-owned mode-0700 non-repository root. It cannot establish reviewer
+identity or independence. It does not accept A3L6, authorize A3L7/A3L8/A3L9,
+invoke Docker, registry, network, container, backend, or external replay,
+mutate an Evidence Ledger, move a score, create Level2+ evidence, create
+benchmark-submission or production authority, or support proof,
+production-readiness, SOTA, breakthrough, full-security, or external-audit
+claims.
+
 Explicit Statebook terminal-payoff and assurance-adjusted settlement boundary
 now allowed and completed as documentation only in
 `docs/integrations/statebook_terminal_payoff_and_trust_settlement.md` plus the
