@@ -80,6 +80,8 @@ pub fn parse_settlement_scenario_v1(
         object
             .get("initial_state")
             .ok_or(missing_field("initial_state"))?,
+        &policy,
+        clock.now(),
     )?;
     let request = parse_request(
         object.get("request").ok_or(missing_field("request"))?,
@@ -410,6 +412,11 @@ fn parse_evidence(value: &Value) -> Result<EvidenceSnapshotV1, SettlementParseEr
                 .get("observed_at")
                 .and_then(Value::as_i64)
                 .ok_or(missing_field("observed_at"))?,
+            content_observed_at: item
+                .get("content_observed_at")
+                .and_then(Value::as_i64)
+                .or_else(|| item.get("observed_at").and_then(Value::as_i64))
+                .ok_or(missing_field("content_observed_at"))?,
             expires_at: item
                 .get("expires_at")
                 .and_then(Value::as_i64)
@@ -424,6 +431,10 @@ fn parse_evidence(value: &Value) -> Result<EvidenceSnapshotV1, SettlementParseEr
                 .get("equivocated")
                 .and_then(Value::as_bool)
                 .unwrap_or(false),
+            prepared_earlier: item
+                .get("prepared_earlier")
+                .and_then(Value::as_bool)
+                .unwrap_or(false),
         });
     }
     Ok(EvidenceSnapshotV1 {
@@ -434,7 +445,11 @@ fn parse_evidence(value: &Value) -> Result<EvidenceSnapshotV1, SettlementParseEr
     })
 }
 
-fn parse_state(value: &Value) -> Result<SettlementStateV1, SettlementParseErrorV1> {
+fn parse_state(
+    value: &Value,
+    scenario_policy: &SettlementPolicyV1,
+    now: i64,
+) -> Result<SettlementStateV1, SettlementParseErrorV1> {
     let object = value.as_object().ok_or(missing_field("initial_state"))?;
     let ledger = object.get("ledger").ok_or(missing_field("ledger"))?;
     let ledger_object = ledger.as_object().ok_or(missing_field("ledger"))?;
@@ -450,10 +465,20 @@ fn parse_state(value: &Value) -> Result<SettlementStateV1, SettlementParseErrorV
     let mut parsed_axes = Vec::new();
     for axis in axes {
         let item = axis.as_object().ok_or(missing_field("axis"))?;
-        parsed_axes.push(default_axis(
+        let mut parsed = default_axis(
             &required_string(item, "asset")?,
             parse_rational(item.get("cap").ok_or(missing_field("cap"))?)?,
-        ));
+        );
+        if let Some(value) = item.get("reserved") {
+            parsed.reserved = parse_rational(value)?;
+        }
+        if let Some(value) = item.get("in_flight") {
+            parsed.in_flight = parse_rational(value)?;
+        }
+        if let Some(value) = item.get("consumed") {
+            parsed.consumed = parse_rational(value)?;
+        }
+        parsed_axes.push(parsed);
     }
     let mut ledger_state = super::types::BudgetLedgerStateV1 {
         tip_digest: parse_digest(
@@ -512,7 +537,21 @@ fn parse_state(value: &Value) -> Result<SettlementStateV1, SettlementParseErrorV
                     .get("profile_digest")
                     .ok_or(missing_field("profile_digest"))?,
             )?,
-            halted_paths: BTreeSet::new(),
+            halted_paths: recovery_object
+                .get("halted_paths")
+                .and_then(Value::as_array)
+                .map(|items| {
+                    items
+                        .iter()
+                        .map(|item| {
+                            item.as_str().map(str::to_owned).ok_or_else(|| {
+                                SettlementParseErrorV1::InvalidIdentifier("halted_paths".to_owned())
+                            })
+                        })
+                        .collect::<Result<BTreeSet<_>, _>>()
+                })
+                .transpose()?
+                .unwrap_or_default(),
             reconciliation_mismatch: recovery_object
                 .get("reconciliation_mismatch")
                 .and_then(Value::as_bool)
@@ -526,6 +565,43 @@ fn parse_state(value: &Value) -> Result<SettlementStateV1, SettlementParseErrorV
             Some(value) => parse_digest(value)?,
             None => ledger_state.tip_digest,
         },
+        applied_challenge_ids: object
+            .get("applied_challenge_ids")
+            .and_then(Value::as_array)
+            .map(|items| {
+                items
+                    .iter()
+                    .map(|item| {
+                        item.as_str().map(str::to_owned).ok_or_else(|| {
+                            SettlementParseErrorV1::InvalidIdentifier(
+                                "applied_challenge_ids".to_owned(),
+                            )
+                        })
+                    })
+                    .collect::<Result<BTreeSet<_>, _>>()
+            })
+            .transpose()?
+            .unwrap_or_default(),
+        active_policy: match object.get("active_policy") {
+            Some(value) => parse_policy(value)?,
+            None => scenario_policy.clone(),
+        },
+        last_policy_change_at: object
+            .get("last_policy_change_at")
+            .and_then(Value::as_i64)
+            .unwrap_or(now),
+        clean_epochs: object
+            .get("clean_epochs")
+            .and_then(Value::as_u64)
+            .unwrap_or(0) as u32,
+        bound_intent_digest: match object.get("bound_intent_digest") {
+            Some(value) if !value.is_null() => Some(parse_digest(value)?),
+            _ => None,
+        },
+        bound_destination: object
+            .get("bound_destination")
+            .and_then(Value::as_str)
+            .map(str::to_owned),
     })
 }
 
@@ -716,6 +792,14 @@ fn parse_request(
             .get("reuse_finality_passed")
             .and_then(Value::as_bool)
             .unwrap_or(true),
+        model_confidence_claimed: object
+            .get("model_confidence_claimed")
+            .and_then(Value::as_bool)
+            .unwrap_or(false),
+        monetizes_queued_value: object
+            .get("monetizes_queued_value")
+            .and_then(Value::as_bool)
+            .unwrap_or(false),
         gate_overrides: parse_gate_overrides(object.get("gate_overrides")),
         evidence_snapshot,
         valuation_profile,

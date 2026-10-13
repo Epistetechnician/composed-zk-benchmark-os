@@ -2,8 +2,13 @@ use statebook_core::SignedRational;
 
 use super::amounts::validate_amount_before_valuation;
 use super::assurance::{evaluate_independence, resolve_assurance_tier};
-use super::breaker::global_breaker_state;
-use super::budget::{gross_reserve_linked_plan, try_reserve, ReservationResult};
+use super::breaker::{
+    apply_ttl_exhaustion_to_state, collect_breaker_block_reasons, global_breaker_state,
+};
+use super::budget::{
+    apply_failed_transfer_rollback_v1, gross_reserve_linked_plan, try_reserve, ReservationResult,
+};
+use super::challenge::{apply_evidence_expiry_to_state, evidence_is_fresh};
 use super::classify::classify_release_class;
 use super::digest::{
     decision_context_digest, decision_record_digest, evidence_snapshot_digest, intent_digest,
@@ -12,13 +17,15 @@ use super::digest::{
 };
 use super::error::SettlementTransitionErrorV1;
 use super::gates::evaluate_hard_gates;
+use super::hysteresis::{apply_accepted_policy_to_state, collect_hysteresis_block_reason};
 use super::linked_plan::linked_outbound_total;
+use super::recovery::recovery_blocks_release;
 use super::types::{
     default_nonclaims, zero_rational, AssuranceTierV1, BreakerStateV1, ClockV1, DecisionOutcomeV1,
     DecisionReasonV1, DecisionRecordV1, ExternalizationRequestV1, QueueStatusV1, ReleaseClassV1,
     SettlementStateV1, TransferStatusV1,
 };
-use super::valuation::evaluate_valuation;
+use super::valuation::{action_oracle_roots, evaluate_valuation};
 
 pub fn decide_and_transition(
     request: ExternalizationRequestV1,
@@ -43,6 +50,132 @@ pub fn decide_and_transition(
         evaluated_at,
     );
 
+    let mut current_state = current_state;
+    apply_ttl_exhaustion_to_state(&mut current_state, evaluated_at);
+
+    let mut expiry_values: Vec<i64> = evidence
+        .observations()
+        .iter()
+        .map(|observation| observation.expires_at)
+        .collect();
+    expiry_values.push(request.expires_at);
+    apply_evidence_expiry_to_state(
+        &mut current_state,
+        expiry_values.iter().copied(),
+        evaluated_at,
+    );
+
+    let mut revalidating = false;
+    if current_state.queue.status == QueueStatusV1::RevalidationRequired {
+        if evidence_is_fresh(expiry_values.iter().copied(), evaluated_at) {
+            // Fresh evidence binds a new decision context (above) and clears the
+            // revalidation block toward Reserved — never timer-alone release.
+            current_state.queue.status = QueueStatusV1::None;
+            revalidating = true;
+        } else {
+            let ledger_tip_before = current_state.ledger.tip_digest;
+            let queue_status_before = current_state.queue.status;
+            let transfer_status_before = current_state.transfer.status;
+            return Ok(build_record(
+                DecisionOutcomeV1::Rejected,
+                None,
+                zero_rational(),
+                zero_rational(),
+                intent,
+                decision_context,
+                None,
+                request.financial_basis.analysis_subject_digest,
+                request.financial_basis.composition_digest,
+                evidence_digest,
+                valuation_digest,
+                policy_d,
+                linked_or_obligation_digest(&request),
+                ledger_tip_before,
+                ledger_tip_before,
+                queue_status_before,
+                QueueStatusV1::RevalidationRequired,
+                transfer_status_before,
+                transfer_status_before,
+                vec![DecisionReasonV1::EvidenceExpired],
+                Vec::new(),
+                default_nonclaims(),
+                evaluated_at,
+                release_class,
+                current_state,
+            ));
+        }
+    }
+
+    if current_state.queue.status == QueueStatusV1::Cancelled {
+        let ledger_tip_before = current_state.ledger.tip_digest;
+        let transfer_status_before = current_state.transfer.status;
+        return Ok(build_record(
+            DecisionOutcomeV1::Rejected,
+            None,
+            zero_rational(),
+            zero_rational(),
+            intent,
+            decision_context,
+            None,
+            request.financial_basis.analysis_subject_digest,
+            request.financial_basis.composition_digest,
+            evidence_digest,
+            valuation_digest,
+            policy_d,
+            linked_or_obligation_digest(&request),
+            ledger_tip_before,
+            ledger_tip_before,
+            QueueStatusV1::Cancelled,
+            QueueStatusV1::Cancelled,
+            transfer_status_before,
+            transfer_status_before,
+            vec![DecisionReasonV1::QueueCancelled],
+            Vec::new(),
+            default_nonclaims(),
+            evaluated_at,
+            release_class,
+            current_state,
+        ));
+    }
+
+    if let (Some(bound_intent), Some(bound_destination)) = (
+        current_state.bound_intent_digest,
+        current_state.bound_destination.as_deref(),
+    ) {
+        if intent == bound_intent && request.destination() != bound_destination {
+            let ledger_tip_before = current_state.ledger.tip_digest;
+            let queue_status_before = current_state.queue.status;
+            let transfer_status_before = current_state.transfer.status;
+            return Ok(build_record(
+                DecisionOutcomeV1::Rejected,
+                None,
+                zero_rational(),
+                zero_rational(),
+                intent,
+                decision_context,
+                None,
+                request.financial_basis.analysis_subject_digest,
+                request.financial_basis.composition_digest,
+                evidence_digest,
+                valuation_digest,
+                policy_d,
+                linked_or_obligation_digest(&request),
+                ledger_tip_before,
+                ledger_tip_before,
+                queue_status_before,
+                queue_status_before,
+                transfer_status_before,
+                transfer_status_before,
+                vec![DecisionReasonV1::IntentDigestMismatch],
+                Vec::new(),
+                default_nonclaims(),
+                evaluated_at,
+                release_class,
+                current_state,
+            ));
+        }
+    }
+
     let ledger_tip_before = current_state.ledger.tip_digest;
     let queue_status_before = current_state.queue.status;
     let transfer_status_before = current_state.transfer.status;
@@ -51,15 +184,47 @@ pub fn decide_and_transition(
     let missing_facts = Vec::new();
     let nonclaims = default_nonclaims();
 
-    if current_state
-        .breakers()
-        .iter()
-        .any(|scope| scope.state == BreakerStateV1::Halted)
-    {
-        reasons.push(DecisionReasonV1::BreakerHalted);
+    reasons.extend(collect_breaker_block_reasons(&current_state, evaluated_at));
+    if let Some(reason) = collect_hysteresis_block_reason(&current_state, policy, evaluated_at) {
+        reasons.push(reason);
     }
-    if current_state.recovery.reconciliation_mismatch || current_state.recovery.canary_failed {
+    if recovery_blocks_release(&current_state) {
         reasons.push(DecisionReasonV1::RecoveryFailed);
+    }
+
+    if reasons.iter().any(|reason| {
+        matches!(
+            reason,
+            DecisionReasonV1::PolicyRollback | DecisionReasonV1::PolicyRelaxRejected
+        )
+    }) {
+        return Ok(build_record(
+            DecisionOutcomeV1::Rejected,
+            None,
+            zero_rational(),
+            zero_rational(),
+            intent,
+            decision_context,
+            None,
+            request.financial_basis.analysis_subject_digest,
+            request.financial_basis.composition_digest,
+            evidence_digest,
+            valuation_digest,
+            policy_d,
+            linked_or_obligation_digest(&request),
+            ledger_tip_before,
+            ledger_tip_before,
+            queue_status_before,
+            queue_status_before,
+            transfer_status_before,
+            transfer_status_before,
+            reasons,
+            missing_facts,
+            nonclaims,
+            evaluated_at,
+            release_class,
+            current_state,
+        ));
     }
 
     let amount = match validate_amount_before_valuation(&request) {
@@ -108,10 +273,13 @@ pub fn decide_and_transition(
         &current_state,
         release_class,
         request.gate_overrides(),
+        evaluated_at,
     );
     let mut quarantined = false;
+    let mut gate_or_valuation_failed = false;
     for result in gate_results {
         if !result.passed {
+            gate_or_valuation_failed = true;
             if let Some(reason) = result.reason {
                 reasons.push(reason);
             }
@@ -121,11 +289,22 @@ pub fn decide_and_transition(
         }
     }
 
-    let valuation = evaluate_valuation(valuation_profile, request.asset(), evaluated_at);
+    let forbidden_oracle_roots = action_oracle_roots(evidence);
+    let valuation = evaluate_valuation(
+        valuation_profile,
+        request.asset(),
+        evaluated_at,
+        &forbidden_oracle_roots,
+    );
     if !valuation.ok {
+        gate_or_valuation_failed = true;
         if let Some(reason) = valuation.reason {
             reasons.push(reason);
         }
+    }
+
+    if request.model_confidence_claimed() && gate_or_valuation_failed {
+        reasons.push(DecisionReasonV1::ModelConfidenceIgnored);
     }
 
     if !reasons.is_empty() {
@@ -305,7 +484,23 @@ pub fn decide_and_transition(
         release_attempt_digest("instant-part-1", decision_context, "reservation-1");
 
     let (outcome, instant_release, queued_release, queue_after, transfer_after) =
-        if global_breaker_state(next_state.breakers()) == BreakerStateV1::Challenged {
+        if global_breaker_state(next_state.breakers()) == BreakerStateV1::Challenged
+            || queue_status_before == QueueStatusV1::Challenged
+            || next_state.queue.status == QueueStatusV1::Challenged
+        {
+            next_state.queue.status = QueueStatusV1::Frozen;
+            next_state.transfer.status = TransferStatusV1::Unreserved;
+            // Reservation already succeeded; release exposure so Frozen cannot leak capacity.
+            if !reserve_amount.is_zero() {
+                let tip = next_state.ledger.tip_digest;
+                apply_failed_transfer_rollback_v1(
+                    &mut next_state,
+                    request.asset(),
+                    reserve_amount,
+                    tip,
+                )?;
+                next_state.queue.status = QueueStatusV1::Frozen;
+            }
             (
                 DecisionOutcomeV1::Frozen,
                 zero_rational(),
@@ -313,12 +508,24 @@ pub fn decide_and_transition(
                 QueueStatusV1::Frozen,
                 TransferStatusV1::Unreserved,
             )
+        } else if revalidating && instant.numerator() > 0 {
+            next_state.queue.status = QueueStatusV1::None;
+            next_state.transfer.status = TransferStatusV1::Reserved;
+            (
+                DecisionOutcomeV1::Immediate,
+                instant,
+                zero_rational(),
+                QueueStatusV1::None,
+                TransferStatusV1::Reserved,
+            )
         } else if release_class == ReleaseClassV1::ExternalUnconditional
             && queued.numerator() > 0
             && tier_fraction.delay_seconds > 0
         {
             next_state.queue.status = QueueStatusV1::Queued;
             next_state.transfer.status = TransferStatusV1::Unreserved;
+            next_state.bound_intent_digest = Some(intent);
+            next_state.bound_destination = Some(request.destination().to_owned());
             (
                 DecisionOutcomeV1::Queued,
                 instant,
@@ -347,6 +554,13 @@ pub fn decide_and_transition(
 
     if ledger_tip_after != ledger_tip_digest(&next_state.ledger) {
         next_state.ledger.tip_digest = ledger_tip_digest(&next_state.ledger);
+    }
+
+    if matches!(
+        outcome,
+        DecisionOutcomeV1::Immediate | DecisionOutcomeV1::Queued | DecisionOutcomeV1::Frozen
+    ) {
+        apply_accepted_policy_to_state(&mut next_state, policy, evaluated_at);
     }
 
     Ok(build_record(

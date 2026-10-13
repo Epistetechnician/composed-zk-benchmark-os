@@ -1936,6 +1936,38 @@ This is local hermetic authority-preflight regression evidence only. No value mo
 | [docs/research/catalyst-strategy/module-sensitivity-matrix.md](docs/research/catalyst-strategy/module-sensitivity-matrix.md) | Targeting system mapping modules to catalysts and pre-declared exercise actions. |
 | [docs/research/catalyst-strategy/claim-packet-forge.md](docs/research/catalyst-strategy/claim-packet-forge.md) | Repeatable recipe to stamp a verifiable claim packet and reproduction checker for a module. |
 | [docs/research/catalyst-strategy/competitive-moat.md](docs/research/catalyst-strategy/competitive-moat.md) | Differentiation thesis vs. tracked competitors and the honest attack surface. |
+| [docs/statebook-p7-authority-integration-boundary-spec.md](docs/statebook-p7-authority-integration-boundary-spec.md) | Docs-first P7 legal/ops authorization for hermetic synthetic authority-statement attach (`statebook-authority`), capital overlay only, deferred live authority products; no value moves. |
+| [docs/statebook-p7-authority-integration-implementation-notes.md](docs/statebook-p7-authority-integration-implementation-notes.md) | Implemented P7 `statebook-authority` crate: hermetic synthetic authority-statement attach, capital overlay only, legal/ops gate deferred, permanent non-grant of execution authority; no value moves. |
+| [docs/statebook-p8-evaluation-and-falsification-boundary-spec.md](docs/statebook-p8-evaluation-and-falsification-boundary-spec.md) | Docs-first P8 authorization for hermetic P1–P7 evaluation/falsification harness (`statebook-e2e-harness`); TD-011/§15 surfaces only; no live authority or value moves. |
+| [docs/statebook-p8-evaluation-and-falsification-implementation-notes.md](docs/statebook-p8-evaluation-and-falsification-implementation-notes.md) | Implemented P8 `statebook-e2e-harness`: hermetic P1–P7 golden path, structured evaluation receipts, TD-011/§15 falsifiers; no live authority or value moves. |
+| [docs/statebook-p9-adversarial-corpus-replay-boundary-spec.md](docs/statebook-p9-adversarial-corpus-replay-boundary-spec.md) | Docs-first P9 authorization for encodable TD-004 / P4 adversarial corpus replay in `statebook-e2e-harness`; no kernel edits, no live authority. |
+| [docs/statebook-p9-adversarial-corpus-replay-implementation-notes.md](docs/statebook-p9-adversarial-corpus-replay-implementation-notes.md) | Implemented P9 encodable TD-004 / P4 adversarial corpus replay in `statebook-e2e-harness`; fail-closed zero-instant invariants; no kernel edits. |
+| [docs/statebook-p10-semantic-equivalence-corpus-boundary-spec.md](docs/statebook-p10-semantic-equivalence-corpus-boundary-spec.md) | Docs-first P10 authorization for labeled StateKey equivalence precision/recall corpus in `statebook-e2e-harness`; fixture-local metrics only. |
+| [docs/statebook-p10-semantic-equivalence-corpus-implementation-notes.md](docs/statebook-p10-semantic-equivalence-corpus-implementation-notes.md) | Implemented P10 labeled StateKey equivalence corpus with fixture-local precision/recall=1 and false-equivalence rate=0. |
+| [docs/statebook-p11-breaker-ttl-resolution-boundary-spec.md](docs/statebook-p11-breaker-ttl-resolution-boundary-spec.md) | Docs-first P11 authorization to wire P4 breaker TTL exhaustion into Resolution with fail-closed renewal rejection; no live authority. |
+| [docs/statebook-p11-breaker-ttl-resolution-implementation-notes.md](docs/statebook-p11-breaker-ttl-resolution-implementation-notes.md) | Implemented P11 P4 breaker TTL→Resolution wiring, fail-closed expired-scope blocking, and `attempt_breaker_renewal_v1`. |
+| [docs/statebook-p12-challenge-grammar-evidence-expiry-boundary-spec.md](docs/statebook-p12-challenge-grammar-evidence-expiry-boundary-spec.md) | Docs-first P12 authorization for P4 challenge grammar variants and evidence-expiry → RevalidationRequired; no live authority. |
+| [docs/statebook-p12-challenge-grammar-evidence-expiry-implementation-notes.md](docs/statebook-p12-challenge-grammar-evidence-expiry-implementation-notes.md) | Implemented P12 `apply_challenge_v1`, evidence-expiry → RevalidationRequired, and fresh-evidence revalidation toward Reserved. |
+| [docs/statebook-p13-hysteresis-relax-rollback-boundary-spec.md](docs/statebook-p13-hysteresis-relax-rollback-boundary-spec.md) | Docs-first P13 authorization for asymmetric P4 policy hysteresis (fast tighten, slow relax, rollback reject); no live authority. |
+| [docs/statebook-p13-hysteresis-relax-rollback-implementation-notes.md](docs/statebook-p13-hysteresis-relax-rollback-implementation-notes.md) | Implemented P13 asymmetric policy hysteresis with `attempt_policy_transition_v1`, rollback reject, and gated relax. |
+| [docs/statebook-p14-cancel-race-intents-boundary-spec.md](docs/statebook-p14-cancel-race-intents-boundary-spec.md) | Docs-first P14 authorization for cancel/destination-replacement intent rotation and cancel-vs-release races; no live authority. |
+| [docs/statebook-p14-cancel-race-intents-implementation-notes.md](docs/statebook-p14-cancel-race-intents-implementation-notes.md) | Implemented P14 `apply_cancel_v1`, bound intent/destination, and cancel/destination race fail-closed paths. |
+| [docs/statebook-p15-destination-finality-proven-no-outflow-boundary-spec.md](docs/statebook-p15-destination-finality-proven-no-outflow-boundary-spec.md) | Docs-first P15 authorization for destination-finality consume and ProvenNoOutflow capacity restore; no live authority. |
+| [docs/statebook-p15-destination-finality-proven-no-outflow-implementation-notes.md](docs/statebook-p15-destination-finality-proven-no-outflow-implementation-notes.md) | Implemented P15 submit/finality/ProvenNoOutflow budget transitions with consumed-aware capacity. |
+| [docs/statebook-p16-recovery-transitions-boundary-spec.md](docs/statebook-p16-recovery-transitions-boundary-spec.md) | Docs-first P16 authorization for hermetic recovery halt/reconcile/canary/reopen drills; no live authority. |
+| [docs/statebook-p16-recovery-transitions-implementation-notes.md](docs/statebook-p16-recovery-transitions-implementation-notes.md) | Implemented P16 recovery halt/reconcile/canary/reopen drills with fail-closed release blocking. |
+| [docs/statebook-p17-adversarial-corpus-expansion-boundary-spec.md](docs/statebook-p17-adversarial-corpus-expansion-boundary-spec.md) | Docs-first P17 authorization for further hermetic TD-004 corpus cases and future-valuation reject; no live authority. |
+| [docs/statebook-p17-adversarial-corpus-expansion-implementation-notes.md](docs/statebook-p17-adversarial-corpus-expansion-implementation-notes.md) | Implemented P17 future-valuation reject and five additional hermetic TD-004 corpus cases. |
+| [docs/statebook-p18-budget-refill-split-drain-boundary-spec.md](docs/statebook-p18-budget-refill-split-drain-boundary-spec.md) | Docs-first P18 authorization for sequential budget epoch refill and slow-drain/split aggregate-cap corpus; no live authority. |
+| [docs/statebook-p18-budget-refill-split-drain-implementation-notes.md](docs/statebook-p18-budget-refill-split-drain-implementation-notes.md) | Implemented P18 sequential budget epoch refill and slow-drain/split aggregate-cap corpus. |
+| [docs/statebook-p19-oracle-freshness-compromised-source-boundary-spec.md](docs/statebook-p19-oracle-freshness-compromised-source-boundary-spec.md) | Docs-first P19 authorization for prepared-earlier reuse, stale-content/fresh-transport, dual-vendor compromised upstream, and action-oracle valuation reject; no live authority. |
+| [docs/statebook-p19-oracle-freshness-compromised-source-implementation-notes.md](docs/statebook-p19-oracle-freshness-compromised-source-implementation-notes.md) | Implemented P19 prepared-earlier/stale-content gate-2, dual-vendor quarantine, and action-oracle valuation reject. |
+| [docs/statebook-p20-model-confidence-boundary-spec.md](docs/statebook-p20-model-confidence-boundary-spec.md) | Docs-first P20 authorization for model/AI confidence non-bypass of failed hard gates or valuation; no live authority. |
+| [docs/statebook-p20-model-confidence-implementation-notes.md](docs/statebook-p20-model-confidence-implementation-notes.md) | Implemented P20 `model_confidence_claimed` non-bypass of failed hard gates or valuation. |
+| [docs/statebook-p21-failed-transfer-reservation-rollback-boundary-spec.md](docs/statebook-p21-failed-transfer-reservation-rollback-boundary-spec.md) | Docs-first P21 authorization for failed-transfer reservation rollback and sequential finalizer CAS; no live authority. |
+| [docs/statebook-p21-failed-transfer-reservation-rollback-implementation-notes.md](docs/statebook-p21-failed-transfer-reservation-rollback-implementation-notes.md) | Implemented P21 failed-transfer reservation rollback and sequential finalizer CAS. |
+| [docs/statebook-p22-queued-value-monetization-boundary-spec.md](docs/statebook-p22-queued-value-monetization-boundary-spec.md) | Docs-first P22 authorization for queued-value monetization reject and post-instant anomaly block; no live authority. |
+| [docs/statebook-p22-queued-value-monetization-implementation-notes.md](docs/statebook-p22-queued-value-monetization-implementation-notes.md) | Implemented P22 monetize-while-queued reject and post-instant anomaly block of queued remainder. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -2092,6 +2124,195 @@ or value movement is authorized. See
 [docs/statebook-p6-read-only-external-sources-implementation-notes.md](docs/statebook-p6-read-only-external-sources-implementation-notes.md).
 
 This is local hermetic captured-source import regression evidence only. No value moves.
+
+Statebook P7 authorization status: the named docs-first slice
+`statebook-p7-authority-integration-boundary` freezes a hermetic synthetic
+authority-statement attach surface in `statebook-authority`. The separately
+committed implementation slice `statebook-p7-authority-integration` adds isolated
+`crates/statebook-authority` with the frozen `synthetic-clearing-authority-v1`
+profile, capital-recognition overlays that preserve economic residual digests,
+revoke/expire evaluation, legal/ops gate deferred checklist constants, and
+domain-separated P7 digests with an independent `ring` golden check. Live
+execution, custody, signing, pause, real margin recognition, and settlement
+remain deferred behind the legal/ops gate. All P1-P6 identities stay unchanged.
+No value movement is authorized. See
+[docs/statebook-p7-authority-integration-implementation-notes.md](docs/statebook-p7-authority-integration-implementation-notes.md).
+
+This is local hermetic synthetic authority-statement / capital-overlay regression
+evidence only. No value moves.
+
+Statebook P8 authorization status: the named docs-first slice
+`statebook-p8-evaluation-and-falsification-boundary` freezes a hermetic
+composing evaluation harness in `statebook-e2e-harness`. The separately
+committed implementation slice `statebook-p8-evaluation-and-falsification` adds
+isolated `crates/statebook-e2e-harness` with one P1–P7 golden path, structured
+evaluation receipts, and TD-011/§15 falsifiers. All P1-P7 identities stay
+unchanged. No live authority, production threshold calibration, or value
+movement is authorized. See
+[docs/statebook-p8-evaluation-and-falsification-implementation-notes.md](docs/statebook-p8-evaluation-and-falsification-implementation-notes.md).
+
+This is local hermetic composed P1–P7 regression and falsification-surface
+evidence only. No value moves.
+
+Statebook P9 authorization status: the named docs-first slice
+`statebook-p9-adversarial-corpus-replay-boundary` freezes encodable TD-004 / P4
+adversarial corpus replay inside `statebook-e2e-harness`. The separately
+committed implementation slice `statebook-p9-adversarial-corpus-replay` adds
+twelve corpus cases plus the timer-alone chain using public P4 APIs only. All
+P1-P8 identities stay unchanged. No kernel edits, live authority, or value
+movement is authorized. See
+[docs/statebook-p9-adversarial-corpus-replay-implementation-notes.md](docs/statebook-p9-adversarial-corpus-replay-implementation-notes.md).
+
+This is local hermetic adversarial fixture regression evidence only. No value moves.
+
+Statebook P10 authorization status: the named docs-first slice
+`statebook-p10-semantic-equivalence-corpus-boundary` freezes a labeled StateKey
+equivalence precision/recall corpus inside `statebook-e2e-harness`. The
+separately committed implementation slice
+`statebook-p10-semantic-equivalence-corpus` adds lineage/profile equivalent
+labels, all 27 P1 material-mutation distinct labels, and fixture-local metrics
+with precision=1, recall=1, and false-equivalence rate=0. All P1-P9 identities
+stay unchanged. No live authority, AI oracle, or value movement is authorized.
+See
+[docs/statebook-p10-semantic-equivalence-corpus-implementation-notes.md](docs/statebook-p10-semantic-equivalence-corpus-implementation-notes.md).
+
+This is local hermetic labeled-fixture StateKey equivalence evidence only. No value moves.
+
+Statebook P11 authorization status: the named docs-first slice
+`statebook-p11-breaker-ttl-resolution-boundary` freezes P4 breaker TTL→Resolution
+wiring. The separately committed implementation slice
+`statebook-p11-breaker-ttl-resolution` wires TTL exhaustion into
+`decide_and_transition`, blocks expired protective scopes without silent
+renewal, adds `attempt_breaker_renewal_v1`, and extends harness corpus coverage.
+Challenge grammar, hysteresis, and cancel remain deferred. No live authority or
+value movement is authorized. See
+[docs/statebook-p11-breaker-ttl-resolution-implementation-notes.md](docs/statebook-p11-breaker-ttl-resolution-implementation-notes.md).
+
+This is local hermetic breaker TTL/resolution regression evidence only. No value moves.
+
+Statebook P12 authorization status: the named docs-first slice
+`statebook-p12-challenge-grammar-evidence-expiry-boundary` freezes P4 challenge
+grammar and evidence-expiry revalidation. The separately committed
+implementation slice `statebook-p12-challenge-grammar-evidence-expiry` adds
+`apply_challenge_v1`, wires queued evidence expiry into `RevalidationRequired`,
+supports fresh-evidence revalidation toward Reserved, and extends harness
+corpus coverage for TD-004 #31. Hysteresis and cancel remain deferred. No live
+authority or value movement is authorized. See
+[docs/statebook-p12-challenge-grammar-evidence-expiry-implementation-notes.md](docs/statebook-p12-challenge-grammar-evidence-expiry-implementation-notes.md).
+
+This is local hermetic challenge grammar / evidence-expiry regression evidence only. No value moves.
+
+Statebook P13 authorization status: the named docs-first slice
+`statebook-p13-hysteresis-relax-rollback-boundary` freezes asymmetric P4 policy
+hysteresis. The separately committed implementation slice
+`statebook-p13-hysteresis-relax-rollback` adds `attempt_policy_transition_v1`,
+wires fast tighten / slow relax / rollback reject into `decide_and_transition`,
+and extends harness corpus coverage for TD-004 #21. Cancel remains deferred. No
+live authority or value movement is authorized. See
+[docs/statebook-p13-hysteresis-relax-rollback-implementation-notes.md](docs/statebook-p13-hysteresis-relax-rollback-implementation-notes.md).
+
+This is local hermetic hysteresis regression evidence only. No value moves.
+
+Statebook P14 authorization status: the named docs-first slice
+`statebook-p14-cancel-race-intents-boundary` freezes cancel/destination intent
+rotation. The separately committed implementation slice
+`statebook-p14-cancel-race-intents` adds `apply_cancel_v1`, binds intent and
+destination on queue, rejects same-digest cancel and destination replacement
+without new intent, and extends harness corpus coverage for TD-004 #25. Live
+authority remains deferred behind the legal/ops gate. No value movement is
+authorized. See
+[docs/statebook-p14-cancel-race-intents-implementation-notes.md](docs/statebook-p14-cancel-race-intents-implementation-notes.md).
+
+This is local hermetic cancel/race regression evidence only. No value moves.
+
+Statebook P15 authorization status: the named docs-first slice
+`statebook-p15-destination-finality-proven-no-outflow-boundary` freezes
+destination-finality and ProvenNoOutflow budget transitions. The separately
+committed implementation slice
+`statebook-p15-destination-finality-proven-no-outflow` adds submit / finality /
+ProvenNoOutflow APIs with consumed-aware available capacity and extends harness
+corpus coverage. Recovery reopen and live authority remain deferred. See
+[docs/statebook-p15-destination-finality-proven-no-outflow-implementation-notes.md](docs/statebook-p15-destination-finality-proven-no-outflow-implementation-notes.md).
+
+This is local hermetic finality/no-outflow regression evidence only. No value moves.
+
+Statebook P16 authorization status: the named docs-first slice
+`statebook-p16-recovery-transitions-boundary` freezes recovery drills. The
+separately committed implementation slice `statebook-p16-recovery-transitions`
+adds halt/reconcile/canary/reopen APIs, blocks release on halt/mismatch/canary
+failure, and extends harness corpus coverage. Live authority remains deferred.
+See
+[docs/statebook-p16-recovery-transitions-implementation-notes.md](docs/statebook-p16-recovery-transitions-implementation-notes.md).
+
+This is local hermetic recovery-drill regression evidence only. No value moves.
+
+Statebook P17 authorization status: the named docs-first slice
+`statebook-p17-adversarial-corpus-expansion-boundary` freezes further corpus
+expansion. The separately committed implementation slice
+`statebook-p17-adversarial-corpus-expansion` rejects future valuation
+observations and adds five hermetic TD-004 corpus cases. Live authority remains
+deferred. See
+[docs/statebook-p17-adversarial-corpus-expansion-implementation-notes.md](docs/statebook-p17-adversarial-corpus-expansion-implementation-notes.md).
+
+This is local hermetic adversarial fixture regression evidence only. No value moves.
+
+Statebook P18 authorization status: the named docs-first slice
+`statebook-p18-budget-refill-split-drain-boundary` freezes sequential budget
+epoch refill and slow-drain/split aggregate-cap corpus coverage. The separately
+committed implementation slice `statebook-p18-budget-refill-split-drain` adds
+`apply_budget_refill_v1` and three hermetic corpus cases (36 total). Live
+authority remains deferred. See
+[docs/statebook-p18-budget-refill-split-drain-implementation-notes.md](docs/statebook-p18-budget-refill-split-drain-implementation-notes.md).
+
+This is local hermetic budget-refill / aggregate-cap fixture regression evidence
+only. No value moves.
+
+Statebook P19 authorization status: the named docs-first slice
+`statebook-p19-oracle-freshness-compromised-source-boundary` freezes future P4
+oracle-freshness and compromised-source fail-closed coverage. The separately
+committed implementation slice
+`statebook-p19-oracle-freshness-compromised-source` hardens gate-2
+prepared-earlier and content freshness, dual-vendor independence quarantine,
+and action-oracle valuation reject, with four corpus cases (40 total). Live
+authority remains deferred. See
+[docs/statebook-p19-oracle-freshness-compromised-source-implementation-notes.md](docs/statebook-p19-oracle-freshness-compromised-source-implementation-notes.md).
+
+This is local hermetic oracle-freshness / compromised-source fixture regression
+evidence only. No value moves.
+
+Statebook P20 authorization status: the named docs-first slice
+`statebook-p20-model-confidence-boundary` freezes P4 model/AI confidence
+non-bypass. The separately committed implementation slice
+`statebook-p20-model-confidence` adds optional `model_confidence_claimed` and
+records `ModelConfidenceIgnored` when confidence is claimed against a failed
+hard gate or valuation. Live authority remains deferred. See
+[docs/statebook-p20-model-confidence-implementation-notes.md](docs/statebook-p20-model-confidence-implementation-notes.md).
+
+This is local hermetic model-confidence fixture regression evidence only. No
+value moves.
+
+Statebook P21 authorization status: the named docs-first slice
+`statebook-p21-failed-transfer-reservation-rollback-boundary` freezes failed
+transfer reservation rollback and sequential finalizer CAS coverage. The
+separately committed implementation slice
+`statebook-p21-failed-transfer-reservation-rollback` adds
+`apply_failed_transfer_rollback_v1`, wires Frozen-path rollback, and extends
+the corpus to 42 cases. Live authority remains deferred. See
+[docs/statebook-p21-failed-transfer-reservation-rollback-implementation-notes.md](docs/statebook-p21-failed-transfer-reservation-rollback-implementation-notes.md).
+
+This is local hermetic reservation-rollback / CAS-finalizer fixture regression
+evidence only. No value moves.
+
+Statebook P22 authorization status: the named docs-first slice
+`statebook-p22-queued-value-monetization-boundary` freezes queued-value
+monetization reject and post-instant anomaly blocking. The separately committed
+implementation slice `statebook-p22-queued-value-monetization` adds
+`monetizes_queued_value` and two corpus cases (44 total). Live authority remains
+deferred. See
+[docs/statebook-p22-queued-value-monetization-implementation-notes.md](docs/statebook-p22-queued-value-monetization-implementation-notes.md).
+
+This is local hermetic queued-value / post-instant-anomaly fixture regression
+evidence only. No value moves.
 
 ## Current Implementation Status
 

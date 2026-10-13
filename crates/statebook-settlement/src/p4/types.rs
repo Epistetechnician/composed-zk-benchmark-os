@@ -116,10 +116,24 @@ pub enum DecisionReasonV1 {
     BreakerHalted,
     BreakerFrozen,
     BreakerInvalidTransition,
+    BreakerResolutionRequired,
+    BreakerRenewalRejected,
     QueueTimerOnly,
     ChallengeInvalid,
     ChallengeDuplicate,
+    ChallengeCensored,
+    ChallengeUnavailable,
+    EvidenceExpired,
     PolicyRollback,
+    PolicyRelaxRejected,
+    QueueCancelled,
+    ProvenNoOutflowRejected,
+    BudgetRefillRejected,
+    FailedTransferRollbackRejected,
+    GateSourceContentStale,
+    GatePreparedEarlierReuse,
+    ValuationActionOracleFallback,
+    QueuedValueMonetization,
     RecoveryFailed,
     IntentDigestMismatch,
     ModelConfidenceIgnored,
@@ -264,6 +278,10 @@ pub struct ExternalizationRequestV1 {
     pub(crate) linked_plan: Option<AtomicLinkedExchangePlanV1>,
     pub(crate) obligation: Option<ExternalRiskReducingObligationV1>,
     pub(crate) reuse_finality_passed: bool,
+    /// Claimed AI/model confidence; cannot bypass failed hard gates or valuation.
+    pub(crate) model_confidence_claimed: bool,
+    /// Attempt to monetize queued value (loan/claim/credit) while queue is Queued.
+    pub(crate) monetizes_queued_value: bool,
     pub(crate) gate_overrides: GateOverridesV1,
     pub(crate) evidence_snapshot: EvidenceSnapshotV1,
     pub(crate) valuation_profile: ConservativeValuationProfileV1,
@@ -291,6 +309,10 @@ impl ExternalizationRequestV1 {
         &self.asset
     }
 
+    pub fn destination(&self) -> &str {
+        &self.destination
+    }
+
     pub const fn financial_basis(&self) -> &FinancialBasisV1 {
         &self.financial_basis
     }
@@ -305,6 +327,14 @@ impl ExternalizationRequestV1 {
 
     pub const fn reuse_finality_passed(&self) -> bool {
         self.reuse_finality_passed
+    }
+
+    pub const fn model_confidence_claimed(&self) -> bool {
+        self.model_confidence_claimed
+    }
+
+    pub const fn monetizes_queued_value(&self) -> bool {
+        self.monetizes_queued_value
     }
 
     pub const fn gate_overrides(&self) -> &GateOverridesV1 {
@@ -347,11 +377,16 @@ pub struct EvidenceObservationV1 {
     pub(crate) current_roots: Vec<AssuranceRootV1>,
     pub(crate) dependency_roots: Vec<AssuranceRootV1>,
     pub(crate) dependency_disclosure: DependencyDisclosureV1,
+    /// Transport/receipt timestamp.
     pub(crate) observed_at: i64,
+    /// Content observation time; freshness for gate 2 uses this, not transport.
+    pub(crate) content_observed_at: i64,
     pub(crate) expires_at: i64,
     pub(crate) bound_request_id: String,
     pub(crate) replayed: bool,
     pub(crate) equivocated: bool,
+    /// Prepared-earlier report; cannot become reusable when transport is fresh.
+    pub(crate) prepared_earlier: bool,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
@@ -427,12 +462,117 @@ pub struct BudgetAxisV1 {
     pub(crate) consumed: SignedRational,
 }
 
+impl BudgetAxisV1 {
+    pub fn asset(&self) -> &str {
+        &self.asset
+    }
+
+    pub const fn reserved(&self) -> SignedRational {
+        self.reserved
+    }
+
+    pub const fn in_flight(&self) -> SignedRational {
+        self.in_flight
+    }
+
+    pub const fn consumed(&self) -> SignedRational {
+        self.consumed
+    }
+
+    pub const fn cap(&self) -> SignedRational {
+        self.cap
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct BudgetLedgerStateV1 {
     pub(crate) tip_digest: DigestV1,
     pub(crate) epoch: u32,
     pub(crate) axes: Vec<BudgetAxisV1>,
     pub(crate) journal: Vec<String>,
+}
+
+impl BudgetLedgerStateV1 {
+    pub fn axes(&self) -> &[BudgetAxisV1] {
+        &self.axes
+    }
+
+    pub const fn tip_digest(&self) -> DigestV1 {
+        self.tip_digest
+    }
+
+    pub const fn epoch(&self) -> u32 {
+        self.epoch
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ChallengeKindV1 {
+    Valid,
+    Invalid,
+    Duplicate,
+    Censored,
+    Unavailable,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct ChallengeSubmissionV1 {
+    challenge_id: String,
+    trust_root_id: String,
+    deadline: i64,
+    affected_scope_id: String,
+    kind: ChallengeKindV1,
+}
+
+impl ChallengeSubmissionV1 {
+    pub fn new(
+        challenge_id: impl Into<String>,
+        trust_root_id: impl Into<String>,
+        deadline: i64,
+        affected_scope_id: impl Into<String>,
+        kind: ChallengeKindV1,
+    ) -> Self {
+        Self {
+            challenge_id: challenge_id.into(),
+            trust_root_id: trust_root_id.into(),
+            deadline,
+            affected_scope_id: affected_scope_id.into(),
+            kind,
+        }
+    }
+
+    pub fn challenge_id(&self) -> &str {
+        &self.challenge_id
+    }
+
+    pub fn trust_root_id(&self) -> &str {
+        &self.trust_root_id
+    }
+
+    pub const fn deadline(&self) -> i64 {
+        self.deadline
+    }
+
+    pub fn affected_scope_id(&self) -> &str {
+        &self.affected_scope_id
+    }
+
+    pub const fn kind(&self) -> ChallengeKindV1 {
+        self.kind
+    }
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum ChallengeApplyResultV1 {
+    Accepted,
+    Rejected { reason: DecisionReasonV1 },
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum CancelApplyResultV1 {
+    Accepted,
+    Rejected { reason: DecisionReasonV1 },
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
@@ -463,12 +603,48 @@ pub struct BreakerScopeV1 {
     pub(crate) renewal_ceiling: u32,
 }
 
+impl BreakerScopeV1 {
+    pub fn scope_id(&self) -> &str {
+        &self.scope_id
+    }
+
+    pub const fn state(&self) -> BreakerStateV1 {
+        self.state
+    }
+
+    pub const fn expires_at(&self) -> Option<i64> {
+        self.expires_at
+    }
+
+    pub const fn renewal_count(&self) -> u32 {
+        self.renewal_count
+    }
+
+    pub const fn renewal_ceiling(&self) -> u32 {
+        self.renewal_ceiling
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct RecoverySnapshotV1 {
     pub(crate) profile_digest: DigestV1,
     pub(crate) halted_paths: BTreeSet<String>,
     pub(crate) reconciliation_mismatch: bool,
     pub(crate) canary_failed: bool,
+}
+
+impl RecoverySnapshotV1 {
+    pub fn halted_paths(&self) -> &BTreeSet<String> {
+        &self.halted_paths
+    }
+
+    pub const fn reconciliation_mismatch(&self) -> bool {
+        self.reconciliation_mismatch
+    }
+
+    pub const fn canary_failed(&self) -> bool {
+        self.canary_failed
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
@@ -479,6 +655,12 @@ pub struct SettlementStateV1 {
     pub(crate) breakers: Vec<BreakerScopeV1>,
     pub(crate) recovery: RecoverySnapshotV1,
     pub(crate) expected_ledger_tip: DigestV1,
+    pub(crate) applied_challenge_ids: BTreeSet<String>,
+    pub(crate) active_policy: SettlementPolicyV1,
+    pub(crate) last_policy_change_at: i64,
+    pub(crate) clean_epochs: u32,
+    pub(crate) bound_intent_digest: Option<DigestV1>,
+    pub(crate) bound_destination: Option<String>,
 }
 
 impl QueueStateV1 {
@@ -512,6 +694,14 @@ impl SettlementStateV1 {
 
     pub const fn recovery(&self) -> &RecoverySnapshotV1 {
         &self.recovery
+    }
+
+    pub const fn bound_intent_digest(&self) -> Option<DigestV1> {
+        self.bound_intent_digest
+    }
+
+    pub fn bound_destination(&self) -> Option<&str> {
+        self.bound_destination.as_deref()
     }
 }
 

@@ -114,6 +114,12 @@ fn encode_evidence_observation(observation: &EvidenceObservationV1) -> Vec<u8> {
     encoder.field(8, observation.bound_request_id.as_bytes());
     encoder.field(9, &encode_bool(observation.replayed));
     encoder.field(10, &encode_bool(observation.equivocated));
+    if observation.content_observed_at != observation.observed_at {
+        encoder.field(11, &encode_i64(observation.content_observed_at));
+    }
+    if observation.prepared_earlier {
+        encoder.field(12, &encode_bool(true));
+    }
     encoder.finish()
 }
 
@@ -311,6 +317,12 @@ pub fn intent_payload(request: &ExternalizationRequestV1) -> Vec<u8> {
     encoder.field(17, request.nonce.as_bytes());
     encoder.field(18, &encode_i64(request.requested_at));
     encoder.field(19, &encode_i64(request.expires_at));
+    if request.model_confidence_claimed {
+        encoder.field(20, &encode_bool(true));
+    }
+    if request.monetizes_queued_value {
+        encoder.field(21, &encode_bool(true));
+    }
     encoder.finish()
 }
 
@@ -410,6 +422,22 @@ pub fn settlement_state_digest(state: &SettlementStateV1) -> DigestV1 {
         &encode_sequence(state.breakers.iter().map(encode_breaker)),
     );
     encoder.field(5, state.recovery.profile_digest.as_bytes());
+    encoder.field(6, &encode_string_set(&state.applied_challenge_ids));
+    encoder.field(7, state.active_policy.policy_digest.as_bytes());
+    encoder.field(8, &encode_u32(state.active_policy.policy_version));
+    encoder.field(9, &encode_i64(state.last_policy_change_at));
+    encoder.field(10, &encode_u32(state.clean_epochs));
+    encoder.field(
+        11,
+        &match state.bound_intent_digest {
+            Some(digest) => digest.as_bytes().to_vec(),
+            None => Vec::new(),
+        },
+    );
+    encoder.field(
+        12,
+        state.bound_destination.as_deref().unwrap_or("").as_bytes(),
+    );
     digest(SETTLEMENT_STATE_DOMAIN, &encoder.finish())
 }
 
@@ -451,10 +479,24 @@ fn decision_reason_tag(value: DecisionReasonV1) -> u8 {
         DecisionReasonV1::BreakerHalted => 24,
         DecisionReasonV1::BreakerFrozen => 25,
         DecisionReasonV1::BreakerInvalidTransition => 26,
+        DecisionReasonV1::BreakerResolutionRequired => 34,
+        DecisionReasonV1::BreakerRenewalRejected => 35,
         DecisionReasonV1::QueueTimerOnly => 27,
         DecisionReasonV1::ChallengeInvalid => 28,
         DecisionReasonV1::ChallengeDuplicate => 29,
+        DecisionReasonV1::ChallengeCensored => 36,
+        DecisionReasonV1::ChallengeUnavailable => 37,
+        DecisionReasonV1::EvidenceExpired => 38,
         DecisionReasonV1::PolicyRollback => 30,
+        DecisionReasonV1::PolicyRelaxRejected => 39,
+        DecisionReasonV1::QueueCancelled => 40,
+        DecisionReasonV1::ProvenNoOutflowRejected => 41,
+        DecisionReasonV1::BudgetRefillRejected => 42,
+        DecisionReasonV1::FailedTransferRollbackRejected => 46,
+        DecisionReasonV1::GateSourceContentStale => 43,
+        DecisionReasonV1::GatePreparedEarlierReuse => 44,
+        DecisionReasonV1::ValuationActionOracleFallback => 45,
+        DecisionReasonV1::QueuedValueMonetization => 47,
         DecisionReasonV1::RecoveryFailed => 31,
         DecisionReasonV1::IntentDigestMismatch => 32,
         DecisionReasonV1::ModelConfidenceIgnored => 33,

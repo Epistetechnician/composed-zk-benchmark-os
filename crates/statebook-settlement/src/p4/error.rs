@@ -37,4 +37,10 @@ pub enum SettlementTransitionErrorV1 {
     InvalidBreakerTransition,
     #[error("invalid queue transfer combination")]
     InvalidQueueTransferCombination,
+    #[error("invalid breaker renewal request")]
+    InvalidBreakerRenewal,
+    #[error("breaker renewal rejected at ceiling")]
+    BreakerRenewalRejected,
+    #[error("challenge count exceeds max_challenges_v1")]
+    ChallengeLimitExceeded,
 }

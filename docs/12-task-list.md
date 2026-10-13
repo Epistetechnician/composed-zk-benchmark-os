@@ -25986,3 +25986,542 @@ moves. No P7 authority, trading, signing, custody, live venue network in this
 slice, admission mutation, Evidence Ledger append, scalar trust score,
 production readiness, SOTA, independent audit, or full-security claims.
 
+
+## Integration Track: Statebook P7 Authority Integration Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p7-authority-integration-boundary`.
+
+## Integration Track: Statebook P7 Authority Integration Implementation
+
+Status: implemented under named state slice
+`statebook-p7-authority-integration`.
+
+Delivered in isolated `crates/statebook-authority`:
+
+- hermetic attach for `synthetic-clearing-authority-v1`;
+- authority registry with revoke/historical digest retention;
+- capital-recognition overlays that preserve economic residual digests;
+- permanent `grants_execution_authority=false` and legal/ops gate deferred checklist;
+- domain-separated P7 TLV digests with an independent `ring` golden encoder;
+- seventeen focused integration tests.
+
+P1-P6 identities remain unchanged. Live authority products remain deferred.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-authority -- --check
+cargo test -p statebook-authority --tests
+cargo clippy -p statebook-authority --all-targets -- -D warnings
+cargo test -p statebook-core -p statebook-settlement -p statebook-report -p statebook-source --tests
+```
+
+Claim ceiling: local hermetic synthetic authority-statement / capital-overlay
+regression only. No value moves. Completing P7 does not satisfy the legal/ops
+gate for live execution, custody, signing, pause, real margin recognition, or
+settlement. No admission mutation, Evidence Ledger append, scalar trust score,
+production readiness, SOTA, independent audit, or full-security claims.
+
+## Integration Track: Statebook P8 Evaluation And Falsification Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p8-evaluation-and-falsification-boundary`.
+
+## Integration Track: Statebook P8 Evaluation And Falsification Implementation
+
+Status: implemented under named state slice
+`statebook-p8-evaluation-and-falsification`.
+
+Delivered in isolated `crates/statebook-e2e-harness`:
+
+- hermetic P1–P7 golden path via `run_hermetic_golden_path_v1`;
+- structured `EvaluationReceiptV1` digest/outcome binding;
+- falsifiers for P4 hard-gate failure, P5 readback tamper, P7 execution grant,
+  and unbound authority digest binding;
+- nine focused harness tests and claim-boundary scans.
+
+P1–P7 identities remain unchanged. Live authority products remain deferred.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-e2e-harness -- --check
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-e2e-harness --all-targets -- -D warnings
+cargo test -p statebook-core -p statebook-settlement -p statebook-report -p statebook-source -p statebook-authority --tests
+```
+
+Claim ceiling: local hermetic composed P1–P7 regression and falsification-
+surface evidence only. No value moves. Completing P8 does not satisfy the P7
+legal/ops gate for live authority products. No admission mutation, Evidence
+Ledger append, scalar trust score, production thresholds, production readiness,
+SOTA, independent audit, or full-security claims.
+
+## Integration Track: Statebook P9 Adversarial Corpus Replay Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p9-adversarial-corpus-replay-boundary`.
+
+## Integration Track: Statebook P9 Adversarial Corpus Replay Implementation
+
+Status: implemented under named state slice
+`statebook-p9-adversarial-corpus-replay`.
+
+Delivered in `crates/statebook-e2e-harness`:
+
+- twelve encodable TD-004 / P4 adversarial corpus replays;
+- timer-alone chained queue rejection;
+- fail-closed zero-instant invariants;
+- four new corpus tests (thirteen harness tests overall).
+
+No P4 kernel edits. P1–P8 identities remain unchanged.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-e2e-harness -- --check
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-e2e-harness --all-targets -- -D warnings
+cargo test -p statebook-core -p statebook-settlement -p statebook-report -p statebook-source -p statebook-authority --tests
+```
+
+Claim ceiling: local hermetic adversarial fixture regression only. No value
+moves. Not complete TD-004 satisfaction, live authority, production readiness,
+SOTA, independent audit, or full-security claims.
+
+## Integration Track: Statebook P18 Budget Refill Split And Slow Drain Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p18-budget-refill-split-drain-boundary`.
+
+## Integration Track: Statebook P18 Budget Refill Split And Slow Drain Implementation
+
+Status: implemented under named state slice
+`statebook-p18-budget-refill-split-drain`.
+
+Delivered:
+
+- `apply_budget_refill_v1` with sequential epoch bump and per-epoch ceiling;
+- skip/backfill/over-ceiling/non-positive refill reject;
+- three harness corpus cases (slow drain, split cannot expand caps, refill
+  skip-epoch); 36 encodable cases total;
+- CAS tip one-success remains covered by existing settlement kernel tests.
+
+Live authority remains deferred behind the legal/ops gate.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic budget-refill / aggregate-cap fixture regression
+only. No value moves. Not complete TD-004 satisfaction, live authority,
+production readiness, SOTA, independent audit, or full-security claims.
+
+Anti-goals: live authority, complete TD-004 claim, trading, signing, custody,
+pause product, transfer command, admission mutation, Evidence Ledger append,
+scalar trust score, production readiness, SOTA, independent audit, or
+full-security claims.
+
+## Integration Track: Statebook P19 Oracle Freshness And Compromised Source Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p19-oracle-freshness-compromised-source-boundary`.
+
+## Integration Track: Statebook P19 Oracle Freshness And Compromised Source Implementation
+
+Status: implemented under named state slice
+`statebook-p19-oracle-freshness-compromised-source`.
+
+Delivered:
+
+- gate-2 prepared-earlier and content-staleness rejects;
+- dual-vendor shared upstream independence quarantine;
+- action-oracle valuation root overlap reject;
+- four harness corpus cases (40 encodable total).
+
+Live authority remains deferred behind the legal/ops gate.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic oracle-freshness / compromised-source fixture
+regression only. No value moves. Not complete TD-004 satisfaction, live
+authority, production readiness, SOTA, independent audit, or full-security
+claims.
+
+Anti-goals: live authority, complete TD-004 claim, trading, signing, custody,
+pause product, transfer command, admission mutation, Evidence Ledger append,
+scalar trust score, production readiness, SOTA, independent audit, or
+full-security claims.
+
+## Integration Track: Statebook P20 Model Confidence Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p20-model-confidence-boundary`.
+
+## Integration Track: Statebook P20 Model Confidence Implementation
+
+Status: implemented under named state slice `statebook-p20-model-confidence`.
+
+Delivered:
+
+- optional `model_confidence_claimed` on requests (digest-preserving when false);
+- `ModelConfidenceIgnored` when claimed against failed hard gate or valuation;
+- corpus `td004_18_model_confidence_bypass` claims confidence.
+
+Live authority remains deferred behind the legal/ops gate.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic model-confidence fixture regression only. No
+value moves. Not complete TD-004 satisfaction, live authority, production
+readiness, SOTA, independent audit, or full-security claims.
+
+Anti-goals: live authority, complete TD-004 claim, trading, signing, custody,
+pause product, transfer command, admission mutation, Evidence Ledger append,
+scalar trust score, production readiness, SOTA, independent audit, or
+full-security claims.
+
+## Integration Track: Statebook P21 Failed Transfer Reservation Rollback Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p21-failed-transfer-reservation-rollback-boundary`.
+
+## Integration Track: Statebook P21 Failed Transfer Reservation Rollback Implementation
+
+Status: implemented under named state slice
+`statebook-p21-failed-transfer-reservation-rollback`.
+
+Delivered:
+
+- `apply_failed_transfer_rollback_v1` with CAS-guarded reserved/in-flight
+  release;
+- Frozen-path kernel rollback so reserved exposure cannot leak;
+- two harness corpus cases (42 encodable total).
+
+Live authority remains deferred behind the legal/ops gate.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic reservation-rollback / CAS-finalizer fixture
+regression only. No value moves. Not complete TD-004 satisfaction, live
+authority, production readiness, SOTA, independent audit, or full-security
+claims.
+
+Anti-goals: live authority, complete TD-004 claim, artificial-profit PnL (#23),
+true threaded concurrency, trading, signing, custody, pause product, transfer
+command, admission mutation, Evidence Ledger append, scalar trust score,
+production readiness, SOTA, independent audit, or full-security claims.
+
+## Integration Track: Statebook P22 Queued Value Monetization Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p22-queued-value-monetization-boundary`.
+
+## Integration Track: Statebook P22 Queued Value Monetization Implementation
+
+Status: implemented under named state slice
+`statebook-p22-queued-value-monetization`.
+
+Delivered:
+
+- optional `monetizes_queued_value` rejects while queue is `Queued`;
+- post-instant anomaly clearance failure blocks queued remainder;
+- two harness corpus cases (44 encodable total).
+
+Live authority remains deferred behind the legal/ops gate.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic queued-value / post-instant-anomaly fixture
+regression only. No value moves. Not complete TD-004 satisfaction, live
+authority, production readiness, SOTA, independent audit, or full-security
+claims.
+
+Anti-goals: live authority, complete TD-004 claim, artificial-profit PnL (#23),
+venue solvency digest binding (#33), trading, signing, custody, pause product,
+transfer command, admission mutation, Evidence Ledger append, scalar trust
+score, production readiness, SOTA, independent audit, or full-security claims.
+
+## Integration Track: Statebook P10 Semantic Equivalence Corpus Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p10-semantic-equivalence-corpus-boundary`.
+
+## Integration Track: Statebook P10 Semantic Equivalence Corpus Implementation
+
+Status: implemented under named state slice
+`statebook-p10-semantic-equivalence-corpus`.
+
+Delivered in `crates/statebook-e2e-harness`:
+
+- labeled StateKey equivalence pairs (2 equivalent + 27 distinct);
+- fixture-local precision/recall/false-equivalence metrics with exact acceptance;
+- three new semantic corpus tests (sixteen harness tests overall).
+
+P1–P9 identities remain unchanged.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-e2e-harness -- --check
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic labeled-fixture StateKey equivalence metrics
+only. No value moves. Not automatic economic-equivalence discovery, legal
+fungibility, AI oracle, live authority, production readiness, SOTA, independent
+audit, or full-security claims.
+
+## Integration Track: Statebook P11 Breaker TTL And Resolution Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p11-breaker-ttl-resolution-boundary`.
+
+## Integration Track: Statebook P11 Breaker TTL And Resolution Implementation
+
+Status: implemented under named state slice
+`statebook-p11-breaker-ttl-resolution`.
+
+Delivered:
+
+- P4 kernel TTL exhaustion → Resolution with zero-instant reject;
+- expired Guarded/Recovery scopes block without silent renewal;
+- `attempt_breaker_renewal_v1` ceiling reject / below-ceiling extend;
+- five settlement breaker TTL tests and two new harness corpus cases.
+
+Challenge grammar, hysteresis, and cancel remain deferred.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic breaker TTL/resolution regression only. No value
+moves. Not live pause authority, complete TD-004 satisfaction, production
+readiness, SOTA, independent audit, or full-security claims.
+
+## Integration Track: Statebook P12 Challenge Grammar And Evidence Expiry Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p12-challenge-grammar-evidence-expiry-boundary`.
+
+## Integration Track: Statebook P12 Challenge Grammar And Evidence Expiry Implementation
+
+Status: implemented under named state slice
+`statebook-p12-challenge-grammar-evidence-expiry`.
+
+Delivered:
+
+- `apply_challenge_v1` for valid/invalid/duplicate/censored/unavailable;
+- valid challenge → Challenged → Frozen with zero instant;
+- evidence expiry while queued → RevalidationRequired reject;
+- fresh evidence revalidation toward Reserved (not timer-alone);
+- seven settlement challenge tests and six new harness corpus cases.
+
+Hysteresis and cancel remain deferred.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic challenge grammar / evidence-expiry regression
+only. No value moves. Not live pause authority, complete TD-004 satisfaction,
+production readiness, SOTA, independent audit, or full-security claims.
+
+## Integration Track: Statebook P13 Hysteresis Relax And Rollback Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p13-hysteresis-relax-rollback-boundary`.
+
+## Integration Track: Statebook P13 Hysteresis Relax And Rollback Implementation
+
+Status: implemented under named state slice
+`statebook-p13-hysteresis-relax-rollback`.
+
+Delivered:
+
+- active policy anchor + `attempt_policy_transition_v1`;
+- rollback / relax-reject / tighten / gated-relax paths;
+- five settlement hysteresis tests and two new harness corpus cases.
+
+Cancel remains deferred.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic hysteresis regression only. No value moves. Not
+live pause authority, complete TD-004 satisfaction, production readiness, SOTA,
+independent audit, or full-security claims.
+
+## Integration Track: Statebook P14 Cancel And Race Intents Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p14-cancel-race-intents-boundary`.
+
+## Integration Track: Statebook P14 Cancel And Race Intents Implementation
+
+Status: implemented under named state slice `statebook-p14-cancel-race-intents`.
+
+Delivered:
+
+- `apply_cancel_v1` with new-intent requirement;
+- bound intent/destination on Queued;
+- Cancelled / destination-mismatch reject paths;
+- five settlement cancel tests and two new harness corpus cases.
+
+Live authority remains deferred behind the legal/ops gate.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic cancel/race regression only. No value moves. Not
+live pause authority, complete TD-004 satisfaction, production readiness, SOTA,
+independent audit, or full-security claims.
+
+## Integration Track: Statebook P15 Destination Finality And Proven No-Outflow Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p15-destination-finality-proven-no-outflow-boundary`.
+
+## Integration Track: Statebook P15 Destination Finality And Proven No-Outflow Implementation
+
+Status: implemented under named state slice
+`statebook-p15-destination-finality-proven-no-outflow`.
+
+Delivered:
+
+- `apply_transfer_submit_v1` / `apply_destination_finality_v1` /
+  `apply_proven_no_outflow_v1`;
+- available capacity subtracts consumed;
+- four settlement finality tests and two new harness corpus cases.
+
+Recovery reopen and live authority remain deferred.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic finality/no-outflow regression only. No value
+moves. Not live pause authority, complete TD-004 satisfaction, production
+readiness, SOTA, independent audit, or full-security claims.
+
+## Integration Track: Statebook P16 Recovery Transitions Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p16-recovery-transitions-boundary`.
+
+## Integration Track: Statebook P16 Recovery Transitions Implementation
+
+Status: implemented under named state slice `statebook-p16-recovery-transitions`.
+
+Delivered:
+
+- recovery halt/reconcile/canary/reopen APIs;
+- release blocked on non-empty halt inventory, mismatch, or canary failure;
+- four settlement recovery tests and two new harness corpus cases.
+
+Live authority remains deferred behind the legal/ops gate.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic recovery-drill regression only. No value moves.
+Not live pause authority, production recovery readiness, complete TD-004
+satisfaction, SOTA, independent audit, or full-security claims.
+
+## Integration Track: Statebook P17 Adversarial Corpus Expansion Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p17-adversarial-corpus-expansion-boundary`.
+
+## Integration Track: Statebook P17 Adversarial Corpus Expansion Implementation
+
+Status: implemented under named state slice
+`statebook-p17-adversarial-corpus-expansion`.
+
+Delivered:
+
+- future valuation observation reject;
+- five new harness corpus cases (33 encodable cases total).
+
+Live authority remains deferred behind the legal/ops gate.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic adversarial fixture regression only. No value
+moves. Not complete TD-004 satisfaction, live authority, production readiness,
+SOTA, independent audit, or full-security claims.
