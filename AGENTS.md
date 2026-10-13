@@ -3356,6 +3356,20 @@ backend, or external replay, mutate an Evidence Ledger, move a score, create
 Level2+ evidence, create benchmark-submission or production authority, or
 support proof, production-readiness, SOTA, breakthrough, full-security, or
 external-audit claims.
+Explicit Phase 796-A3L6S HSAI P01B gate-sandbox test-root correction is now
+allowed and implemented under
+`tools/hsai-formal-preflight/p01b_container_execution_tests.py`,
+`docs/796a3l6s-phase-hsai-p01b-gate-sandbox-test-root-correction.md`, and
+standard navigation mirrors. This narrow state slice corrects only the
+execution-focused test fixture root: when the existing A3L6 nested Seatbelt
+marker is active, the test uses the already permitted `TMPDIR` scratch root;
+outside that gate, its host-only `/private/tmp` fixture location is preserved.
+It does not widen Seatbelt, change the runner, accept A3L6, authorize
+A3L7/A3L8/A3L9, invoke Docker, registry, network, container, backend, or
+external replay, mutate an Evidence Ledger, move a score, create Level2+
+evidence, create benchmark-submission or production authority, or support
+proof, production-readiness, SOTA, breakthrough, full-security, or
+external-audit claims. A fresh immutable audit and retained run are required.
 
 Explicit Statebook terminal-payoff and assurance-adjusted settlement boundary
 now allowed and completed as documentation only in

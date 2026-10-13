@@ -3444,7 +3444,12 @@ class BoundaryGuardTests(unittest.TestCase):
             status = execution.main(["run-v1"])
         self.assertEqual(status, 2)
         self.assertIn("A3L7", stderr.getvalue())
-        with tempfile.TemporaryDirectory(dir="/private/tmp") as temporary:
+        temporary_directory = (
+            tempfile.TemporaryDirectory()
+            if _gate_sandbox_active()
+            else tempfile.TemporaryDirectory(dir="/private/tmp")
+        )
+        with temporary_directory as temporary:
             root = Path(temporary)
             repository = root / "repository"
             repository.mkdir(mode=0o700)

@@ -12040,3 +12040,21 @@ escalation was created. The next dependency is a retained `pending-review` run
 and two genuine human reviews in security-capability then
 correspondence-reproducibility order; A3L7 remains separately authorized.
 See `docs/796a3l6a-phase-hsai-p01b-current-immutable-gate-audit.md`.
+## Phase 796-A3L6S HSAI P01B Gate-Sandbox Test-Root Correction
+
+Outcome: local execution-focused test correction for named state slice
+`phase-796a3l6s-p01b-gate-sandbox-test-root-correction`.
+
+The first clean detached gate attempt retained `rejected` because one test
+unconditionally requested a `/private/tmp` temporary root inside the nested
+Seatbelt profile. The profile correctly denies that write; it permits the
+gate-provided `TMPDIR` scratch root. The test now selects that existing scratch
+only when the existing gate marker is present and preserves the host-only
+`/private/tmp` fixture location otherwise. The runner and profile are unchanged.
+
+The rejection is diagnostic only. The correction requires a new implementation
+audit and detached run. It accepts neither A3L6 nor A3L7 and creates no runtime
+operation, Docker, registry, network, external replay, independent review,
+accepted Evidence Ledger mutation, score movement, Level2+ evidence, benchmark
+submission, production operation, or claim escalation. See
+`docs/796a3l6s-phase-hsai-p01b-gate-sandbox-test-root-correction.md`.
