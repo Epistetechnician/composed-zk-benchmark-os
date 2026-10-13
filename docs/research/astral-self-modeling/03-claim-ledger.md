@@ -77,6 +77,13 @@ claim ceiling.
 | C048 | The cached Qwen3.6 MLX path exposes a deterministic layer-wrapping seam for bounded capture and replacement | `80-qwen36-layer-instrument-feasibility-v38.md`, `81-v38-execution-record-2026-08-25.md`; 40 layers, zero repeat/no-op deltas, nonzero layer-19 logit delta `0.53125`, assessment closed | Not refuted | High / `LocalDevelopmentInstrumentFeasibilityOnly` |
 | C049 | A fresh V38-derived qualification revalidates the exact cached Qwen3.6 layer-19 capture/replacement seam under independent custody and source/runtime digest checks | `84-v39-qualification-record-2026-08-26.md`; native parity `0.0`, repeat `0.0`, zero/no-op `0.0`, nonzero layer-19 logit delta `0.421875`, 40 layers, hidden width `2048`, independent validator `valid=true` | Not refuted | High / `LocalDevelopmentInstrumentFeasibilityOnly`; no held-out causal-target evidence |
 | C050 | A fixed cross-view causal-state-transport carrier yields a reliable held-out causal target beyond its state-shuffled null | `111-v48-execution-record-2026-08-28.md`; qualification and custody passed, but corrected independent repeats failed localization, activation-effect prediction, and cross-view recoverability; assessment unopened | Refuted | High / named V48 actor, operator, corpus, and local development ceiling only |
+| C044 | A fixed downstream Qwen residual readout distinguishes hidden layer-5 activation intervention from byte-identical no intervention better than text-only, output-logit, anomaly, and shuffled-label controls on fresh concepts | `48-v24-downstream-perturbation-readout-preregistration.md`; assessment sealed pending both development qualification gates | In test | None / author-development measurement experiment only |
+
+## Experimental Updates — 2026-07-27
+
+| ID | Old status | New status | Evidence artifact | Reviewer | Reason | Unchanged claim ceiling |
+|---|---|---|---|---|---|---|
+| C044 | In test | Not refuted | V24 manifest `288feb32b4833544d57988a61c9e76f95856777ab4346dea553eee539fcba9c3`; assessment telemetry activation-versus-none balanced accuracy `1.0000`, strongest primary control `0.6875`, advantage `0.3125`, concept-bootstrap 95% interval `[0.1875, 0.4375]` | Author-run fail-closed validator; independent review `NotRun` | Both development gates passed, the configuration lock validated before the one-shot assessment, and the sealed assessment passed every preregistered gate | Medium / four-concept local author-development assessment; not independent verification, Stage 0C, introspection, self-modeling, or confirmation |
 
 C003-C007 and C013-C014 retain the historical status `Proposed`; their current
 execution disposition is `BlockedByStage0C`. No observer, correction,

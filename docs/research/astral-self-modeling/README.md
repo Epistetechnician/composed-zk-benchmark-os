@@ -576,6 +576,25 @@ review and experiments rule out equivalent prior work.
 - [Signed independent-review attestation gate V1](47-signed-independent-review-attestation-gate-v1.md):
   preregistered reviewer keys, role-bound challenges, signed decisions, and
   fail-closed distinct-reviewer quorum.
+- [V24 downstream perturbation readout preregistration](48-v24-downstream-perturbation-readout-preregistration.md):
+  author-development-only fixed downstream residual readout with text,
+  output-logit, anomaly, and shuffled-label controls.
+- [V24 execution record](49-v24-execution-record.md):
+  validated local downstream perturbation-readout observation with sealed
+  assessment, exact claim ceiling, and independent verification still
+  `NotRun`.
+- [V24 independent-validation release V2 specification](50-v24-independent-validation-release-v2-spec.md):
+  V24-specific immutable package, portable clean-room replay, and
+  admin-signed role-separated reviewer-agent authorization with advisory-only
+  agent status.
+- [V24 independent-validation release V2 execution record](51-v24-independent-validation-release-v2-execution-record.md):
+  content-addressed release and capsule identities, successful author and
+  clean-room replay, valid `shaanp` AdminCoordinator kit, and the exact
+  unexecuted external-review boundary.
+- [V24 signed advisory-review rehearsal](52-v24-signed-advisory-review-rehearsal.md):
+  admin-signed role-separated agent review, retained environment-mismatch
+  rejection, successful pinned-runtime retry, scientific limitations, and the
+  unchanged external-human and independent-replication gates.
 - [Stage 0 measurement-validity preregistration](08-stage0-measurement-validity-preregistration.md):
   documentation-only compiled-circuit study boundary, locked comparisons,
   endpoints, stop rules, artifact contract, and advancement gate.
