@@ -654,7 +654,7 @@ explicitly excluded from the update panel because its evaluation-only dataset
 license does not permit adaptation or parameter updates.
 
 The latest signed task/update pilot is documented in
-`docs/research/continual-learning/45-v22-seed-independent-slot-stability-record.md`. Its outputs
+`docs/research/continual-learning/47-v23-task-routed-replay-consolidation-record.md`. Its outputs
 must stay outside the repository because adapter weights and raw run logs are
 generated artifacts, not source fixtures.
 
