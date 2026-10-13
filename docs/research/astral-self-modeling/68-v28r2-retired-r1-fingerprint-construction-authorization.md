@@ -3,8 +3,8 @@
 State slice:
 `astral-rgs-v28r2-retired-r1-fingerprint-construction`.
 
-Status: `ControllerImplemented / ConstructionAuthorized /
-ConstructionNotRun / FingerprintNotBuilt / ProtocolPinUnchanged /
+Status: `R1ExternalPrecheckFailed / R1ConstructionIdentityConsumed /
+ControllerAndBuilderNotRun / FingerprintNotBuilt / ProtocolPinUnchanged /
 R2ExecutionNotAuthorized`.
 
 ## Authorization
@@ -93,10 +93,13 @@ PYTHONDONTWRITEBYTECODE=1 python3 \
   --output /Users/shaanp/Documents/ResearchArtifacts/astral-rgs-v28r1-retired-fingerprint-8cf75d7-r1.json
 ```
 
-The controller and builder invocation counts are zero before this
-authorization and may each become exactly one. Any controller, preflight, or
-builder failure consumes the construction identity. No retry, alternate input,
-copied bundle, alternate output, repair, or overwrite is authorized.
+The first external precheck failed before controller invocation because it
+compared the real construction commit with an unverified incorrect full commit
+string. The controller and builder invocation counts remained zero and the
+fixed `r1` output remained absent. The no-retry contract nevertheless consumes
+this construction identity. The `r1` controller may never be invoked. Any new
+construction requires a separately reviewed identity, controller hash, and
+output path.
 
 ## Authorized post-construction inspection
 

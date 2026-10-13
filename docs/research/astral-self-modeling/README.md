@@ -604,9 +604,12 @@ review and experiments rule out equivalent prior work.
   docs-first one-time hash-only construction contract; construction and
   protocol pinning remain unrun and separate.
 - [V28R2 retired-R1 fingerprint construction authorization](68-v28r2-retired-r1-fingerprint-construction-authorization.md):
-  pinned no-argument exact-path controller and one-invocation construction
-  authority with a mandatory stop before fingerprint commit or protocol
-  pinning.
+  R1 external precheck failure and consumed, unrun R1 construction identity.
+- [V28R2 retired-R1 fingerprint construction R2 authorization](69-v28r2-retired-r1-fingerprint-construction-r2-authorization.md):
+  R2 controller/builder failure record; output absent and identity consumed.
+- [V28R2 retired-R1 fingerprint builder schema-correction boundary](70-v28r2-retired-r1-fingerprint-builder-schema-correction-boundary.md):
+  docs-first split between three-key source/support records and two-key answer
+  options; implementation and any R3 construction remain unrun.
 - [Immutable validation release V1](44-immutable-validation-release-v1.md):
   content-addressed V18-V23 package and authoritative local validator.
 - [Independent validation handoff](45-independent-validation-handoff.md):

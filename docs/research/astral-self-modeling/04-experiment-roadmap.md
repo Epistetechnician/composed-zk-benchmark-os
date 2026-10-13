@@ -30,9 +30,12 @@ failed the frozen family-cluster equivalence intervals and was retired before
 updates. A disjoint 6,144-family V28R2 replacement corpus is now preregistered
 from a conservative assumption-based precision and power calculation;
 the additive clean-room validator is implemented. A docs-first boundary now
-pins a one-time hash-only retired-R1 fingerprint construction. A separate
-pinned exact-path controller is implemented and authorized but not run.
-Protocol pinning, producer implementation, and model execution remain unrun or
+pins a one-time hash-only retired-R1 fingerprint construction. Its R1 external
+precheck failed before controller invocation and permanently consumed R1. A
+fresh fixed-output R2 controller then passed preflight, but the builder failed
+closed on the authentic two-key answer-option schema and created no output.
+R2 is consumed. A narrow correction is docs-first; fingerprint construction,
+protocol pinning, producer implementation, and model execution remain unrun or
 unauthorized.
 Retention and process-level recovery are a second gate. Prospective Astral
 selection is a third gate and remains sealed unless multiple qualified native
@@ -76,7 +79,7 @@ requirements.
 | V24 | `AuthorDevelopmentPerturbationReadoutObserved` | A fixed downstream linear residual readout passed both development gates and the sealed assessment against text, output-logit, anomaly, and shuffled-label controls; independent verification and confirmation remain `NotRun`/`NotAuthorized` |
 | V25 | `SyntheticDockerContinualCorrectionHarnessQualified` | Construction-known positive sensitivity and null specificity passed; protocol qualification only, with model-backed learning and thesis validation still `NotRun`/`NotValidated` |
 | V27 | `DeterministicDevelopmentReplayMatchedNoCandidateAssessmentNotRun` | Two complete 54-execution development packets matched every deterministic scientific lock; no-update dominated, Astral did not beat the strongest nonprivileged selector, and assessment stayed sealed |
-| V28 | `R1CorpusNotNovelRetiredR2ValidatorImplementedFingerprintControllerAuthorized` | The 96-family V28R1 packet was structurally valid and deterministic but failed the frozen equivalence intervals; its corpus and seed are retired, the additive clean-room V28R2 validator and hermetic tests are implemented, and a pinned exact-path controller for one hash-only real-R1 fingerprint construction is implemented and authorized but not run; the fingerprint and R2 packet remain absent, producer/model execution remains unauthorized, and no update, retention/recovery, selector, or assessment evidence exists |
+| V28 | `R1FingerprintPrecheckFailedR2BuilderSchemaFailedCorrectionBounded` | The 96-family V28R1 packet was structurally valid and deterministic but failed the frozen equivalence intervals; its corpus and seed are retired and the clean-room V28R2 validator is implemented. R1 failed before controller invocation. R2 passed preflight but the builder failed closed on an authentic two-key answer-option record; both identities are retired and outputs absent. A narrow builder-schema correction is docs-first only. No fingerprint or R2 packet exists; producer/model execution and every later gate remain unauthorized |
 
 ## V27: Recoverable Multiscale Continual Update Selection
 
