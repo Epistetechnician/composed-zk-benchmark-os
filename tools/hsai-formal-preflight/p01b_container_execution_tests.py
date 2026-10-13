@@ -463,6 +463,76 @@ def gate_expected_bindings(
     return value
 
 
+def a3l6_audit_bindings(
+    *,
+    implementation_commit: str = GIT_A,
+    implementation_tree: str = GIT_B,
+    audit_commit: str = GIT_A,
+    reviewed_file_sha256: Optional[dict[str, str]] = None,
+) -> dict[str, object]:
+    reviewed = reviewed_file_sha256 or {
+        path: HEX_A for path in execution.REVIEWED_PATHS
+    }
+    return {
+        "schema": "hsai-p01b-a3l6-audit-bindings-v1",
+        "implementation_commit": implementation_commit,
+        "implementation_tree": implementation_tree,
+        "audit_commit": audit_commit,
+        "ordered_source_paths": list(execution.SOURCE_PATHS),
+        "ordered_reviewed_file_sha256": [
+            {"path": path, "sha256": reviewed[path]}
+            for path in execution.REVIEWED_PATHS
+        ],
+        "focused_evidence_test_count": 32,
+        "focused_execution_test_count": 33,
+        "focused_test_count": 65,
+        "discovery_test_count": 172,
+        "ordinary_json_cap_bytes": 1_048_576,
+        "a3l6_gate_json_cap_bytes": 4_194_304,
+        "candidate_payload_count": 201,
+        "candidate_file_count": 202,
+        "publication_event_count": 271,
+    }
+
+
+def compact_a3l6_failure_observation() -> dict[str, object]:
+    empty = hashlib.sha256(b"").hexdigest()
+    return {
+        "role": "gate-head",
+        "argv": ["/usr/bin/git", "rev-parse", "HEAD"],
+        "environment": {
+            "HOME": "/nonexistent",
+            "LANG": "C",
+            "LC_ALL": "C",
+            "PATH": "/usr/bin:/bin",
+        },
+        "cwd": "/repo",
+        "stdin_policy": "closed-null",
+        "executable_path": "/usr/bin/git",
+        "executable_sha256": HEX_A,
+        "timeout_ns": 1,
+        "stdout_cap_bytes": 1,
+        "stderr_cap_bytes": 1,
+        "started_monotonic_ns": 1,
+        "ended_monotonic_ns": 1,
+        "outcome": "exit",
+        "exit_code": 1,
+        "signal": None,
+        "stdout_total_bytes": 0,
+        "stdout_retained_bytes": 0,
+        "stdout_truncated": False,
+        "stdout_base64": "",
+        "stdout_sha256": empty,
+        "stdout_observed_sha256": empty,
+        "stderr_total_bytes": 0,
+        "stderr_retained_bytes": 0,
+        "stderr_truncated": False,
+        "stderr_base64": "",
+        "stderr_sha256": empty,
+        "stderr_observed_sha256": empty,
+    }
+
+
 def codesign_display_fixture() -> bytes:
     full = "1" * 64
     short = full[:40]
@@ -1488,7 +1558,7 @@ class PlanBuilderTests(unittest.TestCase):
             return
         parent = Path("/private/tmp/hsai-p01b-gate-" + os.urandom(16).hex())
         try:
-            with tempfile.TemporaryDirectory() as temporary:
+            with tempfile.TemporaryDirectory(dir="/private/tmp") as temporary:
                 repository = Path(temporary)
                 commit, tree = make_gate_repository(repository, parent)
                 capture = execution.capture_a3l6_gate_sources(
@@ -1529,6 +1599,49 @@ class PlanBuilderTests(unittest.TestCase):
                     [item["role"] for item in live_run.ordered_gate_observations],
                     ["evidence-focused", "execution-focused", "formal-discovery"],
                 )
+                source_sha = {
+                    str(row["path"]): str(row["sha256"])
+                    for row in live_run.gate_source_manifest["ordered_sources"]
+                }
+                audit_bindings = a3l6_audit_bindings(
+                    implementation_commit=str(
+                        live_run.gate_plan["implementation_commit"]
+                    ),
+                    implementation_tree=str(live_run.gate_plan["implementation_tree"]),
+                    audit_commit=str(live_run.gate_plan["audit_commit"]),
+                    reviewed_file_sha256=source_sha,
+                )
+                with tempfile.TemporaryDirectory(dir="/private/tmp") as output_temp:
+                    output_parent = Path(output_temp)
+                    audit_bindings_path = output_parent / "audit-bindings.json"
+                    audit_bindings_path.write_bytes(
+                        execution.canonical_json_bytes(audit_bindings)
+                    )
+                    retained_gate_root = output_parent / "a3l6-gate"
+                    retained_root, retained_record = execution.run_a3l6_gate(
+                        repository_root=repository,
+                        expected_bindings_path=audit_bindings_path,
+                        output_root=retained_gate_root,
+                    )
+                    self.assertEqual(retained_root, str(retained_gate_root))
+                    self.assertEqual(retained_record["result"], "pending-review")
+                    self.assertFalse(retained_record["a3l6_accepted"])
+                    self.assertFalse(retained_record["a3l7_authorized"])
+                    self.assertIsNone(retained_record["failure"])
+                    self.assertEqual(
+                        retained_record["partial_command_observations"], []
+                    )
+                    self.assertNotIn(
+                        "ordered_review_records", retained_record["completed_run"]
+                    )
+                    retained_raw = (retained_gate_root / "gate-run.json").read_bytes()
+                    self.assertLessEqual(len(retained_raw), execution.GATE_JSON_CAP)
+                    self.assertEqual(
+                        (retained_gate_root / "gate-run.sha256").read_bytes(),
+                        (hashlib.sha256(retained_raw).hexdigest() + "\n").encode(
+                            "ascii"
+                        ),
+                    )
                 live_reviews = (
                     execution.build_a3l6_code_review_record(
                         live_run,
@@ -3331,6 +3444,188 @@ class BoundaryGuardTests(unittest.TestCase):
             status = execution.main(["run-v1"])
         self.assertEqual(status, 2)
         self.assertIn("A3L7", stderr.getvalue())
+        with tempfile.TemporaryDirectory(dir="/private/tmp") as temporary:
+            root = Path(temporary)
+            repository = root / "repository"
+            repository.mkdir(mode=0o700)
+            bindings_path = root / "audit-bindings.json"
+            bindings_path.write_bytes(
+                execution.canonical_json_bytes(a3l6_audit_bindings())
+            )
+            output_root = root / "a3l6-gate"
+            missing = io.StringIO()
+            with contextlib.redirect_stderr(missing):
+                missing_status = execution.main(
+                    [
+                        "a3l6-gate-v1",
+                        "--repository-root",
+                        str(repository),
+                        "--output-root",
+                        str(output_root),
+                    ]
+                )
+            self.assertEqual(missing_status, 2)
+            self.assertIn("A3L6 gate argv", missing.getvalue())
+            self.assertFalse(output_root.exists())
+            calls: list[str] = []
+
+            def failed_capture(**values):
+                calls.append("capture")
+                raise execution.A3L6GateDiagnosticError(
+                    stage="capture",
+                    reason="fixture capture failure",
+                    role="gate-head",
+                    observations=(compact_a3l6_failure_observation(),),
+                    materialization_parent=str(values["parent"]),
+                )
+
+            def forbidden_execute(*_args, **_values):
+                calls.append("execute")
+                raise AssertionError("execution gate must not run after capture failure")
+
+            with self.assertRaisesRegex(
+                execution.ExecutionError, "overlaps repository root"
+            ):
+                execution._run_a3l6_gate_with_seams(
+                    repository_root=repository,
+                    expected_bindings_path=bindings_path,
+                    output_root=repository,
+                    capture_fn=failed_capture,
+                    execute_fn=forbidden_execute,
+                )
+            linked_repository = root / "linked-repository"
+            linked_repository.symlink_to(repository, target_is_directory=True)
+            with self.assertRaises(execution.ExecutionError):
+                execution._run_a3l6_gate_with_seams(
+                    repository_root=linked_repository,
+                    expected_bindings_path=bindings_path,
+                    output_root=root / "linked-repository-output",
+                    capture_fn=failed_capture,
+                    execute_fn=forbidden_execute,
+                )
+            target = root / "target"
+            target.mkdir(mode=0o700)
+            linked_parent = root / "linked-parent"
+            linked_parent.symlink_to(target, target_is_directory=True)
+            with self.assertRaises(execution.ExecutionError):
+                execution._run_a3l6_gate_with_seams(
+                    repository_root=repository,
+                    expected_bindings_path=bindings_path,
+                    output_root=linked_parent / "a3l6-gate",
+                    capture_fn=failed_capture,
+                    execute_fn=forbidden_execute,
+                )
+            existing_root = root / "existing-a3l6-gate"
+            existing_root.mkdir(mode=0o700)
+            with self.assertRaisesRegex(
+                execution.ExecutionError, "already exists"
+            ):
+                execution._run_a3l6_gate_with_seams(
+                    repository_root=repository,
+                    expected_bindings_path=bindings_path,
+                    output_root=existing_root,
+                    capture_fn=failed_capture,
+                    execute_fn=forbidden_execute,
+                )
+            relative_bindings = Path(
+                os.path.relpath(bindings_path, start=Path.cwd())
+            )
+            relative_root = root / "relative-bindings-a3l6-gate"
+            _, relative_record = execution._run_a3l6_gate_with_seams(
+                repository_root=repository,
+                expected_bindings_path=relative_bindings,
+                output_root=relative_root,
+                capture_fn=failed_capture,
+                execute_fn=forbidden_execute,
+            )
+            self.assertEqual(relative_record["result"], "rejected")
+            self.assertFalse(relative_record["expected_bindings_valid"])
+            self.assertEqual(relative_record["failure"]["stage"], "bindings")
+            self.assertEqual(calls, [])
+            retained_root, record = execution._run_a3l6_gate_with_seams(
+                repository_root=repository,
+                expected_bindings_path=bindings_path,
+                output_root=output_root,
+                capture_fn=failed_capture,
+                execute_fn=forbidden_execute,
+            )
+            self.assertEqual(retained_root, str(output_root))
+            self.assertEqual(calls, ["capture"])
+            self.assertEqual(record["result"], "rejected")
+            self.assertFalse(record["a3l6_accepted"])
+            self.assertFalse(record["a3l7_authorized"])
+            self.assertEqual(record["failure"]["stage"], "capture")
+            self.assertEqual(
+                record["partial_command_observations"][0]["role"], "gate-head"
+            )
+            self.assertEqual(
+                sorted(path.name for path in output_root.iterdir()),
+                ["expected-bindings.json", "gate-run.json", "gate-run.sha256"],
+            )
+            retained = (output_root / "gate-run.json").read_bytes()
+            self.assertEqual(
+                (output_root / "gate-run.sha256").read_bytes(),
+                (hashlib.sha256(retained).hexdigest() + "\n").encode("ascii"),
+            )
+            self.assertEqual(
+                json.loads(retained.decode("ascii"))["result"], "rejected"
+            )
+            pre_observation_root = root / "pre-observation-a3l6-gate"
+
+            def pre_observation_capture(**values):
+                return execution._source_command(
+                    role="gate-tree",
+                    argv=("/usr/bin/git", "rev-parse", "HEAD^{tree}"),
+                    environment=execution.gate_environment(
+                        str(Path(values["parent"]) / "scratch")
+                    ),
+                    cwd=str(repository),
+                    stdout_cap=4_096,
+                    expected_executable_sha256=HEX_A,
+                    diagnostics=values["diagnostics"],
+                )
+
+            with mock.patch.object(
+                execution,
+                "execute_direct",
+                side_effect=execution.ExecutionError("forced pre-observation failure"),
+            ):
+                _, pre_observation_record = execution._run_a3l6_gate_with_seams(
+                    repository_root=repository,
+                    expected_bindings_path=bindings_path,
+                    output_root=pre_observation_root,
+                    capture_fn=pre_observation_capture,
+                    execute_fn=forbidden_execute,
+                )
+            self.assertEqual(pre_observation_record["result"], "rejected")
+            self.assertEqual(
+                pre_observation_record["failure"]["role"], "gate-tree"
+            )
+            self.assertEqual(
+                pre_observation_record["partial_command_observations"], []
+            )
+            failed_verification_root = root / "failed-verification-a3l6-gate"
+            with mock.patch.object(
+                execution,
+                "_a3l6_verify_retained_output",
+                side_effect=execution.ExecutionError("forced retained-output failure"),
+            ), self.assertRaisesRegex(
+                execution.ExecutionError, "forced retained-output failure"
+            ):
+                execution._run_a3l6_gate_with_seams(
+                    repository_root=repository,
+                    expected_bindings_path=bindings_path,
+                    output_root=failed_verification_root,
+                    capture_fn=failed_capture,
+                    execute_fn=forbidden_execute,
+                )
+            self.assertFalse(failed_verification_root.exists())
+            self.assertFalse(
+                any(
+                    path.name.startswith(".a3l6-gate-staging-")
+                    for path in root.iterdir()
+                )
+            )
 
     def test_module_import_performs_no_docker_or_network_action(self) -> None:
         source = Path(execution.__file__).read_text(encoding="utf-8")

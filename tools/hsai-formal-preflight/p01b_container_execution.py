@@ -82,6 +82,7 @@ TAR_CAP = 16_777_216
 RESULT_CAP = 1_048_576
 GATE_JSON_CAP = 4_194_304
 STREAM_CAP = 16_384
+A3L6_FAILURE_STREAM_CAP = 16_384
 ATTEMPT_TIMEOUT_NS = 1_800_000_000_000
 TERMINATION_GRACE_SECONDS = 1.0
 READ_CHUNK_BYTES = 65_536
@@ -91,6 +92,11 @@ CANDIDATE_PAYLOAD_COUNT = 201
 CANDIDATE_FILE_COUNT = 202
 CANDIDATE_DIRECTORY_COUNT = 62
 PUBLICATION_EVENT_COUNT = 271
+A3L6_GATE_OUTPUT_FILES = (
+    "expected-bindings.json",
+    "gate-run.json",
+    "gate-run.sha256",
+)
 
 READY_RE = re.compile(rb"\AP01B_RESULT_READY ([1-9][0-9]{0,6}) ([0-9a-f]{64})\n\Z")
 HEX64_RE = re.compile(r"\A[0-9a-f]{64}\Z")
@@ -268,6 +274,25 @@ A3L9_REVIEWER_IDS = {
 
 class ExecutionError(Exception):
     """A plan or host action failed closed."""
+
+
+class A3L6GateDiagnosticError(ExecutionError):
+    """A retained A3L6 failure with bounded command diagnostics."""
+
+    def __init__(
+        self,
+        *,
+        stage: str,
+        reason: str,
+        role: Optional[str],
+        observations: Sequence[Mapping[str, object]],
+        materialization_parent: Optional[str] = None,
+    ) -> None:
+        super().__init__(reason)
+        self.stage = stage
+        self.role = role
+        self.observations = tuple(dict(item) for item in observations)
+        self.materialization_parent = materialization_parent
 
 
 def canonical_json_bytes(value: object) -> bytes:
@@ -521,6 +546,17 @@ def _identity(metadata: os.stat_result) -> Dict[str, int]:
         "uid": metadata.st_uid,
         "gid": metadata.st_gid,
         "link_count": metadata.st_nlink,
+    }
+
+
+def _a3l6_output_identity(metadata: os.stat_result) -> Dict[str, int]:
+    """Return only directory identity fields stable across output-file writes."""
+    return {
+        "device": metadata.st_dev,
+        "inode": metadata.st_ino,
+        "mode": stat.S_IMODE(metadata.st_mode),
+        "uid": metadata.st_uid,
+        "gid": metadata.st_gid,
     }
 
 
@@ -794,6 +830,98 @@ def census_focused_test_ids(ordered_sources: Mapping[str, bytes]) -> Tuple[str, 
     return tuple(identifiers)
 
 
+def _a3l6_compact_failure_observation(
+    raw: "RawObservation", command: "CommandSpec"
+) -> Dict[str, object]:
+    """Retain bounded facts from a command that may not have completed."""
+    value = raw.value
+
+    def stream(prefix: str, data: bytes, cap: int) -> Dict[str, object]:
+        retained = data[: min(cap, A3L6_FAILURE_STREAM_CAP)]
+        total = value.get(prefix + "_total_bytes")
+        if type(total) is not int or total < len(data):
+            total = len(data)
+        return {
+            prefix + "_total_bytes": total,
+            prefix + "_retained_bytes": len(retained),
+            prefix + "_truncated": total > len(retained),
+            prefix + "_base64": base64.b64encode(retained).decode("ascii"),
+            prefix + "_sha256": sha256_bytes(retained),
+            prefix + "_observed_sha256": value.get(
+                prefix + "_raw_sha256", sha256_bytes(data)
+            ),
+        }
+
+    started = value.get("started_monotonic_ns")
+    ended = value.get("ended_monotonic_ns")
+    if type(started) is not int:
+        started = 0
+    if type(ended) is not int or ended < started:
+        ended = started
+    outcome = value.get("outcome")
+    if outcome not in {"exit", "signal", "timeout", "stdout_limit", "stderr_limit"}:
+        outcome = "exit"
+    exit_code = value.get("exit_code") if outcome == "exit" else None
+    if type(exit_code) is not int or exit_code < 0:
+        exit_code = 1 if outcome == "exit" else None
+    signal_value = value.get("signal") if outcome == "signal" else None
+    if type(signal_value) is not int or signal_value <= 0:
+        signal_value = 1 if outcome == "signal" else None
+    return {
+        "role": command.role,
+        "argv": list(command.argv),
+        "environment": dict(command.environment),
+        "cwd": command.cwd,
+        "stdin_policy": command.stdin_policy,
+        "executable_path": command.argv[0],
+        "executable_sha256": value.get("executable_sha256", "0" * 64),
+        "timeout_ns": command.timeout_ns,
+        "stdout_cap_bytes": command.stdout_cap,
+        "stderr_cap_bytes": command.stderr_cap,
+        "started_monotonic_ns": started,
+        "ended_monotonic_ns": ended,
+        "outcome": outcome,
+        "exit_code": exit_code,
+        "signal": signal_value,
+        **stream("stdout", raw.stdout, command.stdout_cap),
+        **stream("stderr", raw.stderr, command.stderr_cap),
+    }
+
+
+def _a3l6_bounded_reason(error: BaseException) -> str:
+    raw = str(error).replace("\n", " ").replace("\r", " ")
+    filtered = "".join(char if 32 <= ord(char) <= 126 else "?" for char in raw)
+    return (filtered or error.__class__.__name__)[:512]
+
+
+def _a3l6_last_diagnostic_role(
+    observations: Sequence[Mapping[str, object]]
+) -> Optional[str]:
+    if not observations:
+        return None
+    role = observations[-1].get("role")
+    return role if isinstance(role, str) else None
+
+
+def _a3l6_cleanup_gate_parent(parent: Path) -> None:
+    """Remove only a regex-bound, runner-created temporary materialization root."""
+    absolute = Path(os.path.abspath(str(parent)))
+    if re.fullmatch(r"/private/tmp/hsai-p01b-gate-[0-9a-f]{32}", str(absolute)) is None:
+        raise ExecutionError("A3L6 temporary gate parent grammar changed")
+    try:
+        metadata = os.lstat(absolute)
+    except FileNotFoundError:
+        return
+    if not stat.S_ISDIR(metadata.st_mode) or stat.S_ISLNK(metadata.st_mode):
+        raise ExecutionError("A3L6 temporary gate parent is not a real directory")
+    for directory, _, _ in os.walk(absolute):
+        try:
+            os.chmod(directory, 0o700)
+        except OSError:
+            pass
+    shutil.rmtree(absolute, ignore_errors=True)
+
+
 def _complete_command_observation(
     raw: "RawObservation",
     command: "CommandSpec",
@@ -810,7 +938,9 @@ def _complete_command_observation(
         or value.get("stdout_truncated") is not False
         or value.get("stderr_truncated") is not False
     ):
-        raise ExecutionError("bounded gate/source command did not complete")
+        raise ExecutionError(
+            "bounded gate/source command did not complete: " + command.role
+        )
     result: Dict[str, object] = {
         "role": command.role if role is None else role,
         "argv": list(command.argv),
@@ -854,6 +984,8 @@ def _source_command(
     cwd: str,
     stdout_cap: int,
     expected_executable_sha256: str,
+    diagnostics: Optional[List[Mapping[str, object]]] = None,
+    stage: str = "capture",
 ) -> Tuple[Dict[str, object], bytes]:
     command = CommandSpec(
         ordinal=0,
@@ -868,16 +1000,28 @@ def _source_command(
         activation="always",
         expected_outcomes=("exit_zero",),
     )
-    raw = execute_direct(
-        command,
-        plan_sha256="0" * 64,
-        completion_ordinal=0,
-        expected_executable_sha256=expected_executable_sha256,
-    )
-    observation = _complete_command_observation(raw, command)
-    if raw.stderr != b"":
-        raise ExecutionError("Git/source command stderr is not empty")
-    return observation, raw.stdout
+    try:
+        raw = execute_direct(
+            command,
+            plan_sha256="0" * 64,
+            completion_ordinal=0,
+            expected_executable_sha256=expected_executable_sha256,
+        )
+        if diagnostics is not None:
+            diagnostics.append(_a3l6_compact_failure_observation(raw, command))
+        observation = _complete_command_observation(raw, command)
+        if raw.stderr != b"":
+            raise ExecutionError("Git/source command stderr is not empty")
+        return observation, raw.stdout
+    except A3L6GateDiagnosticError:
+        raise
+    except Exception as error:
+        raise A3L6GateDiagnosticError(
+            stage=stage,
+            reason=_a3l6_bounded_reason(error),
+            role=role,
+            observations=() if diagnostics is None else diagnostics,
+        ) from error
 
 
 def _status_paths(raw: bytes) -> Tuple[str, ...]:
@@ -1143,6 +1287,8 @@ def capture_a3l6_gate_sources(
     implementation_commit: str,
     implementation_tree: str,
     audit_commit: str,
+    diagnostics: Optional[List[Mapping[str, object]]] = None,
+    retain_failure_parent: bool = False,
 ) -> A3L6GateCapture:
     """Capture exact Git objects and materialize only their verified blob bytes."""
     for field, value in (
@@ -1164,6 +1310,7 @@ def capture_a3l6_gate_sources(
     environment = gate_environment(str(scratch))
     git_path = "/usr/bin/git"
     git_sha256 = _executable_sha256(git_path)
+    retained_diagnostics = diagnostics if diagnostics is not None else []
     try:
         head_observation, head_raw = _source_command(
             role="gate-head",
@@ -1172,6 +1319,7 @@ def capture_a3l6_gate_sources(
             cwd=str(repository_root),
             stdout_cap=4_096,
             expected_executable_sha256=git_sha256,
+            diagnostics=retained_diagnostics,
         )
         if head_raw != (audit_commit + "\n").encode("ascii"):
             raise ExecutionError("gate audit HEAD drifted")
@@ -1182,6 +1330,7 @@ def capture_a3l6_gate_sources(
             cwd=str(repository_root),
             stdout_cap=4_096,
             expected_executable_sha256=git_sha256,
+            diagnostics=retained_diagnostics,
         )
         if tree_raw != (implementation_tree + "\n").encode("ascii"):
             raise ExecutionError("gate implementation tree drifted")
@@ -1192,6 +1341,7 @@ def capture_a3l6_gate_sources(
             cwd=str(repository_root),
             stdout_cap=1_048_576,
             expected_executable_sha256=git_sha256,
+            diagnostics=retained_diagnostics,
         )
         _validate_gate_status_scope(status_raw, repository_root)
         directories = {source}
@@ -1206,6 +1356,7 @@ def capture_a3l6_gate_sources(
                 cwd=str(repository_root),
                 stdout_cap=16_777_216,
                 expected_executable_sha256=git_sha256,
+                diagnostics=retained_diagnostics,
             )
             destination = source / relative
             destination.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
@@ -1276,14 +1427,23 @@ def capture_a3l6_gate_sources(
             focused_ids,
             pre_end,
         )
-    except BaseException:
-        for directory, _, _ in os.walk(parent):
-            try:
-                os.chmod(directory, 0o700)
-            except OSError:
-                pass
-        shutil.rmtree(parent, ignore_errors=True)
-        raise
+    except Exception as error:
+        if isinstance(error, A3L6GateDiagnosticError):
+            failure_role = error.role
+            failure_observations = error.observations
+        else:
+            failure_role = _a3l6_last_diagnostic_role(retained_diagnostics)
+            failure_observations = retained_diagnostics
+        failure = A3L6GateDiagnosticError(
+            stage="capture",
+            reason=_a3l6_bounded_reason(error),
+            role=failure_role,
+            observations=failure_observations,
+            materialization_parent=str(parent),
+        )
+        if not retain_failure_parent:
+            _a3l6_cleanup_gate_parent(parent)
+        raise failure from error
 
 
 _UNITTEST_RESULT_RE = re.compile(
@@ -1407,6 +1567,7 @@ def _execute_gate_command(
     *,
     expected_root_identity: Mapping[str, object],
     expected_profile_sha256: str,
+    diagnostics: Optional[List[Mapping[str, object]]] = None,
 ) -> Dict[str, object]:
     command = _gate_command_spec(row, ordinal)
     root_flags = os.O_RDONLY | getattr(os, "O_DIRECTORY", 0) | getattr(os, "O_CLOEXEC", 0)
@@ -1443,6 +1604,8 @@ def _execute_gate_command(
             completion_ordinal=ordinal,
             previous_observation_sha256=None,
         )
+        if diagnostics is not None:
+            diagnostics.append(_a3l6_compact_failure_observation(raw, command))
         after = _identity(os.fstat(root_fd))
         if after != before:
             raise ExecutionError("gate cwd identity drifted after execution")
@@ -1455,10 +1618,17 @@ def _execute_gate_command(
         if raw.stdout != b"":
             raise ExecutionError("gate stdout is not empty")
         return observation
-    except BaseException:
+    except BaseException as error:
         if process is not None:
             process.abort()
-        raise
+        if isinstance(error, (KeyboardInterrupt, SystemExit, A3L6GateDiagnosticError)):
+            raise
+        raise A3L6GateDiagnosticError(
+            stage="execution",
+            reason=_a3l6_bounded_reason(error),
+            role=command.role,
+            observations=() if diagnostics is None else diagnostics,
+        ) from error
     finally:
         os.close(saved_fd)
         os.close(root_fd)
@@ -1482,156 +1652,676 @@ def _decode_observation_stream(observation: Mapping[str, object], prefix: str) -
     return raw
 
 
-def execute_a3l6_gates(capture: A3L6GateCapture) -> A3L6GateRun:
+def execute_a3l6_gates(
+    capture: A3L6GateCapture,
+    *,
+    diagnostics: Optional[List[Mapping[str, object]]] = None,
+) -> A3L6GateRun:
     """Execute the three frozen rows, then close their immutable post-state."""
     materialization = capture.materialization
-    expected_rows = _gate_command_rows(
-        materialization.source_root,
-        materialization.scratch_root,
-        materialization.profile_path,
-    )
-    sandbox_observation = capture_descriptor_observation(
-        Path(SANDBOX_EXEC_PATH), "gate-sandbox-exec"
-    )
-    profile_observation = capture_descriptor_observation(
-        Path(materialization.profile_path), "gate-sandbox-profile"
-    )
-    if sandbox_observation["sha256"] != SANDBOX_EXEC_SHA256:
-        raise ExecutionError("sandbox-exec identity drifted")
-    if profile_observation["sha256"] != materialization.profile_sha256:
-        raise ExecutionError("sandbox profile identity drifted")
-    python_observation, python_stdout = _source_command(
-        role="gate-python-version",
-        argv=("/usr/bin/python3", "--version"),
-        environment=capture.environment,
-        cwd=materialization.source_root,
-        stdout_cap=16_384,
-        expected_executable_sha256=NATIVE_PYTHON_SHA256,
-    )
-    if python_stdout != b"Python 3.9.6\n":
-        raise ExecutionError("gate Python version transcript drifted")
-    root_identity = _identity(os.lstat(materialization.source_root))
-    observations: List[Mapping[str, object]] = []
-    focused_paths = {
-        "evidence-focused": SOURCE_PATHS[-1],
-        "execution-focused": SOURCE_PATHS[-2],
-    }
-    for ordinal, row in enumerate(expected_rows):
-        observation = _execute_gate_command(
-            row,
-            ordinal,
-            expected_root_identity=root_identity,
-            expected_profile_sha256=materialization.profile_sha256,
+    current_role: Optional[str] = None
+    try:
+        expected_rows = _gate_command_rows(
+            materialization.source_root,
+            materialization.scratch_root,
+            materialization.profile_path,
         )
-        role = str(row["role"])
-        if role in focused_paths:
-            raw = _read_nofollow_regular(
-                Path(materialization.source_root) / focused_paths[role],
-                SNAPSHOT_FILE_LIMIT,
+        current_role = "gate-python-version"
+        sandbox_observation = capture_descriptor_observation(
+            Path(SANDBOX_EXEC_PATH), "gate-sandbox-exec"
+        )
+        profile_observation = capture_descriptor_observation(
+            Path(materialization.profile_path), "gate-sandbox-profile"
+        )
+        if sandbox_observation["sha256"] != SANDBOX_EXEC_SHA256:
+            raise ExecutionError("sandbox-exec identity drifted")
+        if profile_observation["sha256"] != materialization.profile_sha256:
+            raise ExecutionError("sandbox profile identity drifted")
+        python_observation, python_stdout = _source_command(
+            role="gate-python-version",
+            argv=("/usr/bin/python3", "--version"),
+            environment=capture.environment,
+            cwd=materialization.source_root,
+            stdout_cap=16_384,
+            expected_executable_sha256=NATIVE_PYTHON_SHA256,
+            diagnostics=diagnostics,
+            stage="execution",
+        )
+        if python_stdout != b"Python 3.9.6\n":
+            raise ExecutionError("gate Python version transcript drifted")
+        root_identity = _identity(os.lstat(materialization.source_root))
+        observations: List[Mapping[str, object]] = []
+        focused_paths = {
+            "evidence-focused": SOURCE_PATHS[-1],
+            "execution-focused": SOURCE_PATHS[-2],
+        }
+        for ordinal, row in enumerate(expected_rows):
+            current_role = str(row["role"])
+            observation = _execute_gate_command(
+                row,
+                ordinal,
+                expected_root_identity=root_identity,
+                expected_profile_sha256=materialization.profile_sha256,
+                diagnostics=diagnostics,
             )
-            expected_ids: Optional[Sequence[str]] = _focused_ids_from_source(
-                focused_paths[role], raw
-            )
-            expected_count = 32 if role == "evidence-focused" else 33
-        else:
-            expected_ids = None
-            expected_count = 172
-        try:
-            parse_unittest_transcript(
-                _decode_observation_stream(observation, "stderr"),
-                expected_count=expected_count,
-                expected_ids=expected_ids,
-            )
-        except ExecutionError as error:
-            raise ExecutionError("%s transcript rejected: %s" % (role, error)) from error
-        if observations and observations[-1]["ended_monotonic_ns"] > observation["started_monotonic_ns"]:
-            raise ExecutionError("gate observations overlap")
-        observations.append(observation)
-    if not observations:
-        raise ExecutionError("gate observations are absent")
-    if capture.pre_gate_capture_ended_monotonic_ns > observations[0]["started_monotonic_ns"]:
-        raise ExecutionError("gate started before pre-gate capture ended")
-    post_started = time.monotonic_ns()
-    if observations[-1]["ended_monotonic_ns"] > post_started:
-        raise ExecutionError("post-gate capture started before final gate ended")
-    inventory_after, post_observations, post_timings = _capture_gate_tree(
-        Path(materialization.source_root), "gate-source-post"
-    )
-    if inventory_after != materialization.inventory:
-        raise ExecutionError("immutable gate inventory changed")
-    status_after, status_raw = _source_command(
-        role="gate-status-after",
-        argv=(capture.git_path, "status", "--porcelain=v2", "-z", "--untracked-files=all"),
-        environment=capture.environment,
-        cwd=capture.repository_cwd,
-        stdout_cap=1_048_576,
-        expected_executable_sha256=capture.git_sha256,
-    )
-    if status_after["started_monotonic_ns"] < post_started:
-        raise ExecutionError("post-gate status capture started too early")
-    before_status = _decode_observation_stream(capture.status_before_observation, "stdout")
-    if status_raw != before_status:
-        raise ExecutionError("repository status changed across gates")
-    _validate_gate_status_scope(status_raw, Path(capture.repository_cwd))
-    source_rows: List[Dict[str, object]] = []
-    for original, post, timing in zip(
-        capture.ordered_sources, post_observations, post_timings
-    ):
-        row = dict(original)
-        row["post_gate_started_monotonic_ns"] = timing[0]
-        row["post_gate_ended_monotonic_ns"] = timing[1]
-        row["post_gate_descriptor_observation"] = post
-        if not _descriptor_observations_match(
-            row["pre_gate_descriptor_observation"], post  # type: ignore[arg-type]
+            role = str(row["role"])
+            if role in focused_paths:
+                raw = _read_nofollow_regular(
+                    Path(materialization.source_root) / focused_paths[role],
+                    SNAPSHOT_FILE_LIMIT,
+                )
+                expected_ids: Optional[Sequence[str]] = _focused_ids_from_source(
+                    focused_paths[role], raw
+                )
+                expected_count = 32 if role == "evidence-focused" else 33
+            else:
+                expected_ids = None
+                expected_count = 172
+            try:
+                parse_unittest_transcript(
+                    _decode_observation_stream(observation, "stderr"),
+                    expected_count=expected_count,
+                    expected_ids=expected_ids,
+                )
+            except ExecutionError as error:
+                raise ExecutionError(
+                    "%s transcript rejected: %s" % (role, error)
+                ) from error
+            if (
+                observations
+                and observations[-1]["ended_monotonic_ns"]
+                > observation["started_monotonic_ns"]
+            ):
+                raise ExecutionError("gate observations overlap")
+            observations.append(observation)
+        if not observations:
+            raise ExecutionError("gate observations are absent")
+        if (
+            capture.pre_gate_capture_ended_monotonic_ns
+            > observations[0]["started_monotonic_ns"]
         ):
-            raise ExecutionError("source descriptor changed across gates")
-        if row["post_gate_started_monotonic_ns"] < post_started:
-            raise ExecutionError("post source capture started too early")
-        source_rows.append(row)
-    inventory_raw = canonical_json_bytes(list(materialization.inventory))
-    profile_raw = _read_nofollow_regular(Path(materialization.profile_path), METADATA_CAP)
-    source_manifest: Dict[str, object] = {
-        "schema": "hsai-p01b-a3l6-gate-source-manifest-v1",
-        "implementation_commit": capture.implementation_commit,
-        "implementation_tree": capture.implementation_tree,
-        "audit_commit": capture.audit_commit,
-        "git_path": capture.git_path,
-        "git_sha256": capture.git_sha256,
-        "environment": dict(capture.environment),
-        "repository_cwd": capture.repository_cwd,
-        "materialized_root": materialization.source_root,
-        "materialized_root_identity": root_identity,
-        "gate_temp_root": materialization.scratch_root,
-        "sandbox_exec_descriptor_observation": sandbox_observation,
-        "sandbox_profile_path": materialization.profile_path,
-        "sandbox_profile_descriptor_observation": profile_observation,
-        "sandbox_profile_base64": base64.b64encode(profile_raw).decode("ascii"),
-        "sandbox_profile_sha256": sha256_bytes(profile_raw),
-        "materialized_inventory_before_sha256": sha256_bytes(inventory_raw),
-        "materialized_inventory_before": list(materialization.inventory),
-        "materialized_inventory_after_sha256": sha256_bytes(
-            canonical_json_bytes(list(inventory_after))
-        ),
-        "materialized_inventory_after": list(inventory_after),
-        "head_observation": dict(capture.head_observation),
-        "tree_observation": dict(capture.tree_observation),
-        "status_before_observation": dict(capture.status_before_observation),
-        "ordered_blob_observations": [dict(item) for item in capture.ordered_blob_observations],
-        "ordered_sources": source_rows,
-        "pre_gate_capture_ended_monotonic_ns": capture.pre_gate_capture_ended_monotonic_ns,
-        "post_gate_capture_started_monotonic_ns": post_started,
-        "status_after_observation": status_after,
+            raise ExecutionError("gate started before pre-gate capture ended")
+        post_started = time.monotonic_ns()
+        if observations[-1]["ended_monotonic_ns"] > post_started:
+            raise ExecutionError("post-gate capture started before final gate ended")
+        inventory_after, post_observations, post_timings = _capture_gate_tree(
+            Path(materialization.source_root), "gate-source-post"
+        )
+        if inventory_after != materialization.inventory:
+            raise ExecutionError("immutable gate inventory changed")
+        current_role = "gate-status-after"
+        status_after, status_raw = _source_command(
+            role="gate-status-after",
+            argv=(
+                capture.git_path,
+                "status",
+                "--porcelain=v2",
+                "-z",
+                "--untracked-files=all",
+            ),
+            environment=capture.environment,
+            cwd=capture.repository_cwd,
+            stdout_cap=1_048_576,
+            expected_executable_sha256=capture.git_sha256,
+            diagnostics=diagnostics,
+            stage="execution",
+        )
+        if status_after["started_monotonic_ns"] < post_started:
+            raise ExecutionError("post-gate status capture started too early")
+        before_status = _decode_observation_stream(
+            capture.status_before_observation, "stdout"
+        )
+        if status_raw != before_status:
+            raise ExecutionError("repository status changed across gates")
+        _validate_gate_status_scope(status_raw, Path(capture.repository_cwd))
+        source_rows: List[Dict[str, object]] = []
+        for original, post, timing in zip(
+            capture.ordered_sources, post_observations, post_timings
+        ):
+            row = dict(original)
+            row["post_gate_started_monotonic_ns"] = timing[0]
+            row["post_gate_ended_monotonic_ns"] = timing[1]
+            row["post_gate_descriptor_observation"] = post
+            if not _descriptor_observations_match(
+                row["pre_gate_descriptor_observation"], post  # type: ignore[arg-type]
+            ):
+                raise ExecutionError("source descriptor changed across gates")
+            if row["post_gate_started_monotonic_ns"] < post_started:
+                raise ExecutionError("post source capture started too early")
+            source_rows.append(row)
+        inventory_raw = canonical_json_bytes(list(materialization.inventory))
+        profile_raw = _read_nofollow_regular(
+            Path(materialization.profile_path), METADATA_CAP
+        )
+        source_manifest: Dict[str, object] = {
+            "schema": "hsai-p01b-a3l6-gate-source-manifest-v1",
+            "implementation_commit": capture.implementation_commit,
+            "implementation_tree": capture.implementation_tree,
+            "audit_commit": capture.audit_commit,
+            "git_path": capture.git_path,
+            "git_sha256": capture.git_sha256,
+            "environment": dict(capture.environment),
+            "repository_cwd": capture.repository_cwd,
+            "materialized_root": materialization.source_root,
+            "materialized_root_identity": root_identity,
+            "gate_temp_root": materialization.scratch_root,
+            "sandbox_exec_descriptor_observation": sandbox_observation,
+            "sandbox_profile_path": materialization.profile_path,
+            "sandbox_profile_descriptor_observation": profile_observation,
+            "sandbox_profile_base64": base64.b64encode(profile_raw).decode("ascii"),
+            "sandbox_profile_sha256": sha256_bytes(profile_raw),
+            "materialized_inventory_before_sha256": sha256_bytes(inventory_raw),
+            "materialized_inventory_before": list(materialization.inventory),
+            "materialized_inventory_after_sha256": sha256_bytes(
+                canonical_json_bytes(list(inventory_after))
+            ),
+            "materialized_inventory_after": list(inventory_after),
+            "head_observation": dict(capture.head_observation),
+            "tree_observation": dict(capture.tree_observation),
+            "status_before_observation": dict(capture.status_before_observation),
+            "ordered_blob_observations": [
+                dict(item) for item in capture.ordered_blob_observations
+            ],
+            "ordered_sources": source_rows,
+            "pre_gate_capture_ended_monotonic_ns": (
+                capture.pre_gate_capture_ended_monotonic_ns
+            ),
+            "post_gate_capture_started_monotonic_ns": post_started,
+            "status_after_observation": status_after,
+        }
+        plan = build_a3l6_gate_plan(
+            capture=capture, gate_source_manifest=source_manifest
+        )
+        validate_a3l6_gate_plan_execution(plan, source_manifest, observations)
+        return A3L6GateRun(
+            plan,
+            source_manifest,
+            python_observation,
+            tuple(observations),
+            capture.focused_test_ids,
+            65,
+            172,
+        )
+    except A3L6GateDiagnosticError:
+        raise
+    except Exception as error:
+        raise A3L6GateDiagnosticError(
+            stage="execution",
+            reason=_a3l6_bounded_reason(error),
+            role=current_role,
+            observations=() if diagnostics is None else diagnostics,
+        ) from error
+
+
+@dataclass
+class _A3L6OutputStaging:
+    output_root: Path
+    parent_fd: int
+    staging_name: str
+    staging_fd: int
+    staging_identity: Mapping[str, int]
+    published_name: Optional[str] = None
+    published_identity: Optional[Mapping[str, int]] = None
+
+
+def _a3l6_prepare_output_staging(
+    *, repository_root: Path, output_root: Path
+) -> _A3L6OutputStaging:
+    """Create one owned staging directory for an absent non-repository output."""
+    repository = _a3l9_canonical_absolute(
+        str(repository_root), "A3L6 repository root"
+    )
+    repository_fd = _a3l9_open_absolute_directory(repository)
+    os.close(repository_fd)
+    destination = _a3l9_canonical_absolute(
+        str(output_root), "A3L6 output root"
+    )
+    if destination == "/":
+        raise ExecutionError("A3L6 output root cannot be filesystem root")
+    try:
+        shared = os.path.commonpath((repository, destination))
+    except ValueError as error:
+        raise ExecutionError("A3L6 output/repository paths are incomparable") from error
+    if shared in {repository, destination}:
+        raise ExecutionError("A3L6 output root overlaps repository root")
+    parent = destination.rsplit("/", 1)[0] or "/"
+    name = destination.rsplit("/", 1)[1]
+    if not name or name in {".", ".."}:
+        raise ExecutionError("A3L6 output root name is invalid")
+    parent_fd = _a3l9_open_absolute_directory(parent)
+    staging_name: Optional[str] = None
+    staging_fd: Optional[int] = None
+    try:
+        parent_metadata = os.fstat(parent_fd)
+        if (
+            not stat.S_ISDIR(parent_metadata.st_mode)
+            or parent_metadata.st_uid != os.geteuid()
+            or stat.S_IMODE(parent_metadata.st_mode) != 0o700
+        ):
+            raise ExecutionError("A3L6 output parent is not an owned mode-0700 directory")
+        try:
+            os.stat(name, dir_fd=parent_fd, follow_symlinks=False)
+        except FileNotFoundError:
+            pass
+        else:
+            raise ExecutionError("A3L6 output root already exists")
+        for _ in range(16):
+            candidate = ".a3l6-gate-staging-" + os.urandom(16).hex()
+            try:
+                os.mkdir(candidate, 0o700, dir_fd=parent_fd)
+            except FileExistsError:
+                continue
+            staging_name = candidate
+            break
+        if staging_name is None:
+            raise ExecutionError("A3L6 output staging name collision")
+        staging_fd = os.open(
+            staging_name,
+            os.O_RDONLY
+            | getattr(os, "O_DIRECTORY", 0)
+            | getattr(os, "O_CLOEXEC", 0)
+            | getattr(os, "O_NOFOLLOW", 0),
+            dir_fd=parent_fd,
+        )
+        staging_metadata = os.fstat(staging_fd)
+        if (
+            not stat.S_ISDIR(staging_metadata.st_mode)
+            or staging_metadata.st_uid != parent_metadata.st_uid
+            or staging_metadata.st_gid != parent_metadata.st_gid
+            or staging_metadata.st_dev != parent_metadata.st_dev
+            or stat.S_IMODE(staging_metadata.st_mode) != 0o700
+        ):
+            raise ExecutionError("A3L6 output staging identity drifted")
+        os.fsync(staging_fd)
+        os.fsync(parent_fd)
+        return _A3L6OutputStaging(
+            Path(destination),
+            parent_fd,
+            staging_name,
+            staging_fd,
+            _a3l6_output_identity(staging_metadata),
+        )
+    except Exception:
+        if staging_fd is not None:
+            os.close(staging_fd)
+        if staging_name is not None:
+            try:
+                shutil.rmtree(parent + "/" + staging_name)
+            except OSError:
+                pass
+        os.close(parent_fd)
+        raise
+
+
+def _a3l6_discard_owned_output(
+    staging: _A3L6OutputStaging,
+    *,
+    name: str,
+    expected_identity: Mapping[str, int],
+) -> None:
+    """Remove only the directory still bound to this runner's open descriptor."""
+    try:
+        if _a3l6_output_identity(os.fstat(staging.staging_fd)) != dict(expected_identity):
+            return
+        metadata = os.stat(name, dir_fd=staging.parent_fd, follow_symlinks=False)
+        if (
+            not stat.S_ISDIR(metadata.st_mode)
+            or _a3l6_output_identity(metadata) != dict(expected_identity)
+        ):
+            return
+        descriptor = os.open(
+            name,
+            os.O_RDONLY
+            | getattr(os, "O_DIRECTORY", 0)
+            | getattr(os, "O_CLOEXEC", 0)
+            | getattr(os, "O_NOFOLLOW", 0),
+            dir_fd=staging.parent_fd,
+        )
+    except (FileNotFoundError, OSError):
+        return
+    try:
+        if _a3l6_output_identity(os.fstat(descriptor)) != dict(expected_identity):
+            return
+    finally:
+        os.close(descriptor)
+    for relative in A3L6_GATE_OUTPUT_FILES:
+        try:
+            os.unlink(relative, dir_fd=staging.staging_fd)
+        except FileNotFoundError:
+            pass
+        except OSError:
+            return
+    try:
+        os.fsync(staging.staging_fd)
+        os.rmdir(name, dir_fd=staging.parent_fd)
+        os.fsync(staging.parent_fd)
+    except (FileNotFoundError, OSError):
+        return
+
+
+def _a3l6_discard_output_staging(staging: _A3L6OutputStaging) -> None:
+    name = staging.published_name or staging.staging_name
+    identity = staging.published_identity or staging.staging_identity
+    try:
+        _a3l6_discard_owned_output(
+            staging,
+            name=name,
+            expected_identity=identity,
+        )
+    except OSError:
+        pass
+    try:
+        os.close(staging.staging_fd)
+    except OSError:
+        pass
+    try:
+        os.close(staging.parent_fd)
+    except OSError:
+        pass
+
+
+def _a3l6_close_output_staging(staging: _A3L6OutputStaging) -> None:
+    for descriptor in (staging.staging_fd, staging.parent_fd):
+        try:
+            os.close(descriptor)
+        except OSError:
+            pass
+
+
+def _a3l6_finalize_output_staging(
+    staging: _A3L6OutputStaging,
+    *,
+    expected_bindings_raw: bytes,
+    record_raw: bytes,
+) -> None:
+    if (
+        _a3l6_output_identity(os.fstat(staging.staging_fd))
+        != dict(staging.staging_identity)
+    ):
+        raise ExecutionError("A3L6 output staging identity drifted")
+    _a3l9_write_at(staging.staging_fd, "expected-bindings.json", expected_bindings_raw)
+    _a3l9_write_at(staging.staging_fd, "gate-run.json", record_raw)
+    _a3l9_write_at(
+        staging.staging_fd,
+        "gate-run.sha256",
+        (sha256_bytes(record_raw) + "\n").encode("ascii"),
+    )
+    os.fsync(staging.staging_fd)
+    output_name = staging.output_root.name
+    try:
+        os.stat(output_name, dir_fd=staging.parent_fd, follow_symlinks=False)
+    except FileNotFoundError:
+        pass
+    else:
+        raise ExecutionError("A3L6 output root appeared during retention")
+    _renameatx_np_exclusive(
+        staging.parent_fd,
+        staging.staging_name,
+        output_name,
+        None,
+    )
+    published_identity = _a3l6_output_identity(os.fstat(staging.staging_fd))
+    if published_identity != dict(staging.staging_identity):
+        raise ExecutionError("A3L6 output identity changed during retention")
+    staging.published_name = output_name
+    staging.published_identity = published_identity
+    os.fsync(staging.parent_fd)
+
+
+def _a3l6_verify_retained_output(
+    *,
+    output_root: Path,
+    expected_bindings_raw: bytes,
+    record_raw: bytes,
+    expected_root_identity: Mapping[str, int],
+) -> None:
+    root_fd = _a3l9_open_absolute_directory(str(output_root))
+    try:
+        if (
+            _a3l6_output_identity(os.fstat(root_fd))
+            != dict(expected_root_identity)
+        ):
+            raise ExecutionError("A3L6 retained output identity drifted")
+        files, directories = _a3l9_tree_paths(root_fd, directory_mode=0o700)
+        if files != A3L6_GATE_OUTPUT_FILES or directories:
+            raise ExecutionError("A3L6 retained output grammar drifted")
+        reopened_expected, _ = _a3l9_read_at(
+            root_fd,
+            "expected-bindings.json",
+            GATE_JSON_CAP,
+            directory_mode=0o700,
+            file_mode=0o600,
+        )
+        reopened_record, _ = _a3l9_read_at(
+            root_fd,
+            "gate-run.json",
+            GATE_JSON_CAP,
+            directory_mode=0o700,
+            file_mode=0o600,
+        )
+        reopened_sha, _ = _a3l9_read_at(
+            root_fd,
+            "gate-run.sha256",
+            65,
+            directory_mode=0o700,
+            file_mode=0o600,
+        )
+    finally:
+        os.close(root_fd)
+    if (
+        reopened_expected != expected_bindings_raw
+        or reopened_record != record_raw
+        or reopened_sha != (sha256_bytes(record_raw) + "\n").encode("ascii")
+    ):
+        raise ExecutionError("A3L6 retained output bytes drifted")
+    evidence = _load_evidence_module()
+    try:
+        record = evidence.strict_json_bytes(reopened_record, GATE_JSON_CAP)
+        evidence.validate_a3l6_gate_run_record(record)
+    except Exception as error:
+        raise ExecutionError("A3L6 retained output record was rejected") from error
+
+
+def _a3l6_load_audit_bindings(
+    path: Path,
+) -> Tuple[bytes, Optional[Mapping[str, object]], Optional[str]]:
+    try:
+        _require_absolute(str(path), "A3L6 audit bindings path")
+        raw = _read_nofollow_regular(path, GATE_JSON_CAP)
+    except Exception as error:
+        return b"", None, _a3l6_bounded_reason(error)
+    evidence = _load_evidence_module()
+    try:
+        value = evidence.strict_json_bytes(raw, GATE_JSON_CAP)
+        if not isinstance(value, Mapping):
+            raise ExecutionError("A3L6 audit bindings must be an object")
+        bindings = evidence.validate_a3l6_audit_bindings(value)
+        return raw, bindings, None
+    except Exception as error:
+        return raw, None, _a3l6_bounded_reason(error)
+
+
+def _a3l6_run_record_base(
+    *,
+    bindings: Optional[Mapping[str, object]],
+    expected_bindings_raw: bytes,
+) -> Dict[str, object]:
+    return {
+        "schema": "hsai-p01b-a3l6-gate-run-record-v1",
+        "implementation_commit": None if bindings is None else bindings["implementation_commit"],
+        "implementation_tree": None if bindings is None else bindings["implementation_tree"],
+        "audit_commit": None if bindings is None else bindings["audit_commit"],
+        "expected_bindings": None if bindings is None else dict(bindings),
+        "expected_bindings_valid": bindings is not None,
+        "expected_bindings_sha256": sha256_bytes(expected_bindings_raw),
+        "formal_discovery_semantics": "seatbelt-stubbed-census-not-full-suite-semantics",
+        "a3l6_accepted": False,
+        "a3l7_authorized": False,
+        "evidence_level": "Level1LocalReplayOrLower",
     }
-    plan = build_a3l6_gate_plan(capture=capture, gate_source_manifest=source_manifest)
-    validate_a3l6_gate_plan_execution(plan, source_manifest, observations)
-    return A3L6GateRun(
-        plan,
-        source_manifest,
-        python_observation,
-        tuple(observations),
-        capture.focused_test_ids,
-        65,
-        172,
+
+
+def _a3l6_rejected_run_record(
+    *,
+    bindings: Optional[Mapping[str, object]],
+    expected_bindings_raw: bytes,
+    stage: str,
+    role: Optional[str],
+    reason: str,
+    observations: Sequence[Mapping[str, object]],
+) -> Dict[str, object]:
+    return {
+        **_a3l6_run_record_base(
+            bindings=bindings, expected_bindings_raw=expected_bindings_raw
+        ),
+        "result": "rejected",
+        "completed_run": None,
+        "failure": {"stage": stage, "role": role, "reason": reason},
+        "partial_command_observations": [dict(item) for item in observations],
+    }
+
+
+def _a3l6_pending_run_record(
+    *, bindings: Mapping[str, object], expected_bindings_raw: bytes, run: A3L6GateRun
+) -> Dict[str, object]:
+    return {
+        **_a3l6_run_record_base(
+            bindings=bindings, expected_bindings_raw=expected_bindings_raw
+        ),
+        "result": "pending-review",
+        "completed_run": {
+            "gate_plan": dict(run.gate_plan),
+            "gate_source_manifest": dict(run.gate_source_manifest),
+            "python_version_observation": dict(run.python_version_observation),
+            "ordered_gate_observations": [
+                dict(item) for item in run.ordered_gate_observations
+            ],
+            "focused_test_ids": list(run.focused_test_ids),
+            "focused_test_count": run.focused_test_count,
+            "discovery_test_count": run.discovery_test_count,
+        },
+        "failure": None,
+        "partial_command_observations": [],
+    }
+
+
+def _a3l6_validate_record_bytes(record: Mapping[str, object]) -> bytes:
+    evidence = _load_evidence_module()
+    try:
+        evidence.validate_a3l6_gate_run_record(record)
+    except Exception as error:
+        raise ExecutionError("A3L6 gate-run record was rejected") from error
+    raw = canonical_json_bytes(record)
+    if len(raw) > GATE_JSON_CAP:
+        raise ExecutionError("A3L6 gate-run record exceeds byte cap")
+    return raw
+
+
+def _run_a3l6_gate_with_seams(
+    *,
+    repository_root: Path,
+    expected_bindings_path: Path,
+    output_root: Path,
+    capture_fn: Callable[..., A3L6GateCapture] = capture_a3l6_gate_sources,
+    execute_fn: Callable[..., A3L6GateRun] = execute_a3l6_gates,
+) -> Tuple[str, Mapping[str, object]]:
+    """Run only hermetic A3L6 gates and retain a pending or rejected record."""
+    expected_raw, bindings, binding_error = _a3l6_load_audit_bindings(
+        expected_bindings_path
+    )
+    staging = _a3l6_prepare_output_staging(
+        repository_root=repository_root, output_root=output_root
+    )
+    parent = Path("/private/tmp/hsai-p01b-gate-" + os.urandom(16).hex())
+    diagnostics: List[Mapping[str, object]] = []
+    try:
+        if bindings is None:
+            record = _a3l6_rejected_run_record(
+                bindings=None,
+                expected_bindings_raw=expected_raw,
+                stage="bindings",
+                role=None,
+                reason=binding_error or "A3L6 audit bindings were rejected",
+                observations=(),
+            )
+        else:
+            capture: Optional[A3L6GateCapture] = None
+            try:
+                capture = capture_fn(
+                    repository_root=repository_root,
+                    parent=parent,
+                    implementation_commit=str(bindings["implementation_commit"]),
+                    implementation_tree=str(bindings["implementation_tree"]),
+                    audit_commit=str(bindings["audit_commit"]),
+                    diagnostics=diagnostics,
+                    retain_failure_parent=True,
+                )
+                parent = Path(capture.materialization.parent)
+                run = execute_fn(capture, diagnostics=diagnostics)
+                record = _a3l6_pending_run_record(
+                    bindings=bindings, expected_bindings_raw=expected_raw, run=run
+                )
+            except Exception as error:
+                if isinstance(error, A3L6GateDiagnosticError):
+                    failure_stage = error.stage
+                    failure_role = error.role
+                    failure_observations = error.observations
+                    if error.materialization_parent is not None:
+                        parent = Path(error.materialization_parent)
+                else:
+                    failure_stage = "capture" if capture is None else "execution"
+                    failure_role = _a3l6_last_diagnostic_role(diagnostics)
+                    failure_observations = diagnostics
+                record = _a3l6_rejected_run_record(
+                    bindings=bindings,
+                    expected_bindings_raw=expected_raw,
+                    stage=failure_stage,
+                    role=failure_role,
+                    reason=_a3l6_bounded_reason(error),
+                    observations=failure_observations,
+                )
+        try:
+            record_raw = _a3l6_validate_record_bytes(record)
+        except Exception as error:
+            record = _a3l6_rejected_run_record(
+                bindings=bindings,
+                expected_bindings_raw=expected_raw,
+                stage="record",
+                role=None,
+                reason=_a3l6_bounded_reason(error),
+                observations=(),
+            )
+            record_raw = _a3l6_validate_record_bytes(record)
+        _a3l6_finalize_output_staging(
+            staging,
+            expected_bindings_raw=expected_raw,
+            record_raw=record_raw,
+        )
+        _a3l6_verify_retained_output(
+            output_root=output_root,
+            expected_bindings_raw=expected_raw,
+            record_raw=record_raw,
+            expected_root_identity=(
+                staging.published_identity or staging.staging_identity
+            ),
+        )
+        _a3l6_close_output_staging(staging)
+        return str(output_root), record
+    except Exception:
+        _a3l6_discard_output_staging(staging)
+        raise
+    finally:
+        _a3l6_cleanup_gate_parent(parent)
+
+
+def run_a3l6_gate(
+    *, repository_root: Path, expected_bindings_path: Path, output_root: Path
+) -> Tuple[str, Mapping[str, object]]:
+    """Public local-only retained A3L6 operator entry point."""
+    return _run_a3l6_gate_with_seams(
+        repository_root=repository_root,
+        expected_bindings_path=expected_bindings_path,
+        output_root=output_root,
     )
 
 
@@ -12318,9 +13008,50 @@ def dispatch_a3l9(arguments: argparse.Namespace) -> int:
     return handler(arguments)
 
 
+_A3L6_OPTIONS = (
+    "repository-root",
+    "expected-bindings",
+    "output-root",
+)
+
+
+def _validate_a3l6_raw_argv(raw: Sequence[str]) -> None:
+    if raw[:1] != ["a3l6-gate-v1"]:
+        return
+    if len(raw) != 1 + 2 * len(_A3L6_OPTIONS):
+        raise ExecutionError("A3L6 gate argv arity changed")
+    for index, name in enumerate(_A3L6_OPTIONS):
+        if raw[1 + index * 2] != "--" + name or not raw[2 + index * 2]:
+            raise ExecutionError("A3L6 gate argv order changed")
+
+
+def dispatch_a3l6(arguments: argparse.Namespace) -> int:
+    """Run the hermetic A3L6 gate and retain only its local run record."""
+    output_root, record = run_a3l6_gate(
+        repository_root=Path(arguments.repository_root),
+        expected_bindings_path=Path(arguments.expected_bindings),
+        output_root=Path(arguments.output_root),
+    )
+    print(
+        canonical_json_bytes(
+            {
+                "a3l6_accepted": False,
+                "a3l7_authorized": False,
+                "output_root": output_root,
+                "result": record["result"],
+            }
+        ).decode("ascii")
+    )
+    return 0 if record["result"] == "pending-review" else 2
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__, allow_abbrev=False)
     subparsers = parser.add_subparsers(dest="command", required=True)
+    a3l6 = subparsers.add_parser("a3l6-gate-v1", allow_abbrev=False)
+    for name in _A3L6_OPTIONS:
+        a3l6.add_argument("--" + name, required=True)
+    a3l6.set_defaults(handler=dispatch_a3l6)
     readiness = subparsers.add_parser("readiness-v1")
     readiness.add_argument("--readiness-plan", required=True)
     readiness.add_argument("--a3l6-gate-bundle", required=True)
@@ -12382,6 +13113,7 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: Optional[Sequence[str]] = None) -> int:
     try:
         raw = list(sys.argv[1:] if argv is None else argv)
+        _validate_a3l6_raw_argv(raw)
         _validate_a3l9_raw_argv(raw)
         if raw[:1] == ["run-v1"]:
             required = (

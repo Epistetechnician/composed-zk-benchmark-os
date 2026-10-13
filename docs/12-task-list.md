@@ -21389,6 +21389,56 @@ runtime evidence, class closure, score movement, accepted Evidence Ledger
 mutation, Level2+, benchmark evidence, proof, production readiness, SOTA,
 breakthrough, full-security, or external-audit claim is created.
 
+## Phase 796-A3L5I HSAI P01B A3L6 Current Contract And Rejection-Retention Boundary
+
+Status: complete documentation-only correction; A3L6 remains unaccepted,
+execution remains `NotRun`, and correspondence remains `2/10`.
+
+Named state slice:
+`phase-796a3l5i-p01b-a3l6-current-contract-and-rejection-retention-boundary`.
+
+Completed: reconciled the current committed A3L6 source state with the stale
+original audit: 22 source paths, 32+33=65 focused tests, 172 Seatbelt-stubbed
+discovery-census tests, a 4 MiB A3L6 source/bundle cap, 201 candidate payloads,
+202 reopens, and 271 publication events. It freezes a future caller-owned,
+non-repository, rejected-or-pending-review gate-run record with mandatory
+expected-bindings cross-checking, bounded diagnostics, and no self-generated
+independent-review claim. See
+`docs/796a3l5i-phase-hsai-p01b-a3l6-current-contract-and-rejection-retention-boundary.md`.
+
+Exit criteria for the separately authorized A3L6R implementation are durable
+pending-review-or-rejected local output, exact source/binding validation, error-path
+coverage, unchanged-status enforcement, and honest disclosure that the
+Seatbelt discovery row is a census rather than full-suite semantics. A3L7/A3L8
+remain prohibited; no Docker, registry, network, container, retained runtime
+evidence, class closure, score movement, accepted Evidence Ledger mutation,
+Level2+, benchmark evidence, proof, production readiness, SOTA, breakthrough,
+full-security, or external-audit claim is created.
+
+## Phase 796-A3L6R HSAI P01B Immutable-Gate Rebase And Retention Implementation
+
+Status: complete local implementation; A3L6 remains unaccepted, A3L7/A3L8/A3L9
+remain prohibited, and correspondence remains `2/10`.
+
+Named state slice:
+`phase-796a3l6r-p01b-immutable-gate-rebase-retention-implementation`.
+
+Completed: added the static current-contract audit bindings, a canonical
+`a3l6-gate-v1` local runner, no-follow caller-owned output-root handling,
+atomic three-file retention, bounded rejected-command diagnostics, and a
+pending-review record that contains no review or A3L7 authority. The runner
+derives commit/tree/audit identities from the binding, preserves exact status
+checks, and removes its temporary materialization only after retained output.
+Focused evidence tests remain 32 and execution tests remain 33. See
+`docs/796a3l6r-phase-hsai-p01b-immutable-gate-rebase-retention-implementation-notes.md`.
+
+Remaining: independently freeze this implementation in a new immutable audit,
+run the gate from a clean detached audit checkout, retain that output, and
+obtain two genuine external reviews. No Docker, registry, network, container,
+external replay, accepted Evidence Ledger mutation, score movement, Level2+
+evidence, benchmark evidence, production operation, or submission authority is
+created here.
+
 ## Managed-Attestation Track: Managed JWT Signature Verification
 
 Status: complete for offline ES256 managed-JWT verification. See

@@ -3302,6 +3302,41 @@ and independently reviewed. The dirty admission source remains outside this
 state slice at SHA-256
 `41530d449871484b7c0f15869bab9c892c328d6ab982b166bad3223147f173de`.
 
+Explicit Phase 796-A3L5I HSAI P01B A3L6 current-contract and
+rejection-retention boundary now allowed and completed as documentation only
+under
+`docs/796a3l5i-phase-hsai-p01b-a3l6-current-contract-and-rejection-retention-boundary.md`
+plus the standard navigation mirrors. This named state slice reconciles the
+current committed five-file A3L6 source state with the stale A3L5C/A3L6 audit:
+22 exact materialized paths, 32+33=65 focused tests, a 172 Seatbelt-stubbed
+discovery census, a 4 MiB A3L6 source/bundle cap, and 201/202/271
+candidate/publication cardinalities. It authorizes only a later five-file
+hermetic local A3L6R implementation that persists bounded pending-review-or-rejected
+gate-run records at a caller-owned non-repository root and requires a
+cross-bound expected-bindings document. It does not establish a cryptographic
+trust root or independent-review identity, accept A3L6, authorize A3L7/A3L8/
+A3L9, Docker, registry, network, container, evidence-ledger, score-axis,
+Level2+, proof, production-readiness, SOTA, breakthrough, full-security, or
+external-audit claim. A rejected or pending-review gate run is diagnostic local
+evidence only.
+
+Explicit Phase 796-A3L6R HSAI P01B immutable-gate rebase and retention
+implementation is now allowed and implemented under the five-file A3L6 Python
+surface, its focused tests, and
+`docs/796a3l6r-phase-hsai-p01b-immutable-gate-rebase-retention-implementation-notes.md`
+plus standard navigation mirrors. This named state slice adds only a static
+22-path/65-focused/4-MiB/201-202-271 audit-binding validator, a local
+`a3l6-gate-v1` Git/Python/Seatbelt operator entry point, and atomically retained
+`pending-review` or `rejected` records at a caller-owned non-repository output
+root. It requires canonical expected bindings, no-follow output readback,
+bounded failure diagnostics, and temporary materialization cleanup only after
+retention. It does not establish a trust root or independent-review identity,
+accept A3L6, authorize A3L7/A3L8/A3L9, invoke Docker, registry, network,
+container, backend, or external replay, mutate an Evidence Ledger, move a
+score, create Level2+ evidence, or support proof, production-readiness, SOTA,
+breakthrough, full-security, or external-audit claims. A pending-review record
+is local regression evidence only.
+
 Explicit Statebook terminal-payoff and assurance-adjusted settlement boundary
 now allowed and completed as documentation only in
 `docs/integrations/statebook_terminal_payoff_and_trust_settlement.md` plus the
