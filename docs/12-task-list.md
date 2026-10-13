@@ -26293,6 +26293,26 @@ claims.
 
 Anti-goals: live authority, complete TD-004 claim, artificial-profit PnL (#23),
 venue solvency digest binding (#33), trading, signing, custody, pause product,
+## Integration Track: Statebook P19 Oracle Freshness And Confidence Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p19-oracle-freshness-confidence-boundary`.
+
+The next separately committed slice is
+`statebook-p19-oracle-freshness-confidence`. It may add optional
+`transport_observed_at` (ignored for freshness), `model_confidence_claimed`
+with `ModelConfidenceIgnored` on gate/valuation failure, and corpus coverage
+for stale-data/fresh-transport plus a real model-confidence bypass attempt.
+Live authority remains deferred. Outputs never move value.
+
+Validation gate: stale observed_at + fresh transport → ValuationStale; claimed
+confidence + failed gate → ModelConfidenceIgnored + zero instant; baseline
+digests unchanged when new fields absent; suites green; format/test/Clippy;
+claim-boundary hygiene.
+
+Anti-goals: live authority, complete TD-004 claim, prepared-later consumption
+(#20), compromised-upstream dual valuation (#22), artificial-profit PnL (#23),
+concurrent finalizer races (#31), trading, signing, custody, pause product,
 transfer command, admission mutation, Evidence Ledger append, scalar trust
 score, production readiness, SOTA, independent audit, or full-security claims.
 

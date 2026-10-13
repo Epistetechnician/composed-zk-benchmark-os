@@ -12630,6 +12630,7 @@ only. It does not establish complete TD-004 satisfaction, live authority,
 production readiness, SOTA, independent audit, or full security. No value moves.
 
 ## Statebook P19 Oracle Freshness And Compromised Source Boundary
+## Statebook P19 Oracle Freshness And Confidence Boundary
 
 Date: 16 July 2026.
 
@@ -12774,3 +12775,9 @@ not establish controller connection, production authorization, custody, signing,
 pause, settlement, admission authority, Evidence Ledger mutation, production
 readiness, SOTA, independent audit, or full security. No value moves.
 
+`statebook-p19-oracle-freshness-confidence-boundary`.
+
+This documentation-only slice creates no proof, accepted evidence, Level2+,
+score axis, production readiness, SOTA, breakthrough, full security, external
+audit, or action authority. Implementation requires a separately committed
+state slice `statebook-p19-oracle-freshness-confidence`.
