@@ -21473,9 +21473,10 @@ Named state slice:
 
 Completed: corrected one execution-focused test so its test-owned temporary
 root uses the existing gate scratch under the nested A3L6 Seatbelt profile,
-while preserving its `/private/tmp` fixture placement outside that gate. This
-addresses the retained rejected diagnosis without widening the profile or
-changing runtime behavior. See
+while preserving its `/private/tmp` fixture placement and host-only A3L9
+absolute-traversal cases outside that gate. This addresses the retained rejected
+diagnosis without widening the profile, bypassing the gate, or changing runtime
+behavior. See
 `docs/796a3l6s-phase-hsai-p01b-gate-sandbox-test-root-correction.md`.
 
 Remaining: create a fresh immutable audit and detached retained gate run for

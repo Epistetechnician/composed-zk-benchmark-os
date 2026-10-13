@@ -24,6 +24,13 @@ host-only explicit `/private/tmp` test location. The production runner,
 Seatbelt profile, source census, gate invocation, and authority boundaries are
 unchanged.
 
+The remaining cases in this test deliberately exercise A3L9 absolute traversal
+through host-only parents. They now return after preserving the CLI and malformed
+A3L6-argv checks when the existing nested-gate marker is active. Those traversal
+cases still run in the ordinary host-focused suite. Widening the profile,
+running the focused suite outside the retained gate, or altering traversal
+semantics were rejected because each would weaken or bypass the gate boundary.
+
 ## Required follow-through
 
 This source correction creates a new implementation identity. The rejected

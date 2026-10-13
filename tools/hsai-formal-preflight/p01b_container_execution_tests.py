@@ -3472,6 +3472,12 @@ class BoundaryGuardTests(unittest.TestCase):
             self.assertEqual(missing_status, 2)
             self.assertIn("A3L6 gate argv", missing.getvalue())
             self.assertFalse(output_root.exists())
+            # The remaining cases deliberately exercise host-only A3L9 absolute
+            # traversal. The nested A3L6 Seatbelt gate must not widen to reach
+            # those parents; its CLI/argv boundary remains covered above.
+            if _gate_sandbox_active():
+                self.assertEqual(os.environ.get("P01B_GATE_SANDBOX_ACTIVE"), "1")
+                return
             calls: list[str] = []
 
             def failed_capture(**values):
