@@ -66,6 +66,7 @@ The output plumbing fails closed when:
 - the supplied `LocalAuditIndexManifest` is invalid;
 - the output root is an existing file;
 - the output root contains parent-directory components, URL-like content,
+- the output root contains caller-controlled symlinked ancestor components;
   backslashes, or shell-like fragments;
 - the output root is non-empty and overwrite is not explicitly approved;
 - existing output bytes drift from the supplied manifest;
@@ -99,4 +100,5 @@ Focused regression coverage lives in
 - stale digest and tampered manifest rejection;
 - unexpected-file rejection on read and overwrite;
 - symlink rejection on read and overwrite;
+- nested caller-controlled symlinked output-root ancestor rejection;
 - source scan for external execution hooks.

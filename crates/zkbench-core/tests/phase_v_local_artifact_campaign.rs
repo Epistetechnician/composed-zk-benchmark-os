@@ -261,6 +261,19 @@ fn local_artifact_campaign_outputs_write_and_read_declared_files_only() {
 }
 
 #[test]
+fn local_artifact_campaign_outputs_reject_parent_directory_root_components() {
+    let dir = tempdir().expect("tempdir");
+    let nested = dir.path().join("nested");
+    fs::create_dir(&nested).expect("nested output parent");
+    let output_root = nested.join("..").join("phase-v-campaign");
+
+    let error = write_local_artifact_campaign_outputs(&output_root, &valid_manifest(), false, &[])
+        .expect_err("parent-directory output root should reject before writing");
+    assert!(error.to_string().contains("parent-directory components"));
+    assert!(!dir.path().join("phase-v-campaign").exists());
+}
+
+#[test]
 fn local_artifact_campaign_outputs_reject_drift_and_repair_overwrite() {
     let dir = tempdir().expect("tempdir");
     let output_root = dir.path().join("phase-v-campaign");

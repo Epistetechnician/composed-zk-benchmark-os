@@ -62,7 +62,9 @@ The implementation rejects:
 - incomplete redaction policies;
 - repository-root and protected-path overlap;
 - parent-directory path components;
-- symlink roots and bundle files;
+- caller-controlled symlink roots, parent path components, and bundle files;
+- standard macOS `/etc`, `/home`, `/tmp`, and `/var` aliases are treated as
+  platform-provided path components while the full ancestor chain is checked;
 - non-empty output roots without explicit overwrite;
 - repair overwrite when the existing bundle does not match supplied inputs;
 - partial, unexpected, stale-digest, or tampered outputs;

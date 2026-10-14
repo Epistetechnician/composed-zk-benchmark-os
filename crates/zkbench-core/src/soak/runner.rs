@@ -17,7 +17,7 @@ use crate::replay::{
 };
 use crate::scoring::observed_distinguishability_axis;
 
-use super::artifact_layout::{write_json, SoakArtifactLayout};
+use super::artifact_layout::{validate_soak_root, write_json, SoakArtifactLayout};
 use super::config::{SoakOutputPolicy, SoakRunConfig};
 use super::failure_corpus::{
     build_failure_corpus_entry, FailureCorpus, FailureCorpusEntryInput, FailureCorpusIndex,
@@ -281,6 +281,9 @@ impl LocalSoakRunner {
 
     /// Run a request.
     pub fn run_request(&mut self, request: SoakRunRequest) -> Result<SoakRunResult> {
+        if let Some(output_dir) = &self.output_dir {
+            validate_soak_root(output_dir)?;
+        }
         self.replay_observations.clear();
         let manifest = self
             .plan

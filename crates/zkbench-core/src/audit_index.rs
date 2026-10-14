@@ -4,6 +4,8 @@
 //! Audit indexes are read-only local integrity summaries over existing local
 //! metadata. They do not create accepted evidence, execute replay commands,
 //! claim official benchmark evidence, or report ZK backend performance.
+//!
+//! State slice: benchmark-os-audit-index-output-write-symlink-preflight-v1.
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
@@ -865,6 +867,7 @@ pub fn write_local_audit_index_outputs(
 ) -> Result<LocalAuditIndexOutput> {
     let output_root = output_root.as_ref();
     validate_output_root(output_root)?;
+    validate_output_root_path_components(output_root)?;
     if output_root.exists() && !output_root.is_dir() {
         return Err(audit_index_io_error(
             output_root.display().to_string(),
@@ -932,6 +935,7 @@ pub fn read_local_audit_index_outputs(
 ) -> Result<LocalAuditIndexOutput> {
     let output_root = output_root.as_ref();
     validate_output_root(output_root)?;
+    validate_output_root_path_components(output_root)?;
     reject_unexpected_existing_files(output_root, &audit_index_target_paths())?;
 
     let manifest_bytes = read_relative_bytes(output_root, AUDIT_INDEX_MANIFEST_PATH)?;
@@ -1139,6 +1143,7 @@ pub fn write_local_audit_index_ergonomics_outputs(
     let output_root = output_root.as_ref();
     validate_output_root(output_root)?;
     reject_protected_path_overlap(output_root, protected_paths)?;
+    validate_output_root_path_components(output_root)?;
     if output_root.exists() && !output_root.is_dir() {
         return Err(audit_index_io_error(
             output_root.display().to_string(),
@@ -1235,6 +1240,7 @@ pub fn read_local_audit_index_ergonomics_outputs(
     let output_root = output_root.as_ref();
     validate_output_root(output_root)?;
     reject_protected_path_overlap(output_root, protected_paths)?;
+    validate_output_root_path_components(output_root)?;
     reject_unexpected_existing_files(output_root, &audit_index_ergonomics_target_paths())?;
 
     let view_bytes = read_relative_bytes(output_root, AUDIT_INDEX_ERGONOMICS_VIEW_PATH)?;
@@ -1538,6 +1544,7 @@ pub fn write_local_audit_index_cross_bundle_outputs(
     let output_root = output_root.as_ref();
     validate_output_root(output_root)?;
     reject_protected_path_overlap(output_root, protected_paths)?;
+    validate_output_root_path_components(output_root)?;
     if output_root.exists() && !output_root.is_dir() {
         return Err(audit_index_io_error(
             output_root.display().to_string(),
@@ -1628,6 +1635,7 @@ pub fn read_local_audit_index_cross_bundle_outputs(
     let output_root = output_root.as_ref();
     validate_output_root(output_root)?;
     reject_protected_path_overlap(output_root, protected_paths)?;
+    validate_output_root_path_components(output_root)?;
     reject_unexpected_existing_files(output_root, &audit_index_cross_bundle_target_paths())?;
 
     let view_bytes = read_relative_bytes(output_root, AUDIT_INDEX_CROSS_BUNDLE_VIEW_PATH)?;
@@ -2732,6 +2740,60 @@ fn validate_output_root(root: &Path) -> Result<()> {
     Ok(())
 }
 
+fn validate_output_root_path_components(path: &Path) -> Result<()> {
+    let normalized = comparable_output_path(path)?;
+    let mut candidate = normalized.as_path();
+    let mut is_leaf = true;
+    loop {
+        match fs::symlink_metadata(candidate) {
+            Ok(metadata) => {
+                let platform_symlink =
+                    metadata.file_type().is_symlink() && is_platform_provided_symlink(candidate);
+                if metadata.file_type().is_symlink() && !platform_symlink {
+                    return Err(audit_index_io_error(
+                        candidate.display().to_string(),
+                        "audit-index output path must not be a symlink",
+                    ));
+                }
+                if !is_leaf && !metadata.is_dir() && !platform_symlink {
+                    return Err(audit_index_io_error(
+                        candidate.display().to_string(),
+                        "audit-index output parent must be a directory",
+                    ));
+                }
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+            Err(error) => {
+                return Err(audit_index_io_error(candidate.display().to_string(), error));
+            }
+        }
+
+        let Some(parent) = candidate.parent() else {
+            break;
+        };
+        if parent == candidate || parent.as_os_str().is_empty() {
+            break;
+        }
+        candidate = parent;
+        is_leaf = false;
+    }
+    Ok(())
+}
+
+#[cfg(target_os = "macos")]
+fn is_platform_provided_symlink(path: &Path) -> bool {
+    matches!(path.parent(), Some(parent) if parent == Path::new("/"))
+        && matches!(
+            path.file_name().and_then(|name| name.to_str()),
+            Some("etc" | "home" | "tmp" | "var")
+        )
+}
+
+#[cfg(not(target_os = "macos"))]
+fn is_platform_provided_symlink(_path: &Path) -> bool {
+    false
+}
+
 fn reject_protected_path_overlap(root: &Path, protected_paths: &[impl AsRef<Path>]) -> Result<()> {
     let comparable_root = comparable_output_path(root)?;
     let resolved_root = resolved_comparable_path(root)?;
@@ -2866,6 +2928,7 @@ fn read_relative_bytes(root: &Path, relative_path: &str) -> Result<Vec<u8>> {
 fn write_relative_bytes(root: &Path, relative_path: &str, bytes: &[u8]) -> Result<()> {
     validate_relative_output_path(relative_path)?;
     let path = root.join(relative_path);
+    validate_output_root_path_components(&path)?;
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent)
             .map_err(|error| audit_index_io_error(parent.display().to_string(), error))?;
@@ -2960,4 +3023,32 @@ fn digest_audit_index_output_bytes(bytes: &[u8]) -> ArtifactDigest {
 
 fn audit_index_io_error(path: impl Into<String>, message: impl ToString) -> ZkBenchError {
     ZkBenchError::benchmark_pack(path, message.to_string())
+}
+
+#[cfg(all(test, unix))]
+mod tests {
+    use super::*;
+
+    // State slice: benchmark-os-audit-index-output-write-symlink-preflight-v1.
+    #[test]
+    fn write_relative_bytes_rejects_symlinked_declared_destination() {
+        let directory = tempfile::tempdir().expect("temporary directory should create");
+        let output_root = directory.path().join("output");
+        fs::create_dir_all(&output_root).expect("output root should create");
+
+        let external_target = directory.path().join("external-target.json");
+        fs::write(&external_target, b"protected").expect("external target should write");
+        let declared_destination = output_root.join(AUDIT_INDEX_MANIFEST_PATH);
+        std::os::unix::fs::symlink(&external_target, &declared_destination)
+            .expect("declared destination symlink should create");
+
+        let error = write_relative_bytes(&output_root, AUDIT_INDEX_MANIFEST_PATH, b"replacement")
+            .expect_err("symlinked declared destination should reject");
+
+        assert!(error.to_string().contains("must not be a symlink"));
+        assert_eq!(
+            fs::read(&external_target).expect("external target should remain readable"),
+            b"protected"
+        );
+    }
 }

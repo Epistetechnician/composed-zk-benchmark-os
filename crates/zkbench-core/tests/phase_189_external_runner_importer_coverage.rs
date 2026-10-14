@@ -1,5 +1,8 @@
 use std::fs;
 
+#[cfg(unix)]
+use std::os::unix::fs::symlink;
+
 use tempfile::tempdir;
 use zkbench_core::{
     build_default_artifact_capture_contract, compute_artifact_digest_bytes,
@@ -79,6 +82,90 @@ fn relative_file_resolver_reads_declared_files_and_rejects_unsafe_refs() {
         ZkBenchError::SyntheticImport { ref path, .. }
             if path.ends_with("artifacts/missing.json")
     ));
+}
+
+#[test]
+fn relative_file_resolver_rejects_parent_directory_root_components() {
+    let root = tempdir().expect("tempdir should be available");
+    let nested = root.path().join("nested");
+    fs::create_dir(&nested).expect("nested directory should be created");
+    fs::write(root.path().join("artifact.json"), b"synthetic artifact\n")
+        .expect("fixture artifact should be written");
+
+    let error = ResultCandidateArtifactResolver::from_relative_files(
+        &nested.join(".."),
+        &["artifact.json".to_string()],
+    )
+    .expect_err("parent-directory root components should reject before reading");
+    assert!(error.to_string().contains("parent-directory components"));
+}
+
+#[cfg(unix)]
+#[test]
+fn relative_file_resolver_rejects_symlinked_parent() {
+    let root = tempdir().expect("tempdir should be available");
+    let real_artifacts = root.path().join("real-artifacts");
+    fs::create_dir(&real_artifacts).expect("real artifact dir should be created");
+    fs::write(
+        real_artifacts.join("source.json"),
+        b"synthetic metric source v1\n",
+    )
+    .expect("fixture artifact should be written");
+    symlink(&real_artifacts, root.path().join("linked-artifacts"))
+        .expect("artifact parent symlink should create");
+
+    let error = ResultCandidateArtifactResolver::from_relative_files(
+        root.path(),
+        &["linked-artifacts/source.json".to_string()],
+    )
+    .expect_err("symlinked artifact parent should reject before reading");
+    assert!(error.to_string().contains("must not be a symlink"));
+}
+
+#[cfg(unix)]
+#[test]
+fn relative_file_resolver_rejects_symlinked_ancestor() {
+    let root = tempdir().expect("tempdir should be available");
+    let real_artifacts = root.path().join("real-artifacts");
+    let real_child = real_artifacts.join("child");
+    fs::create_dir_all(&real_child).expect("real artifact child should be created");
+    fs::write(
+        real_child.join("source.json"),
+        b"synthetic metric source v1\n",
+    )
+    .expect("fixture artifact should be written");
+    symlink(&real_artifacts, root.path().join("linked-artifacts"))
+        .expect("artifact ancestor symlink should create");
+
+    let error = ResultCandidateArtifactResolver::from_relative_files(
+        root.path(),
+        &["linked-artifacts/child/source.json".to_string()],
+    )
+    .expect_err("symlinked artifact ancestor should reject before reading");
+    assert!(error.to_string().contains("must not be a symlink"));
+}
+
+#[cfg(unix)]
+#[test]
+fn relative_file_resolver_rejects_symlinked_target() {
+    let root = tempdir().expect("tempdir should be available");
+    fs::write(
+        root.path().join("source.json"),
+        b"synthetic metric source v1\n",
+    )
+    .expect("fixture artifact should be written");
+    symlink(
+        root.path().join("source.json"),
+        root.path().join("linked-source.json"),
+    )
+    .expect("artifact target symlink should create");
+
+    let error = ResultCandidateArtifactResolver::from_relative_files(
+        root.path(),
+        &["linked-source.json".to_string()],
+    )
+    .expect_err("symlinked artifact target should reject before reading");
+    assert!(error.to_string().contains("must not be a symlink"));
 }
 
 #[test]

@@ -7,6 +7,7 @@ Phase I adds a local/synthetic result import prototype to `zkbench-core`.
 - JSON parsing for synthetic `ExternalResultCandidate` values.
 - `SyntheticResultImporter` and `SyntheticResultImportBundle`.
 - `ResultCandidateArtifactResolver` for explicit caller-provided local bytes or declared relative files.
+- Relative-file artifact resolution rejects caller-controlled symlinked path components before reading declared bytes; standard macOS root aliases are treated as platform paths.
 - Artifact digest validation for synthetic artifact refs.
 - Provenance contract validation for candidate provenance drafts.
 - Metric candidate validation for units, source refs, and non-negative numeric values.
@@ -49,6 +50,7 @@ Referenced existing local replay artifacts remain `Level1LocalReplay` at most. P
 ## Known Limitations
 
 - Digest validation is local integrity validation over supplied bytes, not independent reproduction.
+- Direct proposal-ledger persistence rejects caller-controlled symlinked path components before reading or writing JSON; standard macOS root aliases are treated as platform paths. This remains local path validation rather than race-free storage.
 - Metric candidates are metadata only and do not become score inputs.
 - Proposal ledgers are review ledgers and do not mutate the accepted Evidence Ledger.
 - Proposal review policy is intentionally minimal; reviewed acceptance, supersession, and future append eligibility are deferred to Phase J.

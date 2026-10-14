@@ -4,6 +4,8 @@
 //! caller-owned output root. They are not official benchmark evidence, not
 //! accepted Evidence Ledger entries, not ZK backend performance evidence, and
 //! not Level2+ evidence.
+//!
+//! State slice: benchmark-os-local-artifact-campaign-output-write-symlink-preflight-v1.
 
 use std::collections::BTreeSet;
 use std::fs;
@@ -807,6 +809,15 @@ fn validate_output_root(output_root: &Path, protected_paths: &[PathBuf]) -> Resu
             "output root must be non-empty",
         ));
     }
+    if output_root
+        .components()
+        .any(|component| matches!(component, Component::ParentDir))
+    {
+        return Err(campaign_error(
+            output_root.display().to_string(),
+            "output root must not contain parent-directory components",
+        ));
+    }
     let normalized_output = normalize_path(output_root)?;
     let resolved_output = resolve_existing_prefix(output_root)?;
     for protected in protected_paths {
@@ -824,7 +835,64 @@ fn validate_output_root(output_root: &Path, protected_paths: &[PathBuf]) -> Resu
             ));
         }
     }
+    validate_output_root_path_components(&normalized_output)?;
     Ok(())
+}
+
+fn validate_output_root_path_components(path: &Path) -> Result<()> {
+    let mut candidate = path;
+    let mut is_leaf = true;
+    loop {
+        match fs::symlink_metadata(candidate) {
+            Ok(metadata) => {
+                let platform_symlink =
+                    metadata.file_type().is_symlink() && is_platform_provided_symlink(candidate);
+                if metadata.file_type().is_symlink() && !platform_symlink {
+                    return Err(campaign_error(
+                        candidate.display().to_string(),
+                        "local artifact campaign output path must not be a symlink",
+                    ));
+                }
+                if !is_leaf && !metadata.is_dir() && !platform_symlink {
+                    return Err(campaign_error(
+                        candidate.display().to_string(),
+                        "local artifact campaign output parent must be a directory",
+                    ));
+                }
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+            Err(error) => {
+                return Err(campaign_error(
+                    candidate.display().to_string(),
+                    error.to_string(),
+                ));
+            }
+        }
+
+        let Some(parent) = candidate.parent() else {
+            break;
+        };
+        if parent == candidate || parent.as_os_str().is_empty() {
+            break;
+        }
+        candidate = parent;
+        is_leaf = false;
+    }
+    Ok(())
+}
+
+#[cfg(target_os = "macos")]
+fn is_platform_provided_symlink(path: &Path) -> bool {
+    path.parent() == Some(Path::new("/"))
+        && matches!(
+            path.file_name().and_then(|name| name.to_str()),
+            Some("etc" | "home" | "tmp" | "var")
+        )
+}
+
+#[cfg(not(target_os = "macos"))]
+fn is_platform_provided_symlink(_path: &Path) -> bool {
+    false
 }
 
 fn resolve_existing_prefix(path: &Path) -> Result<PathBuf> {
@@ -1010,6 +1078,7 @@ fn read_relative_bytes(root: &Path, relative_path: &str) -> Result<Vec<u8>> {
 fn write_relative_bytes(root: &Path, relative_path: &str, bytes: &[u8]) -> Result<()> {
     validate_relative_output_path(relative_path)?;
     let path = root.join(relative_path);
+    validate_output_root_path_components(&path)?;
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent)
             .map_err(|error| campaign_error(parent.display().to_string(), error.to_string()))?;
@@ -1062,4 +1131,37 @@ fn paths_overlap(left: &Path, right: &Path) -> bool {
 
 fn campaign_error(path: impl Into<String>, message: impl ToString) -> ZkBenchError {
     ZkBenchError::artifact(path, message.to_string())
+}
+
+#[cfg(all(test, unix))]
+mod tests {
+    use super::*;
+
+    // State slice: benchmark-os-local-artifact-campaign-output-write-symlink-preflight-v1.
+    #[test]
+    fn write_relative_bytes_rejects_symlinked_declared_destination() {
+        let directory = tempfile::tempdir().expect("temporary directory should create");
+        let output_root = directory.path().join("output");
+        let output_parent = output_root.join("rendered");
+        fs::create_dir_all(&output_parent).expect("output parent should create");
+
+        let external_target = directory.path().join("external-target.md");
+        fs::write(&external_target, b"protected").expect("external target should write");
+        let declared_destination = output_parent.join("campaign-summary.md");
+        std::os::unix::fs::symlink(&external_target, &declared_destination)
+            .expect("declared destination symlink should create");
+
+        let error = write_relative_bytes(
+            &output_root,
+            LOCAL_ARTIFACT_CAMPAIGN_MARKDOWN_PATH,
+            b"replacement",
+        )
+        .expect_err("symlinked declared destination should reject");
+
+        assert!(error.to_string().contains("must not be a symlink"));
+        assert_eq!(
+            fs::read(&external_target).expect("external target should remain readable"),
+            b"protected"
+        );
+    }
 }

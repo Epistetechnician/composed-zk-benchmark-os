@@ -1,3 +1,6 @@
+#[cfg(unix)]
+use std::os::unix::fs::symlink;
+
 use tempfile::tempdir;
 use zkbench_core::{
     build_local_replay_manifest_for_instance, generate_instance, run_local_replay, ClaimBoundary,
@@ -32,6 +35,30 @@ fn empty_evidence_ledger_validates() {
 #[test]
 fn default_evidence_ledger_matches_new() {
     assert_eq!(EvidenceLedger::default(), EvidenceLedger::new());
+}
+
+#[test]
+fn evidence_ledger_save_and_load_reject_parent_directory_components() {
+    let dir = tempdir().expect("tempdir should be available for ledger persistence");
+    let ledger = EvidenceLedger::new();
+    let nested = dir.path().join("nested");
+    std::fs::create_dir(&nested).expect("nested ledger parent should create");
+    let path = nested.join("../ledger.json");
+    let target = dir.path().join("ledger.json");
+
+    let save_error = ledger
+        .save_json(&path)
+        .expect_err("parent-directory component should reject before writing");
+    assert!(save_error
+        .to_string()
+        .contains("parent-directory components"));
+    assert!(!target.exists());
+
+    let load_error = EvidenceLedger::load_json(&path)
+        .expect_err("parent-directory component should reject before reading");
+    assert!(load_error
+        .to_string()
+        .contains("parent-directory components"));
 }
 
 #[test]
@@ -102,6 +129,60 @@ fn evidence_ledger_json_file_errors_are_reported() {
     assert!(malformed_error
         .to_string()
         .contains("evidence_ledger.load_json"));
+}
+
+#[cfg(unix)]
+#[test]
+fn evidence_ledger_save_rejects_symlinked_parent() {
+    let dir = tempdir().expect("tempdir should be available for ledger persistence");
+    let ledger = EvidenceLedger::new();
+    let real_parent = dir.path().join("real-ledgers");
+    std::fs::create_dir(&real_parent).expect("real ledger parent should create");
+    let symlinked_parent = dir.path().join("linked-ledgers");
+    symlink(&real_parent, &symlinked_parent).expect("ledger parent symlink should create");
+
+    let path = symlinked_parent.join("ledger.json");
+    let error = ledger
+        .save_json(&path)
+        .expect_err("symlinked ledger parent should reject before writing");
+    assert!(error.to_string().contains("must not be a symlink"));
+    assert!(!real_parent.join("ledger.json").exists());
+}
+
+#[cfg(unix)]
+#[test]
+fn evidence_ledger_save_rejects_symlinked_ancestor() {
+    let dir = tempdir().expect("tempdir should be available for ledger persistence");
+    let ledger = EvidenceLedger::new();
+    let real_parent = dir.path().join("real-ledgers");
+    let real_child = real_parent.join("child");
+    std::fs::create_dir_all(&real_child).expect("real ledger child should create");
+    let symlinked_parent = dir.path().join("linked-ledgers");
+    symlink(&real_parent, &symlinked_parent).expect("ledger ancestor symlink should create");
+
+    let path = symlinked_parent.join("child/ledger.json");
+    let error = ledger
+        .save_json(&path)
+        .expect_err("symlinked ledger ancestor should reject before writing");
+    assert!(error.to_string().contains("must not be a symlink"));
+    assert!(!real_child.join("ledger.json").exists());
+}
+
+#[cfg(unix)]
+#[test]
+fn evidence_ledger_load_rejects_symlinked_target() {
+    let dir = tempdir().expect("tempdir should be available for ledger persistence");
+    let ledger = EvidenceLedger::new();
+    let real_path = dir.path().join("real-ledger.json");
+    ledger
+        .save_json(&real_path)
+        .expect("real ledger should save");
+    let symlinked_path = dir.path().join("linked-ledger.json");
+    symlink(&real_path, &symlinked_path).expect("ledger target symlink should create");
+
+    let error = EvidenceLedger::load_json(&symlinked_path)
+        .expect_err("symlinked ledger target should reject before reading");
+    assert!(error.to_string().contains("must not be a symlink"));
 }
 
 #[test]

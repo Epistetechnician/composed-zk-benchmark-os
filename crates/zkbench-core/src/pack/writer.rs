@@ -1,7 +1,7 @@
 //! Benchmark pack writer.
 
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::{Component, Path, PathBuf};
 
 use serde::Serialize;
 
@@ -98,6 +98,7 @@ impl BenchmarkPackWriter {
     /// Write a local pack into the supplied directory.
     pub fn write_to(&self, root: impl AsRef<Path>) -> Result<BenchmarkPackManifest> {
         let root = root.as_ref();
+        validate_pack_root(root)?;
         if root.exists() && !root.is_dir() {
             return Err(ZkBenchError::benchmark_pack(
                 root.display().to_string(),
@@ -351,6 +352,7 @@ pub(crate) fn validate_relative_path(relative_path: &str) -> Result<()> {
 }
 
 fn write_bytes(path: PathBuf, bytes: &[u8]) -> Result<()> {
+    validate_pack_path_components(&path)?;
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent).map_err(|error| {
             ZkBenchError::benchmark_pack(parent.display().to_string(), error.to_string())
@@ -359,6 +361,82 @@ fn write_bytes(path: PathBuf, bytes: &[u8]) -> Result<()> {
     fs::write(&path, bytes).map_err(|error| {
         ZkBenchError::benchmark_pack(path.display().to_string(), error.to_string())
     })
+}
+
+pub(crate) fn validate_pack_path_components(path: &Path) -> Result<()> {
+    if path
+        .components()
+        .any(|component| matches!(component, Component::ParentDir))
+    {
+        return Err(ZkBenchError::benchmark_pack(
+            path.display().to_string(),
+            "pack output path must not contain parent-directory components",
+        ));
+    }
+
+    let mut candidate = path;
+    let mut is_leaf = true;
+    loop {
+        match fs::symlink_metadata(candidate) {
+            Ok(metadata) => {
+                let platform_symlink =
+                    metadata.file_type().is_symlink() && is_platform_provided_symlink(candidate);
+                if metadata.file_type().is_symlink() && !platform_symlink {
+                    return Err(ZkBenchError::benchmark_pack(
+                        candidate.display().to_string(),
+                        "pack output path must not be a symlink",
+                    ));
+                }
+                if !is_leaf && !metadata.is_dir() && !platform_symlink {
+                    return Err(ZkBenchError::benchmark_pack(
+                        candidate.display().to_string(),
+                        "pack output parent must be a directory",
+                    ));
+                }
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+            Err(error) => {
+                return Err(ZkBenchError::benchmark_pack(
+                    candidate.display().to_string(),
+                    error.to_string(),
+                ));
+            }
+        }
+
+        let Some(parent) = candidate.parent() else {
+            break;
+        };
+        if parent == candidate || parent.as_os_str().is_empty() {
+            break;
+        }
+        candidate = parent;
+        is_leaf = false;
+    }
+    Ok(())
+}
+
+pub(crate) fn validate_pack_root(path: &Path) -> Result<()> {
+    if path.as_os_str().is_empty() {
+        return Err(ZkBenchError::benchmark_pack(
+            "benchmark_pack.root",
+            "pack root must be non-empty",
+        ));
+    }
+    validate_pack_path_components(path)
+}
+
+#[cfg(target_os = "macos")]
+fn is_platform_provided_symlink(path: &Path) -> bool {
+    matches!(path.parent(), Some(parent) if parent == Path::new("/"))
+        && matches!(
+            path.file_name().and_then(|name| name.to_str()),
+            Some("etc" | "home" | "tmp" | "var")
+        )
+}
+
+#[cfg(not(target_os = "macos"))]
+fn is_platform_provided_symlink(_path: &Path) -> bool {
+    false
 }
 
 fn directory_has_entries(path: &Path) -> Result<bool> {

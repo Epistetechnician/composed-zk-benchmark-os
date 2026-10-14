@@ -251,6 +251,37 @@ fn packet_output_root_rejects_protected_paths() {
     assert!(error.to_string().contains("protected path"));
 }
 
+#[test]
+fn packet_output_root_rejects_parent_directory_protected_paths() {
+    let dir = tempdir().expect("temporary output parent should exist");
+    let output_root = dir.path().join("packet");
+    let packet = packet(
+        "packet-experiment-protected-parent",
+        "packet-run-protected-parent",
+    );
+    let protected_path = dir.path().join("nested").join("..").join("protected");
+    let error = write_experiment_packet_outputs(&output_root, &packet, false, &[protected_path])
+        .expect_err("parent-directory protected paths must fail closed");
+    assert!(error.to_string().contains("protected path"));
+    assert!(!output_root.exists());
+}
+
+#[test]
+fn packet_output_root_rejects_empty_protected_paths() {
+    let dir = tempdir().expect("temporary output parent should exist");
+    let output_root = dir.path().join("packet");
+    let packet = packet(
+        "packet-experiment-protected-empty",
+        "packet-run-protected-empty",
+    );
+    let error = write_experiment_packet_outputs(&output_root, &packet, false, &["".into()])
+        .expect_err("empty protected paths must fail closed");
+    assert!(error
+        .to_string()
+        .contains("protected path must be non-empty"));
+    assert!(!output_root.exists());
+}
+
 #[cfg(unix)]
 #[test]
 fn packet_readback_rejects_symlinked_payload_paths() {
@@ -268,6 +299,40 @@ fn packet_readback_rejects_symlinked_payload_paths() {
 
     let error = read_experiment_packet_outputs(&output_root, &[])
         .expect_err("symlinked packet payload must be rejected");
+    assert!(error.to_string().contains("symlink"));
+}
+
+#[test]
+fn packet_readback_rejects_parent_directory_components_in_output_root() {
+    let dir = tempdir().expect("temporary output parent should exist");
+    let safe_root = dir.path().join("safe-packet");
+    let packet = packet("packet-experiment-parent", "packet-run-parent");
+    write_experiment_packet_outputs(&safe_root, &packet, false, &[])
+        .expect("packet should materialize at the safe root");
+
+    let unsafe_root = dir.path().join("nested").join("..").join("safe-packet");
+    let error = read_experiment_packet_outputs(&unsafe_root, &[])
+        .expect_err("parent-directory output roots must fail closed");
+    assert!(error.to_string().contains("parent-directory"));
+}
+
+#[cfg(unix)]
+#[test]
+fn packet_readback_rejects_symlinked_output_root_ancestors() {
+    use std::os::unix::fs::symlink;
+
+    let dir = tempdir().expect("temporary output parent should exist");
+    let real_parent = dir.path().join("real-parent");
+    let safe_root = real_parent.join("packet");
+    let packet = packet("packet-experiment-ancestor", "packet-run-ancestor");
+    write_experiment_packet_outputs(&safe_root, &packet, false, &[])
+        .expect("packet should materialize at the real root");
+
+    let symlinked_parent = dir.path().join("symlinked-parent");
+    symlink(&real_parent, &symlinked_parent).expect("test should install a parent symlink");
+    let unsafe_root = symlinked_parent.join("packet");
+    let error = read_experiment_packet_outputs(&unsafe_root, &[])
+        .expect_err("symlinked output-root ancestors must fail closed");
     assert!(error.to_string().contains("symlink"));
 }
 

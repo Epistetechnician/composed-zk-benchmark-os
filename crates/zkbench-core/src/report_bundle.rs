@@ -3,6 +3,8 @@
 //! Report bundles are read-only local integrity summaries. They do not create
 //! accepted evidence, do not execute replay commands, do not claim official
 //! benchmark evidence, and do not report ZK backend performance.
+//!
+//! State slice: benchmark-os-report-bundle-output-write-symlink-preflight-v1.
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
@@ -1111,7 +1113,71 @@ fn validate_output_root(root: &Path) -> Result<()> {
             "report-bundle output root must not contain parent-directory components",
         ));
     }
+    let normalized = if root.is_absolute() {
+        root.to_path_buf()
+    } else {
+        std::env::current_dir()
+            .map_err(|error| report_bundle_io_error("cwd", error))?
+            .join(root)
+    };
+    validate_output_root_path_components(&normalized)?;
     Ok(())
+}
+
+fn validate_output_root_path_components(path: &Path) -> Result<()> {
+    let mut candidate = path;
+    let mut is_leaf = true;
+    loop {
+        match fs::symlink_metadata(candidate) {
+            Ok(metadata) => {
+                let platform_symlink =
+                    metadata.file_type().is_symlink() && is_platform_provided_symlink(candidate);
+                if metadata.file_type().is_symlink() && !platform_symlink {
+                    return Err(report_bundle_io_error(
+                        candidate.display().to_string(),
+                        "report-bundle output path must not be a symlink",
+                    ));
+                }
+                if !is_leaf && !metadata.is_dir() && !platform_symlink {
+                    return Err(report_bundle_io_error(
+                        candidate.display().to_string(),
+                        "report-bundle output parent must be a directory",
+                    ));
+                }
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+            Err(error) => {
+                return Err(report_bundle_io_error(
+                    candidate.display().to_string(),
+                    error,
+                ));
+            }
+        }
+
+        let Some(parent) = candidate.parent() else {
+            break;
+        };
+        if parent == candidate || parent.as_os_str().is_empty() {
+            break;
+        }
+        candidate = parent;
+        is_leaf = false;
+    }
+    Ok(())
+}
+
+#[cfg(target_os = "macos")]
+fn is_platform_provided_symlink(path: &Path) -> bool {
+    path.parent() == Some(Path::new("/"))
+        && matches!(
+            path.file_name().and_then(|name| name.to_str()),
+            Some("etc" | "home" | "tmp" | "var")
+        )
+}
+
+#[cfg(not(target_os = "macos"))]
+fn is_platform_provided_symlink(_path: &Path) -> bool {
+    false
 }
 
 fn validate_rendered_markdown_path(relative_path: &str) -> Result<()> {
@@ -1163,6 +1229,7 @@ fn read_relative_bytes(root: &Path, relative_path: &str) -> Result<Vec<u8>> {
 fn write_relative_bytes(root: &Path, relative_path: &str, bytes: &[u8]) -> Result<()> {
     validate_relative_output_path(relative_path)?;
     let path = root.join(relative_path);
+    validate_output_root_path_components(&path)?;
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent)
             .map_err(|error| report_bundle_io_error(parent.display().to_string(), error))?;
@@ -1279,4 +1346,32 @@ fn digest_markdown_bytes(bytes: &[u8]) -> ArtifactDigest {
 
 fn report_bundle_io_error(path: impl Into<String>, message: impl ToString) -> ZkBenchError {
     ZkBenchError::benchmark_pack(path, message.to_string())
+}
+
+#[cfg(all(test, unix))]
+mod tests {
+    use super::*;
+
+    // State slice: benchmark-os-report-bundle-output-write-symlink-preflight-v1.
+    #[test]
+    fn write_relative_bytes_rejects_symlinked_declared_destination() {
+        let directory = tempfile::tempdir().expect("temporary directory should create");
+        let output_root = directory.path().join("output");
+        fs::create_dir_all(&output_root).expect("output root should create");
+
+        let external_target = directory.path().join("external-target.json");
+        fs::write(&external_target, b"protected").expect("external target should write");
+        let declared_destination = output_root.join(REPORT_BUNDLE_MANIFEST_PATH);
+        std::os::unix::fs::symlink(&external_target, &declared_destination)
+            .expect("declared destination symlink should create");
+
+        let error = write_relative_bytes(&output_root, REPORT_BUNDLE_MANIFEST_PATH, b"replacement")
+            .expect_err("symlinked declared destination should reject");
+
+        assert!(error.to_string().contains("must not be a symlink"));
+        assert_eq!(
+            fs::read(&external_target).expect("external target should remain readable"),
+            b"protected"
+        );
+    }
 }

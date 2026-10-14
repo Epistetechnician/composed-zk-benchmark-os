@@ -884,6 +884,49 @@ fn external_replay_submission_preflight_rejects_endpoint_attempt_and_protected_r
     }));
 }
 
+#[cfg(unix)]
+#[test]
+fn external_replay_submission_preflight_rejects_nested_symlinked_future_output_root_ancestor() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let mut request = valid_external_replay_submission_preflight_request(&dir);
+    let real_parent = dir.path().join("real-output-parent");
+    let real_nested_parent = real_parent.join("existing-child");
+    std::fs::create_dir_all(&real_nested_parent).expect("real output parent should create");
+    let symlinked_parent = dir.path().join("symlinked-output-parent");
+    std::os::unix::fs::symlink(&real_parent, &symlinked_parent)
+        .expect("output parent symlink should create");
+    request.future_output_root = symlinked_parent.join("existing-child").join("output");
+
+    let validation = validate_external_replay_submission_preflight_request(&request);
+
+    assert!(!validation.valid);
+    assert!(validation.issues.iter().any(|issue| {
+        issue.kind == ExternalReplaySubmissionPreflightIssueKind::UnsafeOutputRoot
+            && issue.path == "request.future_output_root"
+            && issue.message.contains("must not be a symlink")
+    }));
+    assert!(!real_nested_parent.join("output").exists());
+}
+
+#[test]
+fn external_replay_submission_preflight_rejects_non_directory_future_output_root_ancestor() {
+    let dir = tempfile::tempdir().expect("tempdir should be available");
+    let mut request = valid_external_replay_submission_preflight_request(&dir);
+    let file_parent = dir.path().join("future-output-file");
+    std::fs::write(&file_parent, b"not a directory").expect("future output file should write");
+    request.future_output_root = file_parent.join("child-output");
+
+    let validation = validate_external_replay_submission_preflight_request(&request);
+
+    assert!(!validation.valid);
+    assert!(validation.issues.iter().any(|issue| {
+        issue.kind == ExternalReplaySubmissionPreflightIssueKind::UnsafeOutputRoot
+            && issue.path == "request.future_output_root"
+            && issue.message.contains("must be a directory parent")
+    }));
+    assert!(!request.future_output_root.exists());
+}
+
 #[test]
 fn external_replay_submission_preflight_source_scan_exposes_no_live_runtime_surface() {
     let source_path = Path::new(env!("CARGO_MANIFEST_DIR"))
@@ -1050,6 +1093,22 @@ fn external_replay_preflight_outputs_reject_file_repo_parent_and_symlink_roots()
         let symlink = write_external_replay_submission_preflight_outputs(&request)
             .expect_err("symlink output root should reject");
         assert!(symlink.to_string().contains("symlink"));
+
+        let real_parent = dir.path().join("real-output-parent");
+        fs::create_dir(&real_parent).expect("real output parent should create");
+        let real_nested_parent = real_parent.join("existing-child");
+        fs::create_dir(&real_nested_parent).expect("real nested output parent should create");
+        let symlinked_parent = dir.path().join("symlinked-output-parent");
+        std::os::unix::fs::symlink(&real_parent, &symlinked_parent)
+            .expect("symlinked output parent should create");
+        request.output_root = symlinked_parent.join("existing-child").join("output");
+        request.preflight_request.future_output_root = request.output_root.clone();
+        request.preflight_report =
+            build_external_replay_submission_preflight_report(&request.preflight_request);
+        let symlinked_parent_error = write_external_replay_submission_preflight_outputs(&request)
+            .expect_err("symlinked output parent should reject before writing");
+        assert!(symlinked_parent_error.to_string().contains("symlink"));
+        assert!(!real_nested_parent.join("output").exists());
     }
 }
 

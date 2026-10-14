@@ -33,7 +33,10 @@ The output path:
 - Requires an existing accepted Evidence Ledger JSON file.
 - Rejects parent-directory components.
 - Rejects protected-path overlap.
-- Rejects symlink output roots, symlink children, and symlink ledger paths.
+- Rejects caller-controlled symlink output roots, symlink parent components,
+  symlink children, and symlink ledger paths. Standard macOS `/etc`, `/home`,
+  `/tmp`, and `/var` aliases remain platform-provided path components while
+  the full ancestor chain is checked.
 - Loads and validates the accepted ledger before materializing package files.
 - Requires every package accepted-evidence id to exist in that accepted ledger
   by sequence number or entry digest.

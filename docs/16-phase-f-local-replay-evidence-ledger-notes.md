@@ -18,6 +18,12 @@ Implemented concepts:
 
 This is still Level1LocalReplay at most. A benchmark pass is not proof. Local replay is not official benchmark evidence. A recursion proof is not semantic proof.
 
+Pack materialization and validation reject caller-controlled symlinked path
+components, declared artifact files, reproduction sidecars, and pack-readiness
+outputs before writing or reading them. This keeps local pack paths bound to
+the caller's selected directory tree; standard macOS root aliases are treated
+as platform paths.
+
 ## Local JSON Adapter Behavior
 
 `LocalJsonAdapter` is the first concrete adapter, but it is not a real ZK backend adapter. It consumes embedded local generated or mutated benchmark subjects from a `ReplayManifest`, evaluates selected traces with the local oracle, and emits `ReplayResult` values.
@@ -89,6 +95,11 @@ Each entry records:
 - notes
 
 The digest chain is computed from sequence number, previous digest, and canonical evidence record JSON. Ledger validation recomputes the chain and verifies summary counts. This is a local integrity check only. It is not tamper-proof, not a Merkle proof, and not independent reproduction.
+
+Direct ledger persistence rejects caller-controlled symlinked path components
+before writing or reading the JSON file; standard macOS root aliases are
+treated as platform paths. This protects the caller-selected local ledger path
+but does not make the digest chain tamper-proof or race-free.
 
 Actual Phase F entries are rejected when their claim boundary exceeds `Level1LocalReplay`.
 

@@ -2,6 +2,165 @@
 
 Status: local validation report only.
 
+The current local hardening pass also verifies that shared
+`hsai-agent-admission` materializers reject caller-controlled symlinked and
+non-directory output-root ancestors before staged filesystem writes. This is
+local filesystem-safety evidence only; it does not elevate benchmark,
+attestation, production, or external-evidence claims.
+
+The runtime hardening pass also makes the authorized local formal-backend
+process lanes drain piped stdout and stderr concurrently while retaining only
+the declared bounded prefix plus one truncation sentinel byte. Timeout paths
+kill and reap the child before readers join. This is local process-capture
+safety evidence only; it does not elevate backend, benchmark, proof,
+production, or external-evidence claims.
+
+The `zkbench-core` proposal-ledger persistence state slice now rejects
+parent-directory components in caller-supplied ledger paths before any read or
+write. This closes a deterministic lexical path escape in the local JSON
+proposal-ledger boundary and remains local filesystem-safety evidence only; it
+does not elevate benchmark, proof, production, or external-evidence claims.
+
+The `zkbench-core` evidence-ledger persistence state slice applies the same
+parent-directory rejection to its public JSON save/load boundary. This is
+local filesystem-safety regression evidence only and does not elevate
+benchmark, proof, production, or external-evidence claims.
+
+The shared `zkbench-core` soak persistence path state slice now rejects
+parent-directory components for checkpoint and local JSON writes before any
+read or write. This remains local filesystem-safety regression evidence only;
+it does not elevate benchmark, proof, production, or external-evidence claims.
+
+The shared `zkbench-core` benchmark-pack path state slice now rejects
+parent-directory components for pack roots before writer or reader filesystem
+access. This remains local filesystem-safety regression evidence only; it does
+not elevate benchmark, proof, production, or external-evidence claims.
+
+The shared `zkbench-core` benchmark-pack root state slice now rejects empty
+roots before writer directory creation or reader manifest access. This remains
+local filesystem-safety regression evidence only; it does not elevate
+benchmark, proof, production, or external-evidence claims.
+
+The benchmark-pack writer regression matrix now covers an exact declared
+destination symlink during overwrite, proving that an external target remains
+unchanged. This remains local filesystem-safety regression evidence only; it
+does not elevate benchmark, proof, production, or external-evidence claims.
+
+The local reporting-chain E2E regression now composes deterministic generation,
+local replay, benchmark-pack write/readback, pack-readiness write/readback,
+report-bundle write/readback, and audit-index write/readback in one hermetic
+test while asserting every downstream claim ceiling and nonclaim flag. This
+remains local compositional regression evidence only; it does not elevate
+benchmark, proof, production, or external-evidence claims.
+
+The same E2E chain now covers Phase S ergonomics and Phase T cross-bundle
+audit-index materialization/readback, including deterministic view digests,
+protected output roots, source ordering, and Level0 claim ceilings. This
+remains local presentation regression evidence only; it does not elevate
+benchmark, proof, production, or external-evidence claims.
+
+The local reporting-chain E2E regression now also tampers a temporary score
+report and verifies that failed pack readiness remains failed and visible
+through readiness output, report-bundle rendering, and audit-index readback,
+while every escalation flag remains false. This is local failure-preservation
+and claim-boundary regression evidence only; it does not elevate benchmark,
+proof, production, or external-evidence claims.
+
+The shared `zkbench-core` soak report-bundle root state slice now rejects empty
+roots before report-bundle directory inspection or manifest access. This remains
+local filesystem-safety regression evidence only; it does not elevate benchmark,
+proof, production, or external-evidence claims.
+
+The shared `zkbench-core` local soak-runner output-root state slice now rejects
+empty or parent-unsafe caller-provided output directories before shard lookup or
+artifact materialization. This remains local filesystem-safety regression
+evidence only; it does not elevate benchmark, proof, production, or
+external-evidence claims.
+
+The shared `zkbench-core` reproduction-sidecar readback state slice now rejects
+empty or unsafe pack roots before constructing the sidecar path. This remains
+local filesystem-safety regression evidence only; it does not elevate benchmark,
+proof, production, or external-evidence claims.
+
+The current typed experiment-packet readback state slice now rejects
+parent-directory components and non-platform symlink ancestors in caller-owned
+packet roots before packet filesystem access. This remains local
+filesystem-safety regression evidence only; it does not elevate benchmark,
+proof, production, or external-evidence claims.
+
+The typed experiment-packet destination state slice now rejects empty,
+parent-traversing, or unsafe protected paths before overlap resolution. This
+remains local filesystem-safety regression evidence only; it does not elevate
+benchmark, proof, production, or external-evidence claims.
+
+The packet-store configuration state slice now rejects parent-directory output
+and protected paths during static job validation, before catalog resolution or
+materialization. This remains local filesystem-safety regression evidence only;
+it does not elevate benchmark, proof, production, or external-evidence claims.
+
+The zk-Harness pack-mapping read boundary now repeats relative-path and resolved
+pack-component validation immediately before private JSON reads. This remains
+local filesystem-safety regression evidence only; it does not elevate
+benchmark, proof, production, or external-evidence claims.
+
+The external replay preflight output write boundary now rechecks every existing
+destination path component immediately before directory creation or file write,
+rejecting symlinked declared destinations and unsafe existing parents. This
+remains local filesystem-safety regression evidence only; it does not elevate
+benchmark, proof, production, or external-evidence claims.
+
+The official-submission package output write boundary now applies the same
+immediate existing-component recheck before directory creation or file write,
+rejecting symlinked declared destinations and unsafe existing parents. This
+remains local filesystem-safety regression evidence only; it does not elevate
+benchmark, proof, production, or external-evidence claims.
+
+The local benchmark-artifact output write boundary now applies the same
+immediate existing-component recheck before directory creation or file write,
+rejecting symlinked declared destinations and unsafe existing parents. This
+remains local filesystem-safety regression evidence only; it does not elevate
+benchmark, proof, production, or external-evidence claims.
+
+The local artifact-campaign output write boundary now applies the same
+immediate existing-component recheck before directory creation or file write,
+rejecting symlinked declared destinations and unsafe existing parents. This
+remains local filesystem-safety regression evidence only; it does not elevate
+benchmark, proof, production, or external-evidence claims.
+
+The local audit-index output write boundary now applies the same immediate
+existing-component recheck before directory creation or file write, covering
+the manifest, ergonomics, and cross-bundle output families. This remains local
+filesystem-safety regression evidence only; it does not elevate benchmark,
+proof, production, or external-evidence claims.
+
+The report-bundle output write boundary now applies the same immediate
+existing-component recheck before directory creation or file write, including
+rendered report paths and digest sidecars. This remains local filesystem-safety
+regression evidence only; it does not elevate benchmark, proof, production, or
+external-evidence claims.
+
+The `zkbench-core` synthetic artifact-resolver path state slice now rejects
+parent-directory components in caller-supplied roots before local artifact
+reads. This remains local filesystem-safety regression evidence only; it does
+not elevate benchmark, proof, production, or external-evidence claims.
+
+The `zkbench-core` local benchmark-artifact output state slice now rejects
+parent-directory components in caller-supplied output roots before
+materialization. This remains local filesystem-safety regression evidence
+only; it does not elevate benchmark, proof, production, or external-evidence
+claims.
+
+The `zkbench-core` local artifact-campaign output state slice now rejects
+parent-directory components in caller-supplied output roots before
+materialization. This remains local filesystem-safety regression evidence
+only; it does not elevate benchmark, proof, production, or external-evidence
+claims.
+
+The `zkbench-core` pack-readiness root state slice now rejects empty or unsafe
+caller-supplied pack roots before adjacent readiness report reads or writes.
+This remains local filesystem-safety regression evidence only; it does not
+elevate benchmark, proof, production, or external-evidence claims.
+
 This report records the end-to-end local validation run after Phase S
 audit-index ergonomics output plumbing, protected-path overlap hardening, the
 Phase 102 opt-in Phala provider-client implementation, the Phase 105

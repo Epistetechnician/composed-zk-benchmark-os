@@ -5,7 +5,7 @@
 
 use std::collections::BTreeMap;
 use std::fs;
-use std::path::Path;
+use std::path::{Component, Path};
 
 use serde::{Deserialize, Serialize};
 
@@ -124,6 +124,7 @@ impl EvidenceLedger {
 
     /// Save ledger as pretty JSON.
     pub fn save_json(&self, path: impl AsRef<Path>) -> Result<()> {
+        validate_ledger_path_components(path.as_ref())?;
         let json = serde_json::to_string_pretty(self).map_err(|error| {
             ZkBenchError::serialization("evidence_ledger.save_json", error.to_string())
         })?;
@@ -134,6 +135,7 @@ impl EvidenceLedger {
 
     /// Load ledger from JSON.
     pub fn load_json(path: impl AsRef<Path>) -> Result<Self> {
+        validate_ledger_path_components(path.as_ref())?;
         let json = fs::read_to_string(path.as_ref()).map_err(|error| {
             ZkBenchError::evidence_ledger(path.as_ref().display().to_string(), error.to_string())
         })?;
@@ -232,6 +234,72 @@ impl EvidenceLedger {
             summary,
         }
     }
+}
+
+fn validate_ledger_path_components(path: &Path) -> Result<()> {
+    if path
+        .components()
+        .any(|component| matches!(component, Component::ParentDir))
+    {
+        return Err(ZkBenchError::evidence_ledger(
+            path.display().to_string(),
+            "evidence ledger path must not contain parent-directory components",
+        ));
+    }
+
+    let mut candidate = path;
+    let mut is_leaf = true;
+    loop {
+        match fs::symlink_metadata(candidate) {
+            Ok(metadata) => {
+                let platform_symlink =
+                    metadata.file_type().is_symlink() && is_platform_provided_symlink(candidate);
+                if metadata.file_type().is_symlink() && !platform_symlink {
+                    return Err(ZkBenchError::evidence_ledger(
+                        candidate.display().to_string(),
+                        "evidence ledger path must not be a symlink",
+                    ));
+                }
+                if !is_leaf && !metadata.is_dir() && !platform_symlink {
+                    return Err(ZkBenchError::evidence_ledger(
+                        candidate.display().to_string(),
+                        "evidence ledger parent must be a directory",
+                    ));
+                }
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+            Err(error) => {
+                return Err(ZkBenchError::evidence_ledger(
+                    candidate.display().to_string(),
+                    error.to_string(),
+                ));
+            }
+        }
+
+        let Some(parent) = candidate.parent() else {
+            break;
+        };
+        if parent == candidate || parent.as_os_str().is_empty() {
+            break;
+        }
+        candidate = parent;
+        is_leaf = false;
+    }
+    Ok(())
+}
+
+#[cfg(target_os = "macos")]
+fn is_platform_provided_symlink(path: &Path) -> bool {
+    matches!(path.parent(), Some(parent) if parent == Path::new("/"))
+        && matches!(
+            path.file_name().and_then(|name| name.to_str()),
+            Some("etc" | "home" | "tmp" | "var")
+        )
+}
+
+#[cfg(not(target_os = "macos"))]
+fn is_platform_provided_symlink(_path: &Path) -> bool {
+    false
 }
 
 /// Evidence ledger entry.

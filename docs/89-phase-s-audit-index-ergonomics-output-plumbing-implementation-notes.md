@@ -67,6 +67,7 @@ The output plumbing fails closed for:
 - output claim boundary above `Level0DesignNote`;
 - missing required limitation labels in the view or rendered Markdown;
 - output roots with parent-directory components, URL-like content, shell-like
+- caller-controlled symlinked output-root ancestor components;
   content, or protected path overlap;
 - non-empty output roots without explicit overwrite;
 - overwrite attempts over unexpected files, symlinks, partial bundles, stale
@@ -96,6 +97,7 @@ It verifies:
 - unexpected-file rejection;
 - protected path overlap rejection;
 - symlink rejection on Unix;
+- nested caller-controlled symlinked output-root ancestor rejection;
 - source scan for no external execution hooks.
 
 Validation run:

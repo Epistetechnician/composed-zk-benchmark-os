@@ -1144,6 +1144,34 @@ fn cross_bundle_outputs_reject_symlink_parent_into_protected_root() {
     assert!(!output_root.exists());
 }
 
+#[cfg(unix)]
+#[test]
+fn cross_bundle_outputs_reject_nested_symlinked_output_root_ancestor() {
+    use std::os::unix::fs::symlink;
+
+    let request = simple_cross_bundle_request();
+    let view = build_local_audit_index_cross_bundle_view(&request).expect("view builds");
+    let dir = tempfile::tempdir().expect("tempdir");
+    let real_parent = dir.path().join("real-output-parent");
+    let real_nested_parent = real_parent.join("existing-child");
+    fs::create_dir_all(&real_nested_parent).expect("real nested output parent");
+    let symlinked_parent = dir.path().join("symlinked-output-parent");
+    symlink(&real_parent, &symlinked_parent).expect("symlinked output parent");
+    let output_root = symlinked_parent.join("existing-child").join("output");
+    let protected_paths: &[&std::path::Path] = &[];
+
+    let error = write_local_audit_index_cross_bundle_outputs(
+        &output_root,
+        &request,
+        &view,
+        false,
+        protected_paths,
+    )
+    .expect_err("nested symlinked output ancestor should fail before writing");
+    assert!(error.to_string().contains("must not be a symlink"));
+    assert!(!real_nested_parent.join("output").exists());
+}
+
 #[test]
 fn cross_bundle_audit_index_source_exposes_no_runtime_surface() {
     let source = include_str!("../src/audit_index.rs");

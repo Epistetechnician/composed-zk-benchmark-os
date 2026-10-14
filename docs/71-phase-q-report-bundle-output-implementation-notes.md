@@ -54,6 +54,7 @@ rendered Markdown files, and recomputes every rendered Markdown digest.
 The implementation fails closed for:
 
 - invalid output roots;
+- caller-controlled symlinked output-root ancestors;
 - unsafe relative output paths;
 - non-empty output roots without explicit overwrite approval;
 - unexpected existing files when overwrite is enabled;

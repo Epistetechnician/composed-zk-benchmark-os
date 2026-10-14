@@ -4,6 +4,8 @@
 //! review metadata only. It writes declared digest-bound files and never runs
 //! external replay, submits to an endpoint, reads credentials, mutates accepted
 //! ledgers, or populates score axes.
+//!
+//! State slice: benchmark-os-external-replay-preflight-output-write-symlink-preflight-v1.
 
 use std::collections::BTreeSet;
 use std::fs;
@@ -812,6 +814,7 @@ fn verify_digest_sidecar(
 fn write_relative_bytes(output_root: &Path, relative_path: &str, bytes: &[u8]) -> Result<()> {
     validate_relative_output_path(relative_path)?;
     let path = output_root.join(relative_path);
+    validate_output_root_path_components(&path)?;
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent).map_err(|error| {
             preflight_output_error(parent.display().to_string(), error.to_string())
@@ -891,6 +894,10 @@ fn validate_output_root(output_root: &Path, protected_paths: &[PathBuf]) -> Resu
         ));
     }
     validate_no_parent_components(output_root, "output root")?;
+    if let Some(parent) = output_root.parent() {
+        validate_output_root_path_components(parent)?;
+    }
+    validate_output_root_path_components(output_root)?;
     let normalized_output = normalize_path(output_root)?;
     let resolved_output = resolve_existing_prefix(output_root)?;
     let repo_root = std::env::current_dir().map_err(|error| {
@@ -920,6 +927,62 @@ fn validate_output_root(output_root: &Path, protected_paths: &[PathBuf]) -> Resu
         }
     }
     Ok(())
+}
+
+fn validate_output_root_path_components(path: &Path) -> Result<()> {
+    let mut candidate = path;
+    let mut is_leaf = true;
+    loop {
+        match fs::symlink_metadata(candidate) {
+            Ok(metadata) => {
+                let platform_symlink =
+                    metadata.file_type().is_symlink() && is_platform_provided_symlink(candidate);
+                if metadata.file_type().is_symlink() && !platform_symlink {
+                    return Err(preflight_output_error(
+                        candidate.display().to_string(),
+                        "external replay preflight output path must not be a symlink",
+                    ));
+                }
+                if !is_leaf && !metadata.is_dir() && !platform_symlink {
+                    return Err(preflight_output_error(
+                        candidate.display().to_string(),
+                        "external replay preflight output parent must be a directory",
+                    ));
+                }
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+            Err(error) => {
+                return Err(preflight_output_error(
+                    candidate.display().to_string(),
+                    error.to_string(),
+                ));
+            }
+        }
+
+        let Some(parent) = candidate.parent() else {
+            break;
+        };
+        if parent == candidate || parent.as_os_str().is_empty() {
+            break;
+        }
+        candidate = parent;
+        is_leaf = false;
+    }
+    Ok(())
+}
+
+#[cfg(target_os = "macos")]
+fn is_platform_provided_symlink(path: &Path) -> bool {
+    path.parent() == Some(Path::new("/"))
+        && matches!(
+            path.file_name().and_then(|name| name.to_str()),
+            Some("etc" | "home" | "tmp" | "var")
+        )
+}
+
+#[cfg(not(target_os = "macos"))]
+fn is_platform_provided_symlink(_path: &Path) -> bool {
+    false
 }
 
 fn validate_no_parent_components(path: &Path, label: &str) -> Result<()> {
@@ -1073,4 +1136,37 @@ fn scan_for_raw_retention_terms(text: &str) -> bool {
 
 fn preflight_output_error(path: impl Into<String>, message: impl Into<String>) -> ZkBenchError {
     ZkBenchError::artifact(path, message)
+}
+
+#[cfg(all(test, unix))]
+mod tests {
+    use super::*;
+
+    // State slice: benchmark-os-external-replay-preflight-output-write-symlink-preflight-v1.
+    #[test]
+    fn write_relative_bytes_rejects_symlinked_declared_destination() {
+        let directory = tempfile::tempdir().expect("temporary directory should create");
+        let output_root = directory.path().join("output");
+        let output_parent = output_root.join("external-replay-submission");
+        fs::create_dir_all(&output_parent).expect("output parent should create");
+
+        let external_target = directory.path().join("external-target.txt");
+        fs::write(&external_target, b"protected").expect("external target should write");
+        let declared_destination = output_parent.join("preflight-report.json");
+        std::os::unix::fs::symlink(&external_target, &declared_destination)
+            .expect("declared destination symlink should create");
+
+        let error = write_relative_bytes(
+            &output_root,
+            EXTERNAL_REPLAY_PREFLIGHT_REPORT_JSON_PATH,
+            b"replacement",
+        )
+        .expect_err("symlinked declared destination should reject");
+
+        assert!(error.to_string().contains("must not be a symlink"));
+        assert_eq!(
+            fs::read(&external_target).expect("external target should remain readable"),
+            b"protected"
+        );
+    }
 }

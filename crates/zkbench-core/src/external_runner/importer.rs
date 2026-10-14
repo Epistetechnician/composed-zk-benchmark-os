@@ -5,7 +5,7 @@
 //! and never appends accepted evidence.
 
 use std::fs;
-use std::path::Path;
+use std::path::{Component, Path};
 
 use serde::{Deserialize, Serialize};
 
@@ -145,6 +145,7 @@ impl ResultCandidateArtifactResolver {
                 ));
             }
             let path = root.join(artifact_ref);
+            validate_artifact_resolver_path_components(&path)?;
             let bytes = fs::read(&path).map_err(|error| {
                 ZkBenchError::synthetic_import(path.display().to_string(), error.to_string())
             })?;
@@ -177,6 +178,72 @@ impl ResultCandidateArtifactResolver {
             .iter()
             .find(|lookup| lookup.artifact_ref == artifact_ref)
     }
+}
+
+fn validate_artifact_resolver_path_components(path: &Path) -> Result<()> {
+    if path
+        .components()
+        .any(|component| matches!(component, Component::ParentDir))
+    {
+        return Err(ZkBenchError::synthetic_import(
+            path.display().to_string(),
+            "artifact resolver path must not contain parent-directory components",
+        ));
+    }
+
+    let mut candidate = path;
+    let mut is_leaf = true;
+    loop {
+        match fs::symlink_metadata(candidate) {
+            Ok(metadata) => {
+                let platform_symlink =
+                    metadata.file_type().is_symlink() && is_platform_provided_symlink(candidate);
+                if metadata.file_type().is_symlink() && !platform_symlink {
+                    return Err(ZkBenchError::synthetic_import(
+                        candidate.display().to_string(),
+                        "artifact resolver path must not be a symlink",
+                    ));
+                }
+                if !is_leaf && !metadata.is_dir() && !platform_symlink {
+                    return Err(ZkBenchError::synthetic_import(
+                        candidate.display().to_string(),
+                        "artifact resolver parent must be a directory",
+                    ));
+                }
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+            Err(error) => {
+                return Err(ZkBenchError::synthetic_import(
+                    candidate.display().to_string(),
+                    error.to_string(),
+                ));
+            }
+        }
+
+        let Some(parent) = candidate.parent() else {
+            break;
+        };
+        if parent == candidate || parent.as_os_str().is_empty() {
+            break;
+        }
+        candidate = parent;
+        is_leaf = false;
+    }
+    Ok(())
+}
+
+#[cfg(target_os = "macos")]
+fn is_platform_provided_symlink(path: &Path) -> bool {
+    matches!(path.parent(), Some(parent) if parent == Path::new("/"))
+        && matches!(
+            path.file_name().and_then(|name| name.to_str()),
+            Some("etc" | "home" | "tmp" | "var")
+        )
+}
+
+#[cfg(not(target_os = "macos"))]
+fn is_platform_provided_symlink(_path: &Path) -> bool {
+    false
 }
 
 /// Synthetic import configuration.

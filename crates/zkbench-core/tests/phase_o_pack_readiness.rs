@@ -1,6 +1,9 @@
 use std::fs;
 use std::path::Path;
 
+#[cfg(unix)]
+use std::os::unix::fs::symlink;
+
 use tempfile::tempdir;
 use zkbench_core::{
     build_local_replay_manifest_for_instance, build_pack_readiness_report_from_reader,
@@ -269,6 +272,24 @@ fn pack_readiness_readback_reports_missing_and_malformed_validation_files() {
 }
 
 #[test]
+fn pack_readiness_roots_reject_empty_paths_before_filesystem_access() {
+    let empty_root = Path::new("");
+
+    let write_error = write_pack_readiness_outputs_for_pack(empty_root)
+        .expect_err("empty pack root should reject before reading pack metadata");
+    let report_error = read_pack_readiness_report(empty_root)
+        .expect_err("empty pack root should reject before reading readiness report");
+    let validation_error = read_pack_readiness_validation(empty_root)
+        .expect_err("empty pack root should reject before reading readiness validation");
+
+    for error in [write_error, report_error, validation_error] {
+        assert!(error
+            .to_string()
+            .contains("pack-readiness pack root must be non-empty"));
+    }
+}
+
+#[test]
 fn pack_readiness_outputs_write_adjacent_metadata_without_manifest_mutation() {
     let dir = write_sample_pack("phase_o_readiness_output_pack");
     let output = write_pack_readiness_outputs_for_pack(dir.path())
@@ -317,6 +338,39 @@ fn pack_readiness_outputs_write_adjacent_metadata_without_manifest_mutation() {
         .files
         .iter()
         .any(|file| file.relative_path.starts_with("readiness/")));
+}
+
+#[cfg(unix)]
+#[test]
+fn pack_readiness_writer_rejects_symlinked_readiness_directory() {
+    let dir = write_sample_pack("phase_o_symlinked_readiness_writer");
+    let outside_root = dir.path().join("outside-readiness");
+    fs::create_dir(&outside_root).expect("outside readiness root should create");
+    symlink(&outside_root, dir.path().join("readiness"))
+        .expect("readiness directory symlink should create");
+
+    let error = write_pack_readiness_outputs_for_pack(dir.path())
+        .expect_err("symlinked readiness directory should reject before writing");
+    assert!(error.to_string().contains("must not be a symlink"));
+    assert!(!outside_root.join("pack-readiness-report.json").exists());
+}
+
+#[cfg(unix)]
+#[test]
+fn pack_readiness_reader_rejects_symlinked_report() {
+    let dir = write_sample_pack("phase_o_symlinked_readiness_reader");
+    write_pack_readiness_outputs_for_pack(dir.path()).expect("readiness outputs should write");
+
+    let report_path = dir.path().join(PACK_READINESS_REPORT_PATH);
+    let outside_path = dir.path().join("outside-readiness-report.json");
+    let report_bytes = fs::read(&report_path).expect("readiness report should read");
+    fs::write(&outside_path, report_bytes).expect("outside readiness report should write");
+    fs::remove_file(&report_path).expect("real readiness report should remove");
+    symlink(&outside_path, &report_path).expect("readiness report symlink should create");
+
+    let error = read_pack_readiness_report(dir.path())
+        .expect_err("symlinked readiness report should reject before reading");
+    assert!(error.to_string().contains("must not be a symlink"));
 }
 
 #[test]

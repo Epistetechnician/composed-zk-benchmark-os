@@ -13,6 +13,8 @@ Phase K adds local-only soak infrastructure for the benchmark OS:
 - Failure corpus indexes, reproduction manifests, and minimization metadata.
 - Local soak artifact layout and report bundle schemas.
 - Deterministic JSON serialization helpers.
+- Artifact manifests hash the exact pretty-JSON bytes emitted to the declared
+  artifact paths.
 
 ## Why Local Soak Is Valuable
 
@@ -145,6 +147,27 @@ The local layout is:
 ```
 
 Tests use tempdirs. Future long soak output should live outside the repository or under an ignored artifact directory unless explicitly requested.
+
+Every artifact digest in a soak report bundle is computed over the exact
+pretty-JSON bytes written to that artifact's declared relative path. This
+keeps the recorded SHA-256 and byte length directly verifiable from the
+materialized campaign directory.
+
+`read_soak_report_bundle` revalidates the complete `Level0DesignNote` bundle
+contract after JSON deserialization and rejects semantically invalid
+readback, undeclared output entries, symlinked roots/files, and malformed JSON.
+
+`write_soak_report_bundle` and the shared soak JSON writer reject existing
+symlinked path components, non-directory parents, symlinked roots, and
+non-empty bundle roots before materializing output. Standard macOS root aliases
+are treated as platform paths.
+
+`read_soak_report_bundle` also rejects symlinked parent components before
+opening the declared bundle file, so readback cannot be redirected through a
+symlinked directory ancestor.
+
+Bundle artifact manifests also require SHA-256, lowercase 64-character
+hexadecimal digests with the expected `Other`/`Manifest` metadata.
 
 ## Validation Summary
 

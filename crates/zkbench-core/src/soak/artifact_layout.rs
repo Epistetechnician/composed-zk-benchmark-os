@@ -2,13 +2,14 @@
 
 use std::collections::BTreeSet;
 use std::fs;
-use std::path::Path;
+use std::path::{Component, Path};
 
 use serde::{Deserialize, Serialize};
 
 use crate::error::{Result, ZkBenchError};
 use crate::evidence::{
-    compute_artifact_digest, ArtifactDigest, ArtifactKind, ArtifactRole, ClaimBoundary,
+    compute_artifact_digest_bytes, ArtifactDigest, ArtifactDigestAlgorithm, ArtifactKind,
+    ArtifactRole, ClaimBoundary,
 };
 use crate::exploration::{validate_exploration_artifact, ExplorationArtifact};
 
@@ -20,6 +21,8 @@ use super::shard::{
     SoakShardPlan,
 };
 use super::telemetry::{validate_soak_telemetry_report, SoakTelemetryReport};
+
+const SOAK_REPORT_BUNDLE_FILENAME: &str = "soak_report_bundle.json";
 
 /// Soak artifact role.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
@@ -349,6 +352,21 @@ pub fn validate_soak_report_bundle(bundle: &SoakReportBundle) -> SoakReportBundl
     let mut artifact_ids = BTreeSet::new();
     let mut artifact_paths = BTreeSet::new();
     for artifact in &bundle.artifact_digest_set.artifacts {
+        if !matches!(
+            artifact.role,
+            SoakArtifactRole::RunConfig
+                | SoakArtifactRole::ShardPlan
+                | SoakArtifactRole::Telemetry
+                | SoakArtifactRole::HealthReport
+                | SoakArtifactRole::FailureCorpusIndex
+                | SoakArtifactRole::AggregateReport
+                | SoakArtifactRole::Exploration
+        ) {
+            issues.push(format!(
+                "unexpected report bundle artifact role for {}: {:?}",
+                artifact.artifact_id, artifact.role
+            ));
+        }
         if !artifact_id_is_portable(&artifact.artifact_id) {
             issues.push(format!(
                 "artifact id is not portable: {}",
@@ -364,11 +382,12 @@ pub fn validate_soak_report_bundle(bundle: &SoakReportBundle) -> SoakReportBundl
                 artifact.relative_path
             ));
         }
-        if artifact.digest.is_none() {
-            issues.push(format!(
+        match &artifact.digest {
+            None => issues.push(format!(
                 "artifact {} is missing digest",
                 artifact.artifact_id
-            ));
+            )),
+            Some(digest) => validate_soak_artifact_digest(artifact, digest, &mut issues),
         }
         if !relative_path_is_portable(&artifact.relative_path) {
             issues.push(format!(
@@ -386,6 +405,36 @@ pub fn validate_soak_report_bundle(bundle: &SoakReportBundle) -> SoakReportBundl
     SoakReportBundleValidation {
         valid: issues.is_empty(),
         issues,
+    }
+}
+
+fn validate_soak_artifact_digest(
+    artifact: &SoakArtifactManifest,
+    digest: &ArtifactDigest,
+    issues: &mut Vec<String>,
+) {
+    if digest.algorithm != ArtifactDigestAlgorithm::Sha256 {
+        issues.push(format!(
+            "artifact {} must use SHA-256 digest algorithm",
+            artifact.artifact_id
+        ));
+    }
+    if digest.hex_digest.len() != 64
+        || !digest
+            .hex_digest
+            .chars()
+            .all(|character| character.is_ascii_digit() || ('a'..='f').contains(&character))
+    {
+        issues.push(format!(
+            "artifact {} must carry a lowercase 64-character hexadecimal digest",
+            artifact.artifact_id
+        ));
+    }
+    if digest.kind != Some(ArtifactKind::Other) || digest.role != Some(ArtifactRole::Manifest) {
+        issues.push(format!(
+            "artifact {} digest kind and role must be Other/Manifest",
+            artifact.artifact_id
+        ));
     }
 }
 
@@ -515,18 +564,7 @@ fn push_missing_expected_report_artifact(
 /// Write a report bundle to a local directory.
 pub fn write_soak_report_bundle(root: impl AsRef<Path>, bundle: &SoakReportBundle) -> Result<()> {
     let root = root.as_ref();
-    if root.exists() && !root.is_dir() {
-        return Err(ZkBenchError::soak(
-            root.display().to_string(),
-            "report bundle root exists and is not a directory",
-        ));
-    }
-    if root.exists() && directory_has_entries(root)? {
-        return Err(ZkBenchError::soak(
-            root.display().to_string(),
-            "report bundle root is non-empty",
-        ));
-    }
+    validate_report_bundle_write_root(root)?;
     let validation = validate_soak_report_bundle(bundle);
     if !validation.valid {
         return Err(ZkBenchError::soak(
@@ -536,9 +574,43 @@ pub fn write_soak_report_bundle(root: impl AsRef<Path>, bundle: &SoakReportBundl
     }
     fs::create_dir_all(root)
         .map_err(|error| ZkBenchError::soak(root.display().to_string(), error.to_string()))?;
-    write_json(root.join("soak_report_bundle.json"), bundle)?;
+    write_json(root.join(SOAK_REPORT_BUNDLE_FILENAME), bundle)?;
     if let Some(exploration) = &bundle.exploration {
         write_json(root.join("aggregate/exploration.json"), exploration)?;
+    }
+    Ok(())
+}
+
+fn validate_report_bundle_write_root(root: &Path) -> Result<()> {
+    validate_soak_root(root)?;
+    match fs::symlink_metadata(root) {
+        Ok(metadata) => {
+            if metadata.file_type().is_symlink() {
+                return Err(ZkBenchError::soak(
+                    root.display().to_string(),
+                    "report bundle root must not be a symlink",
+                ));
+            }
+            if !metadata.is_dir() {
+                return Err(ZkBenchError::soak(
+                    root.display().to_string(),
+                    "report bundle root exists and is not a directory",
+                ));
+            }
+            if directory_has_entries(root)? {
+                return Err(ZkBenchError::soak(
+                    root.display().to_string(),
+                    "report bundle root is non-empty",
+                ));
+            }
+        }
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+        Err(error) => {
+            return Err(ZkBenchError::soak(
+                root.display().to_string(),
+                error.to_string(),
+            ));
+        }
     }
     Ok(())
 }
@@ -546,7 +618,9 @@ pub fn write_soak_report_bundle(root: impl AsRef<Path>, bundle: &SoakReportBundl
 /// Read a report bundle from a local directory.
 pub fn read_soak_report_bundle(root: impl AsRef<Path>) -> Result<SoakReportBundle> {
     let root = root.as_ref();
-    let path = root.join("soak_report_bundle.json");
+    validate_soak_root(root)?;
+    let path = root.join(SOAK_REPORT_BUNDLE_FILENAME);
+    validate_report_bundle_read_root(root)?;
     let bytes = fs::read(&path)
         .map_err(|error| ZkBenchError::soak(path.display().to_string(), error.to_string()))?;
     let bundle: SoakReportBundle = serde_json::from_slice(&bytes).map_err(|error| {
@@ -555,7 +629,7 @@ pub fn read_soak_report_bundle(root: impl AsRef<Path>) -> Result<SoakReportBundl
     let validation = validate_soak_report_bundle(&bundle);
     if !validation.valid {
         return Err(ZkBenchError::soak(
-            "soak.report_bundle",
+            "read_soak_report_bundle",
             format!("invalid bundle: {:?}", validation.issues),
         ));
     }
@@ -602,11 +676,11 @@ pub fn read_soak_report_bundle(root: impl AsRef<Path>) -> Result<SoakReportBundl
                     "exploration artifact manifest digest is missing",
                 )
             })?;
-            let observed_digest = compute_artifact_digest(
-                &sidecar_exploration,
+            let observed_digest = compute_artifact_digest_bytes(
+                &sidecar_bytes,
                 Some(ArtifactKind::Other),
                 Some(ArtifactRole::Manifest),
-            )?;
+            );
             if &observed_digest != expected_digest {
                 return Err(ZkBenchError::soak(
                     "soak.report_bundle.exploration",
@@ -626,7 +700,68 @@ pub fn read_soak_report_bundle(root: impl AsRef<Path>) -> Result<SoakReportBundl
     Ok(bundle)
 }
 
-/// Build an artifact manifest with a deterministic digest.
+fn validate_report_bundle_read_root(root: &Path) -> Result<()> {
+    let metadata = fs::symlink_metadata(root).map_err(|error| {
+        ZkBenchError::soak(
+            root.join(SOAK_REPORT_BUNDLE_FILENAME).display().to_string(),
+            error.to_string(),
+        )
+    })?;
+    if metadata.file_type().is_symlink() {
+        return Err(ZkBenchError::soak(
+            root.display().to_string(),
+            "report bundle root must not be a symlink",
+        ));
+    }
+    if !metadata.is_dir() {
+        return Err(ZkBenchError::soak(
+            root.display().to_string(),
+            "report bundle root is not a directory",
+        ));
+    }
+
+    let mut bundle_file_found = false;
+    for entry in fs::read_dir(root)
+        .map_err(|error| ZkBenchError::soak(root.display().to_string(), error.to_string()))?
+    {
+        let entry = entry
+            .map_err(|error| ZkBenchError::soak(root.display().to_string(), error.to_string()))?;
+        let file_type = entry.file_type().map_err(|error| {
+            ZkBenchError::soak(entry.path().display().to_string(), error.to_string())
+        })?;
+        if file_type.is_symlink() {
+            return Err(ZkBenchError::soak(
+                entry.path().display().to_string(),
+                "report bundle output must not contain symlinks",
+            ));
+        }
+        if entry.file_name().to_string_lossy() == "aggregate" && file_type.is_dir() {
+            continue;
+        }
+        if entry.file_name().to_string_lossy() != SOAK_REPORT_BUNDLE_FILENAME {
+            return Err(ZkBenchError::soak(
+                entry.path().display().to_string(),
+                "unexpected report bundle output entry",
+            ));
+        }
+        if !file_type.is_file() {
+            return Err(ZkBenchError::soak(
+                entry.path().display().to_string(),
+                "report bundle manifest entry is not a regular file",
+            ));
+        }
+        bundle_file_found = true;
+    }
+    if !bundle_file_found {
+        return Err(ZkBenchError::soak(
+            root.display().to_string(),
+            "report bundle manifest file is missing",
+        ));
+    }
+    Ok(())
+}
+
+/// Build an artifact manifest with a digest over the emitted pretty-JSON bytes.
 pub fn soak_artifact_manifest<T: Serialize>(
     artifact_id: impl Into<String>,
     role: SoakArtifactRole,
@@ -647,15 +782,18 @@ pub fn soak_artifact_manifest<T: Serialize>(
             "soak artifact paths must be portable and relative",
         ));
     }
+    let serialized = serde_json::to_vec_pretty(value).map_err(|error| {
+        ZkBenchError::serialization("soak.artifact_manifest", error.to_string())
+    })?;
     Ok(SoakArtifactManifest {
         artifact_id,
         role,
         relative_path,
-        digest: Some(compute_artifact_digest(
-            value,
+        digest: Some(compute_artifact_digest_bytes(
+            &serialized,
             Some(ArtifactKind::Other),
             Some(ArtifactRole::Manifest),
-        )?),
+        )),
         claim_boundary: ClaimBoundary::Level0DesignNote,
         notes: vec!["Soak artifact manifest is local-only.".to_string()],
     })
@@ -677,6 +815,7 @@ pub(crate) fn relative_path_is_portable(path: &str) -> bool {
 
 pub(crate) fn write_json<T: Serialize>(path: impl AsRef<Path>, value: &T) -> Result<()> {
     let path = path.as_ref();
+    validate_soak_path_components(path)?;
     if let Some(parent) = path.parent() {
         fs::create_dir_all(parent)
             .map_err(|error| ZkBenchError::soak(parent.display().to_string(), error.to_string()))?;
@@ -685,6 +824,85 @@ pub(crate) fn write_json<T: Serialize>(path: impl AsRef<Path>, value: &T) -> Res
         .map_err(|error| ZkBenchError::serialization("soak.write_json", error.to_string()))?;
     fs::write(path, bytes)
         .map_err(|error| ZkBenchError::soak(path.display().to_string(), error.to_string()))
+}
+
+pub(crate) fn validate_soak_path_components(path: &Path) -> Result<()> {
+    if path
+        .components()
+        .any(|component| matches!(component, Component::ParentDir))
+    {
+        return Err(ZkBenchError::soak(
+            path.display().to_string(),
+            "soak output path must not contain parent-directory components",
+        ));
+    }
+
+    let mut candidate = path;
+    let mut is_leaf = true;
+    loop {
+        match fs::symlink_metadata(candidate) {
+            Ok(metadata) => {
+                let platform_symlink =
+                    metadata.file_type().is_symlink() && is_platform_provided_symlink(candidate);
+                if metadata.file_type().is_symlink() && !platform_symlink {
+                    return Err(ZkBenchError::soak(
+                        candidate.display().to_string(),
+                        "soak output path must not be a symlink",
+                    ));
+                }
+                if !is_leaf && !metadata.is_dir() && !platform_symlink {
+                    return Err(ZkBenchError::soak(
+                        candidate.display().to_string(),
+                        "soak output parent must be a directory",
+                    ));
+                }
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+            Err(error) => {
+                return Err(ZkBenchError::soak(
+                    candidate.display().to_string(),
+                    error.to_string(),
+                ));
+            }
+        }
+
+        let Some(parent) = candidate.parent() else {
+            break;
+        };
+        if parent == candidate || parent.as_os_str().is_empty() {
+            break;
+        }
+        candidate = parent;
+        is_leaf = false;
+    }
+    Ok(())
+}
+
+pub(crate) fn validate_soak_root(root: &Path) -> Result<()> {
+    if root.as_os_str().is_empty() {
+        return Err(ZkBenchError::soak(
+            "soak.root",
+            "soak root must be non-empty",
+        ));
+    }
+    if let Some(parent) = root.parent() {
+        validate_soak_path_components(parent)?;
+    }
+    Ok(())
+}
+
+#[cfg(target_os = "macos")]
+fn is_platform_provided_symlink(path: &Path) -> bool {
+    matches!(path.parent(), Some(parent) if parent == Path::new("/"))
+        && matches!(
+            path.file_name().and_then(|name| name.to_str()),
+            Some("etc" | "home" | "tmp" | "var")
+        )
+}
+
+#[cfg(not(target_os = "macos"))]
+fn is_platform_provided_symlink(_path: &Path) -> bool {
+    false
 }
 
 fn directory_has_entries(path: &Path) -> Result<bool> {

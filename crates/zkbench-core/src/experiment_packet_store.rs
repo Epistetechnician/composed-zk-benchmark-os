@@ -9,6 +9,7 @@
 //! Typed receipt binding slice: `benchmark-os-plugin-composition-packet-store-receipt-typed-binding-v1`.
 //! Canonical typed transport slice: `benchmark-os-experiment-packet-canonical-typed-transport-v1`.
 //! Typed job readback slice: `benchmark-os-plugin-composition-packet-job-typed-readback-v1`.
+//! Static destination lexical preflight slice: `benchmark-os-plugin-composition-packet-store-destination-preflight-v1`.
 //!
 //! This module separates packet-job choreography from packet persistence. The
 //! filesystem adapter delegates to the existing canonical writer and reader;
@@ -277,11 +278,30 @@ impl PacketStoreDestination {
                 "output root must not be empty",
             ));
         }
+        if self
+            .output_root
+            .components()
+            .any(|component| matches!(component, std::path::Component::ParentDir))
+        {
+            return Err(ZkBenchError::validation(
+                "packet_store.destination.output_root",
+                "output root must not contain parent-directory components",
+            ));
+        }
         for (index, path) in self.protected_paths.iter().enumerate() {
             if path.as_os_str().is_empty() {
                 return Err(ZkBenchError::validation(
                     format!("packet_store.destination.protected_paths[{index}]"),
                     "protected path must not be empty",
+                ));
+            }
+            if path
+                .components()
+                .any(|component| matches!(component, std::path::Component::ParentDir))
+            {
+                return Err(ZkBenchError::validation(
+                    format!("packet_store.destination.protected_paths[{index}]"),
+                    "protected path must not contain parent-directory components",
                 ));
             }
         }

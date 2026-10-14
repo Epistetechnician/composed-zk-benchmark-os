@@ -1,3 +1,8 @@
+#[cfg(unix)]
+use std::os::unix::fs::symlink;
+
+use std::path::Path;
+
 use tempfile::tempdir;
 use zkbench_core::{
     apply_mutation_pass, build_local_replay_manifest_for_instance,
@@ -101,6 +106,52 @@ fn benchmark_pack_writer_refuses_non_empty_directory_without_overwrite() {
         .write_to(dir.path())
         .expect_err("writer should reject non-empty directory by default");
     assert!(error.to_string().contains("non-empty"));
+}
+
+#[test]
+fn benchmark_pack_writer_and_reader_reject_parent_directory_root_components() {
+    let dir = tempdir().expect("tempdir should be available");
+    let nested = dir.path().join("nested");
+    std::fs::create_dir(&nested).expect("nested pack parent should create");
+    let escaped_root = nested.join("../pack");
+    let writer = BenchmarkPackWriter::new("phase_f_parent_component");
+
+    let write_error = writer
+        .write_to(&escaped_root)
+        .expect_err("parent-directory component should reject before writing");
+    assert!(write_error
+        .to_string()
+        .contains("parent-directory components"));
+    assert!(!dir.path().join("pack").exists());
+
+    let valid_root = dir.path().join("valid-pack");
+    writer
+        .write_to(&valid_root)
+        .expect("valid pack root should write");
+    let read_path = nested.join("../valid-pack");
+    let read_error = BenchmarkPackReader::read(&read_path)
+        .expect_err("parent-directory component should reject before reading");
+    assert!(read_error
+        .to_string()
+        .contains("parent-directory components"));
+}
+
+#[test]
+fn benchmark_pack_writer_and_reader_reject_empty_root() {
+    let empty_root = Path::new("");
+
+    let write_error = BenchmarkPackWriter::new("phase_f_empty_root")
+        .write_to(empty_root)
+        .expect_err("writer should reject empty root before creating pack files");
+    let read_error =
+        BenchmarkPackReader::read(empty_root).expect_err("reader should reject empty root");
+
+    assert!(write_error
+        .to_string()
+        .contains("pack root must be non-empty"));
+    assert!(read_error
+        .to_string()
+        .contains("pack root must be non-empty"));
 }
 
 #[test]
@@ -256,6 +307,125 @@ fn benchmark_pack_writer_reports_parent_conflicts_for_artifact_families() {
         .write_to(report_dir.path())
         .expect_err("score report parent conflict should fail");
     assert!(error.to_string().contains("reports"));
+}
+
+#[cfg(unix)]
+#[test]
+fn benchmark_pack_writer_rejects_symlinked_roots_and_parents() {
+    let dir = tempdir().expect("tempdir should be available");
+    let real_root = dir.path().join("real-root");
+    std::fs::create_dir(&real_root).expect("real root should create");
+    let symlinked_root = dir.path().join("symlinked-root");
+    symlink(&real_root, &symlinked_root).expect("root symlink should create");
+
+    let error = BenchmarkPackWriter::new("phase_f_symlinked_root")
+        .write_to(&symlinked_root)
+        .expect_err("symlinked pack root should reject before writing");
+    assert!(error.to_string().contains("must not be a symlink"));
+    assert!(!real_root.join("pack.json").exists());
+
+    let real_parent = dir.path().join("real-parent");
+    std::fs::create_dir(&real_parent).expect("real parent should create");
+    let symlinked_parent = dir.path().join("symlinked-parent");
+    symlink(&real_parent, &symlinked_parent).expect("parent symlink should create");
+
+    let error = BenchmarkPackWriter::new("phase_f_symlinked_parent")
+        .write_to(symlinked_parent.join("pack"))
+        .expect_err("symlinked pack parent should reject before writing");
+    assert!(error.to_string().contains("must not be a symlink"));
+    assert!(!real_parent.join("pack/pack.json").exists());
+}
+
+#[cfg(unix)]
+#[test]
+fn benchmark_pack_writer_rejects_symlinked_artifact_ancestor() {
+    let dir = tempdir().expect("tempdir should be available");
+    let pack_root = dir.path().join("pack");
+    std::fs::create_dir(&pack_root).expect("pack root should create");
+    let real_specs = dir.path().join("real-specs");
+    std::fs::create_dir(&real_specs).expect("real specs directory should create");
+    symlink(&real_specs, pack_root.join("specs")).expect("specs symlink should create");
+
+    let instance = generate_instance(
+        GeneratorConfig::baseline_fsm().seed(63),
+        InstanceParams::default(),
+    )
+    .expect("baseline instance should generate");
+    let error = BenchmarkPackWriter::new("phase_f_symlinked_artifact_ancestor")
+        .with_generated_instance(instance)
+        .overwrite(true)
+        .write_to(&pack_root)
+        .expect_err("symlinked artifact ancestor should reject before writing");
+    assert!(error.to_string().contains("must not be a symlink"));
+    assert!(!real_specs.join("generated_instance.json").exists());
+}
+
+#[cfg(unix)]
+#[test]
+fn benchmark_pack_writer_rejects_symlinked_declared_destination() {
+    // State slice: benchmark-os-benchmark-pack-output-write-symlink-preflight-v1.
+    let dir = tempdir().expect("tempdir should be available");
+    let external_target = dir.path().join("protected-readme.txt");
+    std::fs::write(&external_target, "protected\n").expect("external target should write");
+    symlink(&external_target, dir.path().join("README.md"))
+        .expect("declared README symlink should create");
+
+    let error = BenchmarkPackWriter::new("phase_f_symlinked_declared_destination")
+        .overwrite(true)
+        .write_to(dir.path())
+        .expect_err("symlinked declared destination should reject before writing");
+    assert!(error.to_string().contains("must not be a symlink"));
+    assert_eq!(
+        std::fs::read(&external_target).expect("external target should remain readable"),
+        b"protected\n"
+    );
+}
+
+#[cfg(unix)]
+#[test]
+fn benchmark_pack_reader_rejects_symlinked_declared_files() {
+    let dir = tempdir().expect("tempdir should be available");
+    BenchmarkPackWriter::new("phase_f_symlinked_declared_file")
+        .write_to(dir.path())
+        .expect("pack should write");
+
+    let outside_readme = dir.path().join("outside-readme.txt");
+    std::fs::write(
+        &outside_readme,
+        "local replay is not official benchmark evidence\n",
+    )
+    .expect("outside readme should write");
+    std::fs::remove_file(dir.path().join("README.md")).expect("real README should remove");
+    symlink(&outside_readme, dir.path().join("README.md"))
+        .expect("declared file symlink should create");
+
+    let reader = BenchmarkPackReader::read(dir.path()).expect("pack manifest should read");
+    let validation = reader.validate();
+    assert!(!validation.valid);
+    assert!(validation
+        .errors
+        .iter()
+        .any(|error| error.path == "README.md" && error.message.contains("symlink")));
+}
+
+#[cfg(unix)]
+#[test]
+fn benchmark_pack_reader_rejects_symlinked_parent() {
+    let dir = tempdir().expect("tempdir should be available");
+    let real_parent = dir.path().join("real-parent");
+    std::fs::create_dir(&real_parent).expect("real parent should create");
+    let real_root = real_parent.join("pack");
+    BenchmarkPackWriter::new("phase_f_symlinked_reader_parent")
+        .write_to(&real_root)
+        .expect("pack should write");
+
+    let symlinked_parent = dir.path().join("symlinked-parent");
+    symlink(&real_parent, &symlinked_parent).expect("parent symlink should create");
+    let redirected_root = symlinked_parent.join("pack");
+
+    let error = BenchmarkPackReader::read(&redirected_root)
+        .expect_err("symlinked pack parent should reject before reading");
+    assert!(error.to_string().contains("must not be a symlink"));
 }
 
 #[test]

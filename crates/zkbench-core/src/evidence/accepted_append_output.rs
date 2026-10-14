@@ -113,23 +113,61 @@ fn validate_ledger_path(path: &Path) -> Result<()> {
             "accepted ledger parent directory must exist",
         ));
     }
-    reject_symlink(parent)?;
-    if path.exists() {
-        reject_symlink(path)?;
+    validate_ledger_path_components(path)?;
+    Ok(())
+}
+
+fn validate_ledger_path_components(path: &Path) -> Result<()> {
+    let mut candidate = path;
+    let mut is_leaf = true;
+    loop {
+        match fs::symlink_metadata(candidate) {
+            Ok(metadata) => {
+                let platform_symlink =
+                    metadata.file_type().is_symlink() && is_platform_provided_symlink(candidate);
+                if metadata.file_type().is_symlink() && !platform_symlink {
+                    return Err(materialization_error(
+                        candidate,
+                        "accepted ledger materialization path must not be a symlink",
+                    ));
+                }
+                if !is_leaf && !metadata.is_dir() && !platform_symlink {
+                    return Err(materialization_error(
+                        candidate,
+                        "accepted ledger parent directory must be a directory",
+                    ));
+                }
+            }
+            Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+            Err(error) => {
+                return Err(materialization_error(candidate, error.to_string()));
+            }
+        }
+
+        let Some(parent) = candidate.parent() else {
+            break;
+        };
+        if parent == candidate || parent.as_os_str().is_empty() {
+            break;
+        }
+        candidate = parent;
+        is_leaf = false;
     }
     Ok(())
 }
 
-fn reject_symlink(path: &Path) -> Result<()> {
-    let metadata = fs::symlink_metadata(path)
-        .map_err(|error| materialization_error(path, error.to_string()))?;
-    if metadata.file_type().is_symlink() {
-        return Err(materialization_error(
-            path,
-            "accepted ledger materialization path must not be a symlink",
-        ));
-    }
-    Ok(())
+#[cfg(target_os = "macos")]
+fn is_platform_provided_symlink(path: &Path) -> bool {
+    matches!(path.parent(), Some(parent) if parent == Path::new("/"))
+        && matches!(
+            path.file_name().and_then(|name| name.to_str()),
+            Some("etc" | "home" | "tmp" | "var")
+        )
+}
+
+#[cfg(not(target_os = "macos"))]
+fn is_platform_provided_symlink(_path: &Path) -> bool {
+    false
 }
 
 fn materialization_error(path: &Path, message: impl Into<String>) -> ZkBenchError {

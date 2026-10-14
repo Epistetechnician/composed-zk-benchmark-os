@@ -29,7 +29,7 @@ The materialized path:
 - Requires an explicit ledger JSON path.
 - Requires an existing parent directory.
 - Rejects parent-directory components.
-- Rejects symlink ledger paths and symlink parents.
+- Rejects symlink ledger paths and non-platform symlinked ancestors before atomic writing.
 - Loads and validates an existing ledger when present.
 - Requires `create_if_missing` before creating a new empty local ledger.
 - Applies the Phase 117 accepted-ledger append transaction.

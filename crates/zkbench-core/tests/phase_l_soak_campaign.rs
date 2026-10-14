@@ -1,17 +1,23 @@
 use std::fs;
+use std::path::Path;
+
+#[cfg(unix)]
+use std::os::unix::fs::symlink;
 
 use tempfile::tempdir;
 use zkbench_core::{
     attach_reproduction_bundle_to_pack, build_failure_corpus_entry, build_smoke_soak_config,
-    generate_instance, plan_soak_shards, read_reproduction_bundle_from_pack,
-    read_soak_report_bundle, run_soak_campaign, run_soak_campaign_with_local_json_adapter,
-    soak_artifact_manifest, validate_reproduction_bundle, validate_soak_campaign_config,
-    validate_soak_report_bundle, write_soak_report_bundle, BenchmarkPackReader,
-    BenchmarkPackWriter, ClaimBoundary, FailureCorpusEntryInput, FailureCorpusKind, FamilyKind,
-    GeneratorConfig, GeneratorTunables, InstanceParams, LocalJsonAdapter, LocalJsonAdapterConfig,
-    LocalSoakRunnerConfig, MutationClass, ReproductionBundle, SoakArtifactLayout, SoakArtifactRole,
-    SoakCampaignApproval, SoakCampaignArtifactRootPolicy, SoakCampaignConfig, SoakCaseStatus,
-    SoakOutputPolicy, SoakReportBundle, SoakRunnerErrorPolicy, SoakShardId,
+    compute_artifact_digest_bytes, generate_instance, plan_soak_shards,
+    read_reproduction_bundle_from_pack, read_soak_report_bundle, run_soak_campaign,
+    run_soak_campaign_with_local_json_adapter, soak_artifact_manifest,
+    validate_reproduction_bundle, validate_soak_campaign_config, validate_soak_report_bundle,
+    write_soak_report_bundle, ArtifactKind, ArtifactRole as EvidenceArtifactRole,
+    BenchmarkPackReader, BenchmarkPackWriter, ClaimBoundary, FailureCorpusEntryInput,
+    FailureCorpusKind, FamilyKind, GeneratorConfig, GeneratorTunables, InstanceParams,
+    LocalJsonAdapter, LocalJsonAdapterConfig, LocalSoakRunnerConfig, MutationClass,
+    ReproductionBundle, SoakArtifactLayout, SoakArtifactRole, SoakCampaignApproval,
+    SoakCampaignArtifactRootPolicy, SoakCampaignConfig, SoakCaseStatus, SoakOutputPolicy,
+    SoakReportBundle, SoakRunnerErrorPolicy, SoakShardId,
 };
 
 fn sample_entry(case_id: &str) -> zkbench_core::FailureCorpusEntry {
@@ -107,6 +113,35 @@ fn attach_reproduction_bundle_round_trips_and_keeps_pack_valid() {
         .expect("pack should read")
         .validate();
     assert!(validation.valid, "pack invalid: {:?}", validation.errors);
+}
+
+#[test]
+fn reproduction_bundle_read_rejects_empty_pack_root_before_sidecar_access() {
+    let error = read_reproduction_bundle_from_pack(Path::new(""))
+        .expect_err("empty pack root should reject before sidecar access");
+    assert!(error.to_string().contains("pack root must be non-empty"));
+}
+
+#[cfg(unix)]
+#[test]
+fn reproduction_bundle_read_rejects_symlinked_sidecar() {
+    let dir = tempdir().expect("tempdir should be available");
+    let pack_root = dir.path().join("pack");
+    write_sample_pack(&pack_root);
+    let entries = vec![sample_entry("case_symlinked_reproduction")];
+    attach_reproduction_bundle_to_pack(&pack_root, &entries)
+        .expect("bundle should attach before symlink replacement");
+
+    let sidecar_path = pack_root.join("reproduction/reproduction_bundle.json");
+    let outside_path = dir.path().join("outside-reproduction.json");
+    let sidecar_bytes = fs::read(&sidecar_path).expect("sidecar should read");
+    fs::write(&outside_path, sidecar_bytes).expect("outside sidecar should write");
+    fs::remove_file(&sidecar_path).expect("real sidecar should remove");
+    symlink(&outside_path, &sidecar_path).expect("sidecar symlink should create");
+
+    let error = read_reproduction_bundle_from_pack(&pack_root)
+        .expect_err("symlinked reproduction sidecar should reject before reading");
+    assert!(error.to_string().contains("must not be a symlink"));
 }
 
 #[test]
@@ -332,6 +367,17 @@ fn small_campaign_runs_all_shards_and_aggregates_reports() {
     assert!(campaign_root
         .join("aggregate/report_bundle/soak_report_bundle.json")
         .exists());
+
+    for artifact in &result.report_bundle.artifact_digest_set.artifacts {
+        let bytes = fs::read(campaign_root.join(&artifact.relative_path))
+            .expect("declared campaign artifact should exist");
+        let actual_digest = compute_artifact_digest_bytes(
+            &bytes,
+            Some(ArtifactKind::Other),
+            Some(EvidenceArtifactRole::Manifest),
+        );
+        assert_eq!(artifact.digest.as_ref(), Some(&actual_digest));
+    }
 }
 
 #[test]
@@ -556,6 +602,20 @@ fn report_bundle_validation_rejects_artifact_path_and_boundary_drift() {
         .issues
         .iter()
         .any(|issue| issue.contains("exceeded Level0DesignNote")));
+}
+
+#[test]
+fn report_bundle_validation_rejects_unexpected_artifact_roles() {
+    let mut bundle = campaign_bundle("campaign_unexpected_artifact_role", 1);
+    bundle.artifact_digest_set.artifacts[0].role = SoakArtifactRole::SampledPack;
+
+    let validation = validate_soak_report_bundle(&bundle);
+
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("unexpected report bundle artifact role")));
 }
 
 #[test]
@@ -885,6 +945,20 @@ fn soak_report_bundle_io_rejects_file_roots_non_empty_roots_and_invalid_bundles(
 }
 
 #[test]
+fn soak_report_bundle_io_rejects_empty_roots_before_filesystem_access() {
+    let bundle = campaign_bundle("campaign_phase_225_empty_root", 1);
+    let empty_root = Path::new("");
+
+    let error = write_soak_report_bundle(empty_root, &bundle)
+        .expect_err("empty report bundle write root should reject");
+    assert!(error.to_string().contains("soak root must be non-empty"));
+
+    let error = read_soak_report_bundle(empty_root)
+        .expect_err("empty report bundle read root should reject");
+    assert!(error.to_string().contains("soak root must be non-empty"));
+}
+
+#[test]
 fn soak_report_bundle_io_round_trips_and_rejects_missing_or_malformed_json() {
     let bundle = campaign_bundle("campaign_phase_225_bundle_readback", 1);
     let dir = tempdir().expect("tempdir should be available");
@@ -894,6 +968,39 @@ fn soak_report_bundle_io_round_trips_and_rejects_missing_or_malformed_json() {
     let read_back = read_soak_report_bundle(&output_root).expect("bundle should read");
     assert_eq!(read_back, bundle);
 
+    fs::write(output_root.join("undeclared.txt"), b"unexpected")
+        .expect("undeclared bundle entry should write");
+    let error = read_soak_report_bundle(&output_root)
+        .expect_err("undeclared bundle entry should reject on readback");
+    assert!(error
+        .to_string()
+        .contains("unexpected report bundle output entry"));
+    fs::remove_file(output_root.join("undeclared.txt")).expect("undeclared entry should remove");
+
+    let mut invalid_digest_bundle = bundle.clone();
+    invalid_digest_bundle.artifact_digest_set.artifacts[0]
+        .digest
+        .as_mut()
+        .expect("campaign artifact should have a digest")
+        .hex_digest = "not-a-sha256".to_string();
+    let validation = validate_soak_report_bundle(&invalid_digest_bundle);
+    assert!(!validation.valid);
+    assert!(validation
+        .issues
+        .iter()
+        .any(|issue| issue.contains("lowercase 64-character hexadecimal")));
+
+    let mut tampered = serde_json::to_value(&bundle).expect("bundle should serialize");
+    tampered["bundle_id"] = serde_json::Value::String(String::new());
+    fs::write(
+        output_root.join("soak_report_bundle.json"),
+        serde_json::to_vec_pretty(&tampered).expect("tampered bundle should serialize"),
+    )
+    .expect("tampered bundle should write");
+    let error = read_soak_report_bundle(&output_root)
+        .expect_err("semantically invalid bundle should reject on readback");
+    assert!(error.to_string().contains("invalid bundle"));
+
     let missing_root = dir.path().join("missing-output");
     let error = read_soak_report_bundle(&missing_root).expect_err("missing bundle should reject");
     assert!(error.to_string().contains("soak_report_bundle.json"));
@@ -902,6 +1009,116 @@ fn soak_report_bundle_io_round_trips_and_rejects_missing_or_malformed_json() {
         .expect("malformed bundle JSON should write");
     let error = read_soak_report_bundle(&output_root).expect_err("malformed JSON should reject");
     assert!(error.to_string().contains("read_soak_report_bundle"));
+}
+
+#[cfg(unix)]
+#[test]
+fn soak_report_bundle_readback_rejects_symlinked_roots_and_files() {
+    let bundle = campaign_bundle("campaign_symlinked_bundle_readback", 1);
+    let dir = tempdir().expect("tempdir should be available");
+    let output_root = dir.path().join("bundle-output");
+    write_soak_report_bundle(&output_root, &bundle).expect("bundle should write");
+
+    let symlinked_root = dir.path().join("symlinked-root");
+    symlink(&output_root, &symlinked_root).expect("root symlink should create");
+    let error = read_soak_report_bundle(&symlinked_root)
+        .expect_err("symlinked report bundle root should reject");
+    assert!(error.to_string().contains("root must not be a symlink"));
+
+    let symlinked_file_root = dir.path().join("symlinked-file-root");
+    fs::create_dir(&symlinked_file_root).expect("symlinked file root should create");
+    symlink(
+        output_root.join("soak_report_bundle.json"),
+        symlinked_file_root.join("soak_report_bundle.json"),
+    )
+    .expect("manifest symlink should create");
+    let error = read_soak_report_bundle(&symlinked_file_root)
+        .expect_err("symlinked report bundle manifest should reject");
+    assert!(error.to_string().contains("must not contain symlinks"));
+}
+
+#[cfg(unix)]
+#[test]
+fn soak_report_bundle_readback_rejects_symlinked_parent() {
+    let bundle = campaign_bundle("campaign_symlinked_bundle_parent_readback", 1);
+    let dir = tempdir().expect("tempdir should be available");
+    let real_parent = dir.path().join("real-parent");
+    fs::create_dir(&real_parent).expect("real parent should create");
+    let real_root = real_parent.join("bundle-output");
+    write_soak_report_bundle(&real_root, &bundle).expect("bundle should write");
+
+    let symlinked_parent = dir.path().join("symlinked-parent");
+    symlink(&real_parent, &symlinked_parent).expect("parent symlink should create");
+    let redirected_root = symlinked_parent.join("bundle-output");
+
+    let error = read_soak_report_bundle(&redirected_root)
+        .expect_err("symlinked report bundle parent should reject before reading");
+    assert!(error.to_string().contains("must not be a symlink"));
+}
+
+#[cfg(unix)]
+#[test]
+fn soak_report_bundle_write_rejects_symlinked_root() {
+    let bundle = campaign_bundle("campaign_symlinked_bundle_write", 1);
+    let dir = tempdir().expect("tempdir should be available");
+    let real_root = dir.path().join("real-root");
+    fs::create_dir(&real_root).expect("real root should create");
+    let symlinked_root = dir.path().join("symlinked-root");
+    symlink(&real_root, &symlinked_root).expect("root symlink should create");
+
+    let error = write_soak_report_bundle(&symlinked_root, &bundle)
+        .expect_err("symlinked report bundle root should reject before writing");
+    assert!(error.to_string().contains("root must not be a symlink"));
+    assert!(!real_root.join("soak_report_bundle.json").exists());
+}
+
+#[cfg(unix)]
+#[test]
+fn soak_report_bundle_write_rejects_symlinked_parent() {
+    let bundle = campaign_bundle("campaign_symlinked_bundle_parent_write", 1);
+    let dir = tempdir().expect("tempdir should be available");
+    let real_parent = dir.path().join("real-parent");
+    fs::create_dir(&real_parent).expect("real parent should create");
+    let symlinked_parent = dir.path().join("symlinked-parent");
+    symlink(&real_parent, &symlinked_parent).expect("parent symlink should create");
+    let output_root = symlinked_parent.join("bundle-output");
+
+    let error = write_soak_report_bundle(&output_root, &bundle)
+        .expect_err("symlinked report bundle parent should reject before writing");
+    assert!(error.to_string().contains("must not be a symlink"));
+    assert!(!real_parent
+        .join("bundle-output/soak_report_bundle.json")
+        .exists());
+}
+
+#[cfg(unix)]
+#[test]
+fn soak_json_writer_rejects_symlinked_target() {
+    let dir = tempdir().expect("tempdir should be available");
+    let artifact_root = dir.path().join("artifact-root");
+    fs::create_dir(&artifact_root).expect("artifact root should create");
+    let campaign_root = artifact_root.join("campaign_symlinked_json_target");
+    fs::create_dir(&campaign_root).expect("campaign root should create");
+    let outside_target = dir.path().join("outside.json");
+    fs::write(&outside_target, b"protected").expect("outside target should write");
+    symlink(&outside_target, campaign_root.join("soak_run_config.json"))
+        .expect("JSON target symlink should create");
+
+    let soak_config = build_smoke_soak_config()
+        .with_families(vec![FamilyKind::BaselineFsm])
+        .with_mutation_passes(vec![MutationClass::MissingConstraints])
+        .with_seed_range(0..1)
+        .with_shard_count(1);
+    let plan = plan_soak_shards(soak_config).expect("plan should build");
+    let config = approved_config("campaign_symlinked_json_target", artifact_root);
+
+    let error = run_soak_campaign(&config, plan)
+        .expect_err("symlinked JSON target should reject before writing");
+    assert!(error.to_string().contains("must not be a symlink"));
+    assert_eq!(
+        fs::read(&outside_target).expect("outside target should read"),
+        b"protected"
+    );
 }
 
 #[test]
