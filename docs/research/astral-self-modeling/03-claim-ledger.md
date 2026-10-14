@@ -1,5 +1,185 @@
 # Claim Ledger
 
+- V41R24R2 is a valid independently recomputed retention intervention. Frozen
+  25% protected replay preserved 4/4 acquisition and improved protected
+  accuracy from 0.1875 to 0.875, but its 0.125 drop failed the 0.02 gate.
+  V41R24 itself failed before updates on a retained projection error. The R2
+  candidate is rejected and continual learning remains unvalidated.
+- V41R23 is a valid independently recomputed four-case interference isolation.
+  Shared and modular arms both passed 4/4 exact cases under matched 64-step
+  per-case exposure, so modular advantage was zero and four-case shared
+  interference is unsupported. Protected accuracy fell from 1.0000 to 0.1875
+  shared and as low as 0.0625 modular. Exposure dilution is the stronger next
+  acquisition hypothesis; retention and continual learning remain blocked.
+- V41R22 is a valid independently recomputed isolated-acquisition calibration.
+  The original 64-step, `2e-4` adapter learned the exact case with a 64.0526-nat
+  margin and 0.000365 last8/first8 loss ratio, supporting multi-case
+  interference as the V41R21 bottleneck. Protected accuracy collapsed from
+  1.0000 to 0.2500, so retention, continual learning, and self-improvement
+  remain unvalidated.
+- V41R21 is a valid independently recomputed decomposition negative. The exact
+  end-to-end oracle reached only `0.28125` against its frozen `0.90` floor and
+  reduced protected accuracy to `0.375`; the tested rank-8 all-attention LoRA,
+  AdamW `2e-4`, 64-step update substrate is unqualified. Later arm differences
+  are descriptive only and cannot support continual-learning interpretation.
+- V41R20 is a valid, independently recomputed negative. The prospectively
+  frozen all-layer panel-normalized candidate tied V41R15 persistent accuracy
+  at `0.2604167` and reduced protected accuracy from `0.8125` to `0.625`.
+  Every scientific gate failed. This rejects that exact balancing
+  intervention; it does not establish acquisition or continual learning.
+- V41R19 is a complete independently validated no-update diagnostic. All 24
+  acquisition/protection layer cosines were positive; global cosine was
+  0.804440 and protected gradient norm was 2.47x acquisition. This supports a
+  magnitude-imbalance hypothesis only and does not establish acquisition or a
+  superior update method.
+- V41R18 scientific execution was not authorized. Its no-model exact-cache-hit
+  canary `job-exijp` failed before container start while pulling the existing
+  internal image. This closes all current provider-registry delivery paths and
+  adds no model evidence.
+- V41R17 also remains `NotRun`. Job `job-842y9` reproduced the provider
+  internal-registry blob-HEAD HTTP 500 using a cached prebuilt image and failed
+  before attempt start. The two-path reproduction is infrastructure diagnosis,
+  not model or scientific evidence.
+- V41R16 remote execution remains `NotRun`. Job `job-3t878` failed before
+  attempt start on a provider registry HTTP 500 after its immutable image built
+  and passed 35 tests. No model ran and no scientific result exists.
+- V41R16 prospectively freezes a no-update raw-gradient diagnostic for the
+  V41R15 failure. Local source and an independent tensor-level validator are
+  implemented; execution is unauthorized. The profile has no selector or
+  positive gate and cannot support acquisition or continual-learning claims.
+- V41R15 is a valid, independently validated development negative. Exact
+  equal-example weighting improved protected accuracy relative to V41R14 from
+  0.75 to 0.8125, but persistent acquisition declined from 0.3229167 to
+  0.2604167 and all four scientific gates still failed. Weight distortion was
+  relevant but insufficient; V41R15 is consumed and confirmation remains
+  blocked.
+- V41R15 diagnoses V41R14's token-weighted objective as inconsistent with its
+  declared example policy: protected replay received 11.0641% rather than 25%
+  of loss, while bridge outputs received 63.7534%. An isolated equal-example
+  implementation and independent validator are locally complete. Execution is
+  unauthorized and any future result is development-only because the
+  instrument informed method selection.
+- V41R14 is a valid, independently validated `PilotNoSignal`. The frozen
+  protected-replay attention-LoRA update moved context-free accuracy from 0.25
+  to only 0.3229167, left every query class below 0.60, and reduced protected
+  accuracy from 1.0 to 0.75. Exact reload and all 64 steps passed, but four
+  scientific gates failed. This recipe is rejected and multi-cell
+  qualification remains blocked.
+- V41R12 completed the byte-identical V41R11 model-backed novelty preflight.
+  No-update accuracy was exactly 0.25 overall and per class; context-only was
+  exactly 1.00. The independent validator accepted all 192 raw decisions and
+  confirmed zero adapters or updates. The ceiling is model-backed instrument
+  novelty only; acquisition and continual learning remain untested.
+- V41R11 model-backed preflight R1 is consumed as a provider infrastructure
+  failure. Job `job-ybuqi` hit build-workspace `ENOSPC` at attempt zero and
+  USD 0.00; no model or scientific operation ran. The local instrument remains
+  qualified, but model-backed novelty remains untested.
+- V41R11 locally qualifies a deterministic 32-chain, 96-query novelty
+  instrument under independent reconstruction. Its four opaque labels are
+  exactly balanced as targets, candidate positions, and target positions.
+  Model access, GPU execution, training, qualification, and scientific claims
+  remain unauthorized; the ceiling is `LocalQualifiedNoveltyInstrumentV41R11`.
+- V41R10 is consumed as `PilotInstrumentInvalid`. Job `job-ivs9u` stopped
+  before training because no-update accuracy was 0.375 overall and 0.500 on
+  withheld composition, above the frozen novelty ceilings. The context-only
+  control was 1.000 and independent artifact validation passed. This is no
+  acquisition or continual-learning evidence.
+- V41R9 model-backed profiling passed on one H100 with the real GPT-OSS-20B
+  tokenizer, native-MXFP4 checkpoint, real logits, one update, and exact
+  rollback. Its ceiling is runtime-profile evidence only.
+- V41R8 authorizes one exact-runtime no-model parity job bound to immutable
+  source, context, dependency, hardware, and receipt checks. It does not
+  authorize tokenizer/model access or scientific execution.
+- V41R8 native-MXFP4 attention-LoRA and an independent fail-closed validator
+  are locally implemented. Focused and repository guards pass, but exact
+  runtime parity, model execution, and every scientific claim remain unrun.
+- V41R8 prospectively freezes a native-MXFP4, frozen-expert,
+  attention-projection LoRA correction with exact inventory, parity, rollback,
+  and memory gates. Implementation and independent validation are authorized;
+  model execution and scientific claims are not.
+- V41R7 is consumed as a valid negative engineering result. Real GPT-OSS-20B
+  loading and pre-update scoring succeeded, but the first batch-one update
+  forward OOMed while PEFT materialized an adapted expert weight. This is not
+  acquisition or continual-learning evidence; V41R8 remains only a proposed
+  native-MXFP4 frozen-expert, attention-LoRA correction.
+- V41R7 passed 13/13 parity tests in exact Torch 2.10.0+cu128/CUDA 12.8.
+  Retained no-model job `job-t8anv` subsequently returned the exact valid
+  `V41R7TorchParityPassed` receipt. Exactly one frozen H100 runtime profile was
+  authorized and has now been consumed by the recorded OOM.
+- V41R7 prospectively freezes a token-weighted batch-one accumulation
+  correction with exact parity gates. Its one model-backed profile is
+  consumed; pilot, qualification, tune, assessment, and scientific claims are
+  not authorized.
+- V41R6 reached the real GPT-OSS-20B/PEFT training forward and failed with an
+  H100 OOM while materializing expert LoRA `W + delta_weight`. The profile is
+  consumed and did not qualify; acquisition and later claims remain unrun.
+- V41R5 cache-hit the verified image but failed before Python execution because
+  `/bin/sh` rejected `pipefail`. V41R6 authorizes only a POSIX wrapper
+  correction; scientific execution remains unrun.
+- V41R5 authorizes one cache-only recovery from the exact successful
+  `job-psr8z` image digest. A cache miss must be canceled; no result exists yet.
+- V41R4 design confirms that the preinstalled CUDA 12.4 toolchain can support
+  an infrastructure-only `sm_90` probe but cannot replace the locked tokenizer,
+  model, autograd, PEFT, optimizer, or rollback runtime. Scientific execution
+  remains unauthorized and unrun; the claim ceiling is unchanged.
+- V41R3 remains scientifically unrun. Batch job `job-q7phu` failed during
+  pre-container context fetch, while the persistent-node path passed H100 and
+  exact-source preflight but was stopped before Torch installation completed
+  because package transfer projected multiple paid hours. The parked node may
+  resume only with a verified preloaded PyTorch image/snapshot or restored
+  throughput. No result or claim promotion exists.
+- V41R3 authorizes one fresh slim-runtime recovery profile after V41R2 was
+  canceled pre-execution during repeated image-pull/worker infrastructure
+  failures. It changes only the pinned runtime image and adds fail-closed
+  dependency/GPU preflight checks. The ceiling remains
+  `RemoteH100RuntimeProfileOnlyV41`.
+- V41R2 authorizes one fresh infrastructure-recovery profile with unchanged
+  scientific inputs and one provider-managed worker-loss restart. It is
+  `NotRun`; no downstream stage or higher claim is authorized.
+- V41 runtime profiling is consumed as a platform execution failure. The final
+  job ended `worker_lost` before the command began, with zero run-log bytes, no
+  result, and no artifact. This is not a negative model result and provides no
+  acquisition evidence. All later paid stages are blocked.
+- V41 prospectively locks a GPT-OSS-20B H100 persistent-acquisition
+  tournament and a `$15` runtime-profile gate. Remote execution was attempted,
+  but no scientific result exists.
+- V40R2 concrete native MLX runtime is implemented and hermetically tested.
+  No real gradient or model update has run; this is implementation evidence,
+  not acquisition or continual-learning evidence.
+- V40R2 native runtime hyperparameters and single-forward gradient-cache
+  semantics are prospectively locked and hermetically tested. No native model
+  update or scientific result exists yet.
+- V40R2 real tokenizer/logit plumbing is locally operational and independently
+  artifact-validated over a fixed 12-prompt smoke panel. The untouched model
+  scored 1/8 fit direct and 4/4 protected positive cases. This is forward-path
+  evidence only, not acquisition, retention, routing, continual learning,
+  introspection, or self-modeling evidence.
+- V40R2 corpus/tokenizer structure is locally qualified and independently
+  model-free validated. No model execution or scientific claim promotion.
+- V40 prospective routing is preregistered documentation only. Implementation,
+  execution, assessment, and claim promotion remain unauthorized.
+- V38R2 is a valid negative result: protection was restored, but both joint
+  arms exceeded the task-retention cost ceiling. No claim promotion.
+- V38 execution is authorized once against exact clean commits; status
+  `NotRun`.
+- V38 fixed-allocation development is preregistered and implementation
+  authorized. Execution remains `NotAuthorized`; no claim promotion.
+- V37 is a valid negative result. It established nonsaturated interference and
+  replay separation, but three replay cells failed protected retention. Dynamic
+  selection and claim promotion remain blocked.
+- V37 execution is authorized once against exact clean implementation commits;
+  result status remains `NotRun`.
+- V37 implementation is authorized; model execution remains `NotAuthorized`.
+- V37 is preregistered as a four-task difficulty qualification only.
+  Implementation and execution are `NotAuthorized`; no claim promotion.
+- V36R2 is a valid negative result. The candidate is blocked because joint
+  replay's retention advantage over ordinary task replay was 0.0, below 0.1,
+  and one shared acquisition cell missed its gate. No claim promotion.
+- V36R2 is authorized once against exact clean commits; status is `NotRun`.
+- V36 is consumed as a construction failure: zero gradient steps and no model
+  result. V36R2 corrective implementation is authorized, not execution. Claim
+  status remains unchanged.
+
 This ledger is append-only once experiments begin. `Not refuted` means current
 evidence did not refute a claim; it does not mean established. Empirical claims
 never receive a `Proven` status.
@@ -134,6 +314,62 @@ claim ceiling.
 |---|---|---|---|---|---|---|
 | `V28-C01` | Producer authorized; model-backed packet absent | V28R1 baseline complete; `CorpusNotNovel`; corpus and seed retired | Packet `sha256:2fd74b389907d3167518a0d91d9d63f18fda7c1231a51764657e791286ee2ad0`; report `sha256:3e24804dc84744a300bb11bc246fdfd40256459f97a68da0df7993d676b9ea3d`; manifest `sha256:5b01a32e1ba9d7d9ce84c8b301f29e0145962ac8c0eac59b07cd5cfca846e` | Author-operated execution and integrity audit; independent scientific review `NotRun` | Identical baseline point estimates were near chance, but stratified family-cluster equivalence intervals were too wide; no update arm ran | Local author-run negative novelty falsification only; no acquisition or continual-learning evidence |
 | `V28-C01` | V28R1 retired with a new-corpus requirement | Disjoint V28R2 6,144-family precision census docs-first preregistered; implementation and execution unauthorized | `64-v28r2-powered-acquisition-novelty-preregistration.md` | Conservative design calculation plus internal read-only agent review; independent scientific review `NotRun` | With family-cluster standard deviation `sqrt(2)/6`, planning lift `0.01`, a central 90% design bound, and the unchanged `0.05` margin and `5.0` critical value, the minimum is 1,534 families per kind; the frozen census is the next complete 24-permutation multiple, 1,536 per kind | Prospective protocol only; no new corpus, model run, acquisition, retention/recovery, selector, or assessment evidence |
+| `V28-C01` | V28R2 powered protocol preregistered | Additive independent validator and retired-corpus fingerprint builder implemented; source freeze and execution pending | `tools/astral-rgs-acquisition-v28r2/`; `65-v28r2-powered-acquisition-novelty-implementation-notes.md` | Hermetic contract tests; independent scientific review `NotRun` | Validator recomputes the exact census, permutation cycles, semantic and prompt bindings, R1 disjointness, raw-score argmax, fresh-process parity, family-cluster intervals, and sealed later-gate absence | Local unexecuted research instrument only; no corpus, model-backed novelty result, acquisition, continual-learning, or breakthrough evidence |
+| `V28-C01` | V28R2 implementation frozen; execution pending | One-shot V28R2 unchanged-checkpoint baselines complete; `NoveltyPacketCandidate`; update arms unauthorized | Packet `sha256:5e830ee437e8d67faa9dedc667db35114fa5ccf84809a9b2874c60a1ed622ddc`; report `sha256:a5a090fa7707b179bd373e3a2b76511085c47daf67f910ff55f874ed0ae5547f`; manifest `sha256:e4bba029e565445f4fe930c7aeea1e7b9f572f111df22085100018ff6ed8efde`; `66-v28r2-powered-acquisition-novelty-execution-record.md` | Author-operated execution plus byte-identical validator replay and 15-entry artifact rehash; independent scientific review `NotRun` | Both restarted baselines were exactly identical at accuracy `0.2500678168`; every frozen family-cluster equivalence interval passed | Local model-backed novelty preflight only; acquisition, continual learning, breakthrough, and independent-replication claims remain absent |
+| `V28-C01` | V28R2 novelty candidate; update arms unauthorized | Gate 1 seven-arm native acquisition matrix docs-first preregistered; implementation and execution unauthorized | `67-v28-gate1-acquisition-qualification-preregistration.md` | Source-cited method decomposition and compute-envelope audit; independent scientific review `NotRun` | Exact budgets, three seeds, three orders, process isolation, family-cluster statistics, and only mathematically conclusive blockwise futility are frozen before update code or outcomes | Prospective protocol only; no update, acquisition, retention/recovery, selector, assessment, or breakthrough evidence |
+| `V28-C01` | Gate 1 protocol preregistered; implementation absent | Independent Astral validator and isolated RGS native-worker candidate implemented; execution unauthorized | `tools/astral-rgs-acquisition-v28-gate1/`; `68-v28-gate1-acquisition-qualification-implementation-notes.md` | Hermetic unit and adversarial contract tests; independent scientific review `NotRun` | Target-blind source projection, matched budgets, exact futility, process separation, clustered gates, failure retention, and artifact verification are executable | Local unexecuted instrument only; no acquisition, retention/recovery, continual-learning, selector, assessment, or breakthrough evidence |
+| `V28-C01` | Gate 1 implementation frozen; one-shot execution authorized | One-shot campaign consumed by a pre-model MLX-runtime import abort; no Gate 1 result | Abort packet `sha256:d0aed52f5308ce660646c8231b8c3d76f98bad34203b87bcf15d9d65c863c0fb`; manifest `sha256:7c343e7c2894745ea9506bd43173af4f2b97ebe371b3fcc89c691558e801d1c4`; `69-v28-gate1-infrastructure-abort-execution-record.md` | Independent Astral invalid-run validator plus complete artifact rehash; independent scientific review `NotRun` | Wrong Python lacked MLX; traceback occurs before checkpoint load; zero model outcomes and zero persistent cells; consumed campaign cannot be replaced | Retained infrastructure-abort evidence only; no acquisition, continual-learning, retention/recovery, selector, assessment, or breakthrough evidence |
+| `V28-C01` | V28R3 fresh corpus is model-backed novel at the frozen equivalence gate | Locally validated: both 73,728-query baselines were byte-equivalent at 0.25 accuracy; Phase B then stopped on a Metal OOM before the first control result | `70-v28r3-fresh-acquisition-campaign-preregistration.md`; `71-v28r3-fresh-acquisition-campaign-implementation.md`; `72-v28r3-fresh-acquisition-campaign-execution-authorization.md`; `73-v28r3-infrastructure-failure-execution-record.md` | Content-addressed artifact `astral-rgs-v28r3-abort-0b65ab1e0971-r1`; independent validator report `sha256:69d10a2b4cc4759901d5434332f9f9567139bebf0722ce75b9efd18b5150200f`; external review `NotRun` | Independent validator rederived the corpus, recomputed all novelty intervals, verified exact parity and the Metal OOM, and confirmed zero cells/updates/adapters | Claim ceiling `LocalModelBackedAcquisitionNoveltyPreflightV28R3`; acquisition, continual learning, breakthrough, confirmation, and independent replication remain unvalidated |
+| `V28-C02` | Bounded-memory external-control evaluation can remove the V28R3 infrastructure blocker without changing semantics | V28R4 streaming-control preflight docs-first preregistered; implementation and runtime unauthorized | `74-v28r4-streaming-control-preflight-preregistration.md` | Prospective non-candidate parity/stress design only | Must cap materialized rows at 1,152, match monolithic semantics, pass batch-64 MLX and 8 GiB RSS gates, and receive independent validation | Protocol only; no infrastructure pass, candidate campaign, acquisition, or continual-learning evidence |
+| `V28-C02` | V28R4 streaming-control preflight implementation matches the frozen non-candidate contract | Worker, three-process harness, independent validator, source snapshots, and artifact gate implemented; model execution unauthorized | `tools/astral-rgs-acquisition-v28r4/`; `75-v28r4-streaming-control-preflight-implementation.md` | Nine focused hermetic tests across RGS and Astral | Fixed fixture rederivation, cardinality, comparison tolerance, missing-artifact rejection, and MLX-free imports pass | Local unexecuted infrastructure instrument only; no model-backed infrastructure, acquisition, or continual-learning evidence |
+| `V28-C02` | The committed V28R4 instrument may test the exact infrastructure blocker once | One fixed-fixture model-backed preflight authorized and not run | `76-v28r4-streaming-control-preflight-execution-authorization.md`; RGS `80e654d`; Astral `2e654c5` | Commit and runtime binding only | Any pass or failure must be content-addressed and independently validated | Authorization only; no model outcome or scientific evidence yet |
+| `V28-C02` | Streaming preserves the batch-8 external-control semantics on the fixed V28R4 fixture | Locally validated exact parity; overall V28R4 qualification failed at batch 64 | Artifact `astral-rgs-v28r4-preflight-ef386f74732e-r1`; packet `sha256:86ea271e4af8ee2d236f2f891eafce6a3495a58ffd1c7aba22d61fb2630f7ad5`; corrected report file `sha256:baab7ad147e5b90d1d5fe9a65e6b55f76d87c77066f80c20210ac0d9e0aec84a` | Independent Astral recomputation after retained-negative validator correction; external review `NotRun` | 1,152 batch-8 observations and scores match exactly; batch-64 child exited `-6` with Metal OOM; `valid=true/qualified=false` | Local negative infrastructure result only; no candidate campaign, acquisition, continual learning, or breakthrough evidence |
+| `V28-C02` | Last-token-only output projection can remove the batch-64 peak without changing the frozen external-control score | V28R5 docs-first preregistered; implementation and runtime unauthorized | `79-v28r5-last-token-projection-preflight-preregistration.md`; immutable V28R4 reference file `sha256:9cdade169d775a027361029fd8fe203eb23a4bc536b5b27c8a0daf81caa71227` | Source-informed prospective optimization design | Optimized batch 8 and 64 must both match the reference within `1e-5`, complete under 8 GiB RSS, and prove last-token-only logits | Protocol only; no implementation, model-backed result, acquisition, or continual-learning evidence |
+| `V28-C02` | The V28R5 implementation mechanically enforces last-token-only output projection and frozen-reference parity | Worker, two-process harness, independent validator, source snapshots, and artifact gate implemented; runtime unauthorized | `tools/astral-rgs-acquisition-v28r5/`; `80-v28r5-last-token-projection-preflight-implementation.md` | Six focused hermetic tests across RGS and Astral | Tied/untied last-token seams, reference identity, protocol boundary, and missing-artifact rejection pass | Local unexecuted infrastructure instrument only; no model-backed or scientific evidence |
+| `V28-C02` | The committed V28R5 instrument may test last-token projection once | One fixed-fixture, two-child preflight authorized and not run | `81-v28r5-last-token-projection-preflight-execution-authorization.md`; RGS `5c48558`; Astral `0a0e801` | Commit and runtime binding only | Pass or failure must be content-addressed and independently validated | Authorization only; no new model outcome or scientific evidence |
+| `V28-C02` | Last-token projection removes the observed batch-64 Metal memory failure on the fixed fixture | Locally validated memory success, but frozen numerical-equivalence qualification failed | Artifact `astral-rgs-v28r5-preflight-07fd6d885124-r1`; packet `sha256:e8c74b3e7e7bbd3a705ea72bed6c6a54ef076e619cc8d0aae66ee4e0c6d729b1`; report file `sha256:065622d9c9c06d7d30d3de985e1507bc90d5f9ff9dfaffaa85f0903864cf91f5` | Independent Astral recomputation; external review `NotRun` | Both batches completed below 847 MiB RSS with zero sequence-wide logit elements and zero label flips; score drift `0.01859` and `0.02334` exceeded `1e-5` | Local negative infrastructure result; memory remedy observed but optimized scorer not qualified, and no acquisition or continual-learning evidence exists |
+| `V28-C02` | The numerically qualified legacy batch-8 scorer can remain stable across a longer fixed stream | V28R6 docs-first preregistered; implementation and runtime unauthorized | `83-v28r6-legacy-batch8-endurance-preregistration.md` | Prospective eight-superblock non-candidate protocol only | Single-process completion, endpoint fresh-process parity within `1e-5`, exact census, 8 GiB RSS ceiling, 512 MiB peak-growth ceiling, frozen identities, and independent validation | Protocol only; no infrastructure pass, candidate campaign, acquisition, continual learning, or self-improvement evidence |
+| `V28-C02` | The V28R6 implementation enforces long-horizon legacy batch-8 stability gates | Worker, three-process harness, progress receipts, independent validator, source snapshots, and artifact gate implemented; model execution unauthorized | `tools/astral-rgs-acquisition-v28r6/`; `84-v28r6-legacy-batch8-endurance-implementation.md` | Seven focused hermetic tests plus the RGS fast repository gate pass | Independent fixture rederivation, full observation binding, endpoint comparisons, RSS and persistence gates, and retained-failure handling are executable | Local unexecuted infrastructure instrument only; no model-backed or scientific evidence |
+| `V28-C02` | The committed V28R6 instrument may test long-horizon legacy batch-8 stability once | One fixed-fixture, three-child endurance preflight authorized and not run | `85-v28r6-legacy-batch8-endurance-execution-authorization.md`; RGS `403b342`; Astral `8c64a48` | Clean commit and runtime binding only | Pass or failure must be content-addressed and independently validated | Authorization only; no new model outcome or scientific evidence |
+| `V28-C02` | The legacy batch-8 scorer remains endpoint-exact and memory-stable across the fixed eight-superblock stream | Locally qualified infrastructure; external review `NotRun` | Artifact `astral-rgs-v28r6-preflight-3b707bf7d36b-r1`; packet `sha256:f5b977dca632d3767e8d4dd910bf1760c4d64d640645b55959de5be6db7ef2b9`; report file `sha256:d3b20eb85e061e4ed9e8e66ca9a8d55c4016aa5644436aa939d60a5b84c91a9b`; `86-v28r6-legacy-batch8-endurance-execution-record.md` | Independent Astral recomputation plus byte-identical second validation; external scientific review `NotRun` | All eight blocks and 9,216 endurance rows completed; endpoint semantic and raw-score drift `0.0`; peak RSS growth `0`; every frozen gate passed | `LocalLegacyBatch8LongHorizonInfrastructureQualificationV28R6` only; no acquisition, continual learning, self-improvement, SOTA, confirmation, or independent replication evidence |
+| `V28-C03` | At least two frozen persistent mechanisms may show a large acquisition signal before a powered campaign | V28R7 docs-first preregistered; implementation and runtime unauthorized | `87-v28r7-single-cell-acquisition-pilot-preregistration.md` | Prospective single-seed/order development design only | Fresh nonreuse corpus, two baseline novelty runs, two controls, seven matched full-budget arms, conservative cluster floors, paired Bonferroni bootstrap, RSS and independent artifact validation | Protocol only; no pilot result, Gate 1 qualification, continual learning, or self-improvement evidence |
+| `V28-C03` | All seven V28R7 arms can be compared under the exact common update budget | Implemented and hermetically validated; one execution authorized but not run | `88-v28r7-single-cell-acquisition-pilot-implementation.md`; `89-v28r7-single-cell-acquisition-pilot-execution-authorization.md`; RGS `mesh_brain/meshmodel/v28_gate1_mlx.py` | Clean immutable source commits and committed-source preflight required before the consuming ledger claim | Nonmodular path stays 768 steps; four modular task-local paths are 192 steps each; independent validator recomputes all pilot gates | Local source correction and validation only; no model-backed pilot or acquisition evidence |
+| `V28-C03` | The committed V28R7 instrument may execute once | Authorization consumed; execution completed | `89-v28r7-single-cell-acquisition-pilot-execution-authorization.md`; `91-v28r7-single-cell-acquisition-pilot-execution-record.md` | First exclusive ledger claim consumed the identity | Clean source/runtime/model/predecessor preflight, retained failures and content-addressed artifact completed; validation required R2 correction | Historical authorization only; outcome recorded separately |
+| `V28-C03` | At least two frozen persistent mechanisms show a large acquisition signal on the V28R7 panel | Falsified in the completed local pilot; R2 validator passed; external review `NotRun` | Artifact `astral-rgs-v28r7-pilot-8ae838f1e467-r1`; packet `sha256:930ba5df8e2f0a6d21fa4b6cd7c75f13e918b21343503a8f8b93cf1d6f640169`; `91-v28r7-single-cell-acquisition-pilot-execution-record.md` | R1 validator failure preserved; corrected read-only R2 report `sha256:bac9c99be9afeaedc310f7c41fb98048d43dbd69431a8e7f6712c19dfa1f2292` | Zero signal arms; all accuracies at or below 0.25; all bootstrap lower bounds at or below zero; context and retrieval controls also 0.25 | `PilotNoSignal`; no powered campaign, continual-learning, self-improvement, SOTA, confirmation, or replication claim |
+| `V29-C01` | A response format must pass explicit output, direct, one-hop, and two-hop positive controls before another acquisition pilot is scientifically interpretable | Docs-first preregistered; implementation and model execution unauthorized | `92-v29-positive-control-instrument-repair-preregistration.md`; immutable V28R7 artifact diagnosis | Read-only V28R7 prediction-census audit; external review `NotRun` | Compare three frozen formats on 64 deterministic balanced non-candidate cases and select the simplest format meeting all four locked accuracy floors | Protocol only; no instrument qualification, acquisition, continual-learning, self-improvement, SOTA, or breakthrough evidence |
+| `V29-C01` | The V29 instrument-repair contract is mechanically executable and independently checkable | Implemented; model execution unauthorized | `tools/astral-rgs-positive-controls-v29/`; `93-v29-positive-control-instrument-repair-implementation.md`; matching RGS worker/coordinator | Hermetic fixture, decision, tamper, process, source, and artifact checks | One model-load path, exact 192-observation census, deterministic simplest-eligible selection, and fail-closed artifact validation | Local unexecuted instrument only; no model-backed qualification, acquisition, continual-learning, SOTA, or breakthrough evidence |
+| `V29-C01` | The committed V29 instrument may execute once | Authorized once; not run | `94-v29-positive-control-instrument-repair-execution-authorization.md`; RGS `733425d`; Astral `2d4d096` | Clean commit, runtime, checkpoint, tokenizer, one-process, ledger, and artifact bindings | Pass or failure must be retained and independently validated; first ledger claim consumes the identity | Authorization only; no model-backed result, acquisition, continual-learning, SOTA, or breakthrough evidence |
+| `V29-C01` | At least one frozen response format passes every positive-control rung | Falsified; valid local negative; external review `NotRun` | Artifact `astral-rgs-v29-positive-control-80ac177a2c77-r1`; packet `sha256:c5df613937876738242254269bf5f1f25b41384193f034317e93069c9d28c46b`; `95-v29-positive-control-instrument-repair-execution-record.md` | Independent Astral rederivation and 11-file manifest audit returned `valid=true`, `errors=[]` | No format qualified; answer-cued one-hop/two-hop improved, but literal/direct/one-hop gates failed; post-result tokenizer audit found a noncanonical leading-space boundary | `InstrumentStillBlocked`; no acquisition, continual-learning, self-improvement, SOTA, or breakthrough evidence |
+| `V29R2-C01` | Canonical answer-prefix tokenization may repair the V29 response boundary without changing cases or thresholds | Docs-first preregistered; implementation and execution unauthorized | `96-v29r2-canonical-token-boundary-preregistration.md`; V29 fixture `sha256:b1567784d...bb675` | Post-result tokenizer-only audit; external review `NotRun` | Score only leading-space A-D tokens after `Answer:` and require exact prefix concatenation plus all four unchanged gates | Protocol only; no model-backed qualification, acquisition, continual-learning, SOTA, or breakthrough evidence |
+| `V29R2-C01` | The canonical-boundary correction is mechanically executable without widening the protocol | Implemented and hermetically validated; model execution unauthorized | `tools/astral-rgs-positive-controls-v29r2/`; `97-v29r2-canonical-token-boundary-implementation.md`; matching RGS worker/coordinator | Three RGS and three independent Astral tests | Exact V29 fixture reuse, fixed token ids, one-load path, independent decisions, source and artifact gates | Local unexecuted instrument only; no acquisition, continual-learning, SOTA, or breakthrough evidence |
+| `V29R2-C01` | Canonical leading-space scoring repairs the positive-control instrument | Falsified; valid local negative; external review `NotRun` | Artifact `astral-rgs-v29r2-canonical-boundary-731885d2c9a2-r1`; packet `sha256:29557e62f985c37883c667be23e5d466c0edec9cd8fdf2c7fc1806d024db590f`; `99-v29r2-canonical-token-boundary-execution-record.md` | Independent Astral rederivation returned `valid=true`, `errors=[]` | Canonical tokens passed, but all predictions were A and all rung accuracies were 0.25 | `CanonicalBoundaryStillBlocked`; single-letter scoring closed; no acquisition, continual-learning, SOTA, or breakthrough evidence |
+| `V30-C01` | A response-free content evaluator must pass positive, null, shuffled, and permutation gates before acquisition is interpretable | Docs-first preregistered; implementation and execution unauthorized | `100-v30-response-free-evaluator-preregistration.md`; two frozen local checkpoint inventories | Tokenizer-only shared one-token vocabulary audit; external review `NotRun` | Three shared-logit methods, 32 public cases, exact invariance, unchanged rung floors, null/shuffled ceilings | Protocol only; no model-backed evaluator qualification, acquisition, continual-learning, SOTA, or breakthrough evidence |
+| `V30-C01` | The preregistered response-free evaluator is mechanically executable and independently auditable | Implemented and hermetically validated; model execution unauthorized | `tools/astral-rgs-response-free-v30/`; `101-v30-response-free-evaluator-implementation.md`; matching RGS worker/coordinator | Independent fixture and decision rederivation tests | Raw positive/null score retention, two frozen model identities, exact 128-forward ceiling, consuming artifact identity | Local unexecuted instrument only; no acquisition, continual-learning, SOTA, or breakthrough evidence |
+| `V30-C01` | The frozen V30 implementation may be executed once without widening its claim | Authorized once; not run | `102-v30-response-free-evaluator-execution-authorization.md`; RGS `b8bfed6073d927e82c903a825fc3239fb1209c93`; Astral `b2ba7c66402a59b1e441b9d76e7df4e55168bcda` | Clean source bindings and exclusive ledger required before model access | Exactly two model processes and 128 forwards; raw evidence plus independent validation | Qualification only; no acquisition, continual-learning, SOTA, breakthrough, or claim promotion |
+| `V30-C01` | Response-free content likelihood is usable on the frozen positive-control ladder | Supported locally on two checkpoints; external review `NotRun` | Artifact `astral-rgs-v30-response-free-95062687c1cf-r1`; `103-v30-response-free-evaluator-execution-record.md` | Independent Astral rederivation returned `valid=true`, `errors=[]` | Both models 1.0 on all positive rungs; null 0.3125/0.28125; shuffled 0.0 | `LocalResponseFreeEvaluatorQualificationV30`; no acquisition, continual-learning, SOTA, or breakthrough evidence |
+| `V31-C01` | A frozen minimal LoRA update should acquire new associations under the qualified evaluator before any continual-learning campaign | Docs-first preregistered; implementation and execution unauthorized | `104-v31-tiny-acquisition-preregistration.md`; V30 artifact | Fresh 16-association corpus, exact update budget, reload and protected-panel controls | Direct/paraphrase acquisition, no-update replay, reload equivalence, protected-panel retention | Protocol only; no continual-learning, self-improvement, SOTA, or breakthrough evidence |
+| `V31-C01` | The tiny acquisition protocol is mechanically executable and independently auditable | Implemented and hermetically validated; model execution unauthorized | `tools/astral-rgs-tiny-acquisition-v31/`; `105-v31-tiny-acquisition-implementation.md`; matching RGS worker/coordinator | RGS and independent Astral fixture/gate tests | Exact update ceiling, likelihood decisions, adapter hash, replay/reload/retention gates | Local unexecuted instrument only; no continual-learning, SOTA, or breakthrough evidence |
+| `V31-C01` | The frozen V31 instrument may execute once without adaptive tuning | Authorized once; not run | `106-v31-tiny-acquisition-execution-authorization.md`; bound RGS/Astral implementation commits | Clean sources, exclusive ledger, fixed update budget | One model process, retained adapter, independent artifact validation | Acquisition sanity only; no continual-learning, SOTA, or breakthrough evidence |
+| `V31-C01` | The frozen V31 instrument establishes tiny acquisition | Not tested; consumed infrastructure failure before training | `107-v31-tiny-acquisition-failure-record.md`; retained failure artifact | Process record and absence of adapter/model result | Missing inventory identity field stopped before LoRA initialization | Zero updates; no acquisition, continual-learning, SOTA, or breakthrough evidence |
+| `V31R2-C01` | The V31 construction failure can be corrected without changing a scientific variable | Implemented and hermetically tested; execution unauthorized | `108-v31r2-inventory-binding-correction.md`; exact schema regression test | Canonical full-inventory hash replaces absent field lookup | All corpus, evaluator, update, and gate locks unchanged | Corrected local instrument only; no acquisition or continual-learning evidence |
+| `V31R2-C01` | The narrowly corrected acquisition sanity check may run once | Authorized once; not run | `109-v31r2-execution-authorization.md`; bound correction commits | New consuming ledger; unchanged scientific locks | Only inventory identity binding differs from V31 | Acquisition sanity only; no continual-learning, SOTA, or breakthrough evidence |
+| `V31R2-C01` | The fixed 64-step LoRA update acquires the fresh associations without damaging the qualified evaluator | Falsified locally; valid negative; external review `NotRun` | Artifact `astral-rgs-v31r2-tiny-acquisition-a36975fa2f90-r1`; `110-v31r2-execution-record.md` | Original clean validation plus read-only corrected replay report | Direct 0.1875 to 0.25; paraphrase 0.1875; protected 1.0 to 0.28125; exact reload | `TinyAcquisitionBlocked`; no acquisition, continual-learning, SOTA, or breakthrough evidence |
+| `V32-C01` | Explicit float32 target loss, clipping, and lower learning rates may stabilize acquisition development | Diagnosed and docs-first preregistered; implementation/execution unauthorized | `111-v32-acquisition-objective-diagnosis.md`; V31R2 loss trace | Two fixed development arms on eight unused associations | Acquisition, paraphrase, V30 protection, and loss-stability gates | Development protocol only; no confirmation, continual-learning, SOTA, or breakthrough evidence |
+| `V32-C01` | The frozen optimizer comparison is mechanically executable and independently auditable | Implemented and hermetically validated; model execution unauthorized | `tools/astral-rgs-optimizer-v32/`; `112-v32-optimizer-development-implementation.md`; matching RGS worker/coordinator | RGS and Astral fixture/selection tests | Raw likelihoods, gradient/loss traces, adapter hashes, budgets, and protection gates | Local unexecuted development instrument only |
+| `V32-C01` | The two frozen development arms may execute once | Authorized once; not run | `113-v32-optimizer-development-execution-authorization.md`; bound implementation commits | Clean sources, exclusive ledger, fixed arms and budgets | Independent artifact validation; confirmation withheld | Development evidence only |
+| `V32-C01` | Lower-rate float32 clipped optimization alone yields acquisition | Falsified locally; valid negative | Artifact `astral-rgs-v32-optimizer-development-f2471c7c4030-r1`; `114-v32-execution-v33-objective-preregistration.md` | Independent validation `valid=true`, `errors=[]` | Both arms stable/protected but direct and paraphrase 0.125 | No optimizer selected; no confirmation |
+| `V33-C01` | Removing the target from the training input may force key-to-value acquisition rather than copying | Docs-first preregistered; implementation/execution unauthorized | `114-v32-execution-v33-objective-preregistration.md`; V32 development keys | One locked stable optimizer; target only in supervised completion | Unchanged acquisition, paraphrase, protection, and loss gates | Development protocol only; no confirmation or continual-learning evidence |
+| `V33-C01` | The target-free development objective is mechanically executable and auditable | Implemented and hermetically validated; model execution unauthorized | `tools/astral-rgs-target-free-v33/`; `115-v33-target-free-objective-implementation.md` | Independent fixture and gate tests | Target exclusion, fixed optimizer/budget, raw decisions, adapter and source locks | Local unexecuted development instrument only |
+| `V33-C01` | Target-free supervision acquires the development associations while preserving the evaluator | Acquisition supported; retention falsified; valid blocked result | Artifact `astral-rgs-v33-target-free-717292ceeec5-r1`; `117-v33-result-v34-replay-preregistration.md` | Independent validation `valid=true`, `errors=[]` | Direct/paraphrase 1.0; protected 0.71875 | Development acquisition only; confirmation blocked |
+| `V34-C01` | Matched protected replay may retain V30 while preserving target-free acquisition | Docs-first preregistered; implementation/execution unauthorized | `117-v33-result-v34-replay-preregistration.md` | Fixed 25%/50% replay arms and matched budgets | Acquisition, paraphrase, protected accuracy and loss stability | Development protocol only |
+| `V34-C01` | The protected-replay comparison is mechanically executable and auditable | Implemented and hermetically validated; model execution unauthorized | `tools/astral-rgs-replay-v34/`; `118-v34-protected-replay-implementation.md` | Independent fixture and gate tests | Fixed mixture counts, adapters, likelihood decisions and source locks | Local unexecuted development instrument only |
+| `V34-C01` | Protected replay can jointly satisfy development acquisition and V30 retention | Supported locally for 25% replay; valid development result | Artifact `astral-rgs-v34-protected-replay-cc777697532e-r1`; `120-v34-result-v35-confirmation-preregistration.md` | Independent validation `valid=true`, `errors=[]` | 25% arm direct/paraphrase 0.75, protected 1.0; 50% rejected | Development only; fresh confirmation required |
+| `V35-C01` | The locked 25% replay method generalizes to untouched associations | Fresh confirmation preregistered; implementation/execution unauthorized | `120-v34-result-v35-confirmation-preregistration.md` | Eight unused words, new keys, immutable selected method | Acquisition, paraphrase, protection, loss and reload gates | Confirmation protocol only; no continual-learning or SOTA claim |
+| `V35-C01` | The fresh confirmation is mechanically executable and independently auditable | Implemented and hermetically validated; model execution unauthorized | `tools/astral-rgs-confirmation-v35/`; `121-v35-fresh-confirmation-implementation.md` | Independent fresh-fixture and gate tests | Locked method, adapter reload, likelihood and source locks | Local unexecuted confirmation instrument only |
+| `V35-C01` | The locked 25% replay method generalizes to untouched associations while preserving V30 | Supported locally; valid fresh confirmation; external review `NotRun` | Artifact `astral-rgs-v35-confirmation-8765db154d79-r1`; `123-v35-execution-record.md` | Independent validation `valid=true`, `errors=[]` | Direct/paraphrase/protected all 1.0; reload delta 0; 6,688 tokens | `LocalFreshAcquisitionConfirmationV35`; no continual-learning, recovery, SOTA, or breakthrough evidence |
+| `V36-C01` | Joint prior-task and protected replay may outperform matched baselines on a two-task stream | Docs-first preregistered; implementation/execution unauthorized | `124-v36-two-task-stream-preregistration.md` | 3 arms x 2 seeds x 2 orders; exact compute parity | Acquisition, forgetting, paraphrase, protection, reload and advantage gates | Protocol only; no CL-bench, recovery, SOTA, or breakthrough evidence |
+| `V36-C01` | The two-task pilot is mechanically executable and independently auditable | Implemented and hermetically validated; model execution unauthorized | `tools/astral-rgs-two-task-v36/`; `125-v36-two-task-stream-implementation.md` | Independent fixture, coverage and advantage tests | Exact schedules/windows, restart adapters, decisions and source locks | Local unexecuted two-task instrument only |
+| `V36-C01` | The frozen 12-cell pilot may execute once | Authorized once; not run | `126-v36-execution-authorization.md`; bound implementation commits | Clean sources, consuming ledger, exact total budget | Independent validation; CL-bench withheld | Local two-task pilot only |
 
 ## V28R2 Validator Implementation Authorization — 2026-07-28
 

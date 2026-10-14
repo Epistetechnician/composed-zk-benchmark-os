@@ -1,0 +1,5 @@
+cell=v41r27-panel-8-seed-412019 substrate=qwen2.5-0.5b step=0/256
+cell=v41r27-panel-8-seed-412019 substrate=qwen2.5-0.5b step=64/256
+cell=v41r27-panel-8-seed-412019 substrate=qwen2.5-0.5b step=128/256
+cell=v41r27-panel-8-seed-412019 substrate=qwen2.5-0.5b step=192/256
+{"classification": "V41R28SurrogateWorkerComplete", "run_id": "v41r27-panel-8-seed-412019", "substrate": "qwen2.5-0.5b", "protected_accuracy": 1.0, "pass": true, "output": "artifacts/native-pcsm-governed-autoresearch/local-surrogate-2026-08-04/qwen2.5-0.5b/v41r27-panel-8-seed-412019"}

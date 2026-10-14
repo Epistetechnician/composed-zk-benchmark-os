@@ -1,0 +1,20 @@
+{
+  "version": "astral.interference_stream_protocol.v37",
+  "result_version": "mesh.astral_v37_interference_result.v1",
+  "packet_version": "mesh.astral_v37_interference_packet.v1",
+  "claim_ceiling": "LocalFourTaskInterferenceStreamQualificationV37",
+  "task_ids": ["A", "B", "C", "D"],
+  "arms": ["no_task_replay", "recent_replay_25", "reservoir_replay_25"],
+  "seeds": [370037, 370038],
+  "orders": {
+    "forward": ["A", "B", "C", "D"],
+    "reverse": ["D", "C", "B", "A"]
+  },
+  "steps_per_task": 32,
+  "tokens_per_example": 96,
+  "update_tokens_per_task": 12288,
+  "update_tokens_per_cell": 49152,
+  "total_update_tokens": 589824,
+  "retention_band": [0.6, 0.9],
+  "replay_advantage_floor": 0.1
+}

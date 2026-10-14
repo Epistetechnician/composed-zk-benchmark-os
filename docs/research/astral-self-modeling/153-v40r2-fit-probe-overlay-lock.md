@@ -1,0 +1,41 @@
+# V40R2 Fit Probe Overlay Lock
+
+State slice: `V40R2FitProbeOverlayLock`.
+
+Status: `TokenizerQualified / ModelForwardPassNotAuthorized`.
+
+The initial `e5c251f-r1` tokenizer construction is retired because it used
+uncommitted source and omitted source, runtime, and model inventories. It
+performed no forward pass. It cannot be promoted or retried under the same
+identity.
+
+The fresh R2 artifact
+`/Users/shaanp/Documents/ResearchArtifacts/astral-rgs-v40r2-fit-probes-fadf0a814514-r2`
+passes independent validation. It seals 400 prompts, an 83-token maximum input
+length, and a 3,256,320-token evaluation-forward budget. No model forward pass
+occurred.
+
+Runner inspection found an additional required compute surface:
+`protected_output_margin` needs one rotating protected prompt at each of 384
+pre-update feature rows. R2 remains valid for the counterfactual evaluation
+budget but is insufficient for runner authorization. Qualification schema V2
+must seal this feature-probe budget under a fresh R3 identity.
+
+The corrected R3 artifact
+`/Users/shaanp/Documents/ResearchArtifacts/astral-rgs-v40r2-fit-probes-97e7ebe81c9f-r3`
+passes independent validation with a 25,728-token feature-probe budget in
+addition to the unchanged 3,256,320-token counterfactual evaluation budget.
+
+The deterministic overlay adds training, direct, paraphrase, candidate, and
+calibration definitions only for the four fit families without changing the
+sealed base corpus. It also selects a balanced 16-case protected panel from
+the previously qualified V30 response-free fixture; every protected target and
+candidate is disjoint from V40R2 targets.
+
+Calibration is frozen as multiclass mean Brier error derived from direct and
+protected candidate log probabilities, requiring no additional forward pass.
+Tune and assessment prompts are not constructed.
+
+Tokenizer-only qualification must still seal all prompt token sequences,
+confirm the 96-token ceiling, and compute the exact evaluation-forward-token
+budget. No model forward pass or update is authorized.

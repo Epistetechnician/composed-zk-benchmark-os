@@ -2,6 +2,30 @@
 
 ## Current Decision
 
+V39 narrowly missed its fixed retention-cost gate without threshold
+relaxation. V40 therefore freezes the first prospective equal-budget routing
+protocol on a fresh corpus. It must beat fixed, random, shuffled, and
+nonprivileged routers under prediction locks before any confirmation or
+benchmark escalation.
+
+V38R2 restored protected retention with a fixed alternating replay slot but
+lost too much task memory. Dynamic routing remains blocked. Any next allocation
+study must use a newly preregistered lower protected fraction or a genuinely
+prospective controller and must not reinterpret V38R2 as qualification.
+
+V37 completed with a useful nonsaturated retention regime, but three replay
+cells violated the protected V30 gate. The next permissible development slice
+is a fresh fixed-allocation protection-restoration study under identical
+per-step compute and memory. It must rerun matched task-only controls and cannot
+introduce Astral selection, dynamic compression, CL-bench, or confirmation.
+
+V36R2 is a valid negative two-task result: ordinary and joint replay both
+saturated at mean retention 1.0. V37 therefore qualifies a four-task
+interference stream before any dynamic-memory method is introduced. It must
+place the strongest fixed replay baseline inside the frozen `[0.60, 0.90]`
+retention band and preserve acquisition, protection, reload, and compute gates.
+Otherwise the stream is retired without candidate testing.
+
 The tested one-pass local gradient-selector lane is closed. The planted control
 validated measurement plumbing, but V5 returned `Null` and V10 selected no
 method because activation magnitude remained stronger. Stage 1 observer work is

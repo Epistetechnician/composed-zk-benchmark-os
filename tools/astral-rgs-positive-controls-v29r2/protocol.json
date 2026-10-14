@@ -1,0 +1,15 @@
+{
+  "version": "astral.v29r2_canonical_boundary_protocol.v1",
+  "state_slice": "astral-rgs-v29r2-canonical-token-boundary-execution",
+  "fixture_sha256": "sha256:b1567784d35275bab2a4a1e0a98998d7e808c8279e1975d513e9c0aff8fbb675",
+  "result_version": "mesh.astral_v29r2_canonical_boundary_result.v1",
+  "packet_version": "mesh.astral_v29r2_canonical_boundary_packet.v1",
+  "format_id": "chat_template_colon_prefill_leading_space",
+  "prefix_token_ids": [16141, 25],
+  "label_token_ids": {"A": 362, "B": 425, "C": 356, "D": 422},
+  "thresholds": {"literal_symbol": 0.95, "direct_lookup": 0.90, "one_hop": 0.80, "two_hop": 0.70},
+  "batch_size": 8,
+  "checkpoint_sha256": "sha256:0a321941ffa31f920284c932f98bd4dba7c7cb95acd797c01ec2fa0fdd1321ab",
+  "tokenizer_sha256": "sha256:43c4bf51c8db8d03b43a5c2b3d1c44adf886d12fe3eba979b9d41f6101d10f5b",
+  "claim_ceiling": "LocalCanonicalTokenBoundaryQualificationV29R2"
+}
