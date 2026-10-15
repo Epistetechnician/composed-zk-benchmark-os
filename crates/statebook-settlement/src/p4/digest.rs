@@ -415,6 +415,17 @@ pub fn settlement_state_digest(state: &SettlementStateV1) -> DigestV1 {
     encoder.field(8, &encode_u32(state.active_policy.policy_version));
     encoder.field(9, &encode_i64(state.last_policy_change_at));
     encoder.field(10, &encode_u32(state.clean_epochs));
+    encoder.field(
+        11,
+        &match state.bound_intent_digest {
+            Some(digest) => digest.as_bytes().to_vec(),
+            None => Vec::new(),
+        },
+    );
+    encoder.field(
+        12,
+        state.bound_destination.as_deref().unwrap_or("").as_bytes(),
+    );
     digest(SETTLEMENT_STATE_DOMAIN, &encoder.finish())
 }
 
@@ -466,6 +477,7 @@ fn decision_reason_tag(value: DecisionReasonV1) -> u8 {
         DecisionReasonV1::EvidenceExpired => 38,
         DecisionReasonV1::PolicyRollback => 30,
         DecisionReasonV1::PolicyRelaxRejected => 39,
+        DecisionReasonV1::QueueCancelled => 40,
         DecisionReasonV1::RecoveryFailed => 31,
         DecisionReasonV1::IntentDigestMismatch => 32,
         DecisionReasonV1::ModelConfidenceIgnored => 33,
