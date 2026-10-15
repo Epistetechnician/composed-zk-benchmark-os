@@ -129,6 +129,7 @@ pub enum DecisionReasonV1 {
     QueueCancelled,
     ProvenNoOutflowRejected,
     BudgetRefillRejected,
+    FailedTransferRollbackRejected,
     GateSourceContentStale,
     GatePreparedEarlierReuse,
     ValuationActionOracleFallback,

@@ -489,6 +489,7 @@ fn decision_reason_tag(value: DecisionReasonV1) -> u8 {
         DecisionReasonV1::QueueCancelled => 40,
         DecisionReasonV1::ProvenNoOutflowRejected => 41,
         DecisionReasonV1::BudgetRefillRejected => 42,
+        DecisionReasonV1::FailedTransferRollbackRejected => 46,
         DecisionReasonV1::GateSourceContentStale => 43,
         DecisionReasonV1::GatePreparedEarlierReuse => 44,
         DecisionReasonV1::ValuationActionOracleFallback => 45,

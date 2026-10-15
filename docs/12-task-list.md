@@ -21595,6 +21595,44 @@ pause product, transfer command, admission mutation, Evidence Ledger append,
 scalar trust score, production readiness, SOTA, independent audit, or
 full-security claims.
 
+## Integration Track: Statebook P21 Failed Transfer Reservation Rollback Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p21-failed-transfer-reservation-rollback-boundary`.
+
+## Integration Track: Statebook P21 Failed Transfer Reservation Rollback Implementation
+
+Status: implemented under named state slice
+`statebook-p21-failed-transfer-reservation-rollback`.
+
+Delivered:
+
+- `apply_failed_transfer_rollback_v1` with CAS-guarded reserved/in-flight
+  release;
+- Frozen-path kernel rollback so reserved exposure cannot leak;
+- two harness corpus cases (42 encodable total).
+
+Live authority remains deferred behind the legal/ops gate.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic reservation-rollback / CAS-finalizer fixture
+regression only. No value moves. Not complete TD-004 satisfaction, live
+authority, production readiness, SOTA, independent audit, or full-security
+claims.
+
+Anti-goals: live authority, complete TD-004 claim, artificial-profit PnL (#23),
+true threaded concurrency, trading, signing, custody, pause product, transfer
+command, admission mutation, Evidence Ledger append, scalar trust score,
+production readiness, SOTA, independent audit, or full-security claims.
+
 ## Integration Track: Statebook P10 Semantic Equivalence Corpus Boundary
 
 Status: documentation-first boundary complete for named state slice
