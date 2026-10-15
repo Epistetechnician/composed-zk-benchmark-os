@@ -1,0 +1,17 @@
+Copyright 2026 Epistetechnician and contributors
+
+Licensed under the Apache License, Version 2.0. See LICENSE.
+
+This repository is research software. Results recorded here are bounded local
+or synthetic observations governed by the claim boundaries in RESEARCH.md and
+AGENTS.md. Nothing here is a security guarantee, a proof of production
+readiness, a benchmark leaderboard result, or independent verification unless a
+record says so explicitly.
+
+Directory-specific notes:
+- docs/research/evidence-bounded-ai adapts the pure-LaTeX styling of
+  Foadsf/vintage-latex (CC BY-SA 4.0, attribution retained in that directory).
+  The paper build fetches jemmybutton/fiziko (GPL-3.0) into an ignored build
+  directory and does not vendor it; the rendered PDF is a build product.
+- Model weights, assessment corpora, raw traces, and custody artifacts are not
+  part of this repository and keep their own licenses and terms.

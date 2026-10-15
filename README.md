@@ -2,6 +2,12 @@
 
 A benchmark operating system for generating ZK workloads from control-flow semantics, mutating them adversarially, replaying them across benchmark/formal/proof backends, and scoring performance separately from soundness evidence.
 
+> **Start here:** [RESEARCH.md](RESEARCH.md) is the consolidated research report
+> and findings; [SECURITY.md](SECURITY.md) explains how to report issues;
+> [CONTRIBUTING.md](CONTRIBUTING.md) lists contribution rules. Licensed under
+> [Apache-2.0](LICENSE) (see [NOTICE](NOTICE) for directory-specific terms). This
+> README is a long, append-only implementation log.
+
 ## Thesis
 
 ZK benchmark cases should be generated from semantic machine specifications - states, transitions, guards, loops, invariants, traces, witnesses, and expected accept/reject outcomes - rather than only selected from hand-authored circuits or workload examples.
