@@ -21579,3 +21579,34 @@ cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -
 Claim ceiling: local hermetic challenge grammar / evidence-expiry regression
 only. No value moves. Not live pause authority, complete TD-004 satisfaction,
 production readiness, SOTA, independent audit, or full-security claims.
+
+## Integration Track: Statebook P13 Hysteresis Relax And Rollback Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p13-hysteresis-relax-rollback-boundary`.
+
+## Integration Track: Statebook P13 Hysteresis Relax And Rollback Implementation
+
+Status: implemented under named state slice
+`statebook-p13-hysteresis-relax-rollback`.
+
+Delivered:
+
+- active policy anchor + `attempt_policy_transition_v1`;
+- rollback / relax-reject / tighten / gated-relax paths;
+- five settlement hysteresis tests and two new harness corpus cases.
+
+Cancel remains deferred.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic hysteresis regression only. No value moves. Not
+live pause authority, complete TD-004 satisfaction, production readiness, SOTA,
+independent audit, or full-security claims.
