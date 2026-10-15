@@ -24,7 +24,8 @@ pub fn evaluate_valuation(
     }
     let mut rates: BTreeMap<String, SignedRational> = BTreeMap::new();
     for observation in &profile.observations {
-        if now - observation.observed_at > profile.max_age_seconds {
+        if observation.observed_at > now || now - observation.observed_at > profile.max_age_seconds
+        {
             return ValuationResult {
                 ok: false,
                 reason: Some(DecisionReasonV1::ValuationStale),

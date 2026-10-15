@@ -48,7 +48,7 @@ fn corpus_case_ids_are_stable() {
     assert!(ids.contains(&"td004_01_oracle_replay"));
     assert!(ids.contains(&"td004_18_model_confidence_bypass"));
     assert!(ids.contains(&"td004_26_recovery_mismatch"));
-    assert_eq!(ids.len(), 28);
+    assert_eq!(ids.len(), 33);
     assert!(ids.contains(&"td004_17_breaker_ttl_resolution"));
     assert!(ids.contains(&"td004_31_challenge_valid"));
     assert!(ids.contains(&"td004_31_evidence_expired"));
@@ -56,4 +56,6 @@ fn corpus_case_ids_are_stable() {
     assert!(ids.contains(&"td004_25_cancel_race"));
     assert!(ids.contains(&"td004_16_proven_no_outflow_rejected"));
     assert!(ids.contains(&"td004_26_all_path_halt"));
+    assert!(ids.contains(&"td004_07_future_valuation"));
+    assert!(ids.contains(&"td004_32_halted_to_normal_blocked"));
 }
