@@ -885,6 +885,8 @@ Surface DSL
 | [docs/statebook-p10-semantic-equivalence-corpus-implementation-notes.md](docs/statebook-p10-semantic-equivalence-corpus-implementation-notes.md) | Implemented P10 labeled StateKey equivalence corpus with fixture-local precision/recall=1 and false-equivalence rate=0. |
 | [docs/statebook-p11-breaker-ttl-resolution-boundary-spec.md](docs/statebook-p11-breaker-ttl-resolution-boundary-spec.md) | Docs-first P11 authorization to wire P4 breaker TTL exhaustion into Resolution with fail-closed renewal rejection; no live authority. |
 | [docs/statebook-p11-breaker-ttl-resolution-implementation-notes.md](docs/statebook-p11-breaker-ttl-resolution-implementation-notes.md) | Implemented P11 P4 breaker TTL→Resolution wiring, fail-closed expired-scope blocking, and `attempt_breaker_renewal_v1`. |
+| [docs/statebook-p12-challenge-grammar-evidence-expiry-boundary-spec.md](docs/statebook-p12-challenge-grammar-evidence-expiry-boundary-spec.md) | Docs-first P12 authorization for P4 challenge grammar variants and evidence-expiry → RevalidationRequired; no live authority. |
+| [docs/statebook-p12-challenge-grammar-evidence-expiry-implementation-notes.md](docs/statebook-p12-challenge-grammar-evidence-expiry-implementation-notes.md) | Implemented P12 `apply_challenge_v1`, evidence-expiry → RevalidationRequired, and fresh-evidence revalidation toward Reserved. |
 | [docs/media/statebook/README.md](docs/media/statebook/README.md) | Manifest for the original Statebook architecture diagrams and teaching memes; all assets are explanatory media rather than evidence. |
 | [output/pdf/statebook-whitepaper.pdf](output/pdf/statebook-whitepaper.pdf) and [output/pdf/statebook-product-requirements.pdf](output/pdf/statebook-product-requirements.pdf) | Rendered non-benchmark publication PDFs generated from the Markdown sources and visually inspected page by page. |
 | [docs/research/zk_external_source_index.md](docs/research/zk_external_source_index.md) | External source index and verification notes. |
@@ -1082,6 +1084,18 @@ value movement is authorized. See
 [docs/statebook-p11-breaker-ttl-resolution-implementation-notes.md](docs/statebook-p11-breaker-ttl-resolution-implementation-notes.md).
 
 This is local hermetic breaker TTL/resolution regression evidence only. No value moves.
+
+Statebook P12 authorization status: the named docs-first slice
+`statebook-p12-challenge-grammar-evidence-expiry-boundary` freezes P4 challenge
+grammar and evidence-expiry revalidation. The separately committed
+implementation slice `statebook-p12-challenge-grammar-evidence-expiry` adds
+`apply_challenge_v1`, wires queued evidence expiry into `RevalidationRequired`,
+supports fresh-evidence revalidation toward Reserved, and extends harness
+corpus coverage for TD-004 #31. Hysteresis and cancel remain deferred. No live
+authority or value movement is authorized. See
+[docs/statebook-p12-challenge-grammar-evidence-expiry-implementation-notes.md](docs/statebook-p12-challenge-grammar-evidence-expiry-implementation-notes.md).
+
+This is local hermetic challenge grammar / evidence-expiry regression evidence only. No value moves.
 
 ## Current Implementation Status
 
