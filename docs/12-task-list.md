@@ -21483,3 +21483,34 @@ cargo test -p statebook-core -p statebook-settlement -p statebook-report -p stat
 Claim ceiling: local hermetic adversarial fixture regression only. No value
 moves. Not complete TD-004 satisfaction, live authority, production readiness,
 SOTA, independent audit, or full-security claims.
+
+## Integration Track: Statebook P10 Semantic Equivalence Corpus Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p10-semantic-equivalence-corpus-boundary`.
+
+## Integration Track: Statebook P10 Semantic Equivalence Corpus Implementation
+
+Status: implemented under named state slice
+`statebook-p10-semantic-equivalence-corpus`.
+
+Delivered in `crates/statebook-e2e-harness`:
+
+- labeled StateKey equivalence pairs (2 equivalent + 27 distinct);
+- fixture-local precision/recall/false-equivalence metrics with exact acceptance;
+- three new semantic corpus tests (sixteen harness tests overall).
+
+P1–P9 identities remain unchanged.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-e2e-harness -- --check
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic labeled-fixture StateKey equivalence metrics
+only. No value moves. Not automatic economic-equivalence discovery, legal
+fungibility, AI oracle, live authority, production readiness, SOTA, independent
+audit, or full-security claims.
