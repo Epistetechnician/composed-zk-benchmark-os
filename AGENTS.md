@@ -281,7 +281,7 @@ earned. Preserve the frozen packet, prepared receipt, private run, adapters,
 aggregate release, and local receipt. Do not rerun or retune V7. The execution
 record is `docs/research/continual-learning/325-aligned-rsi-billsum-chat-template-adaptation-v7-execution.md`.
 
-+Explicit aligned RSI BillSum length-matched curriculum V8 is authorized by the user's continuing end-to-end local-acceptance instruction under named state slice
+Explicit aligned RSI BillSum length-matched curriculum V8 is authorized by the user's continuing end-to-end local-acceptance instruction under named state slice
 `aligned-rsi-billsum-length-matched-curriculum-v8` and governance slice
 `global-experiment-assurance-lifecycle-v1`. This is a fresh hypothesis and packet; V7 remains terminal `NoCandidate` and may not be rerun, retuned, or edited.
 V8 permits additive source and hermetic tests under `experiments/continual_learning/`, a frozen protocol and execution record under `docs/research/continual-learning/`, a hash-locked runtime contract, and an aggregate-only release under `release/aligned_rsi_billsum_length_matched_v8/`, with navigation in `README.md`, `docs/12-task-list.md`, and `experiments/continual_learning/README.md`.
