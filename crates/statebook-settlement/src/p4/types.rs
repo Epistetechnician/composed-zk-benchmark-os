@@ -129,6 +129,9 @@ pub enum DecisionReasonV1 {
     QueueCancelled,
     ProvenNoOutflowRejected,
     BudgetRefillRejected,
+    GateSourceContentStale,
+    GatePreparedEarlierReuse,
+    ValuationActionOracleFallback,
     RecoveryFailed,
     IntentDigestMismatch,
     ModelConfidenceIgnored,
@@ -360,11 +363,16 @@ pub struct EvidenceObservationV1 {
     pub(crate) current_roots: Vec<AssuranceRootV1>,
     pub(crate) dependency_roots: Vec<AssuranceRootV1>,
     pub(crate) dependency_disclosure: DependencyDisclosureV1,
+    /// Transport/receipt timestamp.
     pub(crate) observed_at: i64,
+    /// Content observation time; freshness for gate 2 uses this, not transport.
+    pub(crate) content_observed_at: i64,
     pub(crate) expires_at: i64,
     pub(crate) bound_request_id: String,
     pub(crate) replayed: bool,
     pub(crate) equivocated: bool,
+    /// Prepared-earlier report; cannot become reusable when transport is fresh.
+    pub(crate) prepared_earlier: bool,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]

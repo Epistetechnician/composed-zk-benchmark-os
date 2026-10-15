@@ -21522,6 +21522,44 @@ pause product, transfer command, admission mutation, Evidence Ledger append,
 scalar trust score, production readiness, SOTA, independent audit, or
 full-security claims.
 
+## Integration Track: Statebook P19 Oracle Freshness And Compromised Source Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p19-oracle-freshness-compromised-source-boundary`.
+
+## Integration Track: Statebook P19 Oracle Freshness And Compromised Source Implementation
+
+Status: implemented under named state slice
+`statebook-p19-oracle-freshness-compromised-source`.
+
+Delivered:
+
+- gate-2 prepared-earlier and content-staleness rejects;
+- dual-vendor shared upstream independence quarantine;
+- action-oracle valuation root overlap reject;
+- four harness corpus cases (40 encodable total).
+
+Live authority remains deferred behind the legal/ops gate.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic oracle-freshness / compromised-source fixture
+regression only. No value moves. Not complete TD-004 satisfaction, live
+authority, production readiness, SOTA, independent audit, or full-security
+claims.
+
+Anti-goals: live authority, complete TD-004 claim, trading, signing, custody,
+pause product, transfer command, admission mutation, Evidence Ledger append,
+scalar trust score, production readiness, SOTA, independent audit, or
+full-security claims.
+
 ## Integration Track: Statebook P10 Semantic Equivalence Corpus Boundary
 
 Status: documentation-first boundary complete for named state slice

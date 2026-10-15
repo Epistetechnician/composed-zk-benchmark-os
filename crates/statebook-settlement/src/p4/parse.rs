@@ -412,6 +412,11 @@ fn parse_evidence(value: &Value) -> Result<EvidenceSnapshotV1, SettlementParseEr
                 .get("observed_at")
                 .and_then(Value::as_i64)
                 .ok_or(missing_field("observed_at"))?,
+            content_observed_at: item
+                .get("content_observed_at")
+                .and_then(Value::as_i64)
+                .or_else(|| item.get("observed_at").and_then(Value::as_i64))
+                .ok_or(missing_field("content_observed_at"))?,
             expires_at: item
                 .get("expires_at")
                 .and_then(Value::as_i64)
@@ -424,6 +429,10 @@ fn parse_evidence(value: &Value) -> Result<EvidenceSnapshotV1, SettlementParseEr
                 .unwrap_or(false),
             equivocated: item
                 .get("equivocated")
+                .and_then(Value::as_bool)
+                .unwrap_or(false),
+            prepared_earlier: item
+                .get("prepared_earlier")
                 .and_then(Value::as_bool)
                 .unwrap_or(false),
         });
