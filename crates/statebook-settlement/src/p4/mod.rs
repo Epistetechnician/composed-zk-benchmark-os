@@ -1,4 +1,4 @@
-pub use breaker::validate_breaker_transition;
+pub use breaker::{attempt_breaker_renewal_v1, validate_breaker_transition};
 
 mod amounts;
 mod assurance;
@@ -32,11 +32,11 @@ pub use error::{SettlementParseErrorV1, SettlementTransitionErrorV1};
 pub use kernel::decide_and_transition;
 pub use parse::parse_settlement_scenario_v1;
 pub use types::{
-    AssuranceTierV1, AtomicLinkedExchangePlanV1, BreakerStateV1, ClockV1, DecisionMissingFactV1,
-    DecisionNonclaimV1, DecisionOutcomeV1, DecisionReasonV1, DecisionRecordV1, DirectionV1,
-    ExternalRiskReducingObligationV1, ExternalizationRequestV1, FinancialBasisKindV1,
-    FinancialBasisV1, QueueStatusV1, ReleaseClassV1, SettlementPolicyV1, SettlementScenarioV1,
-    SettlementStateV1, TransferStatusV1,
+    AssuranceTierV1, AtomicLinkedExchangePlanV1, BreakerScopeV1, BreakerStateV1, ClockV1,
+    DecisionMissingFactV1, DecisionNonclaimV1, DecisionOutcomeV1, DecisionReasonV1,
+    DecisionRecordV1, DirectionV1, ExternalRiskReducingObligationV1, ExternalizationRequestV1,
+    FinancialBasisKindV1, FinancialBasisV1, QueueStatusV1, ReleaseClassV1, SettlementPolicyV1,
+    SettlementScenarioV1, SettlementStateV1, TransferStatusV1,
 };
 
 pub const STATE_SLICE_P4: &str = "statebook-p4-settlement-simulator";

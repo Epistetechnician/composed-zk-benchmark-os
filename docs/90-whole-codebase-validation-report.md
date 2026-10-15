@@ -11213,3 +11213,51 @@ This is local hermetic labeled-fixture StateKey equivalence evidence only. It
 does not establish automatic economic-equivalence discovery, legal fungibility,
 AI oracle correctness, live authority, production thresholds, production
 readiness, SOTA, independent audit, or full security. No value moves.
+
+## Statebook P11 Breaker TTL And Resolution Boundary
+
+Date: 16 July 2026.
+
+Outcome: `DocumentationOnly`, `NotRun`, named state slice
+`statebook-p11-breaker-ttl-resolution-boundary`.
+
+State slice:
+
+- `docs/statebook-p11-breaker-ttl-resolution-boundary-spec.md`;
+- `README.md`;
+- `AGENTS.md`;
+- `docs/12-task-list.md`;
+- this report.
+
+The boundary freezes P4 breaker TTL→Resolution wiring, fail-closed expired
+scope handling without silent renewal, and malicious renewal rejection.
+Challenge grammar, hysteresis, and cancel remain outside. No Rust or Cargo
+change in this commit.
+
+This documentation-only slice creates no proof, accepted evidence, Level2+,
+score axis, production readiness, SOTA, breakthrough, full security, external
+audit, or action authority.
+
+## Statebook P11 Breaker TTL And Resolution Implementation
+
+Date: 16 July 2026.
+
+Outcome: `Level1LocalReplay`, `Pass`, named state slice
+`statebook-p11-breaker-ttl-resolution`.
+
+State slice:
+
+- additive `crates/statebook-settlement/src/p4/{breaker,kernel,types,digest,error,mod}.rs`
+  and `src/lib.rs` exports;
+- `crates/statebook-settlement/tests/breaker_ttl.rs`;
+- additive harness corpus cases under `crates/statebook-e2e-harness`;
+- `docs/statebook-p11-breaker-ttl-resolution-implementation-notes.md`;
+- navigation/status mirrors.
+
+TTL exhaustion enters Resolution and rejects with zero instant release; expired
+protective scopes block without silent renewal; renewal at ceiling rejects;
+existing P4 five-outcome and harness suites remain green.
+
+This is local hermetic breaker TTL/resolution regression evidence only. It does
+not establish live pause authority, complete TD-004 satisfaction, production
+readiness, SOTA, independent audit, or full security. No value moves.

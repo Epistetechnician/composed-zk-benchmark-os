@@ -2,7 +2,9 @@ use statebook_core::SignedRational;
 
 use super::amounts::validate_amount_before_valuation;
 use super::assurance::{evaluate_independence, resolve_assurance_tier};
-use super::breaker::global_breaker_state;
+use super::breaker::{
+    apply_ttl_exhaustion_to_state, collect_breaker_block_reasons, global_breaker_state,
+};
 use super::budget::{gross_reserve_linked_plan, try_reserve, ReservationResult};
 use super::classify::classify_release_class;
 use super::digest::{
@@ -43,6 +45,9 @@ pub fn decide_and_transition(
         evaluated_at,
     );
 
+    let mut current_state = current_state;
+    apply_ttl_exhaustion_to_state(&mut current_state, evaluated_at);
+
     let ledger_tip_before = current_state.ledger.tip_digest;
     let queue_status_before = current_state.queue.status;
     let transfer_status_before = current_state.transfer.status;
@@ -51,13 +56,7 @@ pub fn decide_and_transition(
     let missing_facts = Vec::new();
     let nonclaims = default_nonclaims();
 
-    if current_state
-        .breakers()
-        .iter()
-        .any(|scope| scope.state == BreakerStateV1::Halted)
-    {
-        reasons.push(DecisionReasonV1::BreakerHalted);
-    }
+    reasons.extend(collect_breaker_block_reasons(&current_state, evaluated_at));
     if current_state.recovery.reconciliation_mismatch || current_state.recovery.canary_failed {
         reasons.push(DecisionReasonV1::RecoveryFailed);
     }

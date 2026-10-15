@@ -21514,3 +21514,35 @@ Claim ceiling: local hermetic labeled-fixture StateKey equivalence metrics
 only. No value moves. Not automatic economic-equivalence discovery, legal
 fungibility, AI oracle, live authority, production readiness, SOTA, independent
 audit, or full-security claims.
+
+## Integration Track: Statebook P11 Breaker TTL And Resolution Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p11-breaker-ttl-resolution-boundary`.
+
+## Integration Track: Statebook P11 Breaker TTL And Resolution Implementation
+
+Status: implemented under named state slice
+`statebook-p11-breaker-ttl-resolution`.
+
+Delivered:
+
+- P4 kernel TTL exhaustion → Resolution with zero-instant reject;
+- expired Guarded/Recovery scopes block without silent renewal;
+- `attempt_breaker_renewal_v1` ceiling reject / below-ceiling extend;
+- five settlement breaker TTL tests and two new harness corpus cases.
+
+Challenge grammar, hysteresis, and cancel remain deferred.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic breaker TTL/resolution regression only. No value
+moves. Not live pause authority, complete TD-004 satisfaction, production
+readiness, SOTA, independent audit, or full-security claims.
