@@ -11399,3 +11399,37 @@ green.
 This is local hermetic finality/no-outflow regression evidence only. It does not
 establish live pause authority, complete TD-004 satisfaction, production
 readiness, SOTA, independent audit, or full security. No value moves.
+
+## Statebook P16 Recovery Transitions Boundary
+
+Date: 16 July 2026.
+
+Outcome: `DocumentationOnly`, `Level0DesignNote`, named state slice
+`statebook-p16-recovery-transitions-boundary`.
+
+This documentation-only slice creates no proof, accepted evidence, Level2+,
+score axis, production readiness, SOTA, breakthrough, full security, external
+audit, or action authority.
+
+## Statebook P16 Recovery Transitions Implementation
+
+Date: 16 July 2026.
+
+Outcome: `Level1LocalReplay`, `Pass`, named state slice
+`statebook-p16-recovery-transitions`.
+
+State slice:
+
+- additive `crates/statebook-settlement/src/p4/{recovery,kernel,parse,mod}.rs`
+  and `src/lib.rs` exports;
+- `crates/statebook-settlement/tests/recovery_transitions.rs`;
+- additive harness corpus cases under `crates/statebook-e2e-harness`;
+- `docs/statebook-p16-recovery-transitions-implementation-notes.md`;
+- navigation/status mirrors.
+
+All-path halt, canary failure, and reconciliation mismatch reject with zero
+instant; gated reopen clears halt only when clean; existing suites remain green.
+
+This is local hermetic recovery-drill regression evidence only. It does not
+establish live pause authority, production recovery readiness, complete TD-004
+satisfaction, SOTA, independent audit, or full security. No value moves.

@@ -606,6 +606,20 @@ pub struct RecoverySnapshotV1 {
     pub(crate) canary_failed: bool,
 }
 
+impl RecoverySnapshotV1 {
+    pub fn halted_paths(&self) -> &BTreeSet<String> {
+        &self.halted_paths
+    }
+
+    pub const fn reconciliation_mismatch(&self) -> bool {
+        self.reconciliation_mismatch
+    }
+
+    pub const fn canary_failed(&self) -> bool {
+        self.canary_failed
+    }
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct SettlementStateV1 {
     pub(crate) ledger: BudgetLedgerStateV1,

@@ -21673,3 +21673,33 @@ cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -
 Claim ceiling: local hermetic finality/no-outflow regression only. No value
 moves. Not live pause authority, complete TD-004 satisfaction, production
 readiness, SOTA, independent audit, or full-security claims.
+
+## Integration Track: Statebook P16 Recovery Transitions Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p16-recovery-transitions-boundary`.
+
+## Integration Track: Statebook P16 Recovery Transitions Implementation
+
+Status: implemented under named state slice `statebook-p16-recovery-transitions`.
+
+Delivered:
+
+- recovery halt/reconcile/canary/reopen APIs;
+- release blocked on non-empty halt inventory, mismatch, or canary failure;
+- four settlement recovery tests and two new harness corpus cases.
+
+Live authority remains deferred behind the legal/ops gate.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-settlement -p statebook-e2e-harness -- --check
+cargo test -p statebook-settlement --tests
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-settlement -p statebook-e2e-harness --all-targets -- -D warnings
+```
+
+Claim ceiling: local hermetic recovery-drill regression only. No value moves.
+Not live pause authority, production recovery readiness, complete TD-004
+satisfaction, SOTA, independent audit, or full-security claims.

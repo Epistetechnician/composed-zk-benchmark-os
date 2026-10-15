@@ -159,6 +159,14 @@ pub fn encodable_corpus_cases_v1() -> &'static [CorpusCaseV1] {
             id: "td004_16_finality_no_capacity_restore",
             expected_outcome: DecisionOutcomeV1::Rejected,
         },
+        CorpusCaseV1 {
+            id: "td004_26_all_path_halt",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_26_canary_failed",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
     ]
 }
 
@@ -322,6 +330,27 @@ pub fn build_corpus_scenario_v1(id: &str) -> Result<SettlementScenarioV1, Evalua
         "td004_16_proven_no_outflow_rejected" | "td004_16_finality_no_capacity_restore" => {
             mutate(|_| {})
         }
+        "td004_26_all_path_halt" => mutate(|value| {
+            value["initial_state"]["recovery"]["halted_paths"] = json!([
+                "release-class-all",
+                "profitable-close-payout",
+                "liquidation-surplus",
+                "lp-withdrawal",
+                "collateral-withdrawal",
+                "linked-exchange-outbound-leg",
+                "risk-reducing-obligation-endpoint",
+                "bridge",
+                "administrative-transfer",
+                "emergency-route",
+                "transferable-queued-claim",
+                "borrowing",
+                "margin-reuse",
+                "internal-credit-monetization"
+            ]);
+        }),
+        "td004_26_canary_failed" => mutate(|value| {
+            value["initial_state"]["recovery"]["canary_failed"] = json!(true);
+        }),
         _ => Err(EvaluationErrorV1::Settlement(format!(
             "unknown corpus id: {id}"
         ))),
