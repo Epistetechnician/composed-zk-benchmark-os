@@ -21451,3 +21451,35 @@ surface evidence only. No value moves. Completing P8 does not satisfy the P7
 legal/ops gate for live authority products. No admission mutation, Evidence
 Ledger append, scalar trust score, production thresholds, production readiness,
 SOTA, independent audit, or full-security claims.
+
+## Integration Track: Statebook P9 Adversarial Corpus Replay Boundary
+
+Status: documentation-first boundary complete for named state slice
+`statebook-p9-adversarial-corpus-replay-boundary`.
+
+## Integration Track: Statebook P9 Adversarial Corpus Replay Implementation
+
+Status: implemented under named state slice
+`statebook-p9-adversarial-corpus-replay`.
+
+Delivered in `crates/statebook-e2e-harness`:
+
+- twelve encodable TD-004 / P4 adversarial corpus replays;
+- timer-alone chained queue rejection;
+- fail-closed zero-instant invariants;
+- four new corpus tests (thirteen harness tests overall).
+
+No P4 kernel edits. P1–P8 identities remain unchanged.
+
+Validation gate:
+
+```text
+cargo fmt -p statebook-e2e-harness -- --check
+cargo test -p statebook-e2e-harness --tests
+cargo clippy -p statebook-e2e-harness --all-targets -- -D warnings
+cargo test -p statebook-core -p statebook-settlement -p statebook-report -p statebook-source -p statebook-authority --tests
+```
+
+Claim ceiling: local hermetic adversarial fixture regression only. No value
+moves. Not complete TD-004 satisfaction, live authority, production readiness,
+SOTA, independent audit, or full-security claims.
