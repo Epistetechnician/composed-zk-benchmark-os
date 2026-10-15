@@ -1,4 +1,8 @@
 pub use breaker::{attempt_breaker_renewal_v1, validate_breaker_transition};
+pub use budget::{
+    apply_destination_finality_v1, apply_proven_no_outflow_v1, apply_transfer_submit_v1,
+    available_capacity, TransferBudgetResultV1,
+};
 pub use cancel::apply_cancel_v1;
 pub use challenge::apply_challenge_v1;
 pub use hysteresis::{attempt_policy_transition_v1, evaluate_policy_transition_v1};

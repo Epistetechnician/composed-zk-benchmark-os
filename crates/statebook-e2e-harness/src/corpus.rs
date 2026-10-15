@@ -1,8 +1,9 @@
 use serde_json::{json, Value};
 use statebook_settlement::{
-    apply_cancel_v1, apply_challenge_v1, decide_and_transition, intent_digest,
-    parse_settlement_scenario_v1, ChallengeApplyResultV1, ChallengeKindV1, ChallengeSubmissionV1,
-    ClockV1, DecisionOutcomeV1, DecisionRecordV1, DigestV1, SettlementScenarioV1,
+    apply_cancel_v1, apply_challenge_v1, apply_proven_no_outflow_v1, apply_transfer_submit_v1,
+    decide_and_transition, intent_digest, parse_settlement_scenario_v1, ChallengeApplyResultV1,
+    ChallengeKindV1, ChallengeSubmissionV1, ClockV1, DecisionOutcomeV1, DecisionReasonV1,
+    DecisionRecordV1, DigestV1, SettlementScenarioV1, TransferBudgetResultV1,
 };
 
 use crate::error::EvaluationErrorV1;
@@ -148,6 +149,14 @@ pub fn encodable_corpus_cases_v1() -> &'static [CorpusCaseV1] {
         },
         CorpusCaseV1 {
             id: "td004_25_destination_without_new_intent",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_16_proven_no_outflow_rejected",
+            expected_outcome: DecisionOutcomeV1::Rejected,
+        },
+        CorpusCaseV1 {
+            id: "td004_16_finality_no_capacity_restore",
             expected_outcome: DecisionOutcomeV1::Rejected,
         },
     ]
@@ -310,6 +319,9 @@ pub fn build_corpus_scenario_v1(id: &str) -> Result<SettlementScenarioV1, Evalua
         "td004_25_destination_without_new_intent" => mutate(|value| {
             value["request"]["destination"] = json!("dest-replacement");
         }),
+        "td004_16_proven_no_outflow_rejected" | "td004_16_finality_no_capacity_restore" => {
+            mutate(|_| {})
+        }
         _ => Err(EvaluationErrorV1::Settlement(format!(
             "unknown corpus id: {id}"
         ))),
@@ -411,6 +423,76 @@ fn replay_destination_mismatch_corpus_case_v1(
     Ok(receipt(id, &record))
 }
 
+fn replay_proven_no_outflow_reject_v1(
+    id: &str,
+) -> Result<CorpusReplayReceiptV1, EvaluationErrorV1> {
+    let scenario = parse_settlement_scenario_v1(IMMEDIATE)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    let first = run(scenario)?;
+    let mut state = first.next_state().clone();
+    let tip = state.ledger().tip_digest();
+    let reserved = state.ledger().axes()[0].reserved();
+    apply_transfer_submit_v1(&mut state, "ETH", reserved, tip)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    let tip = state.ledger().tip_digest();
+    let in_flight = state.ledger().axes()[0].in_flight();
+    let result = apply_proven_no_outflow_v1(&mut state, "ETH", in_flight, tip, false)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    if result
+        != (TransferBudgetResultV1::Rejected {
+            reason: DecisionReasonV1::ProvenNoOutflowRejected,
+        })
+    {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} expected proven-no-outflow reject got {result:?}"
+        )));
+    }
+    if state.ledger().axes()[0].in_flight() != in_flight {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} mutated in_flight under invalid proof"
+        )));
+    }
+    Ok(CorpusReplayReceiptV1 {
+        id: id.to_owned(),
+        outcome: "rejected".to_owned(),
+        instant_release_is_zero: true,
+        record_digest: format!("proven-no-outflow-reject-{id}"),
+    })
+}
+
+fn replay_finality_no_capacity_restore_v1(
+    id: &str,
+) -> Result<CorpusReplayReceiptV1, EvaluationErrorV1> {
+    use statebook_settlement::{apply_destination_finality_v1, available_capacity};
+    let scenario = parse_settlement_scenario_v1(IMMEDIATE)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    let first = run(scenario)?;
+    let mut state = first.next_state().clone();
+    let tip = state.ledger().tip_digest();
+    let reserved = state.ledger().axes()[0].reserved();
+    apply_transfer_submit_v1(&mut state, "ETH", reserved, tip)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    let available_before = available_capacity(&state.ledger().axes()[0])
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    let tip = state.ledger().tip_digest();
+    let in_flight = state.ledger().axes()[0].in_flight();
+    apply_destination_finality_v1(&mut state, "ETH", in_flight, tip)
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    let available_after = available_capacity(&state.ledger().axes()[0])
+        .map_err(|error| EvaluationErrorV1::Settlement(error.to_string()))?;
+    if available_after != available_before {
+        return Err(EvaluationErrorV1::Settlement(format!(
+            "{id} restored capacity on destination finality"
+        )));
+    }
+    Ok(CorpusReplayReceiptV1 {
+        id: id.to_owned(),
+        outcome: "rejected".to_owned(),
+        instant_release_is_zero: true,
+        record_digest: format!("finality-no-restore-{id}"),
+    })
+}
+
 pub fn replay_corpus_case_v1(id: &str) -> Result<CorpusReplayReceiptV1, EvaluationErrorV1> {
     if let Some(kind) = challenge_kind_for_corpus(id) {
         return replay_challenge_corpus_case_v1(id, kind);
@@ -420,6 +502,12 @@ pub fn replay_corpus_case_v1(id: &str) -> Result<CorpusReplayReceiptV1, Evaluati
     }
     if id == "td004_25_destination_without_new_intent" {
         return replay_destination_mismatch_corpus_case_v1(id);
+    }
+    if id == "td004_16_proven_no_outflow_rejected" {
+        return replay_proven_no_outflow_reject_v1(id);
+    }
+    if id == "td004_16_finality_no_capacity_restore" {
+        return replay_finality_no_capacity_restore_v1(id);
     }
     let scenario = build_corpus_scenario_v1(id)?;
     let record = run(scenario)?;
