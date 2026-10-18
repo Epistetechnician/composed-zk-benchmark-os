@@ -1,12 +1,27 @@
 <!-- readme-v2:begin -->
 # Composed ZK Benchmark OS
 
-[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE) ![visibility: private staging](https://img.shields.io/badge/release-private%20staging-lightgrey) ![claims: bounded](https://img.shields.io/badge/claims-bounded%20local-orange)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE) ![claims: bounded](https://img.shields.io/badge/claims-bounded%20local-orange)
 
 > A benchmark operating system for generating ZK workloads from control-flow semantics, mutating them adversarially, replaying them across benchmark/formal/proof backends, and scoring performance separately from soundness evidence.
 
+## Start here
+
+**Question.** Can a zero-knowledge benchmark start from program *meaning*, so that a fast backend accepting an invalid trace scores worse than a slow one that rejects it?
+
+**Headline result.** A semantic benchmark OS across nine workload families with 14 adversarial mutation classes, local replay, and a ledger discipline in which every claim carries a ceiling. About 80 attempts at Rust-to-Lean extraction with Aeneas ended without a kernel-checked witness; the recorded failures and a fail-closed execution state machine are the product. Interpretability and continual-learning results are summarized in [FINDINGS.md](FINDINGS.md).
+
+**What it does not show.** Everything is Level 1: local, deterministic infrastructure. There is no official benchmark result, no backend performance claim, and no proof of the Rust source. This repository is a very long implementation log; read [FINDINGS.md](FINDINGS.md) and [RESEARCH.md](RESEARCH.md) first.
+
+**Reproduce.**
+
+```sh
+cargo test --workspace
+```
+
 ## Contents
 
+- [Start here](#start-here)
 - [At a glance](#at-a-glance)
 - [Key findings](#key-findings)
 - [Verification and CI/CD acceptance](#verification-and-cicd-acceptance)
@@ -20,7 +35,7 @@
 | | |
 |---|---|
 | Stack | Rust workspace |
-| Release stage | Private staging for research release; not yet public |
+| Release stage | Public research release |
 | License | Apache-2.0 (see [LICENSE](LICENSE), [NOTICE](NOTICE)) |
 | Research report | [RESEARCH.md](RESEARCH.md) |
 | Last full acceptance run | 2026-10-14 |

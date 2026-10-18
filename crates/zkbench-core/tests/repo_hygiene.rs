@@ -47,10 +47,14 @@ fn scan_repo(
             .unwrap_or("");
         let root_package_contract = root.parent() == Some(repo_root)
             && matches!(file_name, "package.json" | "pnpm-lock.yaml");
+        // The Electron desktop shell is a tracked, intentional app with its own manifest.
+        let desktop_shell_contract = root.parent() == Some(&repo_root.join("apps").join("desktop"))
+            && file_name == "package.json";
         if matches!(
             file_name,
             "package.json" | "pnpm-lock.yaml" | "yarn.lock" | "package-lock.json"
         ) && !root_package_contract
+            && !desktop_shell_contract
         {
             forbidden_artifacts.push(root.to_path_buf());
         }
@@ -66,7 +70,7 @@ fn scan_repo(
         .unwrap_or("");
     if matches!(
         dir_name,
-        ".git" | "target" | ".autoresearch" | ".phala-capture" | ".venv"
+        ".git" | "target" | ".autoresearch" | ".phala-capture" | ".venv" | ".weco"
     ) {
         return;
     }
