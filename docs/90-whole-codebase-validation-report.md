@@ -12942,3 +12942,5 @@ audit, or action authority. Implementation requires a separately committed
 state slice `statebook-p19-oracle-freshness-confidence`.
 audit, or action authority. Implementation requires a separately committed
 state slice `statebook-p20-model-confidence`.
+
+Fixture-only matched-control boundary package (slices: astral-neuron-level-causal-lane-v49-boundary, caduceus-mechanism-vs-behavior-lane-boundary, continual-learning-activation-shape-diagnostic-boundary, theseus-neuron-control-instrument-validity-boundary, matched-control-validity-fixtures-v1): docs-first boundaries plus hermetic validator in tools/matched-control-validity-fixtures-v1/. No model runs or spend; Level0/Level1 only.

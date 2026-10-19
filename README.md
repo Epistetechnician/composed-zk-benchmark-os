@@ -4737,3 +4737,5 @@ Work proceeds under named state slices recorded in [AGENTS.md](AGENTS.md). The c
 - Report vulnerabilities per [SECURITY.md](SECURITY.md).
 - Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
 - Licensed under [Apache-2.0](LICENSE); see [NOTICE](NOTICE).
+
+Fixture-only matched-control boundary package (slices: astral-neuron-level-causal-lane-v49-boundary, caduceus-mechanism-vs-behavior-lane-boundary, continual-learning-activation-shape-diagnostic-boundary, theseus-neuron-control-instrument-validity-boundary, matched-control-validity-fixtures-v1): docs-first boundaries plus hermetic validator in tools/matched-control-validity-fixtures-v1/. No model runs or spend; Level0/Level1 only.
