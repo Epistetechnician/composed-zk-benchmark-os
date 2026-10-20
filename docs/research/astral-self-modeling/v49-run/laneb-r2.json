@@ -1,0 +1,44 @@
+{
+ "gate": {
+  "status": "InstrumentNotValid",
+  "fails": [
+   "known_bad_instrument"
+  ],
+  "ceiling": "LocalDevelopmentUnreviewed"
+ },
+ "readouts": {
+  "margin": {
+   "effect": 1.2401044368743896,
+   "p": 0.000999000999000999,
+   "z": 24.898640832405167
+  },
+  "logprob": {
+   "effect": 0.3463391065597534,
+   "p": 0.000999000999000999,
+   "z": 13.870625275486534
+  }
+ },
+ "tail": {
+  "n": 3840,
+  "min": -59.0,
+  "max": 50.25,
+  "pos_frac": 0.45729166666666665,
+  "excess_kurtosis": 15.630552376177537,
+  "mean": -0.134782838045309
+ },
+ "positive_control_effect": 3.420312821865082,
+ "near_miss_effect": 0.5526044368743896,
+ "selected_effect": 1.2401044368743896,
+ "known_bad": {
+  "effect": 0.07343750447034836,
+  "z": 4.084730802594748
+ },
+ "lens_tol": 12.449320416202584,
+ "cfg": {
+  "seed": 50,
+  "k": 32,
+  "draws": 1000,
+  "min_effect": 0.5,
+  "alpha": 0.05
+ }
+}
