@@ -51,12 +51,18 @@ def matched_pool(magnitude, selected, layer_of, pct_bins=10):
     by_layer = {}
     for u in magnitude:
         by_layer.setdefault(layer_of[u], []).append(u)
+    ranked = {}
+    for l, us in by_layer.items():
+        us = sorted(us, key=lambda x: (magnitude[x], x))
+        ranked[l] = (us, {u: i for i, u in enumerate(us)})
+    sel = set(selected)
     cand = {}
     for u in selected:
-        peers = sorted(by_layer[layer_of[u]], key=lambda x: (magnitude[x], x))
-        rank = peers.index(u)
-        b = rank * pct_bins // len(peers)
-        pool = [p for p in peers if peers.index(p) * pct_bins // len(peers) == b and p not in selected]
+        us, rk = ranked[layer_of[u]]
+        n = len(us)
+        b = rk[u] * pct_bins // n
+        lo, hi = -(-b * n // pct_bins), -(-(b + 1) * n // pct_bins)
+        pool = [p for p in us[lo:hi] if p not in sel]
         if not pool:
             raise V49Error("no matched controls for %r" % (u,))
         cand[u] = pool

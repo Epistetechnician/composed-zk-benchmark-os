@@ -1,0 +1,80 @@
+{
+ "status": "NoCandidate",
+ "lock": "92c3f7a860f6e90bfcb5b327a3d93796f21242bc23493a674fc3de297faf51f0",
+ "selected": [
+  3277,
+  3376,
+  3857,
+  4893,
+  5949,
+  6990,
+  7079,
+  7418,
+  8524,
+  9116,
+  9302,
+  10099,
+  10505,
+  10513,
+  10584,
+  10674,
+  10804,
+  10950,
+  11368,
+  11835,
+  12216,
+  13462,
+  13532,
+  15158,
+  15641,
+  16319,
+  16422,
+  17241,
+  17308,
+  17687,
+  18199,
+  18418
+ ],
+ "results": {
+  "tune": {
+   "effect": -1.1729168891906738,
+   "p": 1.0,
+   "gap": -1.1904859414100648
+  },
+  "assess": {
+   "effect": -1.1223955154418945,
+   "p": 1.0,
+   "gap": -1.1614722397327424
+  }
+ },
+ "controls": {
+  "text_only": {
+   "effect": 0.0,
+   "separates": false
+  },
+  "shuffled": {
+   "effect": 0.018229171633720398,
+   "separates": false
+  },
+  "constant": {
+   "effect": 0.0625,
+   "separates": false
+  }
+ },
+ "holm_reject": [
+  false,
+  false
+ ],
+ "ceiling": "LocalDevelopmentUnreviewed",
+ "cfg": {
+  "seed": 49,
+  "k": 32,
+  "draws": 1000,
+  "min_effect": 0.5,
+  "alpha": 0.05,
+  "note": "preregistered V49 local run"
+ },
+ "n_docs": 360,
+ "model_path": "/home/dev/.cache/huggingface/hub/models--Qwen--Qwen3-1.7B-MLX-bf16/snapshots/720c04346ea2b095c801ebbd545c109230964cd4",
+ "seconds": 58.4
+}
