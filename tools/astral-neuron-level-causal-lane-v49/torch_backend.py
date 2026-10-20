@@ -4,7 +4,7 @@ Units: MLP intermediate neurons (input to down_proj) at LAYERS of a cached Qwen3
 checkpoint, id = k*I + i. Task: subject-verb agreement logit margin
 (correct-verb minus wrong-verb logit at the final position). Effect(S) is the
 margin drop when S is zeroed at every position, mean over docs. Fit score is
--d margin / d mask (first-order ablation effect), positive part.
++d margin / d mask (first-order margin drop under ablation), positive part.
 """
 import random
 
@@ -89,7 +89,7 @@ class TorchBackend:
             for k in self.mask:
                 tot[k] += self.mask[k].grad
         self._reset()
-        return {k * self.I + i: max(0.0, -float(tot[k][i])) for k in tot for i in range(self.I)}
+        return {k * self.I + i: max(0.0, float(tot[k][i])) for k in tot for i in range(self.I)}
 
     def magnitude(self):
         self._reset()

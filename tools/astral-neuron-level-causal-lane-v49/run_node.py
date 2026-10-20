@@ -5,7 +5,7 @@ import v49
 from torch_backend import TorchBackend
 
 path = sys.argv[1]
-cfg = {"seed": 49, "k": 32, "draws": 1000, "min_effect": 0.5, "alpha": 0.05, "note": "preregistered V49 local run"}
+cfg = {"seed": 50, "k": 32, "draws": 1000, "min_effect": 0.5, "alpha": 0.05, "note": "preregistered V49 r2 (sign fix; r1 disclosed)"}
 t = time.time()
 be = TorchBackend(path)
 res = v49.run_v49(be, cfg)
