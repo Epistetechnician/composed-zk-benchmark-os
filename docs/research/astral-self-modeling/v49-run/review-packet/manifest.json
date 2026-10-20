@@ -1,0 +1,275 @@
+{
+ "packet": "v49-campaign-review-packet-v1",
+ "status": "UNREVIEWED",
+ "claim_ceiling": "LocalDevelopmentUnreviewed",
+ "head_at_build": "afa3fcf863c191b50e26cb39a3c4497036c96f0d",
+ "authorization": {
+  "agents_md_slice": "neuron-control-lanes-unreviewed-execution-v1",
+  "owner_waived_independent_accept": true,
+  "usd_ceiling": 30.0,
+  "usd_spent_gman_node": 13.041,
+  "provider": "GiveMeANode (gman), h100-1, europe-north1, node astral-v49-neuron-r1, id 6ffef873-ff32-4f4f-bcfe-b6c32212e149"
+ },
+ "models": {
+  "Qwen3-1.7B-MLX-bf16": "720c04346ea2b095c801ebbd545c109230964cd4",
+  "Qwen3-4B-Base": "906bfd4b4dc7f14ee4320094d8b41684abff8539",
+  "SmolLM2-1.7B": "effd688a12921b4cc83e3312b6feb579f70f9c71"
+ },
+ "code": [
+  {
+   "path": "tools/astral-neuron-level-causal-lane-v49/v49.py",
+   "sha256": "f76d695d4494c4ec5fe4291f6c79b72c1e79afa2f2f9ba06b48fd527626fb14f",
+   "bytes": 6667,
+   "first_commit": "c359c6ba05a1992383c29cc91c1c029334a774ad",
+   "last_commit": "d2fbe87d38c8f0357fbbe6bec5628a40d1e83368"
+  },
+  {
+   "path": "tools/astral-neuron-level-causal-lane-v49/torch_backend.py",
+   "sha256": "314d256efd83760d9637df6c34ad37aebd28487f79510d6e83df990b93fa06f2",
+   "bytes": 7679,
+   "first_commit": "b3653955cbaab42c34d725ce7ab9e1671beaa666",
+   "last_commit": "89af0cae47153dc6e0d916e5fcb1aed3cc503e26"
+  },
+  {
+   "path": "tools/astral-neuron-level-causal-lane-v49/run_node.py",
+   "sha256": "8fca7236bfa74c4662f4fd5ce5530850771f24d6a0297cab01049000d131e908",
+   "bytes": 654,
+   "first_commit": "b3653955cbaab42c34d725ce7ab9e1671beaa666",
+   "last_commit": "938a9860c137869b40ea76cd76472d3fd2dc87bb"
+  },
+  {
+   "path": "tools/astral-neuron-level-causal-lane-v49/run_laneb.py",
+   "sha256": "a828f3bf427f4e2276cbcf28cf974e8c76a848a89dea1ceb165bc5a96a8fc371",
+   "bytes": 3938,
+   "first_commit": "b85f56e3dff95f6a0a173b28284962651cf7a11d",
+   "last_commit": "b85f56e3dff95f6a0a173b28284962651cf7a11d"
+  },
+  {
+   "path": "tools/astral-neuron-level-causal-lane-v49/run_r3.py",
+   "sha256": "178f24dd316b9496d596ecadcfc378a5a3bcc7ee4481c810e6efb6f5d856e5d3",
+   "bytes": 4303,
+   "first_commit": "d2fbe87d38c8f0357fbbe6bec5628a40d1e83368",
+   "last_commit": "d2fbe87d38c8f0357fbbe6bec5628a40d1e83368"
+  },
+  {
+   "path": "tools/astral-neuron-level-causal-lane-v49/run_r4.py",
+   "sha256": "37ce621db0debf737db3e44f5b9cf839dc56d2aa736032c4133695b1267f23fe",
+   "bytes": 4477,
+   "first_commit": "fdddf816e83569707b75014f79349a872bb41f23",
+   "last_commit": "fdddf816e83569707b75014f79349a872bb41f23"
+  },
+  {
+   "path": "tools/astral-neuron-level-causal-lane-v49/run_gen.py",
+   "sha256": "511fe505686cf80b9a1d1a25891d22f40cbdd40749d8081a8ddcfcbc4dbde274",
+   "bytes": 5016,
+   "first_commit": "1517b831de836f9d8366d1f477e9306ff512e244",
+   "last_commit": "14e6836e19e68f3310c456be7762aa48f6b0b680"
+  },
+  {
+   "path": "tools/astral-neuron-level-causal-lane-v49/run_cd.py",
+   "sha256": "de305d9610eb2d06fc1c14eb3f8e2f36d4b1a028200377c9a280c21de00df024",
+   "bytes": 4538,
+   "first_commit": "1517b831de836f9d8366d1f477e9306ff512e244",
+   "last_commit": "1517b831de836f9d8366d1f477e9306ff512e244"
+  },
+  {
+   "path": "tools/astral-neuron-level-causal-lane-v49/run_corpus.py",
+   "sha256": "c68ca656e02f0de0f6968f4ab24ece28200ee88815c8aa913e621b03d52a0755",
+   "bytes": 5509,
+   "first_commit": "89af0cae47153dc6e0d916e5fcb1aed3cc503e26",
+   "last_commit": "89af0cae47153dc6e0d916e5fcb1aed3cc503e26"
+  },
+  {
+   "path": "tools/astral-neuron-level-causal-lane-v49/run_corpus_bal.py",
+   "sha256": "abf686db39066e377cd9209475b4a23fed887526959d54d151561d38bebea307",
+   "bytes": 5544,
+   "first_commit": "7c90bda2c07b77c2d27aae30fd8dc1848d2ac701",
+   "last_commit": "7c90bda2c07b77c2d27aae30fd8dc1848d2ac701"
+  },
+  {
+   "path": "tools/astral-neuron-level-causal-lane-v49/build_corpus.py",
+   "sha256": "c45bf7181997df55c6fbc718e76aa69dfa0201944e01bdbd886b514c98f1a833",
+   "bytes": 1453,
+   "first_commit": "89af0cae47153dc6e0d916e5fcb1aed3cc503e26",
+   "last_commit": "89af0cae47153dc6e0d916e5fcb1aed3cc503e26"
+  },
+  {
+   "path": "tools/astral-neuron-level-causal-lane-v49/build_corpus_balanced.py",
+   "sha256": "71abb81661ffe3922bcedf3c6a3748951544210621f1f2c01e2ac65f13d4413a",
+   "bytes": 1236,
+   "first_commit": "7c90bda2c07b77c2d27aae30fd8dc1848d2ac701",
+   "last_commit": "7c90bda2c07b77c2d27aae30fd8dc1848d2ac701"
+  },
+  {
+   "path": "tools/astral-neuron-level-causal-lane-v49/tests/test_v49.py",
+   "sha256": "7ec7343139fed374842de3d21202289c40247511ad84f00de266e3c5cfe4d3e6",
+   "bytes": 2829,
+   "first_commit": "c359c6ba05a1992383c29cc91c1c029334a774ad",
+   "last_commit": "c359c6ba05a1992383c29cc91c1c029334a774ad"
+  }
+ ],
+ "results": [
+  {
+   "path": "docs/research/astral-self-modeling/v49-run/result-r1.json",
+   "sha256": "f9338e92e90716241b2f7534a4bbef1d51704487690fab1d49874434c71f42f9",
+   "bytes": 1214,
+   "first_commit": "b3653955cbaab42c34d725ce7ab9e1671beaa666",
+   "last_commit": "b3653955cbaab42c34d725ce7ab9e1671beaa666"
+  },
+  {
+   "path": "docs/research/astral-self-modeling/v49-run/result-r2.json",
+   "sha256": "36af8a3b0c1a0e562d4d31b30fdf3b677fb281f7a2b05ac1d37da0f64e419ddb",
+   "bytes": 1234,
+   "first_commit": "938a9860c137869b40ea76cd76472d3fd2dc87bb",
+   "last_commit": "938a9860c137869b40ea76cd76472d3fd2dc87bb"
+  },
+  {
+   "path": "docs/research/astral-self-modeling/v49-run/laneb-r2.json",
+   "sha256": "7420b2a604b68df2658d0a7d1db862d9aabb7c7a370c32b9d3338b0418ad98e7",
+   "bytes": 871,
+   "first_commit": "b85f56e3dff95f6a0a173b28284962651cf7a11d",
+   "last_commit": "b85f56e3dff95f6a0a173b28284962651cf7a11d"
+  },
+  {
+   "path": "docs/research/astral-self-modeling/v49-run/r3.json",
+   "sha256": "cbe450b5dc0d6ae431a0afb92f4286336babf414622d224ed12b3fdbcf8395d8",
+   "bytes": 1915,
+   "first_commit": "883eed29d8d9e25220e3c958a590e03de20b6332",
+   "last_commit": "883eed29d8d9e25220e3c958a590e03de20b6332"
+  },
+  {
+   "path": "docs/research/astral-self-modeling/v49-run/r4.json",
+   "sha256": "a417052f8318893e668f8d79a8311ddc830d4045aca8fb2d6e90c2bb82809277",
+   "bytes": 1895,
+   "first_commit": "71e43f66162715364264bf7e7e936f4399ce8e19",
+   "last_commit": "71e43f66162715364264bf7e7e936f4399ce8e19"
+  },
+  {
+   "path": "docs/research/astral-self-modeling/v49-run/g1.json",
+   "sha256": "5cc54c9cb94124fc4744f00a48f887baca3dbe17410a2fb21b7e227ac81e7f55",
+   "bytes": 1903,
+   "first_commit": "d2929d760291710eaaa7bed2fef19064db7acbb1",
+   "last_commit": "d2929d760291710eaaa7bed2fef19064db7acbb1"
+  },
+  {
+   "path": "docs/research/astral-self-modeling/v49-run/g2.json",
+   "sha256": "ff82409aa6d5ac887e75ee7cee38cb39efb2ded70957b2b12cddde7254b9f71d",
+   "bytes": 1894,
+   "first_commit": "d2929d760291710eaaa7bed2fef19064db7acbb1",
+   "last_commit": "d2929d760291710eaaa7bed2fef19064db7acbb1"
+  },
+  {
+   "path": "docs/research/astral-self-modeling/v49-run/cd.json",
+   "sha256": "bba2919fd2f56c1a641719bd4a1f17bee8251f723b9be1c83c5fdd552d5b56a9",
+   "bytes": 3216,
+   "first_commit": "14e6836e19e68f3310c456be7762aa48f6b0b680",
+   "last_commit": "14e6836e19e68f3310c456be7762aa48f6b0b680"
+  },
+  {
+   "path": "docs/research/astral-self-modeling/v49-run/c1.json",
+   "sha256": "989623b8dfb7c3b6bab5068a7c90e00055efad6c66a2a7d5e15fb6e7406fcd16",
+   "bytes": 1914,
+   "first_commit": "ce40f7f04dce2bca034b6ba903dde2098bbce27b",
+   "last_commit": "ce40f7f04dce2bca034b6ba903dde2098bbce27b"
+  },
+  {
+   "path": "docs/research/astral-self-modeling/v49-run/b1.json",
+   "sha256": "9d75f831ec8d376655a4554c8e893436ea10de59dc417cbffc6b945c7e893bc0",
+   "bytes": 1892,
+   "first_commit": "afa3fcf863c191b50e26cb39a3c4497036c96f0d",
+   "last_commit": "afa3fcf863c191b50e26cb39a3c4497036c96f0d"
+  },
+  {
+   "path": "docs/research/astral-self-modeling/v49-run/b2.json",
+   "sha256": "fa8540e1b3d44c9886268d7dcb1512c8d70300a983fe9ca9bc68888612a34215",
+   "bytes": 1895,
+   "first_commit": "afa3fcf863c191b50e26cb39a3c4497036c96f0d",
+   "last_commit": "afa3fcf863c191b50e26cb39a3c4497036c96f0d"
+  }
+ ],
+ "records": [
+  {
+   "path": "docs/research/astral-self-modeling/v49-run/execution-record-r1.md",
+   "sha256": "4b87528e4838ab4288a9a52d864e48a7d9687f789dfb40c1d02c913cc4ddb290",
+   "bytes": 1757,
+   "first_commit": "b3653955cbaab42c34d725ce7ab9e1671beaa666",
+   "last_commit": "b3653955cbaab42c34d725ce7ab9e1671beaa666"
+  },
+  {
+   "path": "docs/research/astral-self-modeling/v49-run/execution-record-r2.md",
+   "sha256": "e56b2b9d05e364a1b88825191897dafaede7385e2b25a2e773543fee4c45a0ee",
+   "bytes": 1818,
+   "first_commit": "938a9860c137869b40ea76cd76472d3fd2dc87bb",
+   "last_commit": "938a9860c137869b40ea76cd76472d3fd2dc87bb"
+  },
+  {
+   "path": "docs/research/astral-self-modeling/v49-run/laneb-record-r2.md",
+   "sha256": "5cbf5fc223b084c20d82dac9c03dacde56b645f257a206822729daf3065ce7b0",
+   "bytes": 1581,
+   "first_commit": "b85f56e3dff95f6a0a173b28284962651cf7a11d",
+   "last_commit": "b85f56e3dff95f6a0a173b28284962651cf7a11d"
+  },
+  {
+   "path": "docs/research/astral-self-modeling/v49-run/execution-record-r3.md",
+   "sha256": "c2f9b749e16b43e943dd67d4ae11084b3add4a6437280ae37324f2a2c850b733",
+   "bytes": 1647,
+   "first_commit": "883eed29d8d9e25220e3c958a590e03de20b6332",
+   "last_commit": "883eed29d8d9e25220e3c958a590e03de20b6332"
+  },
+  {
+   "path": "docs/research/astral-self-modeling/v49-run/execution-record-r4.md",
+   "sha256": "ffa963148ee0672ff76e6196577549e7b17fb6c2ac732026f94c6f4571664048",
+   "bytes": 1932,
+   "first_commit": "71e43f66162715364264bf7e7e936f4399ce8e19",
+   "last_commit": "71e43f66162715364264bf7e7e936f4399ce8e19"
+  },
+  {
+   "path": "docs/research/astral-self-modeling/v49-run/generalization-and-lanes-cd-record.md",
+   "sha256": "75195751988a854274de8fe3965f8c08fafef1ef0a411c1876c2a347ccc6124c",
+   "bytes": 3421,
+   "first_commit": "d2929d760291710eaaa7bed2fef19064db7acbb1",
+   "last_commit": "d2929d760291710eaaa7bed2fef19064db7acbb1"
+  },
+  {
+   "path": "docs/research/astral-self-modeling/v49-run/natural-text-second-family-record.md",
+   "sha256": "f030b151a2c5f53d11226a4e4cd6d9383268c31ab46fbddfc89c00f3062751af",
+   "bytes": 2504,
+   "first_commit": "ce40f7f04dce2bca034b6ba903dde2098bbce27b",
+   "last_commit": "ce40f7f04dce2bca034b6ba903dde2098bbce27b"
+  },
+  {
+   "path": "docs/research/astral-self-modeling/v49-run/balanced-natural-text-record.md",
+   "sha256": "5c425f03b90a852c10d2dc23403f18c8b1ddffa19af0bd50ad093e3be55fd6f6",
+   "bytes": 2874,
+   "first_commit": "afa3fcf863c191b50e26cb39a3c4497036c96f0d",
+   "last_commit": "afa3fcf863c191b50e26cb39a3c4497036c96f0d"
+  }
+ ],
+ "runs": {
+  "r1": "Candidate? no: NoCandidate (selection sign defect, disclosed)",
+  "r2": "Candidate",
+  "r3": "Candidate, gate failed lens z-gap",
+  "r4": "Candidate, gate valid after post-hoc criterion change; same neurons as r3",
+  "g1": "Candidate, gate failed known-bad",
+  "g2": "Candidate, gate valid",
+  "cd": "Lanes C/D descriptive",
+  "c1": "Candidate, gate failed known-bad floor (11.2%)",
+  "b1": "Candidate, gate valid (8.7%)",
+  "b2": "Candidate, gate valid (9.1%)"
+ },
+ "known_caveats": [
+  "Independent ACCEPT waived by owner; no reviewer has seen this",
+  "r1 selection sign defect found after reading result; r2 mistaken launch of unfixed code discarded unread",
+  "Lens criterion changed after r3 (post hoc); known-bad rule changed after g1/c1 (preregistered for c1/b1/b2)",
+  "r4 reuses r3's neurons (not independent)",
+  "Single runs, no power/ICC analysis, p at 1000-draw floor",
+  "Zero-ablation + first-order selection; no path/circuit analysis; residual label-independent effect (known-bad 8-9% of selected)",
+  "One phenomenon (subject-verb number), small LMs, heuristic wikitext labels",
+  "Lane D measured on this run's checkpoints, not closed-family artifacts (spec deviation)",
+  "Lane C fine-tune loss is unbounded (margin ~125): degenerate update"
+ ],
+ "reviewer_decision": {
+  "signed": false,
+  "note": "Left unsigned. The operator must not self-sign; a genuinely independent reviewer fills review-decision-template.json."
+ }
+}
