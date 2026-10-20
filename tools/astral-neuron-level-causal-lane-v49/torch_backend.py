@@ -71,8 +71,8 @@ class TorchBackend:
         for _, poss in groups.items():
             enc = self.tok([self._docs[ids[p]][0] for p in poss], return_tensors="pt").to("cuda")
             out = self.m(**enc).logits[:, -1].float()
-            g = [self.tok.encode(self._docs[ids[p]][1])[0] for p in poss]
-            b = [self.tok.encode(self._docs[ids[p]][2])[0] for p in poss]
+            g = [self.tok.encode(self._docs[ids[p]][1], add_special_tokens=False)[0] for p in poss]
+            b = [self.tok.encode(self._docs[ids[p]][2], add_special_tokens=False)[0] for p in poss]
             fl = [flips[p] for p in poss]
             g, b = ([y if f else x for x, y, f in zip(g, b, fl)], [x if f else y for x, y, f in zip(g, b, fl)])
             g = torch.tensor(g, device="cuda")
