@@ -18,27 +18,35 @@ SUBJ = [("The {} keys to the cabinet", " are", " is"), ("The {} dogs near the do
         ("The {} author of the books", " is", " are"), ("The {} pilot of the planes", " is", " are"),
         ("The {} teacher of the students", " is", " are"), ("The {} captain of the ships", " is", " are"),
         ("The {} editor of the papers", " is", " are"), ("The {} owner of the shops", " is", " are")]
+SUBJ_B = [("The {} cups on the table", " are", " is"), ("The {} nurses at the clinic", " are", " is"),
+          ("The {} trains to the city", " are", " is"), ("The {} coats in the closet", " are", " is"),
+          ("The {} boats near the shore", " are", " is"), ("The {} chairs by the window", " are", " is"),
+          ("The {} manager of the stores", " is", " are"), ("The {} driver of the buses", " is", " are"),
+          ("The {} judge of the contests", " is", " are"), ("The {} chef of the hotels", " is", " are"),
+          ("The {} artist of the murals", " is", " are"), ("The {} guard of the gates", " is", " are")]
 SPLIT_T = {"fit": (0, 1, 6, 7), "tune": (2, 5, 8, 11), "assess": (3, 4, 9, 10)}  # template-disjoint
 FILL = ["old", "red", "new", "big", "tiny", "dusty", "quiet", "loud", "green", "heavy",
         "small", "bright", "cold", "warm", "plain", "rusty", "silver", "golden"]
 
 
 class TorchBackend:
-    def __init__(self, path, ndocs=720, seed=0):
+    def __init__(self, path, ndocs=720, seed=0, subj=None, layers=None):
+        self.LY = tuple(layers) if layers else LAYERS
+        subj = subj or SUBJ
         self.tok = AutoTokenizer.from_pretrained(path, local_files_only=True)
         self.m = AutoModelForCausalLM.from_pretrained(
             path, torch_dtype=torch.bfloat16, local_files_only=True).cuda().eval()
         for p in self.m.parameters():
             p.requires_grad_(False)
         self.I = self.m.config.intermediate_size
-        self.mask = {k: torch.ones(self.I, device="cuda", dtype=torch.float32) for k in range(len(LAYERS))}
-        for k, l in enumerate(LAYERS):
+        self.mask = {k: torch.ones(self.I, device="cuda", dtype=torch.float32) for k in range(len(self.LY))}
+        for k, l in enumerate(self.LY):
             self.m.model.layers[l].mlp.down_proj.register_forward_pre_hook(self._hook(k))
         self.capture, self.acts = False, {}
         rng = random.Random(seed)
         self._docs, self._tmpl = {}, {}
-        for t, (text, good, bad) in enumerate(SUBJ):
-            for j in range(ndocs // len(SUBJ)):
+        for t, (text, good, bad) in enumerate(subj):
+            for j in range(ndocs // len(subj)):
                 i = "d%d_%d" % (t, j)
                 self._docs[i] = (text.format(rng.choice(FILL)), good, bad)
                 self._tmpl[i] = t
@@ -90,7 +98,7 @@ class TorchBackend:
         return list(self._docs)
 
     def layers(self):
-        return {k * self.I + i: k for k in range(len(LAYERS)) for i in range(self.I)}
+        return {k * self.I + i: k for k in range(len(self.LY)) for i in range(self.I)}
 
     def scores(self, fit):
         self._reset()
