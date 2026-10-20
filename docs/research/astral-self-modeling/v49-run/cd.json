@@ -1,0 +1,169 @@
+{
+ "cfg": {
+  "seed": 60,
+  "k": 32,
+  "draws": 1000,
+  "ctl_draws_per_ckpt": 200,
+  "lr": 1e-05
+ },
+ "selected": [
+  565,
+  1873,
+  2023,
+  2065,
+  2118,
+  2338,
+  3908,
+  4446,
+  5009,
+  5167,
+  5563,
+  6376,
+  6604,
+  7562,
+  8123,
+  8609,
+  8783,
+  8858,
+  9016,
+  9492,
+  10047,
+  10048,
+  10169,
+  10774,
+  11506,
+  11642,
+  13460,
+  14274,
+  16113,
+  16163,
+  17391,
+  17424
+ ],
+ "top8": [
+  14274,
+  17391,
+  16113,
+  16163,
+  8609,
+  8783,
+  17424,
+  2065
+ ],
+ "checkpoints": [
+  {
+   "step": 0,
+   "behavior": {
+    "mean_margin": 4.316929340362549,
+    "accuracy": 1.0
+   },
+   "lane_c": {
+    "descriptive_only": true,
+    "is_gate": false,
+    "is_score": false,
+    "behavior_gates": {
+     "accuracy_nonregression": true
+    },
+    "ablation_delta": 1.1743521833419799,
+    "ceiling": "LocalDevelopmentUnreviewed",
+    "effect": 1.1493737697601318,
+    "control_mean": -0.024978413581848144,
+    "control_sd": 0.06732239026923623
+   }
+  },
+  {
+   "step": 10,
+   "behavior": {
+    "mean_margin": 56.178810119628906,
+    "accuracy": 1.0
+   },
+   "lane_c": {
+    "descriptive_only": true,
+    "is_gate": false,
+    "is_score": false,
+    "behavior_gates": {
+     "accuracy_nonregression": true
+    },
+    "ablation_delta": 1.2855387496948243,
+    "ceiling": "LocalDevelopmentUnreviewed",
+    "effect": 1.3328361511230469,
+    "control_mean": 0.047297401428222655,
+    "control_sd": 0.3250885420952789
+   }
+  },
+  {
+   "step": 20,
+   "behavior": {
+    "mean_margin": 88.96273040771484,
+    "accuracy": 1.0
+   },
+   "lane_c": {
+    "descriptive_only": true,
+    "is_gate": false,
+    "is_score": false,
+    "behavior_gates": {
+     "accuracy_nonregression": true
+    },
+    "ablation_delta": 1.3844579315185548,
+    "ceiling": "LocalDevelopmentUnreviewed",
+    "effect": 1.41925048828125,
+    "control_mean": 0.03479255676269531,
+    "control_sd": 0.22399269986401055
+   }
+  },
+  {
+   "step": 40,
+   "behavior": {
+    "mean_margin": 111.74974060058594,
+    "accuracy": 1.0
+   },
+   "lane_c": {
+    "descriptive_only": true,
+    "is_gate": false,
+    "is_score": false,
+    "behavior_gates": {
+     "accuracy_nonregression": true
+    },
+    "ablation_delta": 1.6992893981933594,
+    "ceiling": "LocalDevelopmentUnreviewed",
+    "effect": 1.743194580078125,
+    "control_mean": 0.04390518188476562,
+    "control_sd": 0.2691277160558814
+   }
+  },
+  {
+   "step": 80,
+   "behavior": {
+    "mean_margin": 125.65426635742188,
+    "accuracy": 1.0
+   },
+   "lane_c": {
+    "descriptive_only": true,
+    "is_gate": false,
+    "is_score": false,
+    "behavior_gates": {
+     "accuracy_nonregression": true
+    },
+    "ablation_delta": 1.9218691635131835,
+    "ceiling": "LocalDevelopmentUnreviewed",
+    "effect": 1.9939498901367188,
+    "control_mean": 0.07208072662353515,
+    "control_sd": 0.3158759370523337
+   }
+  }
+ ],
+ "lane_d": {
+  "descriptive_only": true,
+  "locality_by_checkpoint": [
+   0.8740082312531737,
+   0.822463266758451,
+   0.8292020915817693,
+   0.8341015081699015,
+   0.8320714729299827
+  ],
+  "grows_local": false,
+  "ceiling": "LocalDevelopmentUnreviewed",
+  "claims_retention_or_improvement": false
+ },
+ "note": "descriptive only; Lane D measured on this run's checkpoints (spec deviation)"
+}

@@ -26,13 +26,18 @@ class B(TorchBackend):
 
     def lp(self, units, docs):
         self._ablate(units)
+        tot = 0.0
+        groups = {}
+        for i in docs:
+            groups.setdefault(len(self.tok.encode(self._docs[i][0])), []).append(i)
         with torch.no_grad():
-            enc = self.tok([self._docs[i][0] for i in docs], return_tensors="pt").to("cuda")
-            lg = self.m(**enc).logits[:, -1].float().log_softmax(-1)
-            g = torch.tensor([self.tok.encode(self._docs[i][1])[0] for i in docs], device="cuda")
-            v = float(lg.gather(1, g[:, None]).mean())
+            for _, ids in groups.items():
+                enc = self.tok([self._docs[i][0] for i in ids], return_tensors="pt").to("cuda")
+                lg = self.m(**enc).logits[:, -1].float().log_softmax(-1)
+                g = torch.tensor([self.tok.encode(self._docs[i][1])[0] for i in ids], device="cuda")
+                tot += float(lg.gather(1, g[:, None]).sum())
         self._reset()
-        return v
+        return tot / len(docs)
 
     def lp_effect(self, units, docs):
         return self.lp([], docs) - self.lp(units, docs)
