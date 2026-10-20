@@ -8,3 +8,6 @@ On 2026-10-20 the owner instructed, in chat, that the independent signed decisio
 - It does not change the claim ceiling: `LocalDevelopmentUnreviewed`.
 - It does not create accepted evidence, Level2+, independent verification, proof, SOTA, benchmark, production, or introspection claims, and does not mutate any Evidence Ledger.
 - `review-decision-template.json` stays unsigned. Any independent decision must come from a genuinely independent reviewer.
+
+## Update 2026-10-20: self-attestation ceiling
+AGENTS.md slice `v49-owner-self-attestation-v1` now permits recording this campaign at claim ceiling `OwnerSelfAttestedLocalDevelopment`. The label is mandatory and means: the owner reviewed the packet and accepts it for their own use. It is not independent review, not accepted evidence, and carries no signature. Cite it only with the packet caveats.
