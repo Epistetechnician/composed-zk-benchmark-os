@@ -1,0 +1,114 @@
+{
+ "gate": {
+  "status": "InstrumentNotValid",
+  "fails": [
+   "known_bad_instrument"
+  ],
+  "ceiling": "LocalDevelopmentUnreviewed"
+ },
+ "readouts": {
+  "margin": {
+   "effect": 1.2710938453674316,
+   "p": 0.000999000999000999,
+   "z": 62.44601515906407
+  },
+  "logprob": {
+   "effect": 0.11300897181034086,
+   "p": 0.000999000999000999,
+   "z": 12.615336596293433
+  }
+ },
+ "tail": {
+  "n": 12800,
+  "min": -12.1875,
+  "max": 8.3125,
+  "pos_frac": 0.459140625,
+  "excess_kurtosis": 20.218123285857146,
+  "mean": -0.026608134126290678
+ },
+ "positive_control_effect": 2.4691407680511475,
+ "near_miss_effect": 0.24687528610229492,
+ "selected_effect": 1.2710938453674316,
+ "known_bad": {
+  "effect": 0.1418749988079071,
+  "z": 37.895413075900464
+ },
+ "lens_tol": 1000000000.0,
+ "cfg": {
+  "seed": 70,
+  "k": 32,
+  "draws": 1000,
+  "min_effect": 0.5,
+  "alpha": 0.05
+ },
+ "v49_run": {
+  "status": "Candidate",
+  "lock": "e1ee499ce229078c6d2d07ebff9954cbbbb3ac2ea1d5c100c6a19b344ab9f7fb",
+  "selected": [
+   1874,
+   2980,
+   5487,
+   6139,
+   7920,
+   8038,
+   8056,
+   8955,
+   9219,
+   10351,
+   12012,
+   15652,
+   16532,
+   16900,
+   16934,
+   18559,
+   18792,
+   18874,
+   19234,
+   20215,
+   20269,
+   20415,
+   20857,
+   21367,
+   21447,
+   21920,
+   22097,
+   22639,
+   22946,
+   23522,
+   23629,
+   24469
+  ],
+  "results": {
+   "tune": {
+    "effect": 1.2919530868530273,
+    "p": 0.000999000999000999,
+    "gap": 1.3016544699668884
+   },
+   "assess": {
+    "effect": 1.2710938453674316,
+    "p": 0.000999000999000999,
+    "gap": 1.2767851700782775
+   }
+  },
+  "controls": {
+   "text_only": {
+    "effect": 0.0,
+    "separates": false
+   },
+   "shuffled": {
+    "effect": 0.01328124850988388,
+    "separates": false
+   },
+   "constant": {
+    "effect": 0.0,
+    "separates": false
+   }
+  },
+  "holm_reject": [
+   true,
+   true
+  ],
+  "ceiling": "LocalDevelopmentUnreviewed"
+ },
+ "r3_verdict": "NotValidated"
+}
