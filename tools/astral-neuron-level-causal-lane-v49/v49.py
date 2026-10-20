@@ -103,7 +103,7 @@ def one_sided_p(effect, control_effects):
 def run_v49(backend, cfg):
     """backend: object with docs(), scores(fit_docs), magnitude(), layers(), effect(units, docs)."""
     check_text(cfg.get("note", ""))
-    sp = split_docs(backend.docs(), cfg["seed"])
+    sp = backend.split() if hasattr(backend, "split") else split_docs(backend.docs(), cfg["seed"])
     scores = backend.scores(sp["fit"])
     sel = select_units(scores, cfg["k"])
     lock = digest({"selected": sel, "cfg": cfg, "split": sp})  # prediction lock before assess effects

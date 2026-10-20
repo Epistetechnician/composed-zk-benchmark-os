@@ -13,14 +13,18 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 LAYERS = (10, 16, 22)
 SUBJ = [("The {} keys to the cabinet", " are", " is"), ("The {} dogs near the door", " are", " is"),
+        ("The {} cars behind the house", " are", " is"), ("The {} books on the shelf", " are", " is"),
+        ("The {} birds above the river", " are", " is"), ("The {} lamps in the hall", " are", " is"),
         ("The {} author of the books", " is", " are"), ("The {} pilot of the planes", " is", " are"),
-        ("The {} cars behind the house", " are", " is"), ("The {} teacher of the students", " is", " are")]
+        ("The {} teacher of the students", " is", " are"), ("The {} captain of the ships", " is", " are"),
+        ("The {} editor of the papers", " is", " are"), ("The {} owner of the shops", " is", " are")]
+SPLIT_T = {"fit": (0, 1, 6, 7), "tune": (2, 5, 8, 11), "assess": (3, 4, 9, 10)}  # template-disjoint
 FILL = ["old", "red", "new", "big", "tiny", "dusty", "quiet", "loud", "green", "heavy",
         "small", "bright", "cold", "warm", "plain", "rusty", "silver", "golden"]
 
 
 class TorchBackend:
-    def __init__(self, path, ndocs=360, seed=0):
+    def __init__(self, path, ndocs=720, seed=0):
         self.tok = AutoTokenizer.from_pretrained(path, local_files_only=True)
         self.m = AutoModelForCausalLM.from_pretrained(
             path, torch_dtype=torch.bfloat16, local_files_only=True).cuda().eval()
@@ -32,14 +36,12 @@ class TorchBackend:
             self.m.model.layers[l].mlp.down_proj.register_forward_pre_hook(self._hook(k))
         self.capture, self.acts = False, {}
         rng = random.Random(seed)
-        cand = {}
-        for i in range(ndocs * 3):
-            t, good, bad = rng.choice(SUBJ)
-            text = t.format(rng.choice(FILL))
-            n = len(self.tok.encode(text))
-            cand.setdefault(n, []).append((text, good, bad))
-        n = max(cand, key=lambda x: len(cand[x]))
-        self._docs = {"d%d" % i: d for i, d in enumerate(cand[n][:ndocs])}
+        self._docs, self._tmpl = {}, {}
+        for t, (text, good, bad) in enumerate(SUBJ):
+            for j in range(ndocs // len(SUBJ)):
+                i = "d%d_%d" % (t, j)
+                self._docs[i] = (text.format(rng.choice(FILL)), good, bad)
+                self._tmpl[i] = t
         self._base = {}
 
     def _hook(self, k):
@@ -52,15 +54,28 @@ class TorchBackend:
         return h
 
     def _margin(self, ids, labels_flip=None):
-        enc = self.tok([self._docs[i][0] for i in ids], return_tensors="pt").to("cuda")
-        out = self.m(**enc).logits[:, -1].float()
-        g = [self.tok.encode(self._docs[i][1])[0] for i in ids]
-        b = [self.tok.encode(self._docs[i][2])[0] for i in ids]
-        if labels_flip:
-            g, b = ([y if f else x for x, y, f in zip(g, b, labels_flip)], [x if f else y for x, y, f in zip(g, b, labels_flip)])
-        g = torch.tensor(g, device="cuda")
-        b = torch.tensor(b, device="cuda")
-        return (out.gather(1, g[:, None]) - out.gather(1, b[:, None])).squeeze(1)
+        ids = list(ids)
+        flips = list(labels_flip) if labels_flip else [False] * len(ids)
+        groups = {}
+        for pos, i in enumerate(ids):
+            groups.setdefault(len(self.tok.encode(self._docs[i][0])), []).append(pos)
+        res = [None] * len(ids)
+        for _, poss in groups.items():
+            enc = self.tok([self._docs[ids[p]][0] for p in poss], return_tensors="pt").to("cuda")
+            out = self.m(**enc).logits[:, -1].float()
+            g = [self.tok.encode(self._docs[ids[p]][1])[0] for p in poss]
+            b = [self.tok.encode(self._docs[ids[p]][2])[0] for p in poss]
+            fl = [flips[p] for p in poss]
+            g, b = ([y if f else x for x, y, f in zip(g, b, fl)], [x if f else y for x, y, f in zip(g, b, fl)])
+            g = torch.tensor(g, device="cuda")
+            b = torch.tensor(b, device="cuda")
+            m = (out.gather(1, g[:, None]) - out.gather(1, b[:, None])).squeeze(1)
+            for p, v in zip(poss, m):
+                res[p] = v
+        return torch.stack(res)
+
+    def split(self):
+        return {k: sorted(i for i, t in self._tmpl.items() if t in ts) for k, ts in SPLIT_T.items()}
 
     def _reset(self):
         for k in self.mask:
