@@ -1,0 +1,69 @@
+{
+ "ceiling": "LocalDevelopmentUnreviewed",
+ "code": {
+  "packet.py": "83129c848772c85744e92206057b8f904cf600c295c684e96e0e1545981f20d5",
+  "pythia_backend.py": "42d3cf9c173bf28ef16b4cf797fc4c8166dc651190d2f4eecbef09f7222f6af4",
+  "pythia_plan.py": "e9e8cfc85ea67eae9baa7972e053cbf73982e5e64ba256c1b63a1cd7c6c560b4",
+  "run_v50_node.py": "e4ae1d2cdeb1d5db7764c19f0362048a682b20fbf0a907d8227d8ec2e557cc05",
+  "v49.py": "f76d695d4494c4ec5fe4291f6c79b72c1e79afa2f2f9ba06b48fd527626fb14f",
+  "v50.py": "19b0bf21ebe3a534fed340a18e0270838117e9b7ce8b66818ad537a59f24d69f",
+  "v50_corpus.py": "17709709209947e8768750fb63c761bb368d4e81a6bfe480b07a2ac8a049218e"
+ },
+ "code_commit": "2582ee96ab0ecb2e5ebb126f2a020f471d9fbdfb",
+ "corpus": {
+  "label_audit": null,
+  "manifest_digest": null
+ },
+ "deviations": [
+  "path components are block-level (attn/mlp per layer), not per head",
+  "H2 uses indirect share and top-2 mediator share",
+  "path analysis runs on the first 64 sorted assessment documents"
+ ],
+ "frozen": {
+  "k": 32,
+  "known_bad_max_abs": 0.05,
+  "known_bad_max_frac": 0.1,
+  "known_bad_shuffles": 20,
+  "layers": 3,
+  "min_draws": 1000,
+  "min_effect": 0.5,
+  "spend_cap_usd": 14.0,
+  "top2_min_share": 0.5
+ },
+ "frozen_digest": "77e3fa5bbf425330a430481c195309ad8c9018a57280d3619d06ccf8568c363c",
+ "models": {
+  "pythia-1.4b": {
+   "file_hashes": null,
+   "hf_id": "EleutherAI/pythia-1.4b",
+   "layers": [
+    7,
+    13,
+    19
+   ],
+   "license_checked": null,
+   "n_layers": 24,
+   "revision": null,
+   "role": "primary"
+  },
+  "pythia-2.8b": {
+   "file_hashes": null,
+   "hf_id": "EleutherAI/pythia-2.8b",
+   "layers": [
+    10,
+    18,
+    26
+   ],
+   "license_checked": null,
+   "n_layers": 32,
+   "revision": null,
+   "role": "replication"
+  }
+ },
+ "node": {
+  "receipt_digest": null
+ },
+ "packet": "astral-v50-packet-v1",
+ "packet_digest": "f386ebd7e6d1c1fc3a10fddb06062f4ed1a154d30827bd9756faffb730ac1725",
+ "protocol_sha256": "216b050aae14a84ad96ba0e4c14ecce201c65ea08adfb9f8912b34ed75742d5e",
+ "status": "code-frozen-data-pending"
+}
