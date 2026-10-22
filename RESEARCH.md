@@ -118,6 +118,6 @@ from the repository alone.
 
 ## Known issues
 
-- `cargo test --workspace` reports one failure, `repo_preserves_level1_hygiene_boundary`, because `apps/desktop/package.json` is present; it fails on the current trunk independent of this release work.
+- The hygiene test `repo_preserves_level1_hygiene_boundary` previously failed because `apps/desktop/package.json` is present. The test now allows that tracked desktop-shell manifest and skips the git-ignored `.weco` folder, and it passes.
 - This repository's `AGENTS.md` forbids CI files and package scripts outside authorized slices, so no CI workflow is provided; run the commands above locally.
 - The README is a very long implementation log; this report and the paper are the intended entry points.
