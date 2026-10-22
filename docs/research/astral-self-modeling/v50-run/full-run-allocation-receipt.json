@@ -1,0 +1,13 @@
+{
+ "allocation_id": "cdd08400-b8a7-492a-82ad-d8c4e27183db",
+ "provider": "GiveMeANode",
+ "node_name": "v50-full-r1",
+ "chip": "h100-1",
+ "image": "pytorch-2.13-cuda12.9",
+ "region": "europe-north1",
+ "rate_usd_per_min": 0.084,
+ "spend_ceiling_usd": 14.0,
+ "spent_before_usd": 1.3566,
+ "purpose": "V50 full run (pythia-1.4b then pythia-2.8b)",
+ "recorded_utc": "2026-10-22"
+}

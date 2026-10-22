@@ -83,10 +83,10 @@
   }
  },
  "node": {
-  "receipt_digest": null
+  "receipt_digest": "16ecd35590b542f9271f84e9e2e00e6981b6dc32593bd41f7175092e206264f7"
  },
  "packet": "astral-v50-packet-v1",
- "packet_digest": "128b601be97f5c34916fed0a0cc3bc7f95f48ac91ff7f3f09cfbd69be419f21b",
+ "packet_digest": "43ae57ecadb99dfe42e1515021e59a41b128ad111c4ad1ea5498af8d9c34adec",
  "protocol_sha256": "216b050aae14a84ad96ba0e4c14ecce201c65ea08adfb9f8912b34ed75742d5e",
- "status": "code-frozen-data-pending"
+ "status": "frozen"
 }
