@@ -2,7 +2,7 @@
  "ceiling": "LocalDevelopmentUnreviewed",
  "code": {
   "packet.py": "d42fc364bb0950e6af15341cf72b3fc6160e8cf708fe03a33290ddd83fd61cc8",
-  "pythia_backend.py": "d2c759603c6310b2dca21d97a989d064ee3c995cbbffc135edeb6dc1ce2881a1",
+  "pythia_backend.py": "4568ac791180881f09cb12e42c33980aa99939484d2a3faaca27631e4b7b5d09",
   "pythia_plan.py": "e9e8cfc85ea67eae9baa7972e053cbf73982e5e64ba256c1b63a1cd7c6c560b4",
   "run_v50_node.py": "b42cb9acdf8ebee27ebf81730088f73c1983c54576925bad2450f80bdc0d2f8a",
   "smoke_v50.py": "82917721305e0c5514e7cff9f7f6e972ac62707c36928568e7095de1a3db3af3",
@@ -10,7 +10,7 @@
   "v50.py": "19b0bf21ebe3a534fed340a18e0270838117e9b7ce8b66818ad537a59f24d69f",
   "v50_corpus.py": "8eef96a08baa4d259981fd82525be159f115bf79a57a20e79e2edd6ef6a96916"
  },
- "code_commit": "bcc2bf8bedd8fb44b52d17178ec2db1b83329977",
+ "code_commit": "f29ed85a262904ac50f3647bd2bdf4762ad23e60",
  "corpus": {
   "label_audit": {
    "error_rate": 0.01,
@@ -18,7 +18,7 @@
    "judge": "Claude Sonnet 5.5 (AI-assisted, not independent human review)",
    "n": 200
   },
-  "manifest_digest": null,
+  "manifest_digest": "4b2febfbe102fdc51aa530a85970b27e47a62ea67f7f3e8d08e3a6ea8ebf46dc",
   "public_manifest_items_sha256": "fb58326014e003fc4c5a95b1032a80fa82c96834df5896ecbb26720c80197c69"
  },
  "deviations": [
@@ -40,29 +40,45 @@
  "frozen_digest": "77e3fa5bbf425330a430481c195309ad8c9018a57280d3619d06ccf8568c363c",
  "models": {
   "pythia-1.4b": {
-   "file_hashes": null,
+   "file_hashes": {
+    "config.json": "6ea552aa42b7437f019ccdd30b7c9b83a32dccb5170ce31b9ddbe94d00f4671c",
+    "model.safetensors": "ad4388632e922d0c58c23cb315292d516deb70af0573f9c1543ce84158bff59c"
+   },
    "hf_id": "EleutherAI/pythia-1.4b",
    "layers": [
     7,
     13,
     19
    ],
-   "license_checked": null,
+   "license_checked": {
+    "checked": "2026-10-22",
+    "lfs_sha256_matches_downloaded": true,
+    "license": "apache-2.0",
+    "source": "HF model-card metadata via huggingface.co/api/models"
+   },
    "n_layers": 24,
-   "revision": null,
+   "revision": "fedc38a16eea3bd36a96b906d78d11d2ce18ed79",
    "role": "primary"
   },
   "pythia-2.8b": {
-   "file_hashes": null,
+   "file_hashes": {
+    "config.json": "fe1a9b9550935517588c98f89df24db7d7eadf4c4a00dd32e127a2d4585e9827",
+    "model.safetensors": "ab496f1c3fd79e3c749a9d5414136a2c8e4224f94eecb261970315cdb0f813fe"
+   },
    "hf_id": "EleutherAI/pythia-2.8b",
    "layers": [
     10,
     18,
     26
    ],
-   "license_checked": null,
+   "license_checked": {
+    "checked": "2026-10-22",
+    "lfs_sha256_matches_downloaded": true,
+    "license": "apache-2.0",
+    "source": "HF model-card metadata via huggingface.co/api/models"
+   },
    "n_layers": 32,
-   "revision": null,
+   "revision": "2a259cdd96a4beb1cdf467512e3904197345f6a9",
    "role": "replication"
   }
  },
@@ -70,7 +86,7 @@
   "receipt_digest": null
  },
  "packet": "astral-v50-packet-v1",
- "packet_digest": "1926c6f9ac5ff22fb2a400a299371de164d08c54db866d790a720802dabb9dad",
+ "packet_digest": "128b601be97f5c34916fed0a0cc3bc7f95f48ac91ff7f3f09cfbd69be419f21b",
  "protocol_sha256": "216b050aae14a84ad96ba0e4c14ecce201c65ea08adfb9f8912b34ed75742d5e",
  "status": "code-frozen-data-pending"
 }
