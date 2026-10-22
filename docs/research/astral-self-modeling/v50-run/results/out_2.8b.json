@@ -1,0 +1,92 @@
+{
+ "ceiling": "LocalDevelopmentUnreviewed",
+ "controls": {
+  "constant": {
+   "effect": 0.46875,
+   "separates": false
+  },
+  "shuffled": {
+   "effect": -0.009296874999999996,
+   "separates": false
+  },
+  "text_only": {
+   "effect": 0.0,
+   "separates": false
+  }
+ },
+ "gate": {
+  "ceiling": "LocalDevelopmentUnreviewed",
+  "detail": {
+   "both_signs": true,
+   "known_bad_max": 0.0633203125,
+   "logprob_effect": 0.011837563514709437,
+   "near_miss": 0.02156249999999993,
+   "positive_control": 0.7051562499999999,
+   "selected_effect": 0.5633203125000001
+  },
+  "fails": [
+   "known_bad"
+  ],
+  "status": "InstrumentNotValid"
+ },
+ "holm_reject": [
+  true,
+  true
+ ],
+ "lock": "f8d81c81abdbb8afa0288ec41a0b92f0ed5d83ae752a93a9203278d39b8eb7b3",
+ "model_key": "pythia-2.8b",
+ "packet_digest": "43ae57ecadb99dfe42e1515021e59a41b128ad111c4ad1ea5498af8d9c34adec",
+ "path": {
+  "h2": false,
+  "mechanism_wording_allowed": false,
+  "reason": "path analysis only after a valid Candidate"
+ },
+ "results": {
+  "assess": {
+   "effect": 0.5633203125000001,
+   "gap": 0.5674929785156254,
+   "p": 0.000999000999000999
+  },
+  "tune": {
+   "effect": 0.5705664062499998,
+   "gap": 0.57045884765625,
+   "p": 0.000999000999000999
+  }
+ },
+ "selected": [
+  384,
+  1545,
+  2952,
+  3463,
+  4074,
+  6010,
+  6858,
+  7044,
+  7461,
+  7670,
+  8792,
+  10650,
+  11647,
+  13691,
+  14134,
+  14678,
+  14711,
+  14973,
+  17603,
+  18598,
+  19504,
+  20414,
+  21530,
+  22664,
+  24129,
+  24862,
+  25229,
+  25902,
+  27372,
+  27989,
+  28326,
+  28532
+ ],
+ "spend_usd": 3.6692,
+ "status": "InstrumentNotValid"
+}
