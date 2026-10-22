@@ -68,7 +68,9 @@ def extract_items(doc_id, sent_idx, tokens):
         num = _number(v)
         if num is None or v["tag"] not in {"VBZ", "VBP", "VBD"}:
             continue
-        subj = [t for t in tokens if t["head"] == v["i"] and t["dep"] in {"nsubj"} and t["i"] != v["i"]]
+        # auxiliaries (is/are/was/were/does/do/has/have as aux/auxpass) take the subject of their head verb
+        sh = byi[v["head"]] if v["dep"] in {"aux", "auxpass"} and v["head"] != v["i"] else v
+        subj = [t for t in tokens if t["head"] == sh["i"] and t["dep"] in {"nsubj", "nsubjpass"} and t["i"] != sh["i"]]
         if len(subj) != 1:
             continue
         s = subj[0]
@@ -99,15 +101,19 @@ def extract_items(doc_id, sent_idx, tokens):
     return items
 
 
-def balance(items, splits):
-    """Exact class balance per split; deterministic selection by id hash."""
+CAP_PER_CLASS = 400  # per class per split; keeps the attractor minimum reachable (set before any model effect)
+
+
+def balance(items, splits, cap=CAP_PER_CLASS):
+    """Exact class balance per split. Subsampling prefers attractor items (corpus-construction rule fixed
+    before any model effect), then id hash, so the protocol's attractor minimum is reachable."""
     out = {}
     doc2split = {d: k for k, ds in splits.items() for d in ds}
     for k in splits:
         pool = [it for it in items if doc2split.get(it["doc"]) == k]
-        s = sorted((i for i in pool if i["cls"] == "sing"), key=lambda i: digest(i["id"]))
-        p = sorted((i for i in pool if i["cls"] == "plur"), key=lambda i: digest(i["id"]))
-        n = min(len(s), len(p))
+        s = sorted((i for i in pool if i["cls"] == "sing"), key=lambda i: (not i["attractor"], digest(i["id"])))
+        p = sorted((i for i in pool if i["cls"] == "plur"), key=lambda i: (not i["attractor"], digest(i["id"])))
+        n = min(len(s), len(p), cap)
         if n == 0:
             raise V50CorpusError("split %s has an empty class" % k)
         out[k] = sorted(s[:n] + p[:n], key=lambda i: i["id"])

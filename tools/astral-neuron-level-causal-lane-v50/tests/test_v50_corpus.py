@@ -19,7 +19,17 @@ S_PRON = sent([("He", "PRP", "nsubj", 1), ("is", "VBZ", "ROOT", 1), ("here", "RB
 S_DIS = sent([("The", "DT", "det", 1), ("dogs", "NNS", "nsubj", 2), ("is", "VBZ", "ROOT", 2), ("loud", "JJ", "acomp", 2)])
 
 
+# passive/aux: "The keys to the cabinet are lost" as spaCy parses it (nsubjpass, auxpass)
+S_AUX = sent([("The", "DT", "det", 1), ("keys", "NNS", "nsubjpass", 6), ("to", "IN", "prep", 1), ("the", "DT", "det", 4),
+              ("cabinet", "NN", "pobj", 2), ("are", "VBP", "auxpass", 6), ("lost", "VBN", "ROOT", 6)])
+
+
 class T(unittest.TestCase):
+    def test_aux_passive(self):
+        it = c.extract_items("d", 0, S_AUX)
+        self.assertEqual(len(it), 1)
+        self.assertEqual((it[0]["good"], it[0]["bad"], it[0]["attractor"]), (" are", " is", True))
+
     def test_extract_plain(self):
         it = c.extract_items("d1", 0, S_PLAIN)
         self.assertEqual(len(it), 1)
@@ -64,6 +74,26 @@ class T(unittest.TestCase):
             self.assertEqual(sum(i["cls"] == "sing" for i in v), sum(i["cls"] == "plur" for i in v))
         g = c.corpus_gates(by)
         self.assertGreaterEqual(g["attractor_frac"], 0.3)
+
+    def test_balance_prefers_attractors(self):
+        docs = ["doc%d" % i for i in range(30)]
+        splits = c.split_docs(docs, "s")
+        plur = sent([("Her", "PRP$", "poss", 1), ("brothers", "NNS", "nsubj", 2), ("are", "VBP", "ROOT", 2)])
+        items = []
+        for d in docs:
+            items += c.extract_items(d, 0, S_PLAIN) + c.extract_items(d, 1, S_ATTR) + c.extract_items(d, 2, plur)
+        by = c.balance(items, splits)
+        for k, v in by.items():
+            n_attr = sum(i["attractor"] for i in v)
+            self.assertGreater(n_attr, len(v) * 0.3)
+
+    def test_cap(self):
+        docs = ["doc%d" % i for i in range(60)]
+        splits = c.split_docs(docs, "s")
+        plur = sent([("Her", "PRP$", "poss", 1), ("brothers", "NNS", "nsubj", 2), ("are", "VBP", "ROOT", 2)])
+        items = [i for d in docs for j in range(3) for i in c.extract_items(d, j, S_PLAIN) + c.extract_items(d, j + 9, plur)]
+        by = c.balance(items, splits, cap=5)
+        self.assertTrue(all(len(v) <= 10 for v in by.values()))
 
     def test_gate_failures(self):
         docs = ["doc%d" % i for i in range(60)]
