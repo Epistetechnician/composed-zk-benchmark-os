@@ -1,23 +1,30 @@
 {
  "ceiling": "LocalDevelopmentUnreviewed",
  "code": {
-  "packet.py": "83129c848772c85744e92206057b8f904cf600c295c684e96e0e1545981f20d5",
-  "pythia_backend.py": "42d3cf9c173bf28ef16b4cf797fc4c8166dc651190d2f4eecbef09f7222f6af4",
+  "packet.py": "d42fc364bb0950e6af15341cf72b3fc6160e8cf708fe03a33290ddd83fd61cc8",
+  "pythia_backend.py": "d2c759603c6310b2dca21d97a989d064ee3c995cbbffc135edeb6dc1ce2881a1",
   "pythia_plan.py": "e9e8cfc85ea67eae9baa7972e053cbf73982e5e64ba256c1b63a1cd7c6c560b4",
-  "run_v50_node.py": "e4ae1d2cdeb1d5db7764c19f0362048a682b20fbf0a907d8227d8ec2e557cc05",
+  "run_v50_node.py": "b42cb9acdf8ebee27ebf81730088f73c1983c54576925bad2450f80bdc0d2f8a",
+  "smoke_v50.py": "82917721305e0c5514e7cff9f7f6e972ac62707c36928568e7095de1a3db3af3",
   "v49.py": "f76d695d4494c4ec5fe4291f6c79b72c1e79afa2f2f9ba06b48fd527626fb14f",
   "v50.py": "19b0bf21ebe3a534fed340a18e0270838117e9b7ce8b66818ad537a59f24d69f",
-  "v50_corpus.py": "17709709209947e8768750fb63c761bb368d4e81a6bfe480b07a2ac8a049218e"
+  "v50_corpus.py": "8eef96a08baa4d259981fd82525be159f115bf79a57a20e79e2edd6ef6a96916"
  },
- "code_commit": "2582ee96ab0ecb2e5ebb126f2a020f471d9fbdfb",
+ "code_commit": "bcc2bf8bedd8fb44b52d17178ec2db1b83329977",
  "corpus": {
-  "label_audit": null,
-  "manifest_digest": null
+  "label_audit": {
+   "error_rate": 0.01,
+   "file": "label-audit.json",
+   "judge": "Claude Sonnet 5.5 (AI-assisted, not independent human review)",
+   "n": 200
+  },
+  "manifest_digest": null,
+  "public_manifest_items_sha256": "fb58326014e003fc4c5a95b1032a80fa82c96834df5896ecbb26720c80197c69"
  },
  "deviations": [
   "path components are block-level (attn/mlp per layer), not per head",
   "H2 uses indirect share and top-2 mediator share",
-  "path analysis runs on the first 64 sorted assessment documents"
+  "path analysis runs on up to 64 same-token-length assessment documents (at least 16)"
  ],
  "frozen": {
   "k": 32,
@@ -63,7 +70,7 @@
   "receipt_digest": null
  },
  "packet": "astral-v50-packet-v1",
- "packet_digest": "f386ebd7e6d1c1fc3a10fddb06062f4ed1a154d30827bd9756faffb730ac1725",
+ "packet_digest": "1926c6f9ac5ff22fb2a400a299371de164d08c54db866d790a720802dabb9dad",
  "protocol_sha256": "216b050aae14a84ad96ba0e4c14ecce201c65ea08adfb9f8912b34ed75742d5e",
  "status": "code-frozen-data-pending"
 }
