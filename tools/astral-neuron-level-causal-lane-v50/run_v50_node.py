@@ -25,7 +25,7 @@ def main(argv=None, backend_factory=None):
         a.add_argument("--" + n.replace("_", "-"), required=True)
     a.add_argument("--usd-per-hour", type=float, required=True)
     a.add_argument("--seed", type=int, default=71)
-    a.add_argument("--code-commit", default=None)
+    a.add_argument("--spent-so-far", type=float, default=0.0, help="USD already spent on V50 (cap is shared)")
     args = a.parse_args(argv)
     pk = json.load(open(args.packet))
     pk_mod.verify_packet(pk, strict=True)
@@ -37,7 +37,9 @@ def main(argv=None, backend_factory=None):
     receipt = json.load(open(args.receipt))
     if v50.digest(receipt) != pk["node"]["receipt_digest"] or not receipt.get("allocation_id"):
         raise v50.V50Error("receipt missing or differs from packet")
-    guard = v50.SpendGuard(receipt["allocation_id"])
+    if args.spent_so_far < 0 or args.spent_so_far >= v50.FROZEN["spend_cap_usd"]:
+        raise v50.V50Error("no V50 budget left")
+    guard = v50.SpendGuard(receipt["allocation_id"], cap=v50.FROZEN["spend_cap_usd"] - args.spent_so_far)
     max_s = guard.cap / args.usd_per_hour * 3600 * 0.95
     t0 = time.time()
     dog = threading.Timer(max_s, lambda: os._exit(3))  # hard stop before the cap can be breached

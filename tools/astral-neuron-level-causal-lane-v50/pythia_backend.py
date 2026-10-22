@@ -4,7 +4,7 @@ State slices: astral-neuron-level-causal-lane-v50-execution, instrument-validity
 NOT exercised in the authoring environment (no torch). Verified only by the torch-gated test
 and by the contract tests. Units: MLP hidden neurons (input of dense_4h_to_h) at the plan
 layers, id = k * I + i. Effect(S) = mean margin drop when S is zeroed at every position.
-Path components are block-level (attention and MLP output per layer >= first target layer);
+Path analysis uses up to 64 same-token-length assessment docs. Path components are block-level (attention and MLP output per layer >= first target layer);
 per-head components are not implemented (a deviation to freeze in the packet).
 """
 import os
@@ -196,7 +196,18 @@ class PythiaBackend:
 
     # ---- path analysis ----------------------------------------------------------------------
     def _path_docs(self, docs):
-        return sorted(docs)[:PATH_DOCS]
+        """Up to 64 docs sharing the most common token length (one batch per forward keeps patching cheap)."""
+        key = tuple(docs)
+        if getattr(self, "_pd_key", None) == key:
+            return self._pd
+        groups = {}
+        for i in sorted(docs):
+            groups.setdefault(len(self.tok.encode(self._items[i][0])), []).append(i)
+        best = max(groups.values(), key=lambda g: (len(g), g[0]))
+        if len(best) < 16:
+            raise RuntimeError("fewer than 16 same-length docs for path analysis")
+        self._pd_key, self._pd = key, best[:PATH_DOCS]
+        return self._pd
 
     def total_effect(self, units, docs):
         ids = self._path_docs(docs)

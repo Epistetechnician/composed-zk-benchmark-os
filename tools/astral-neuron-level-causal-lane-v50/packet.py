@@ -7,7 +7,7 @@ import os
 import pythia_plan
 import v50
 
-CODE = ["v50.py", "v50_corpus.py", "pythia_plan.py", "pythia_backend.py", "packet.py", "run_v50_node.py",
+CODE = ["v50.py", "v50_corpus.py", "pythia_plan.py", "pythia_backend.py", "packet.py", "run_v50_node.py", "smoke_v50.py",
         "../astral-neuron-level-causal-lane-v49/v49.py"]
 PROTOCOL = "../../docs/research/astral-self-modeling/132-neuron-level-causal-lane-v50-protocol.md"
 PENDING_FIELDS = ("models.*.revision", "models.*.file_hashes", "models.*.license_checked",
@@ -40,7 +40,7 @@ def build_packet(code_commit):
         "node": {"receipt_digest": None},
         "deviations": ["path components are block-level (attn/mlp per layer), not per head",
                        "H2 uses indirect share and top-2 mediator share",
-                       "path analysis runs on the first 64 sorted assessment documents"],
+                       "path analysis runs on up to 64 same-token-length assessment documents (at least 16)"],
     }
     pk["packet_digest"] = v50.digest({k: v for k, v in pk.items() if k != "packet_digest"})
     return pk

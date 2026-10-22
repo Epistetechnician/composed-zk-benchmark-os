@@ -125,3 +125,21 @@ class BackendContract(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SmokeAndBudget(unittest.TestCase):
+    def test_smoke_with_fake(self):
+        import smoke_v50
+        class F(RunnerFake):
+            def __init__(self, *a): super().__init__(None, None, None)
+            def known_bad_effect(self, s, u, d): return 0.01
+        b = F(); b.mark_locked = lambda lock: setattr(b, "locked", lock)
+        r = smoke_v50.smoke(b, 0.084)
+        self.assertTrue(r["passed"], r["checks"])
+        self.assertGreater(r["projected_full_run_usd"], 0)
+
+    def test_shared_cap(self):
+        with tempfile.TemporaryDirectory() as t:
+            fz, mdir, paths = frozen_fixture(t); out = os.path.join(t, "o.json")
+            a = Runner().args(mdir, paths, out) + ["--spent-so-far", "14"]
+            with self.assertRaises(v50.V50Error): run_v50_node.main(a, backend_factory=RunnerFake)
