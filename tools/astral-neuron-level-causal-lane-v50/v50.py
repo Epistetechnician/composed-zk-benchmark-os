@@ -99,7 +99,7 @@ def instrument_gate_v2(backend, selected, scores, docs, controls_p, alpha=0.05):
         fails.append("positive_control")
     if not near < eff:
         fails.append("near_miss")
-    vals = backend.activation_values()
+    vals = backend.activation_values(selected, docs)
     detail["both_signs"] = any(v > 0 for v in vals) and any(v < 0 for v in vals)
     if not detail["both_signs"] or min(vals) == max(vals):
         fails.append("activation_shape")

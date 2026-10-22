@@ -26,7 +26,7 @@ class Fake:
         e = self._eff(units, docs); return e if readout == "margin" else 0.5 * e
     def control_effect(self, name, units, docs): return 0.0
     def known_bad_effect(self, s, units, docs): return self.kb * (1 + s % 3) / 3
-    def activation_values(self): return [-3.0, -0.2, 0.4, 7.0]
+    def activation_values(self, selected, docs): return [-3.0, -0.2, 0.4, 7.0]
     def total_effect(self, units, docs): return self._eff(units, docs)
     def direct_effect(self, units, docs):
         t = self._eff(units, docs)
@@ -88,7 +88,7 @@ class T(unittest.TestCase):
         self.assertFalse(r["path"]["h2"]); self.assertFalse(r["path"]["mechanism_wording_allowed"])
 
     def test_gate_bad_activation_and_controls(self):
-        b = Fake(); b.activation_values = lambda: [1.0, 2.0]
+        b = Fake(); b.activation_values = lambda sel, docs: [1.0, 2.0]
         self.assertIn("activation_shape", v50.run_v50(b, CFG)["gate"]["fails"])
 
     def test_rejects(self):
