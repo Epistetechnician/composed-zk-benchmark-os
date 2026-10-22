@@ -1,0 +1,41 @@
+{
+ "checks": {
+  "activation_both_signs": true,
+  "effect_repeatable": true,
+  "empty_ablation_zero": true,
+  "known_bad_finite": true,
+  "logprob_finite": true,
+  "magnitude_finite": true,
+  "mediators_normalized": true,
+  "path_finite": true,
+  "scores_finite_varied": true,
+  "splits_nonempty": true,
+  "whole_layer_ablation_nonzero": true
+ },
+ "direct_path": 0.05923022702336311,
+ "passed": true,
+ "projected_full_run_min": 38.8877272605896,
+ "projected_full_run_usd": 3.2665690898895265,
+ "random_effect": 0.006611328125000426,
+ "selected_effect": 0.1975195312500002,
+ "t_direct": 0.10987353324890137,
+ "t_effect_assess": 0.6072399616241455,
+ "t_magnitude": 4.205411195755005,
+ "t_mediators": 0.4016702175140381,
+ "t_scores_fit": 4.05165696144104,
+ "top_mediators": [
+  [
+   "mlp_L7",
+   0.15877972615901995
+  ],
+  [
+   "mlp_L13",
+   0.08671631035311074
+  ],
+  [
+   "mlp_L23",
+   0.0720634158059092
+  ]
+ ],
+ "total_path": 0.169677734375
+}

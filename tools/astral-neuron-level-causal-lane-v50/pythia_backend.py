@@ -225,7 +225,7 @@ class PythiaBackend:
         want = {}
         for u in units:
             want.setdefault(u // self.I, []).append(u % self.I)
-        ln, U = self.m.gpt_neox.final_layer_norm, self.m.embed_out.weight
+        ln, U = self.m.gpt_neox.final_layer_norm, self.m.get_output_embeddings().weight
         tot, n = 0.0, 0
         self._reset()
         for enc, g, b in self._batches(ids):
