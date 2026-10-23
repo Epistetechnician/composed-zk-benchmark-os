@@ -1,0 +1,12 @@
+{
+ "allocation_id": "6e1eaffb-2411-49bc-8d6d-f90ec5d73fe3",
+ "provider": "GiveMeANode",
+ "node_name": "v51-full-r1",
+ "chip": "h100-1",
+ "image": "pytorch-2.13-cuda12.9",
+ "region": "europe-north1",
+ "rate_usd_per_min": 0.084,
+ "spend_ceiling_usd": 10.0,
+ "purpose": "V52 pythia-2.8b re-run, reused stopped node",
+ "recorded_utc": "2026-10-23"
+}
