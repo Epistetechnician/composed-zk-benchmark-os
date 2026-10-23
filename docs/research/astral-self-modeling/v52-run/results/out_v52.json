@@ -1,0 +1,116 @@
+{
+ "ceiling": "LocalDevelopmentUnreviewed",
+ "controls": {
+  "constant": {
+   "effect": 0.60546875,
+   "separates": true
+  },
+  "shuffled": {
+   "effect": -0.004931640624999997,
+   "separates": false
+  },
+  "text_only": {
+   "effect": 0.0,
+   "separates": false
+  }
+ },
+ "frozen51_digest": "a413d5d238733df6cae10afbd0bc6017a658ec292a57231058d2a46fbf7d6421",
+ "frozen52_digest": "5aa67dd21129ccdcc52f4afbb8abfefd980aaed6347e7e0e7c0f885a1ac68405",
+ "gate": {
+  "ceiling": "LocalDevelopmentUnreviewed",
+  "detail": {
+   "both_signs": true,
+   "flip_scale": 0.03386042438283942,
+   "known_bad_draws": [
+    0.020927734374999993,
+    0.07448242187499998,
+    0.019111328124999993,
+    0.009033203125,
+    0.0017285156249999822,
+    0.087958984375,
+    -0.023134765624999998,
+    -0.016591796875000002,
+    -0.029541015625,
+    0.016826171875000018,
+    0.021533203124999997,
+    -0.004931640624999997,
+    -0.006474609374999999,
+    -0.001962890624999991,
+    -0.04086914062500002,
+    0.01002929687500001,
+    -0.026552734374999998,
+    -0.00026367187500001,
+    0.02393554687499999,
+    -0.009521484375
+   ],
+   "known_bad_max": 0.087958984375,
+   "logprob_effect": 0.02289949018508164,
+   "near_miss": 0.04262695312500053,
+   "positive_control": 0.9703710937499999,
+   "selected_effect": 0.8119238281249999,
+   "signal_over_noise": 23.97854849499422
+  },
+  "fails": [],
+  "gate": "v3",
+  "status": "InstrumentValid"
+ },
+ "holm_reject": [
+  true,
+  true
+ ],
+ "lock": "0c740f05fbb5ca3ff895655438d66876c0021529b3c5b781f1b825ba86a3953b",
+ "model_key": "pythia-2.8b",
+ "path": {
+  "h2": false,
+  "mechanism_wording_allowed": false,
+  "reason": "path analysis only after a valid Candidate"
+ },
+ "results": {
+  "assess": {
+   "effect": 0.8119238281249999,
+   "gap": 0.8174503124999998,
+   "p": 0.000999000999000999
+  },
+  "tune": {
+   "effect": 0.7922460937500002,
+   "gap": 0.8010298437500002,
+   "p": 0.000999000999000999
+  }
+ },
+ "selected": [
+  1545,
+  2171,
+  2587,
+  2952,
+  3308,
+  3463,
+  6010,
+  7044,
+  7461,
+  8792,
+  8909,
+  10650,
+  11647,
+  13691,
+  14134,
+  14711,
+  14973,
+  17368,
+  17603,
+  18598,
+  19504,
+  20414,
+  21530,
+  22664,
+  24129,
+  24862,
+  25229,
+  25902,
+  26838,
+  27989,
+  28326,
+  28532
+ ],
+ "spend_usd": 3.4811,
+ "status": "NoCandidate"
+}
