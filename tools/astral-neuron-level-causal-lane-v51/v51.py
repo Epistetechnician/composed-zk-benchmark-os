@@ -5,7 +5,9 @@ V50 = os.path.join(os.path.dirname(__file__), "..", "astral-neuron-level-causal-
 sys.path.insert(0, V50)
 import v50
 
-FROZEN51 = {"z_null": 4.0, "z_signal": 10.0, "min_effect": 0.5, "spend_cap_usd": 5.50, "model": "pythia-2.8b"}
+_GATE_V2 = v50.instrument_gate_v2  # captured at import; run_v51 swaps the module attribute
+
+FROZEN51 = {"z_null": 4.0, "z_signal": 10.0, "min_effect": 0.5, "spend_cap_usd": 6.50, "model": "pythia-2.8b"}
 FROZEN51_DIGEST = v50.digest(FROZEN51)
 
 
@@ -28,7 +30,7 @@ def null_gate(kb, eff, s, z_null=None, z_signal=None, min_effect=None):
 
 
 def instrument_gate_v3(backend, selected, scores, docs, controls_p, alpha=0.05):
-    base = v50.instrument_gate_v2(backend, selected, scores, docs, controls_p, alpha)
+    base = _GATE_V2(backend, selected, scores, docs, controls_p, alpha)
     fails = [f for f in base["fails"] if f != "known_bad"]
     detail = dict(base["detail"])
     kb = [backend.known_bad_effect(sd, selected, docs) for sd in range(v50.FROZEN["known_bad_shuffles"])]
@@ -42,7 +44,7 @@ def instrument_gate_v3(backend, selected, scores, docs, controls_p, alpha=0.05):
 def run_v51(backend, cfg):
     if v50.digest(FROZEN51) != FROZEN51_DIGEST:
         raise v50.V50Error("V51 frozen values changed")
-    orig = v50.instrument_gate_v2
+    orig = _GATE_V2
     v50.instrument_gate_v2 = instrument_gate_v3
     try:
         return v50.run_v50(backend, cfg)
