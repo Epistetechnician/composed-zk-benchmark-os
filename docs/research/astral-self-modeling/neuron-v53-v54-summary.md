@@ -19,6 +19,9 @@ The effect is far outside 1000 matched-random draws and disappears when the sent
 ## Safe wording
 "In an exploratory single-model (Pythia-2.8b) study, owner-attested, the selected units causally move subject-verb agreement margins far beyond matched-random units, specific to agreement context; the result replicated on fresh text."
 
+## Update: V55 on Pythia-1.4B (not a replication)
+Same corpus and procedure, new model: gate `InstrumentNotValid` because the selected effect 0.239 logits is below the frozen 0.5 floor. The effect is still far from matched-random (p = 0.001) and specific (z = 14.9), but the pre-registered rule is not met, so the finding is currently **one model, Pythia-2.8b**. See v55-run/README.md. Spend about USD 41.6 of the 50.00 ceiling.
+
 ## Not claimed
 Mechanism or circuit (path analysis returned "too few valid control draws" in both runs, H2 false); other models or tasks; independence (owner and operator are not independent; the label audits, 1-2% error, were AI-assisted); proof, Level2+, SOTA, benchmark, production, introspection or self-modeling.
 
