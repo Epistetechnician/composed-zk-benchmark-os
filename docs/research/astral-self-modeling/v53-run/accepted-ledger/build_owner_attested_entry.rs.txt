@@ -1,0 +1,47 @@
+// State slices: v53-owner-self-attestation-v1, neuron-control-lanes-unreviewed-execution-v1
+use zkbench_core::*;
+
+fn main() {
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).parent().unwrap().parent().unwrap().to_path_buf();
+    let manifest = std::fs::read(root.join("docs/research/astral-self-modeling/v53-run/results/out_v53.json")).unwrap();
+    let md = compute_artifact_digest_bytes(&manifest, Some(ArtifactKind::Other), Some(ArtifactRole::Report));
+    assert_eq!(md.hex_digest, "686a34c70648ed0ee472cfab50f6a494504f3cbd968b7dd2392241bd5b8796c8");
+    let mut v: serde_json::Value = serde_json::from_str(include_str!("../tests/fixtures/evidence_append_proposal.json")).unwrap();
+    v["id"] = "proposal_v53_owner_self_attested".into();
+    v["proposed_provenance_summary"] = serde_json::json!(["owner self-attested; NOT independent review", "manifest_sha256=686a34c70648ed0ee472cfab50f6a494504f3cbd968b7dd2392241bd5b8796c8", "slice=v53-owner-self-attestation-v1"]);
+    v["proposed_artifact_refs"][0]["artifact_ref"] = "docs/research/astral-self-modeling/v53-run/results/out_v53.json".into();
+    v["proposed_artifact_refs"][0]["digest"] = serde_json::to_value(&md).unwrap();
+    v["validation_report_digest"] = serde_json::to_value(&md).unwrap();
+    v["notes"] = serde_json::json!(["Evidence append proposals are not accepted evidence.", "Owner self-attested local development record; not independent."]);
+    let proposal: external_runner::EvidenceAppendProposal = serde_json::from_value(v).unwrap();
+    let decision = review_evidence_append_proposal(&proposal, EvidenceReviewerRole::Maintainer, EvidenceReviewDecisionKind::ApproveForCandidateOnly, EvidenceReviewChecklist::satisfied_phase_j_default()).unwrap();
+    let candidate = create_evidence_record_candidate(&EvidenceAcceptancePolicy::phase_j_level1_local_only(), &proposal, &decision).unwrap();
+    let ledger_path = root.join("docs/research/astral-self-modeling/v53-run/accepted-ledger/owner-self-attested-ledger.json");
+    let ledger = EvidenceLedger::new();
+    let preview = create_evidence_append_preview(&candidate, Some(&ledger)).unwrap();
+    let req = ReviewedPromotionPreflightRequest {
+        id: "v53_owner_self_attested_preflight".into(),
+        version: ReviewedPromotionPreflightVersion::default(),
+        source_artifact_digests: candidate.proposed_artifact_refs.iter().map(|a| a.digest.clone()).collect(),
+        candidate, append_preview: preview, review_decision: decision,
+        expected_current_ledger_tip: None, external_replay_provenance: vec![],
+        unresolved_quarantine_markers: vec![], blocking_markers: vec![],
+        requested_evidence_class: EvidenceClass::LocalReplay,
+        requested_claim_boundary: ClaimBoundary::Level1LocalReplay,
+        populates_score_axes: false, official_submission_package_requested: false,
+        accepted_evidence_ledger_entry_ids: vec![],
+        claim_text: vec!["owner self-attested local record".into()],
+        non_claims: required_reviewed_promotion_preflight_non_claims().into_iter().map(str::to_string).collect(),
+    };
+    let report = build_reviewed_promotion_preflight_report(&req);
+    assert!(report.validation.valid, "{:?}", report.validation.issues);
+    let tx = AcceptedLedgerAppendTransactionRequest {
+        transaction_id: "v53_owner_self_attested_append".into(),
+        version: AcceptedLedgerAppendTransactionVersion::default(),
+        target_evidence_ledger_id: "v53-owner-self-attested-ledger".into(),
+        expected_current_ledger_tip: None, preflight_request: req, preflight_report: report,
+        notes: vec!["owner self-attested; not independent; Level1LocalReplay only".into()],
+    };
+    let r = apply_materialized_accepted_ledger_append_transaction(&MaterializedAcceptedLedgerAppendRequest { ledger_path, create_if_missing: true, transaction: tx }).unwrap();
+    println!("{:?}", r);
+}
