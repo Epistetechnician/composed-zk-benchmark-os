@@ -1,0 +1,65 @@
+{
+  "version": {
+    "value": "phase-f-local-ledger-v0"
+  },
+  "entries": [
+    {
+      "sequence_number": 0,
+      "evidence_record": {
+        "evidence_class": "LocalReplay",
+        "claim_boundary": "Level1LocalReplay",
+        "provenance": {
+          "source": "candidate:candidate_proposal_v54_owner_self_attested",
+          "captured_at": null,
+          "command": null,
+          "notes": [
+            "owner self-attested; NOT independent review",
+            "manifest_sha256=7f583b720a51d2200a952bd8adf58f7adb7a10112f31d68792f2d3bca0553c73",
+            "slice=v54-owner-self-attestation-v1"
+          ]
+        },
+        "artifact_digest": {
+          "algorithm": "Sha256",
+          "hex_digest": "7f583b720a51d2200a952bd8adf58f7adb7a10112f31d68792f2d3bca0553c73",
+          "byte_len": 2415,
+          "kind": "Other",
+          "role": "Report"
+        },
+        "notes": [
+          "accepted-ledger append transaction: v54_owner_self_attested_append",
+          "source append preview: append_preview_candidate_proposal_v54_owner_self_attested",
+          "Official submission was not created.",
+          "Score axes were not populated."
+        ],
+        "backend_target": null
+      },
+      "previous_digest": null,
+      "entry_digest": {
+        "algorithm": "Sha256",
+        "hex_digest": "fbca03095afb07e1a20944649e83cefd068bd7dc57ffe7d70eefd980db12db64",
+        "byte_len": 846,
+        "kind": "EvidenceLedger",
+        "role": "Digest"
+      },
+      "notes": []
+    }
+  ],
+  "summary": {
+    "entry_count": 1,
+    "evidence_class_counts": [
+      {
+        "name": "LocalReplay",
+        "count": 1
+      }
+    ],
+    "claim_boundary_counts": [
+      {
+        "name": "Level1LocalReplay",
+        "count": 1
+      }
+    ]
+  },
+  "notes": [
+    "Evidence ledger digest validation is a local integrity check, not independent reproduction."
+  ]
+}
