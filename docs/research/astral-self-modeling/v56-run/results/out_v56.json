@@ -1,0 +1,33 @@
+{
+ "ceiling": "LocalDevelopmentUnreviewed",
+ "control_indirect_mean": -0.0006953320348111447,
+ "control_n": 1000,
+ "control_top2_abs_mean": 0.0010631428937535265,
+ "correlational_patching_only": true,
+ "frozen56_digest": "e0620c316c3aa56f6541252a7f1904a14fe858847e6042612184b9e3059ffa6f",
+ "h2_prime": false,
+ "holm_reject": [
+  true,
+  true
+ ],
+ "mechanism_wording_allowed": false,
+ "mediators": [
+  "mlp_L18",
+  "mlp_L26"
+ ],
+ "p": {
+  "indirect_abs": 0.000999000999000999,
+  "top2_abs": 0.000999000999000999
+ },
+ "selected": {
+  "indirect_abs": 0.22379350662231445,
+  "mediators": [
+   "mlp_L18",
+   "mlp_L26"
+  ],
+  "top2_abs": 0.1025596732335375,
+  "top2_share": 0.4582781456953643,
+  "total": 0.93017578125
+ },
+ "spend_usd": 0.6207
+}

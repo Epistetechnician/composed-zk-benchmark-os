@@ -22,6 +22,9 @@ The effect is far outside 1000 matched-random draws and disappears when the sent
 ## Update: V55 on Pythia-1.4B (not a replication)
 Same corpus and procedure, new model: gate `InstrumentNotValid` because the selected effect 0.239 logits is below the frozen 0.5 floor. The effect is still far from matched-random (p = 0.001) and specific (z = 14.9), but the pre-registered rule is not met, so the finding is currently **one model, Pythia-2.8b**. See v55-run/README.md. Spend about USD 41.6 of the 50.00 ceiling.
 
+## Update: V56 path analysis (post-hoc, exploratory)
+With ratio-free statistics (all 1000 control draws valid), the selected units' indirect effect (0.224 logits) and top-2 mediator effect both beat matched-random (p = 0.001), but the top-2 mediators (mlp_L18, mlp_L26, the layers holding the selected units) explain only 45.8% of the indirect part (< 0.5 frozen), and about 76% of the total effect is direct on the logits. H2' false: **no mechanism wording**. See v56-run/README.md. Spend about USD 42.3 of 50.00.
+
 ## Not claimed
 Mechanism or circuit (path analysis returned "too few valid control draws" in both runs, H2 false); other models or tasks; independence (owner and operator are not independent; the label audits, 1-2% error, were AI-assisted); proof, Level2+, SOTA, benchmark, production, introspection or self-modeling.
 
