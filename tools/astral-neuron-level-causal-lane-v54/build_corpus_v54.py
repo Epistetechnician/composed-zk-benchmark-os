@@ -12,8 +12,8 @@ import books_v54 as b
 
 def fetch(gid):
     url = "https://www.gutenberg.org/cache/epub/%d/pg%d.txt" % (gid, gid)
-    with urllib.request.urlopen(url, timeout=60) as r:
-        return r.read(8_000_000)
+    import subprocess  # system curl: the venv Python lacks the host trust chain; TLS verification stays on
+    return subprocess.run(["/usr/bin/curl", "-sSf", "-m", "90", "--max-filesize", "8000000", url], check=True, capture_output=True).stdout
 
 
 def main(raw_dir, out_corpus, out_public, v50_public):
@@ -30,7 +30,8 @@ def main(raw_dir, out_corpus, out_public, v50_public):
         path = os.path.join(raw_dir, "%d.txt" % gid)
         if not os.path.exists(path):
             try:
-                open(path, "wb").write(fetch(gid))
+                data = fetch(gid)
+                open(path, "wb").write(data)
             except Exception as e:
                 dropped.append({"id": gid, "reason": "fetch failed: %s" % type(e).__name__}); continue
         raw = open(path, "rb").read()
