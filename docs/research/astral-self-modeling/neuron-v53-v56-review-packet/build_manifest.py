@@ -8,7 +8,7 @@ def entry(p):
     return {"path": p, "sha256": sha(p), "bytes": os.path.getsize(p), "first_commit": log[-1], "last_commit": log[0]}
 code = sorted(p for v in range(50, 60) for p in glob.glob("tools/astral-neuron-level-causal-lane-v%d/*.py" % v) + glob.glob("tools/astral-neuron-level-causal-lane-v%d/tests/*.py" % v))
 protocols = sorted(glob.glob(A + "1[34][0-9]-neuron-level-causal-lane-v5*-protocol.md"))
-results = sorted(glob.glob(A + "v5[0-9]-run/results/*.json") + glob.glob(A + "v5[0-9]-run/**/corpus-public.json", recursive=True) + glob.glob(A + "v5[0-9]-run/**/label-audit.json", recursive=True))
+results = sorted(glob.glob(A + "v5[0-9]-run/results/*.json") + glob.glob(A + "v5[0-9]-run/**/corpus-public.json", recursive=True) + glob.glob(A + "v5[0-9]-run/**/label-audit.json", recursive=True) + glob.glob(A + "v59-run/refl-public.json"))
 records = sorted(glob.glob(A + "v5[0-9]-run/**/README.md", recursive=True) + glob.glob(A + "v5[0-9]-run/**/allocation-receipt.json", recursive=True) + glob.glob(A + "v5[34]-run/accepted-ledger/*") + [A + "neuron-v53-v54-summary.md"])
 m = {"packet": "neuron-v53-v59-review-packet-v1", "status": "UNREVIEWED", "claim_ceiling": "OwnerSelfAttestedLocalDevelopment",
      "head_at_build": git("rev-parse", "HEAD"),

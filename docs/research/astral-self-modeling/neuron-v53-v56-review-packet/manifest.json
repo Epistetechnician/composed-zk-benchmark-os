@@ -311,7 +311,7 @@
   "V50-V53 books (item-disjoint re-draws)": "manifest digest 8e3d127c733b81019598493a4bdc6c2493e2c82bf0422a1d823752c219dacc30 (V51 corpus)",
   "V54/V55 fresh books": "manifest digest 59c514f0c5a89a1cf046f94a64e4abbe1254158bf3e992f37fbcf5e754a33221"
  },
- "head_at_build": "06642cff9fe073d2ede1f1d0f73a0d2e67dbab00",
+ "head_at_build": "547796387781ffd0b8eac68b801ceb515706c5b6",
  "models": {
   "pythia-1.4b": "fedc38a16eea3bd36a96b906d78d11d2ce18ed79",
   "pythia-2.8b": "2a259cdd96a4beb1cdf467512e3904197345f6a9"
@@ -713,6 +713,13 @@
    "last_commit": "e95c669abba10dafb4ffe5b88b99777ddc86029a",
    "path": "docs/research/astral-self-modeling/v58-run/results/out_v58.json",
    "sha256": "1d7a7d912a24ef16b9fd27122689aa5c2a4be72a65ad0777d4726a09759a0d50"
+  },
+  {
+   "bytes": 2502,
+   "first_commit": "7282d113f615531310d8b619523b5f59b8b8ca87",
+   "last_commit": "7282d113f615531310d8b619523b5f59b8b8ca87",
+   "path": "docs/research/astral-self-modeling/v59-run/refl-public.json",
+   "sha256": "aa850eeb36e141960dbb8a4612c82dfd7fbe6ab093d539c3eb8761e5ceb7c143"
   },
   {
    "bytes": 818,
