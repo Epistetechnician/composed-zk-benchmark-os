@@ -8,7 +8,7 @@ for d in ("astral-neuron-level-causal-lane-v58", "astral-neuron-level-causal-lan
     sys.path.insert(0, os.path.join(HERE, "..", d))
 import v50
 
-FROZEN59 = {"spend_cap_usd": 2.50, "total_ceiling_usd": 50.00, "ctl_draws": 100, "min_effect": 0.1, "min_refl_per_class": 100,
+FROZEN59 = {"spend_cap_usd": 2.50, "total_ceiling_usd": 50.00, "ctl_draws": 100, "min_effect": 0.1, "min_refl_per_class": 40,
             "swap_units": [20414, 25229, 2952, 28532, 24862, 13691, 22664], "ablate_units": [20414, 25229, 24862, 13691, 2952, 22664, 28532, 14134]}
 FROZEN59_DIGEST = v50.digest(FROZEN59)
 

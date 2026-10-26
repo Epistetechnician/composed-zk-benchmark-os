@@ -52,7 +52,7 @@ def main(raw_dir, public54, out_items, out_public):
     b = import_module("books_v54"); p = import_module("prepare_corpus")
     nlp = spacy.load("en_core_web_sm", disable=["ner", "lemmatizer"])
     pub = json.load(open(public54))
-    assess = set(pub["splits"]["assess"])
+    assess = set(pub["documents"])  # addendum 1 (doc 141): all 35 books; units were selected on a different task
     items = []
     for did in sorted(assess):
         raw = open(os.path.join(raw_dir, "%s.txt" % did), "rb").read()
@@ -74,7 +74,7 @@ def main(raw_dir, public54, out_items, out_public):
     pl = sorted((i for i in items if i["cls"] == "plur"), key=lambda i: c.digest(i["id"]))
     n = min(len(s), len(pl))
     bal = sorted(s[:n] + pl[:n], key=lambda i: i["id"])
-    sample = c.audit_sample(bal, n=min(100, len(bal)), seed="v59-audit") if len(bal) >= 100 else []
+    sample = c.audit_sample(bal, n=min(60, len(bal)), seed="v59-audit") if len(bal) >= 60 else []
     json.dump(bal, open(out_items, "w"))
     json.dump({"n_items": len(bal), "per_class": n, "raw_counts": {"sing": len(s), "plur": len(pl)},
                "items_sha256": hashlib.sha256(json.dumps(bal, sort_keys=True).encode()).hexdigest(),

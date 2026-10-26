@@ -17,3 +17,6 @@ Measure: ablation of the 8 units (zero) -> margin drop on R items vs 100 matched
 
 ## Budget and rules
 Hard cap USD 2.50 on node v51-full-r1 (new receipt), campaign <= USD 50.00 (about 44 spent plus wake minutes); expected under USD 1. One run. No downloads or new data. Any positive result is correlational/interventional on one model and split: no circuit, general, proof, Level2+, independent, SOTA, benchmark or production claim.
+
+## Addendum 1 (2026-10-26, before any V59 model run or effect data)
+Counting reflexive items on the assess documents only gave 108 singular and 13 plural, so Task R would be skipped. Amendment, made after seeing item counts but before any effect: Task R items are drawn from **all 35 V54 books** (fit, tune and assess documents), because the units were selected on subject-verb items and no reflexive target was ever used in selection; minimum 40 items per class (was 100); label audit 60 items (was 100), > 5% error closes R. Everything else unchanged. Task A (assess split, 800 items) is unaffected.
