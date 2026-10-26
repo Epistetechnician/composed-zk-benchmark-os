@@ -28,6 +28,9 @@ With ratio-free statistics (all 1000 control draws valid), the selected units' i
 ## Update: V57 robustness (post-hoc, exploratory)
 On the locked V54 selection: mean ablation reproduces the effect (1.02x zero ablation, above all controls). Dose-response over k = 4..128 is saturating and concentrated (4 units: 0.505 logits, 32: 0.709, 128: 0.824; every k beats all controls), but the pre-registered strict-monotone rule failed on a 0.02-logit k=16 vs k=32 inversion, so "dose-response supported" is false as defined. See v57-run/README.md. Spend about USD 43.1 of 50.00.
 
+## Update: V58 per-neuron analysis (post-hoc, exploratory)
+Concentration is real: the top 8 of the 128 selected units carry 92.5% of the joint effect (one unit, L18 #20414, alone 0.32 logits), all beating 300 matched-random units. The pre-registered direct-path (Spearman 0.43 < 0.5) and "agreement-selective in both classes" (5/8 < 6) hypotheses were false as defined; post-hoc, 7 of the top 8 units look number-selective (active for one subject number, writing the matching verb form). See v58-run/README.md. Spend about USD 44 of 50.00.
+
 ## Not claimed
 Mechanism or circuit (path analysis returned "too few valid control draws" in both runs, H2 false); other models or tasks; independence (owner and operator are not independent; the label audits, 1-2% error, were AI-assisted); proof, Level2+, SOTA, benchmark, production, introspection or self-modeling.
 
