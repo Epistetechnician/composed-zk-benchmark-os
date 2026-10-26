@@ -1,0 +1,36 @@
+{
+ "ceiling": "LocalDevelopmentUnreviewed",
+ "frozen59_digest": "d84a535e21e879643d768666608375838d0c39c6e8b67314527bef84f830b6ef",
+ "reflexive": {
+  "class_counts": {
+   "plur": 143,
+   "sing": 143
+  },
+  "ctl_max": 0.020282451923077538,
+  "ctl_mean": -0.0047460937499996005,
+  "effect": 0.06068345716783252,
+  "n_items": 286,
+  "p": 0.009900990099009901,
+  "transfer_supported": false
+ },
+ "spend_usd": 0.4015,
+ "swap": {
+  "ctl_max": {
+   "all": 0.07190704345703125,
+   "plur": 0.0374859619140625,
+   "sing": 0.106328125
+  },
+  "ctl_mean": {
+   "all": 0.002859708309173584,
+   "plur": 0.002611213493347168,
+   "sing": 0.0031082031250000003
+  },
+  "p_all": 0.009900990099009901,
+  "selected": {
+   "all": 1.30823974609375,
+   "plur": 1.1641748046875,
+   "sing": 1.4523046875
+  },
+  "sufficiency_supported": true
+ }
+}

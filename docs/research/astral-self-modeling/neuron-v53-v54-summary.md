@@ -31,6 +31,9 @@ On the locked V54 selection: mean ablation reproduces the effect (1.02x zero abl
 ## Update: V58 per-neuron analysis (post-hoc, exploratory)
 Concentration is real: the top 8 of the 128 selected units carry 92.5% of the joint effect (one unit, L18 #20414, alone 0.32 logits), all beating 300 matched-random units. The pre-registered direct-path (Spearman 0.43 < 0.5) and "agreement-selective in both classes" (5/8 < 6) hypotheses were false as defined; post-hoc, 7 of the top 8 units look number-selective (active for one subject number, writing the matching verb form). See v58-run/README.md. Spend about USD 44 of 50.00.
 
+## Update: V59 sufficiency and transfer (post-hoc, exploratory)
+**Sufficiency supported:** swapping 7 number-selective units to the opposite number class's mean activation lowers the verb margin by 1.31 logits (singular 1.45, plural 1.16) vs a matched-random max of 0.072, so these units are a causal handle on verb number, not only a dependency. **Transfer not supported by the frozen floor:** ablating the 8 units lowers reflexive-pronoun agreement margin by 0.061 logits (above all 100 controls, max 0.020, but < 0.1 floor); the units are mostly verb-form-specific. See v59-run/README.md. Spend about USD 45 of 50.00.
+
 ## Not claimed
 Mechanism or circuit (path analysis returned "too few valid control draws" in both runs, H2 false); other models or tasks; independence (owner and operator are not independent; the label audits, 1-2% error, were AI-assisted); proof, Level2+, SOTA, benchmark, production, introspection or self-modeling.
 
