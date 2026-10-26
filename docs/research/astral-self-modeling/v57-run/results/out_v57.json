@@ -1,0 +1,65 @@
+{
+ "ceiling": "LocalDevelopmentUnreviewed",
+ "dose_monotone_increasing": false,
+ "dose_response": {
+  "128": {
+   "beats_all_controls": true,
+   "ctl_max": 0.018247070312499503,
+   "ctl_mean": -0.0026909595489505735,
+   "effect": 0.8238598632812497,
+   "p": 0.009900990099009901,
+   "per_unit": 0.006436405181884763
+  },
+  "16": {
+   "beats_all_controls": true,
+   "ctl_max": 0.02105957031249961,
+   "ctl_mean": 0.00044363098144493127,
+   "effect": 0.7285473632812494,
+   "p": 0.009900990099009901,
+   "per_unit": 0.045534210205078085
+  },
+  "32": {
+   "beats_all_controls": true,
+   "ctl_max": 0.019781494140624467,
+   "ctl_mean": 0.00033486137390099203,
+   "effect": 0.7087719726562494,
+   "p": 0.009900990099009901,
+   "per_unit": 0.022149124145507793
+  },
+  "4": {
+   "beats_all_controls": true,
+   "ctl_max": 0.02740478515625,
+   "ctl_mean": 0.0021552688598629023,
+   "effect": 0.5051977539062493,
+   "p": 0.009900990099009901,
+   "per_unit": 0.12629943847656233
+  },
+  "64": {
+   "beats_all_controls": true,
+   "ctl_max": 0.01720733642578054,
+   "ctl_mean": -0.0008298461914066291,
+   "effect": 0.7438256835937498,
+   "p": 0.009900990099009901,
+   "per_unit": 0.01162227630615234
+  },
+  "8": {
+   "beats_all_controls": true,
+   "ctl_max": 0.015710449218749645,
+   "ctl_mean": 0.0006529567718501994,
+   "effect": 0.5873315429687498,
+   "p": 0.009900990099009901,
+   "per_unit": 0.07341644287109372
+  }
+ },
+ "dose_response_supported": false,
+ "frozen57_digest": "cbb5b614bd76a2b7cd5fa2b0d31f4a8cbc36d3d18b4255fb81bf176bdb2e8365",
+ "mean_ablation": {
+  "ctl_max": 0.014799194335936683,
+  "ctl_mean": 0.0012503166198726578,
+  "effect": 0.7228735351562499,
+  "frac_of_zero": 1.019895767671445,
+  "p": 0.009900990099009901,
+  "supported": true
+ },
+ "spend_usd": 0.7993
+}
