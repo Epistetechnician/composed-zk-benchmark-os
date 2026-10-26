@@ -1,4 +1,4 @@
-# Neuron-level V53-V56 independent review packet (UNREVIEWED)
+# Neuron-level V53-V59 independent review packet (UNREVIEWED)
 
 `manifest.json` lists SHA-256, size and first/last commit for all code (V50-V56 runners and hermetic tests), the seven frozen protocols (docs 132-138), result JSON and incremental logs, corpus public records, label audits, receipts and the two owner-attested ledgers. Build it again with `python3 build_manifest.py` from the repo root (its digest changes only if a listed file changes). This packet is evidence for a reviewer, not an acceptance.
 
@@ -29,3 +29,6 @@
 
 ## Decision
 Complete `review-decision-template.json` (identity, independence, decision, findings, Ed25519 signature) only if you are independent of the operator. Without that, nothing here is accepted evidence.
+
+## Update (V57-V59)
+The manifest now also covers V57 (dose-response, mean ablation), V58 (per-neuron analysis) and V59 (class-swap sufficiency, reflexive transfer) with protocols 139-141 and the V59 reflexive-item record. Added claim under review: "swapping seven number-selective units to the other number's mean activation lowers the verb margin by 1.31 logits vs a matched-random maximum of 0.07 (post-hoc, single model)". Extra caveats: the swap writes class-mean constants at all positions; V59 addendum 1 (reflexive items from all books, minimum 40 per class) was made after counting items but before any effect.
