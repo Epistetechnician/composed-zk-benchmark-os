@@ -1,0 +1,49 @@
+{
+ "ceiling": "LocalDevelopmentUnreviewed",
+ "donor_patch": {
+  "ctl_max": {
+   "all": 0.01173828125,
+   "plur": 0.0128656005859375,
+   "sing": 0.0176171875
+  },
+  "ctl_mean": {
+   "all": 0.004337142992019653,
+   "plur": 0.0030590516090393065,
+   "sing": 0.005615234375
+  },
+  "p_all": 0.009900990099009901,
+  "same_class_donor_diagnostic": {
+   "all": 0.10529052734375,
+   "plur": 0.1428857421875,
+   "sing": 0.0676953125
+  },
+  "selected": {
+   "all": 1.39766357421875,
+   "plur": 1.2652880859375,
+   "sing": 1.5300390625
+  },
+  "supported": true
+ },
+ "frozen60_digest": "2683c494d1bcba3686a88d305f10070014d7ddca8e0f72c60d50931c069b749f",
+ "headline_hardened": true,
+ "last_swap": {
+  "ctl_max": {
+   "all": 0.01136962890625,
+   "plur": 0.0116796875,
+   "sing": 0.0131640625
+  },
+  "ctl_mean": {
+   "all": 0.004324163818359375,
+   "plur": 0.00351278076171875,
+   "sing": 0.005135546875
+  },
+  "p_all": 0.009900990099009901,
+  "selected": {
+   "all": 1.045283203125,
+   "plur": 1.03919921875,
+   "sing": 1.0513671875
+  },
+  "supported": true
+ },
+ "spend_usd": 0.5055
+}
