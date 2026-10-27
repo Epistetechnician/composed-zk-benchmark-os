@@ -1,0 +1,8 @@
+{
+ "allocation_id": "local-mac-no-provider-v60",
+ "provider": "none (local Apple MPS, this Mac)",
+ "node_name": "local",
+ "spend_ceiling_usd": 0,
+ "purpose": "V60-local execution per protocol doc 200 addendum 1; node v51-full-r1 dequeued, no provider spend",
+ "recorded_utc": "2026-10-27"
+}
