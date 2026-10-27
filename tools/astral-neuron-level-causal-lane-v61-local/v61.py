@@ -19,7 +19,7 @@ def run_v61(backend, cfg, v54_selected=None, log=None):
     sp = backend.split()
     layer_of = backend.layers()
     scores = backend.scores(sp["fit"])
-    cand_units = v50.select_per_layer(scores, layer_of, cfg["target_layers"], FROZEN61["k_per_layer"])
+    cand_units = v50.select_per_layer(scores, layer_of, cfg["target_layers"], FROZEN61["k_per_layer"] * len(cfg["target_layers"]))
     dirs = {u: (1 if scores[u] >= 0 else -1) for u in cand_units}
     lock = v50.make_lock(cand_units, dirs, {k: sp[k] for k in ("fit", "tune", "assess")}, cfg["model_id"],
                          cfg["corpus_digest"], cfg["code_commit"])

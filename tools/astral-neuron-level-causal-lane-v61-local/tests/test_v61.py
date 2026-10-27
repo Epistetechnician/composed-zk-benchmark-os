@@ -32,6 +32,11 @@ class T(unittest.TestCase):
         self.assertTrue(r["headline_reproduced_and_hardened"])
         self.assertEqual(r["overlap_with_v54_selection"], 3)
 
+    def test_quota_is_per_layer(self):
+        f = F()
+        sel = v50.select_per_layer(f.scores(['f']), f.layers(), [0, 1, 2], v61.FROZEN61['k_per_layer'] * 3)
+        self.assertEqual(len(sel), 96)
+
     def test_frozen(self):
         self.assertEqual(v61.FROZEN61["dtype"], "float32")
 
