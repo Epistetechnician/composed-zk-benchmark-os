@@ -1,0 +1,38 @@
+{
+ "baseline_margin": 4.8638671875,
+ "ceiling": "LocalDevelopmentUnreviewed",
+ "frozen61_digest": "5e561382f4197015ebea86683f48b48882f2120edc052c01690bf0755c4cebe6",
+ "minimal_pair_confirmed": true,
+ "minpair_patch": {
+  "ctl_max": {
+   "all": 0.018828125,
+   "plur": 0.0221875,
+   "sing": 0.020625
+  },
+  "ctl_mean": {
+   "all": -0.005185546875,
+   "plur": -0.0021210937499999997,
+   "sing": -0.00825
+  },
+  "p_all": 0.009900990099009901,
+  "selected": {
+   "all": 0.482109375,
+   "plur": 0.492265625,
+   "sing": 0.471953125
+  },
+  "supported": true
+ },
+ "n_items": 800,
+ "same_number_donor_diagnostic": {
+  "all": -0.0326953125,
+  "plur": -0.039921875,
+  "sing": -0.02546875
+ },
+ "self_donor": {
+  "all": 0.0,
+  "plur": 0.0,
+  "sing": 0.0
+ },
+ "self_donor_ok": true,
+ "spend_usd": 0.0758
+}

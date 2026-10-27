@@ -1,4 +1,4 @@
-# Dossier: a null-calibrated, pre-registered neuron-claim pipeline (V50-V60)
+# Dossier: a null-calibrated, pre-registered neuron-claim pipeline (V50-V61)
 Status: owner-attested exploratory research, ceiling `OwnerSelfAttestedLocalDevelopment` / `LocalDevelopmentUnreviewed`; not independently reviewed. Documentation only: no model run, spend, or ledger mutation in this document. Slice: v53-v56-review-packet-v1.
 
 ## Thesis
@@ -20,14 +20,15 @@ The durable contribution is the instrument, not one neuron map. Each claim is pr
 | Zeroing artifact? | No: mean ablation 1.02x zero | V57 |
 | Sufficient? | Class swap 1.31 logits (ctl max 0.07) | V59 |
 | Sufficient, cleaner? | Last-position swap 1.05; donor patch 1.40 (ctl max 0.012) | V60 |
+| Sufficient, minimal pairs? | Number-only donor patch 0.48 logits (ctl max 0.019; same-number donor -0.03; baseline margin 4.86) | V61 |
 | Transfers to reflexives? | 0.061 logits, above controls, below 0.1 floor | V59 |
 | Other model / circuit / dose-response? | Not supported (recorded negatives) | V55, V56, V57 |
 
 ## Honest limits
-One model; single splits; 100-1000 controls; V57-V60 post-hoc relative to V54; donors are different sentences, not minimal pairs; AI-assisted label audits; owner-attested only. No circuit, general-mechanism, proof, Level2+, SOTA, benchmark, production, or independent claim.
+One model; single splits; 100-1000 controls; V57-V61 post-hoc relative to V54; V61 minimal pairs are short synthetic templates; AI-assisted label audits; owner-attested only. No circuit, general-mechanism, proof, Level2+, SOTA, benchmark, production, or independent claim.
 
 ## Reproduce
 Protocols `131`-`141`, `200`; run records under `v5x-run/` and `v60-run/`; review packet `neuron-v53-v56-review-packet/` (manifest hashes, unsigned decision template). Hermetic tests live under `tools/astral-neuron-level-causal-lane-v*/tests/`.
 
 ## Next
-Scale test with a scale-aware floor committed in advance (needs a ceiling above USD 50); minimal-pair donors; independent replication by an outside reader (only route above the current ceiling).
+Scale test with a scale-aware floor committed in advance (needs a ceiling above USD 50); natural-text minimal pairs; independent replication by an outside reader (only route above the current ceiling).

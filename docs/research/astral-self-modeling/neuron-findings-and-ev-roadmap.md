@@ -1,5 +1,5 @@
 # Neuron-level subject-verb agreement: findings, assets, and expected-value roadmap
-Status: owner-attested exploratory research (ceiling OwnerSelfAttestedLocalDevelopment); not independently reviewed. Campaign V50-V60, about USD 45.5 of 50.00 spent.
+Status: owner-attested exploratory research (ceiling OwnerSelfAttestedLocalDevelopment); not independently reviewed. Campaign V50-V61, about USD 45.6 of 50.00 spent.
 
 ## 1. What the evidence supports (strongest to weakest)
 | Claim | Evidence | Grade |
@@ -9,6 +9,7 @@ Status: owner-attested exploratory research (ceiling OwnerSelfAttestedLocalDevel
 | Not a zeroing artifact | V57 mean ablation 1.02x zero | moderate |
 | **Sufficiency: swapping 7 number-selective units to the other number's code moves the verb choice by 1.31 logits (matched-random max 0.07)** | V59 | strong (post-hoc, single model) |
 | **Hardened sufficiency (V60)**: last-position-only swap drops the margin 1.05 logits; opposite-class donor patching 1.40 (controls max 0.012); same-class donor 0.105 (diagnostic) | V60 | strong (post-hoc, single model, donors are not minimal pairs) |
+| **Minimal-pair sufficiency (V61)**: changing only subject number, donor patch of the 7 units drops the margin 0.48 logits (ctl max 0.019; same-number donor -0.03; baseline 4.86). Smaller than V60's 1.40: part of that came from non-number differences | V61 | moderate-strong (synthetic templates, single model) |
 | Units are number-selective (active for one number, write that verb form) | V58 post-hoc table + V59 swap | moderate |
 | Narrowness: little transfer to reflexive agreement | V59 R: 0.061 logits, above controls, below floor | weak-moderate |
 | NOT supported: other model (1.4B), mechanism/circuit beyond direct path, monotone dose-response | V55, V56, V57 | negative, recorded |
