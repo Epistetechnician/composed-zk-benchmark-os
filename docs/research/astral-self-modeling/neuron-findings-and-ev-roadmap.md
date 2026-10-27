@@ -1,5 +1,5 @@
 # Neuron-level subject-verb agreement: findings, assets, and expected-value roadmap
-Status: owner-attested exploratory research (ceiling OwnerSelfAttestedLocalDevelopment); not independently reviewed. Campaign V50-V59, about USD 45 of 50.00 spent.
+Status: owner-attested exploratory research (ceiling OwnerSelfAttestedLocalDevelopment); not independently reviewed. Campaign V50-V60, about USD 45.5 of 50.00 spent.
 
 ## 1. What the evidence supports (strongest to weakest)
 | Claim | Evidence | Grade |
@@ -8,6 +8,7 @@ Status: owner-attested exploratory research (ceiling OwnerSelfAttestedLocalDevel
 | Concentration: ~8 units carry >90% of it; one unit alone 0.32 logits | V57/V58 | strong (post-hoc) |
 | Not a zeroing artifact | V57 mean ablation 1.02x zero | moderate |
 | **Sufficiency: swapping 7 number-selective units to the other number's code moves the verb choice by 1.31 logits (matched-random max 0.07)** | V59 | strong (post-hoc, single model) |
+| **Hardened sufficiency (V60)**: last-position-only swap drops the margin 1.05 logits; opposite-class donor patching 1.40 (controls max 0.012); same-class donor 0.105 (diagnostic) | V60 | strong (post-hoc, single model, donors are not minimal pairs) |
 | Units are number-selective (active for one number, write that verb form) | V58 post-hoc table + V59 swap | moderate |
 | Narrowness: little transfer to reflexive agreement | V59 R: 0.061 logits, above controls, below floor | weak-moderate |
 | NOT supported: other model (1.4B), mechanism/circuit beyond direct path, monotone dose-response | V55, V56, V57 | negative, recorded |
@@ -22,7 +23,7 @@ Status: owner-attested exploratory research (ceiling OwnerSelfAttestedLocalDevel
 | Rank | Step | Cost | P(success) | Value if it works | Why |
 |---|---|---|---|---|---|
 | 1 | Independent review/replication of the packet (any outside reader) | ~0 | high | converts "owner-attested" into evidence others can cite | only route above the current ceiling; owner has chosen to skip it for now |
-| 2 | **Cleaner intervention**: last-position-only swap and true activation patching with counterfactual (opposite-number) activations, plus a "swap one unit at a time" dose curve | ~USD 0.5-1 | high | removes the main V59 caveat (out-of-distribution constants at all positions); supports a causal-handle claim | cheapest way to harden the headline |
+| 2 (DONE, V60) | **Cleaner intervention**: last-position-only swap and true activation patching with counterfactual (opposite-number) activations, plus a "swap one unit at a time" dose curve | ~USD 0.5-1 | high | removes the main V59 caveat (out-of-distribution constants at all positions); supports a causal-handle claim | cheapest way to harden the headline |
 | 3 | Scale/family: Pythia-6.9B and one non-Pythia model with a **scale-aware floor fixed in advance** | USD 8-12 (needs a higher ceiling) | medium (V55 shows effect shrinks with size) | converts a one-model finding into a scaling statement | biggest scope gap |
 | 4 | Other phenomena (gender/reflexive done; add negation, quantifier agreement, tense) to map what the unit set encodes | USD 1-2 | medium | specificity map; V59 says narrow | cheap, but incremental |
 | 5 | Application: use the unit set as a number-steering/editing probe (e.g. targeted agreement-error injection and repair test on held-out text) | USD 1-2 | medium | shows a usable control, not just a diagnosis | link to downstream value |
