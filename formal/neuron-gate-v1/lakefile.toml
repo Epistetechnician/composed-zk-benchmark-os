@@ -1,0 +1,7 @@
+name = "NeuronGate"
+version = "0.1.0"
+defaultTargets = ["NeuronGate"]
+
+[[lean_lib]]
+name = "NeuronGate"
+roots = ["NeuronGate.Gate"]

@@ -32,3 +32,9 @@ Complete `review-decision-template.json` (identity, independence, decision, find
 
 ## Update (V57-V59)
 The manifest now also covers V57 (dose-response, mean ablation), V58 (per-neuron analysis) and V59 (class-swap sufficiency, reflexive transfer) with protocols 139-141 and the V59 reflexive-item record. Added claim under review: "swapping seven number-selective units to the other number's mean activation lowers the verb margin by 1.31 logits vs a matched-random maximum of 0.07 (post-hoc, single model)". Extra caveats: the swap writes class-mean constants at all positions; V59 addendum 1 (reflexive items from all books, minimum 40 per class) was made after counting items but before any effect.
+
+## Addendum: V60/V61-local and harness-logic proof [neuron-gate-formal-v1]
+- Packet manifest already globs V50-V61 code/results (incl. v61-local-run).
+- `formal/neuron-gate-v1/NeuronGate/Gate.lean` machine-checks (Lean 4.30.0) the gate rule: support requires strict exceedance of control maxima in both classes plus the floor; raising the floor only removes support; permutation p has floor 1/(1+n) (1/101 at n=100) and p<=1. Run `scripts/verify_neuron_gate_formal_v1.sh`.
+- Scope: harness logic only. Does NOT verify the model results, selection stability, or the same-class-donor diagnostic (0.098). Not independent.
+- Open for a reviewer: replicate on other hardware/dtype/model size; explain the 0.098 diagnostic.
