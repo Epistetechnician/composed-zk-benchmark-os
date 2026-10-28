@@ -38,3 +38,11 @@ The manifest now also covers V57 (dose-response, mean ablation), V58 (per-neuron
 - `formal/neuron-gate-v1/NeuronGate/Gate.lean` machine-checks (Lean 4.30.0) the gate rule: support requires strict exceedance of control maxima in both classes plus the floor; raising the floor only removes support; permutation p has floor 1/(1+n) (1/101 at n=100) and p<=1. Run `scripts/verify_neuron_gate_formal_v1.sh`.
 - Scope: harness logic only. Does NOT verify the model results, selection stability, or the same-class-donor diagnostic (0.098). Not independent.
 - Open for a reviewer: replicate on other hardware/dtype/model size; explain the 0.098 diagnostic.
+
+## Addendum 2: extended formal layer (neuron-gate-formal-v1)
+
+Machine-checked in Lean 4.30.0 (no `sorry`; only propext/Classical.choice/Quot.sound):
+- `Pipeline.lean`: per-layer quotas sum to k and differ by at most 1; `selectTop` returns min q n units, a subset of the input, every selected unit ranks at or above every unselected one under (|score| desc, id asc), deterministically; `p_uniform`: for distinct pooled values exactly min j n have p-numerator <= j, i.e. the finite core of permutation-test validity (exchangeable roles give exactly uniform p).
+- `CertV61.lean` (generated from the V61-local run log): exact 2^-200 fixed-point encoding of the logged selected and 100 control effects per task; Lean recomputes the control maxima (equal to the reported ones), `supported` for T0/L/P, and p = 1/101.
+
+Still NOT formal: that logged numbers came from the model run, that effects generalize, that the swap/patch operators implement the intended intervention, hardware/dtype sensitivity of selection, and the same-class-donor 0.098. Run `scripts/verify_neuron_gate_formal_v1.sh`. Ties in the p-value are conservative (>=), but `p_uniform` is proved for the no-tie case only.

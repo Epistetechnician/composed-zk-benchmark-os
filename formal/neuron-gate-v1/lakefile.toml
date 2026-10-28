@@ -4,4 +4,4 @@ defaultTargets = ["NeuronGate"]
 
 [[lean_lib]]
 name = "NeuronGate"
-roots = ["NeuronGate.Gate"]
+roots = ["NeuronGate.Gate", "NeuronGate.Pipeline", "NeuronGate.CertV61"]
