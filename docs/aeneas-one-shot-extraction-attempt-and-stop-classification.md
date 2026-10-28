@@ -41,3 +41,11 @@ not Aeneas faults. Counts are keyword-based, not a reading of each doc.
 Executing the downloaded Aeneas/Charon binaries needs explicit user permission
 in the harness, and Charon additionally needs the nix libs (or a source build
 per doc 670) and the pinned nightly. Test: `cd tools/aeneas-preflight-classification && /usr/bin/python3 -I -m unittest discover -s .`
+
+## Retry result (extraction succeeded)
+
+- Removed only the partial `nightly-2026-06-01` toolchain created by an earlier stray `rustup` probe run inside the extracted dir (cause: its `rust-toolchain` file; run rustup from a neutral dir). Installed the pinned toolchain from `~` with `rustc-dev`, `llvm-tools-preview`, `rust-src`, `miri` (host target only).
+- Prebuilt `charon` ran despite `charon-driver` referencing absent `/nix/store` libiconv/zlib (doc 669 failure did not reproduce on this host); the doc 670 source-build fallback was not needed.
+- `charon rustc --preset=aeneas` on a one-function pure-Rust module produced an LLBC; `aeneas -backend lean` generated `M.lean` (`def add ... := ok (U32.checked_add a b)`). Lean kernel checking was not run.
+- Classification of earlier stops: toolchain-class stops (missing pinned nightly/rustc-dev, driver link) are resolved here; provenance and ordering stops are unaffected.
+- Evidence ceiling: Level1LocalReplayOrLower; local extraction only, no proof or correctness claim.
