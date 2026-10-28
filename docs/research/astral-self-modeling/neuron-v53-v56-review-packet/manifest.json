@@ -307,6 +307,13 @@
    "sha256": "8be526da849df8b0f061f17344e1e0d9f3dba1e820e71f717de5f9c597b923d6"
   },
   {
+   "bytes": 523,
+   "first_commit": "66f411df6c5f5f913b70cde9d0d9267123c150c9",
+   "last_commit": "66f411df6c5f5f913b70cde9d0d9267123c150c9",
+   "path": "tools/astral-neuron-level-causal-lane-v60/run_v60_local.py",
+   "sha256": "d599bd5448f812fcefc25b757c2c8f52595afc8d4f05ddbfe6c572d3f5f8ea6a"
+  },
+  {
    "bytes": 2398,
    "first_commit": "dc3822af9e84fe2bd38b5f38f6d98c9ffb196be3",
    "last_commit": "dc3822af9e84fe2bd38b5f38f6d98c9ffb196be3",
@@ -353,7 +360,7 @@
   "V50-V53 books (item-disjoint re-draws)": "manifest digest 8e3d127c733b81019598493a4bdc6c2493e2c82bf0422a1d823752c219dacc30 (V51 corpus)",
   "V54/V55 fresh books": "manifest digest 59c514f0c5a89a1cf046f94a64e4abbe1254158bf3e992f37fbcf5e754a33221"
  },
- "head_at_build": "94e302b96a54f944ecb160940574588add4dfa6a",
+ "head_at_build": "bca47c957fa30f01070e2fe72ab485ce930d8777",
  "models": {
   "pythia-1.4b": "fedc38a16eea3bd36a96b906d78d11d2ce18ed79",
   "pythia-2.8b": "2a259cdd96a4beb1cdf467512e3904197345f6a9"
@@ -431,11 +438,11 @@
    "sha256": "0906b0688eaf23435bd766e1a133b5cdf8c5b4d0f8d0aa7154658b9a8590eeec"
   },
   {
-   "bytes": 2992,
+   "bytes": 4401,
    "first_commit": "4148d527c65ee5e33a4aeff777cefcc70f132f83",
-   "last_commit": "4148d527c65ee5e33a4aeff777cefcc70f132f83",
+   "last_commit": "42eb75c87f797e1adee3f2713682fed7073c0e84",
    "path": "docs/research/astral-self-modeling/200-neuron-level-causal-lane-v60-protocol.md",
-   "sha256": "6b635d6fb5097d2ea583678128b0ecb4c3830d5acc3d9011745524562800e7b7"
+   "sha256": "2ca271350814996450e93477efb98339e4d4171f6f0f1f47e1c25bf9290e0373"
   },
   {
    "bytes": 3397,
@@ -447,18 +454,18 @@
  ],
  "records": [
   {
-   "bytes": 5168,
+   "bytes": 5578,
    "first_commit": "547796387781ffd0b8eac68b801ceb515706c5b6",
    "last_commit": "94e302b96a54f944ecb160940574588add4dfa6a",
    "path": "docs/research/astral-self-modeling/neuron-findings-and-ev-roadmap.md",
-   "sha256": "90e9fb26876adad0ba3c1ed9be82d73448e9e51e9f30a555b1a3be13c63b7641"
+   "sha256": "6326b95fd639f04ff478874377e1533701f27a89f6a85e46b09082626b49638b"
   },
   {
-   "bytes": 2845,
+   "bytes": 3502,
    "first_commit": "c867b2260e1b4232c149ed4757a26082e9de3b79",
    "last_commit": "94e302b96a54f944ecb160940574588add4dfa6a",
    "path": "docs/research/astral-self-modeling/neuron-pipeline-dossier.md",
-   "sha256": "51c2328b16bb4c32a7b89be614551e484a4f7ad24bbed35286c007f013fbd23e"
+   "sha256": "077c5156d713856a2886efc7d17c5cfab059eec5f1e47236c858e1c89aaf98e6"
   },
   {
    "bytes": 4865,
@@ -685,11 +692,11 @@
    "sha256": "d1354b128649ece21b41d00e100a4f4f18929da980d74e779ea87d62e8d79864"
   },
   {
-   "bytes": 1567,
+   "bytes": 3427,
    "first_commit": "16601b0274ab7404d35e45b0835b95004c7f66c1",
-   "last_commit": "16601b0274ab7404d35e45b0835b95004c7f66c1",
+   "last_commit": "bca47c957fa30f01070e2fe72ab485ce930d8777",
    "path": "docs/research/astral-self-modeling/v60-run/README.md",
-   "sha256": "39ab3e57111e050f59fc138d60fe3f7e40df3c2a9103c73564a5eba2fe697a98"
+   "sha256": "f8fb179e7cb3bd6334397f092f3f99a2d2107e686b0237e75efd7c8b9bcf642f"
   },
   {
    "bytes": 399,
