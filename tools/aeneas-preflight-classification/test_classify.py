@@ -17,6 +17,11 @@ class T(unittest.TestCase):
         self.assertEqual(classify.classify("717-acquisition-provenance-stop.md"), "provenance")
         self.assertEqual(classify.classify("721-primary-worktree-stop.md"), "ordering")
 
+    def test_retry_result_documented(self):
+        doc = (DOCS / "aeneas-one-shot-extraction-attempt-and-stop-classification.md").read_text()
+        self.assertIn("## Retry result (extraction succeeded)", doc)
+        self.assertIn("Level1LocalReplayOrLower", doc)
+
 
 if __name__ == "__main__":
     unittest.main()
