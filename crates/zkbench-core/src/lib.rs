@@ -34,6 +34,7 @@ pub mod local_artifact_campaign;
 pub mod local_benchmark_artifact;
 pub mod mutation;
 pub mod pack;
+pub mod pqai;
 pub mod prelude;
 pub mod recursion;
 pub mod registry;

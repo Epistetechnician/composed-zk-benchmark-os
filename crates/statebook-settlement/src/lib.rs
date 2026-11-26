@@ -2,6 +2,14 @@
 
 mod completeness;
 mod p4;
+mod pqai_finality;
+
+pub use pqai_finality::{
+    assess_pqai_finality_v1, AccountAuthAssumptionV1, ConsensusSignatureAssumptionV1,
+    CryptographicFinalityStateV1, DataAvailabilityAssumptionV1, HashPrimitiveClassV1,
+    PqaiFinalityContextV1, PqaiFinalityError, PqaiFinalityReportV1, PQAI_FINALITY_CLAIM_BOUNDARY,
+    PQAI_FINALITY_DOMAIN_V1, PQAI_FINALITY_SCHEMA_V1,
+};
 
 pub use completeness::{
     compose_completeness_reports_v1, derive_analysis_subject_v1, parse_completeness_fixture_v1,
